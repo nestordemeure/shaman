@@ -1,0 +1,5 @@
+*** SHAMAN PROFILE ***
+3	main (file main.cpp)
+1		std::min (line 50)
+1		operator- (line 49)
+1		operator- (line 48)

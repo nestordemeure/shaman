@@ -108,17 +108,25 @@ class ShamanDebugBreakpoint(gdb.Breakpoint):
         operation = next(frames)
         function = next(frames)
         function_position = function.find_sal()
-        function_file = function_position.symtab.filename
 
-        # avoids functions inside shaman
+        # avoids functions inside Shaman (such as +=)
+        function_file = function_position.symtab.filename
         while function_file.endswith("Shaman_Decl.h"):
             operation = function
             function = next(frames)
             function_position = function.find_sal()
             function_file = function_position.symtab.filename
 
-        # useful informations
+        # avoid functions called by the stl (such as std::min)
         function_name = function.name()
+        while function_name.startswith("std::"):
+            operation = function
+            function = next(frames)
+            function_position = function.find_sal()
+            function_file = function_position.symtab.filename
+            function_name = function.name()
+
+        # useful informations
         operation_name = operation.name()
         function_line = function_position.line
 
