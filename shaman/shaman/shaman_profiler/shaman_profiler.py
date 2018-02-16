@@ -13,7 +13,7 @@ from collections import defaultdict
 # PRINTING
 
 def remove_template_parameters(name):
-    """returns a function name without the template parameters"""
+    """returns a function name without the template parameters : fun<T> -> fun"""
     if name.endswith('>'): # if the name might end with a template
         template_number = 0
         for i in reversed(range(len(name))):
@@ -26,7 +26,7 @@ def remove_template_parameters(name):
     return name
 
 def abreviate_file_name(file_name):
-    """Returns a file name without its path"""
+    """Returns a file name without its path : /path/to/file.cpp -> file.cpp"""
     index_path = file_name.rindex('/')
     return file_name[index_path+1:]
 
@@ -95,7 +95,7 @@ class ShamanDebugBreakpoint(gdb.Breakpoint):
     def stop(self):
         """called when the breakpoint is triggered"""
 
-        # progress counter to prove that gdb is not dead
+        # progress counter to prove that gdb is not dead when the number of cancelations is huge
         global breaknumber
         breaknumber += 1
         if breaknumber % 100000 == 0:
