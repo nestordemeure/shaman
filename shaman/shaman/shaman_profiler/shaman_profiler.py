@@ -91,25 +91,40 @@ class ShamanDebugBreakpoint(gdb.Breakpoint):
     """breakpoint that displays basic informations"""
     def stop(self):
         """called when the breakpoint is triggered"""
+
         # progress counter to prove that gdb is not dead
         global breaknumber
         breaknumber += 1
-        if breaknumber % 100000 == 0: # TODO the 50th+ print will kill gdb on older versions
+        if breaknumber % 100000 == 0:
+            # WARNING the 50th+ print will kill gdb on older versions
             gdb.write("{}th numerical unstability detected\n".format(breaknumber))
+
         # raw information
         frames = get_frame_seq()
         next(frames) # we skip 'NumericalDebugger::unstability()'
         operation = next(frames)
         function = next(frames)
         function_position = function.find_sal()
+        function_file = function_position.symtab.filename
+
+        # avoids functions inside shaman
+        while function_file.endswith("Shaman_Decl.h"):
+            operation = function
+            function = next(frames)
+            function_position = function.find_sal()
+            function_file = function_position.symtab.filename
+
         # useful informations
         function_name = function.name()
         operation_name = operation.name()
         function_line = function_position.line
+
         # saving the data
         call_tree[(function_name,function_line,operation_name)] += 1
         if not function_name in file_of_function:
-            file_of_function[function_name] = function_position.symtab.filename
+            file_of_function[function_name] = function_file
+
+        # keep going after hitting the breakpoint
         return False
 
 #------------------------------------------------------------------------------
