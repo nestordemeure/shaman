@@ -14,13 +14,16 @@ from collections import defaultdict
 
 def remove_template_parameters(name):
     """returns a function name without the template parameters"""
-    if name.startswith("operator<"):
-        return "operator<"
-    else:
-        try:
-            return name[:name.index('<')]
-        except ValueError:
-            return name
+    if name.endswith('>'): # if the name might end with a template
+        template_number = 0
+        for i in reversed(range(len(name))):
+            if name[i] is '>': # we are going inside a template
+                template_number += 1
+            elif name[i] is '<': # we are going outside a template
+                template_number -= 1
+                if template_number == 0: # we went outside the outer template
+                    return name[:i]
+    return name
 
 def abreviate_file_name(file_name):
     """Returns a file name without its path"""
