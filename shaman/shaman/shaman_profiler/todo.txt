@@ -1,9 +1,7 @@
 
-some shaman function call other shaman functions
-+(double,S<double>) will call +(S<double>,S<double>)
-this will result in a profile inside shaman and not inside the actual code
+add a better way to visualize informations on top of the code ?
 
-some stl function such as std::max are also suceptible to call shaman function and to lose the frame
-
-add a way to visualize information on top of the code ?
-speed-up the debugger
+speed-up the debugger, maybe by using libunwind from C++ instead of a gdb script
+(posibility to get all of the informations directly from C++ without giving the hand to a debugger)
+see this tutorial for additional informations :
+https://eli.thegreenplace.net/2015/programmatic-access-to-the-call-stack-in-c/
