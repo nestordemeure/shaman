@@ -1,0 +1,9 @@
+
+some shaman function call other shaman functions
++(double,S<double>) will call +(S<double>,S<double>)
+this will result in a profile inside shaman and not inside the actual code
+
+some stl function such as std::max are also suceptible to call shaman function and to lose the frame
+
+add a way to visualize information on top of the code ?
+speed-up the debugger
