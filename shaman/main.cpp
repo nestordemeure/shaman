@@ -41,7 +41,7 @@ int main()
     newton();
     falsePositive();
     gauss();
-    //jacobi();
+    jacobi();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
