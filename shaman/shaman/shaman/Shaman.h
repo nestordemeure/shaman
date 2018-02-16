@@ -82,6 +82,8 @@ templated const Snum sin(const Snum& n);
 templated const Snum cos(const Snum& n);
 templated const Snum tan(const Snum& n);
 templated const Snum pow(const Snum& n1, const Snum& n2);
+templated const Snum min(const Snum& n1, const Snum& n2);
+templated const Snum max(const Snum& n1, const Snum& n2);
 templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3);
 
 // streaming operator

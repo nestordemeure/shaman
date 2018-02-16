@@ -453,6 +453,50 @@ templated inline const Snum pow(const Snum& n1, const Snum& n2)
 };
 set_Sfunction2_casts(pow);
 
+// min
+templated inline const Snum min(const Snum& n1, const Snum& n2)
+{
+    #ifdef NUMERICAL_DEBUGGER
+    if (Snum::isUnstableBranchings(n1, n2))
+    {
+        NumericalDebugger::unstableBranchings++;
+        NumericalDebugger::unstability();
+    }
+    #endif
+
+    if (n1.number <= n2.number)
+    {
+        return n1;
+    }
+    else
+    {
+        return n2;
+    }
+};
+set_Sfunction2_casts(min);
+
+// max
+templated inline const Snum max(const Snum& n1, const Snum& n2)
+{
+    #ifdef NUMERICAL_DEBUGGER
+    if (Snum::isUnstableBranchings(n1, n2))
+    {
+        NumericalDebugger::unstableBranchings++;
+        NumericalDebugger::unstability();
+    }
+    #endif
+
+    if (n1.number >= n2.number)
+    {
+        return n1;
+    }
+    else
+    {
+        return n2;
+    }
+};
+set_Sfunction2_casts(max);
+
 // fma
 templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 {
