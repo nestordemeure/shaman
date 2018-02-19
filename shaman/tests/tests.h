@@ -6,7 +6,11 @@
 #define COMPENSATIONS_TESTS_H
 
 #include <iostream>
+#include <cadna.h>
 #include "../shaman/shaman/Shaman.h"
+
+using Cdouble = double_st;
+using real = Sdouble;
 
 //---------------------------------------------------------------------------------------
 // FUNCTIONS
@@ -14,7 +18,7 @@
 /*
  * displays the absolute difference between a computed value and the expected value
  */
-templated void displayError(Snum result, double expectedResult)
+templated inline void displayError(Snum result, double expectedResult)
 {
     double error = result.number - expectedResult;
     double digits = -log10(std::abs(error / result.number));
@@ -33,7 +37,7 @@ templated void displayError(Snum result, double expectedResult)
 /*
  * displays the absolute difference between a computed value and the expected value
  */
-void displayError(double result, double expectedResult)
+inline void displayError(double result, double expectedResult)
 {
     double error = result - expectedResult;
     double digits = -log10(std::abs(error / result));
@@ -56,7 +60,7 @@ void displayError(double result, double expectedResult)
  * the result is astronomicaly wrong !
  * but consistant across precisions
  */
-void rumpTest()
+inline void rumpTest()
 {
     std::cout << "rump test" << std::endl;
 
@@ -80,7 +84,7 @@ void rumpTest()
  *
  * a nice example of Verificarlo working as expected on a problem
  */
-void polynomialTest()
+inline void polynomialTest()
 {
     std::cout << "polynomial test" << std::endl;
 
@@ -108,7 +112,7 @@ void polynomialTest()
 *
 *  This problem seems undetectable with MCA (which makes sense, MCA is all about perturbations)
 */
-void fixedPointTest()
+inline void fixedPointTest()
 {
     std::cout << "Fixed-point test" << std::endl;
 
@@ -127,7 +131,7 @@ void fixedPointTest()
 
 //-----
 
-real identity(real x)
+inline real identity(real x)
 {
     std::cout << "Identity test (x=" << x << ')' << std::endl;
 
@@ -156,7 +160,7 @@ real identity(real x)
  * MCA fail to detect problems around 0
  * (we might detect such comportment by analysing the sensitivity to perturbations in inputs)
  */
-void kahanIdentity()
+inline void kahanIdentity()
 {
     displayError(identity(0.0), 0);
     displayError(identity(0.5), 0.5);
@@ -168,7 +172,7 @@ void kahanIdentity()
 
 //-----
 
-real E(real z)
+inline real E(real z)
 {
     if (z == 0.0)
     {
@@ -180,13 +184,13 @@ real E(real z)
     }
 }
 
-real Q(real x)
+inline real Q(real x)
 {
     real sq = sqrt(x*x + 1.0);
     return fabs(x - sq) - 1.0/(x + sq);
 }
 
-real H(real x)
+inline real H(real x)
 {
     std::cout << "Muller test (x=" << (float) x << ')' << std::endl;
 
@@ -201,7 +205,7 @@ real H(real x)
  * but VERY sensible to perturbations
  * goes very wrong with MCA
  */
-void mullerTest()
+inline void mullerTest()
 {
     displayError(H(15.0), 1);
     displayError(H(16.0), 1);

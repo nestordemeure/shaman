@@ -14,7 +14,7 @@
 //---------------------------------------------------------------------------------------
 // POLYNOMIAL
 
-Sdouble P(Sdouble x, Sdouble y)
+real P(real x, real y)
 {
     return 9.0*x*x*x*x - y*y*y*y + 2.0*y*y;
 }
@@ -35,9 +35,9 @@ void polynomial()
     std::cout << "Rump equation." << '\n'
               << "Can we differentiate a bad result from a good one ?" << std::endl;
 
-    Sdouble x = 10864.0;
-    Sdouble y = 18817.0;
-    Sdouble res = P(x,y);
+    real x = 10864.0;
+    real y = 18817.0;
+    real res = P(x,y);
     std::cout << "P(10864,18817) = " << res << " (exact value : 1)" << std::endl;
     // displayError(res, 1);
 
@@ -63,9 +63,9 @@ void secondOrder()
     std::cout << "Second order equation." << '\n'
               << "Discriminant d=0, x1=x2=3.5" << std::endl;
 
-    Sdouble a = 0.3;
-    Sdouble b = -2.1;
-    Sdouble c = 3.675;
+    real a = 0.3;
+    real b = -2.1;
+    real c = 3.675;
 
     if (a == 0.0)
     {
@@ -82,36 +82,36 @@ void secondOrder()
         }
         else
         {
-            Sdouble x1 = - c/b;
-            std::cout << "The equation is degenerated. There is one Sdouble solution" << x1 << std::endl;
+            real x1 = - c/b;
+            std::cout << "The equation is degenerated. There is one real64 solution" << x1 << std::endl;
         }
     }
     else
     {
         b = b/a;
         c = c/a;
-        Sdouble d = b*b - 4.0*c;
+        real d = b*b - 4.0*c;
         std::cout << "d = " << d << std::endl;
         //displayError(d, 0);
 
         if (d == 0.0)
         {
-            Sdouble x1 = -b*0.5;
+            real x1 = -b*0.5;
             std::cout << "Discriminant is zero. The double solution is " << x1 << std::endl;
             //displayError(x1, 3.5);
         }
         else if (d > 0.0)
         {
-            Sdouble x1 = ( - b - sqrt(d))*0.5;
-            Sdouble x2 = ( - b + sqrt(d))*0.5;
-            std::cout << "There are two Sdouble solutions. x1 = " << x1 << " x2 = " << x2 << std::endl;
+            real x1 = ( - b - sqrt(d))*0.5;
+            real x2 = ( - b + sqrt(d))*0.5;
+            std::cout << "There are two real64 solutions. x1 = " << x1 << " x2 = " << x2 << std::endl;
             //displayError(x1, 3.5);
             //displayError(x2, 3.5);
         }
         else
         {
-            Sdouble x1 = - b*0.5;
-            Sdouble x2 = sqrt(-d)*0.5;
+            real x1 = - b*0.5;
+            real x2 = sqrt(-d)*0.5;
             std::cout << "There are two complex solutions."
                       << "z1 = " << x1 << " + i * " << x2 << ' '
                       << "z2 = " << x1 << " + i * " << -x2
@@ -141,7 +141,7 @@ void hilbert()
               << "The gradual loss of accuracy is pointed out." << '\n'
               << "One can see that the value of the determinant is significant even if it is very \"small\"." << std::endl;
 
-    std::array<std::array<Sdouble, 11>, 11> amat;
+    std::array<std::array<real, 11>, 11> amat;
     for (int i = 1; i <= 11; i++)
     {
         for (int j = 1; j <= 11; j++)
@@ -149,16 +149,16 @@ void hilbert()
             amat[i-1][j-1] = 1.0 / (i+j-1);
         }
     }
-    Sdouble det = 1.0;
+    real det = 1.0;
 
     int i;
     for (i = 1; i <= 10; i++)
     {
-        Sdouble pivot = amat[i-1][i-1];
+        real pivot = amat[i-1][i-1];
         std::cout << "Pivot number " << i << " = " << pivot << std::endl;
         det = det * pivot;
 
-        Sdouble aux = 1.0 / pivot;
+        real aux = 1.0 / pivot;
         for (int j = i+1; j <= 11; j++)
         {
             amat[i-1][j-1] = amat[i-1][j-1] * aux;
@@ -174,7 +174,7 @@ void hilbert()
         }
     }
 
-    Sdouble pivot = amat[i-1][i-1];
+    real pivot = amat[i-1][i-1];
     det = det * pivot;
     std::cout << "Pivot number " << i << " = " << pivot << std::endl;
     std::cout << "Determinant = " << det << std::endl;
@@ -200,12 +200,12 @@ void muller()
               << "The unstable division make us unable to track the precision past them."
               << std::endl;
 
-    Sdouble a = 5.5;
-    Sdouble b = 61.0/11.0;
+    real a = 5.5;
+    real b = 61.0/11.0;
 
     for (int i = 3; i <= 25; i++)
     {
-        Sdouble c = b;
+        real c = b;
         b = 111.0 - 1130.0/b + 3000.0/(a*b);
         a = c;
         std::cout << "U(" << i << ") = " << b << std::endl;
@@ -236,12 +236,12 @@ void newton()
     std::cout << "Root of a polynomial by Newton's method" << '\n'
               << "One can see that 7 significant digits were lost (despite the apparent stability)." << std::endl;
 
-    Sdouble eps = 1.0e-12;
+    real eps = 1.0e-12;
     int nmax = 100;
 
     int i;
-    Sdouble y = 0.5;
-    Sdouble x = y + 2.0*eps;
+    real y = 0.5;
+    real x = y + 2.0*eps;
     for (i = 1; (i <= nmax) && (abs(x-y) >= eps); i++)
     {
         x = y;
@@ -480,7 +480,7 @@ void jacobi()
 //---------------------------------------------------------------------------------------
 // CADNA FAILURES
 
-Sdouble squaredTriangleArea(Sdouble x, Sdouble y, Sdouble z)
+real squaredTriangleArea(real x, real y, real z)
 {
     return (x + y + z) * (z - (x - y)) * (z + (x - y)) * (x + (y - z));
 }
@@ -491,13 +491,13 @@ Sdouble squaredTriangleArea(Sdouble x, Sdouble y, Sdouble z)
 void falsePositive()
 {
     std::cout << "False positive." << '\n'
-              << "Example of a problem where CADNA falsly detects that the result has no significative digits"
+              << "Example of a problem where CADNA is said to falsly detects that the result has no significative digits"
               << std::endl;
 
-    Sdouble x = 1.234568e6;
-    Sdouble y = 1.234567e6;
-    Sdouble z = 1.00000000023;
-    Sdouble r = sqrt( squaredTriangleArea(x,y,z) / squaredTriangleArea(x,y,2.0*z) );
+    real x = 1.234568e6;
+    real y = 1.234567e6;
+    real z = 1.00000000023;
+    real r = sqrt( squaredTriangleArea(x,y,z) / squaredTriangleArea(x,y,2.0*z) );
 
     std::cout << "ratio of areas : " << r << " (exact result  1.238278374e-05)" << std::endl;
 

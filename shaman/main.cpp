@@ -12,6 +12,7 @@
 
 int main()
 {
+    cadna_init(-1);
     auto begin = std::chrono::steady_clock::now();
 
     // various tests
@@ -40,7 +41,7 @@ int main()
     muller();
     newton();
     falsePositive();
-    gauss();
+    //gauss();
     //jacobi();
 
     // displays computation time
@@ -48,5 +49,6 @@ int main()
     auto elapsedSec = std::chrono::duration<double>(end - begin).count();
     std::cout << "Time elapsed = " << elapsedSec << 's' << std::endl;
 
+    cadna_end();
     return 0;
 }

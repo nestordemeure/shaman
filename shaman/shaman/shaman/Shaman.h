@@ -99,9 +99,29 @@ using Sfloat = S<float, float, double>;
 using Sdouble = S<double, double, long double>;
 using Slong_double = S<long double, long double, long double>;
 #endif
-using real = Sdouble;
 
+/*
+// CADNA openMP definition
 
+#ifdef _OPENMP
+#pragma omp threadprivate (_cadna_random, _cadna_random_counter, _cadna_recurrence)
+#endif //_OPENMP
+
+#ifdef _OPENMP
+#pragma omp declare reduction(+:float_st : omp_out=omp_in+omp_out)	\
+  initializer(omp_priv=float_st(0.f))
+#pragma omp declare reduction(+:double_st: omp_out=omp_in+omp_out)	\
+  initializer(omp_priv=double_st(0.))
+#pragma omp declare reduction(-:float_st : omp_out=omp_in+omp_out)	\
+  initializer(omp_priv=float_st(0.f))
+#pragma omp declare reduction(-:double_st: omp_out=omp_in+omp_out)	\
+  initializer(omp_priv=double_st(0.))
+#pragma omp declare reduction(*:float_st : omp_out=omp_in*omp_out)	\
+  initializer(omp_priv=float_st(1.f))
+#pragma omp declare reduction(*:double_st: omp_out=omp_in*omp_out)	\
+  initializer(omp_priv=double_st(1.))
+#endif //_OPENMP
+*/
 
 #endif //SHAMAN_H
 #include "Shaman_Decl.h"
