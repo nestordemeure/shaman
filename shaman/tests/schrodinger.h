@@ -30,19 +30,19 @@ class Schrodinger
 {
 private:
     // constants
-    std::vector<real> psi;
-    real ECurrent;
-    real EMin = 1.490;
-    real xMin = -15.;
-    real xMax = 15.;
-    real hZero;
-    real EDelta = 1e-7;
-    real maxPsi = 1e-8;
+    std::vector<number> psi;
+    number ECurrent;
+    number EMin = 1.490;
+    number xMin = -15.;
+    number xMax = 15.;
+    number hZero;
+    number EDelta = 1e-7;
+    number maxPsi = 1e-8;
     int numberDivisions = 200;
 
     // computations
-    real calculateKSSquared(int n);
-    real calculateNextPsi(int n);
+    number calculateKSSquared(int n);
+    number calculateNextPsi(int n);
 
 public:
     // initialisation

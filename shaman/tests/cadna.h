@@ -14,7 +14,7 @@
 //---------------------------------------------------------------------------------------
 // POLYNOMIAL
 
-real P(real x, real y)
+number P(number x, number y)
 {
     return 9.0*x*x*x*x - y*y*y*y + 2.0*y*y;
 }
@@ -35,9 +35,9 @@ void polynomial()
     std::cout << "Rump equation." << '\n'
               << "Can we differentiate a bad result from a good one ?" << std::endl;
 
-    real x = 10864.0;
-    real y = 18817.0;
-    real res = P(x,y);
+    number x = 10864.0;
+    number y = 18817.0;
+    number res = P(x,y);
     std::cout << "P(10864,18817) = " << res << " (exact value : 1)" << std::endl;
     // displayError(res, 1);
 
@@ -63,9 +63,9 @@ void secondOrder()
     std::cout << "Second order equation." << '\n'
               << "Discriminant d=0, x1=x2=3.5" << std::endl;
 
-    real a = 0.3;
-    real b = -2.1;
-    real c = 3.675;
+    number a = 0.3;
+    number b = -2.1;
+    number c = 3.675;
 
     if (a == 0.0)
     {
@@ -82,7 +82,7 @@ void secondOrder()
         }
         else
         {
-            real x1 = - c/b;
+            number x1 = - c/b;
             std::cout << "The equation is degenerated. There is one real64 solution" << x1 << std::endl;
         }
     }
@@ -90,28 +90,28 @@ void secondOrder()
     {
         b = b/a;
         c = c/a;
-        real d = b*b - 4.0*c;
+        number d = b*b - 4.0*c;
         std::cout << "d = " << d << std::endl;
         //displayError(d, 0);
 
         if (d == 0.0)
         {
-            real x1 = -b*0.5;
+            number x1 = -b*0.5;
             std::cout << "Discriminant is zero. The double solution is " << x1 << std::endl;
             //displayError(x1, 3.5);
         }
         else if (d > 0.0)
         {
-            real x1 = ( - b - sqrt(d))*0.5;
-            real x2 = ( - b + sqrt(d))*0.5;
+            number x1 = ( - b - sqrt(d))*0.5;
+            number x2 = ( - b + sqrt(d))*0.5;
             std::cout << "There are two real64 solutions. x1 = " << x1 << " x2 = " << x2 << std::endl;
             //displayError(x1, 3.5);
             //displayError(x2, 3.5);
         }
         else
         {
-            real x1 = - b*0.5;
-            real x2 = sqrt(-d)*0.5;
+            number x1 = - b*0.5;
+            number x2 = sqrt(-d)*0.5;
             std::cout << "There are two complex solutions."
                       << "z1 = " << x1 << " + i * " << x2 << ' '
                       << "z2 = " << x1 << " + i * " << -x2
@@ -141,7 +141,7 @@ void hilbert()
               << "The gradual loss of accuracy is pointed out." << '\n'
               << "One can see that the value of the determinant is significant even if it is very \"small\"." << std::endl;
 
-    std::array<std::array<real, 11>, 11> amat;
+    std::array<std::array<number, 11>, 11> amat;
     for (int i = 1; i <= 11; i++)
     {
         for (int j = 1; j <= 11; j++)
@@ -149,16 +149,16 @@ void hilbert()
             amat[i-1][j-1] = 1.0 / (i+j-1);
         }
     }
-    real det = 1.0;
+    number det = 1.0;
 
     int i;
     for (i = 1; i <= 10; i++)
     {
-        real pivot = amat[i-1][i-1];
+        number pivot = amat[i-1][i-1];
         std::cout << "Pivot number " << i << " = " << pivot << std::endl;
         det = det * pivot;
 
-        real aux = 1.0 / pivot;
+        number aux = 1.0 / pivot;
         for (int j = i+1; j <= 11; j++)
         {
             amat[i-1][j-1] = amat[i-1][j-1] * aux;
@@ -174,7 +174,7 @@ void hilbert()
         }
     }
 
-    real pivot = amat[i-1][i-1];
+    number pivot = amat[i-1][i-1];
     det = det * pivot;
     std::cout << "Pivot number " << i << " = " << pivot << std::endl;
     std::cout << "Determinant = " << det << std::endl;
@@ -200,12 +200,12 @@ void muller()
               << "The unstable division make us unable to track the precision past them."
               << std::endl;
 
-    real a = 5.5;
-    real b = 61.0/11.0;
+    number a = 5.5;
+    number b = 61.0/11.0;
 
     for (int i = 3; i <= 25; i++)
     {
-        real c = b;
+        number c = b;
         b = 111.0 - 1130.0/b + 3000.0/(a*b);
         a = c;
         std::cout << "U(" << i << ") = " << b << std::endl;
@@ -236,12 +236,12 @@ void newton()
     std::cout << "Root of a polynomial by Newton's method" << '\n'
               << "One can see that 7 significant digits were lost (despite the apparent stability)." << std::endl;
 
-    real eps = 1.0e-12;
+    number eps = 1.0e-12;
     int nmax = 100;
 
     int i;
-    real y = 0.5;
-    real x = y + 2.0*eps;
+    number y = 0.5;
+    number x = y + 2.0*eps;
     for (i = 1; (i <= nmax) && (abs(x-y) >= eps); i++)
     {
         x = y;
@@ -277,37 +277,37 @@ void gauss()
     int idim = a.size();
     int idim1 = a[0].size();
 
-    xsol[0] = 1.;
-    xsol[1] = 1.;
-    xsol[2] = 1.e-8;
-    xsol[3] = 1.;
-    a[0][0] = 21.0;
-    a[0][1] = 130.0;
-    a[0][2] = 0.0;
-    a[0][3] = 2.1;
-    a[0][4] = 153.1;
-    a[1][0] = 13.0;
-    a[1][1] = 80.0;
-    a[1][2] = 4.74e+8;
-    a[1][3] = 752.0;
-    a[1][4] = 849.74;
-    a[2][0] = 0.0;
-    a[2][1] = -0.4;
-    a[2][2] = 3.9816e+8;
-    a[2][3] = 4.2;
-    a[2][4] = 7.7816;
-    a[3][0] = 0.0;
-    a[3][1] = 0.0;
-    a[3][2] = 1.7;
-    a[3][3] = 9.0e-9;
-    a[3][4] = 2.6e-8;
+    xsol[0] = 1.f;
+    xsol[1] = 1.f;
+    xsol[2] = 1.e-8f;
+    xsol[3] = 1.f;
+    a[0][0] = 21.0f;
+    a[0][1] = 130.0f;
+    a[0][2] = 0.0f;
+    a[0][3] = 2.1f;
+    a[0][4] = 153.1f;
+    a[1][0] = 13.0f;
+    a[1][1] = 80.0f;
+    a[1][2] = 4.74e+8f;
+    a[1][3] = 752.0f;
+    a[1][4] = 849.74f;
+    a[2][0] = 0.0f;
+    a[2][1] = -0.4f;
+    a[2][2] = 3.9816e+8f;
+    a[2][3] = 4.2f;
+    a[2][4] = 7.7816f;
+    a[3][0] = 0.0f;
+    a[3][1] = 0.0f;
+    a[3][2] = 1.7f;
+    a[3][3] = 9.0e-9f;
+    a[3][4] = 2.6e-8f;
 
     for (int i = 1; i<idim; i++)
     {
         Sfloat aux;
         int ll = 0;
 
-        Sfloat pmax = 0.0;
+        Sfloat pmax = 0.0f;
         for (int j = i; j <= idim; j++)
         {
             if (abs(a[j-1][i-1]) > pmax)
@@ -366,7 +366,7 @@ void gauss()
 // Jacobi's method
 
 int nrand = 23;
-double random1()
+float random1()
 {
     nrand = (nrand*5363 + 143) % 1387;
     return 2.0*nrand/1387.0 - 1.0;
@@ -386,7 +386,7 @@ void jacobi()
 {
     std::cout << "Jacobi's method" << std::endl;
 
-    Sfloat eps = 1e-4;
+    Sfloat eps = 1e-4f;
     int ndim = 20;
     int niter = 1000;
     std::array<std::array<Sfloat, 20>, 20> a;
@@ -395,26 +395,26 @@ void jacobi()
     std::array<Sfloat, 20> y;
     std::array<Sfloat, 20> xsol;
 
-    xsol[0] = 1.7;
-    xsol[1] = -4746.89;
-    xsol[2] = 50.23;
-    xsol[3] = -245.32;
-    xsol[4] = 4778.29;
-    xsol[5] = -75.73;
-    xsol[6] = 3495.43;
-    xsol[7] = 4.35;
-    xsol[8] = 452.98;
-    xsol[9] = -2.76;
-    xsol[10] = 8239.24;
-    xsol[11] = 3.46;
-    xsol[12] = 1000.0;
-    xsol[13] = -5.0;
-    xsol[14] = 3642.4;
-    xsol[15] = 735.36;
-    xsol[16] = 1.7;
-    xsol[17] = -2349.17;
-    xsol[18] = -8247.52;
-    xsol[19] = 9843.57;
+    xsol[0] = 1.7f;
+    xsol[1] = -4746.89f;
+    xsol[2] = 50.23f;
+    xsol[3] = -245.32f;
+    xsol[4] = 4778.29f;
+    xsol[5] = -75.73f;
+    xsol[6] = 3495.43f;
+    xsol[7] = 4.35f;
+    xsol[8] = 452.98f;
+    xsol[9] = -2.76f;
+    xsol[10] = 8239.24f;
+    xsol[11] = 3.46f;
+    xsol[12] = 1000.0f;
+    xsol[13] = -5.0f;
+    xsol[14] = 3642.4f;
+    xsol[15] = 735.36f;
+    xsol[16] = 1.7f;
+    xsol[17] = -2349.17f;
+    xsol[18] = -8247.52f;
+    xsol[19] = 9843.57f;
 
     for (int i = 0; i < ndim; i++)
     {
@@ -422,24 +422,24 @@ void jacobi()
         {
             a[i][j] = random1();
         }
-        a[i][i] = a[i][i] + 4.9213648;
+        a[i][i] = a[i][i] + 4.9213648f;
     }
     for (int i = 0; i < ndim; i++)
     {
-        Sfloat aux = 0.0;
+        Sfloat aux = 0.0f;
         for (int j = 0; j < ndim; j++)
         {
             aux = aux + a[i][j] * xsol[j];
         }
         b[i] = aux;
-        y[i] = 10.0;
+        y[i] = 10.0f;
     }
 
     int i;
-    Sfloat anorm = 1.0 + eps;
+    Sfloat anorm = 1.0f + eps;
     for (i = 0; (i < niter) && (anorm >= eps); i++)
     {
-        anorm = 0.0;
+        anorm = 0.0f;
         for (int j = 0; j < ndim; j++)
         {
             x[j] = y[j];
@@ -480,7 +480,7 @@ void jacobi()
 //---------------------------------------------------------------------------------------
 // CADNA FAILURES
 
-real squaredTriangleArea(real x, real y, real z)
+number squaredTriangleArea(number x, number y, number z)
 {
     return (x + y + z) * (z - (x - y)) * (z + (x - y)) * (x + (y - z));
 }
@@ -494,10 +494,10 @@ void falsePositive()
               << "Example of a problem where CADNA is said to falsly detects that the result has no significative digits"
               << std::endl;
 
-    real x = 1.234568e6;
-    real y = 1.234567e6;
-    real z = 1.00000000023;
-    real r = sqrt( squaredTriangleArea(x,y,z) / squaredTriangleArea(x,y,2.0*z) );
+    number x = 1.234568e6;
+    number y = 1.234567e6;
+    number z = 1.00000000023;
+    number r = sqrt( squaredTriangleArea(x,y,z) / squaredTriangleArea(x,y,2.0*z) );
 
     std::cout << "ratio of areas : " << r << " (exact result  1.238278374e-05)" << std::endl;
 

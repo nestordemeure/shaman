@@ -46,7 +46,7 @@ std::array<Sdouble, 21> legendre20 = []()
 // compute a a value using Horner's algorithm
 Sdouble legendreHorner(Sdouble x)
 {
-    Sdouble result = 0;
+    Sdouble result = 0.0;
 
     for (int i = 20; i >= 0; i--)
     {
@@ -63,7 +63,7 @@ Sdouble legendreHorner(Sdouble x)
 // compute a value using the naive polynomial evaluation algorithm
 Sdouble legendreNaive(Sdouble x)
 {
-    Sdouble result = 0;
+    Sdouble result = 0.0;
 
     for (int i = 20; i >= 0; i--)
     {
@@ -79,7 +79,7 @@ Sdouble legendreRec(int q, Sdouble x)
 {
     if (q == 0)
     {
-        return 1;
+        return 1.0;
     }
     else if (q == 1)
     {
@@ -87,7 +87,7 @@ Sdouble legendreRec(int q, Sdouble x)
     }
     else
     {
-        Sdouble p0 = 1;
+        Sdouble p0 = 1.0;
         Sdouble p1 = x;
         Sdouble pn = x;
 

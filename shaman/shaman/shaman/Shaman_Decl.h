@@ -89,65 +89,103 @@ inline Sdouble makeStype(double t) { return Sdouble(t); };
 inline Slong_double makeStype(long double t) { return Slong_double(t); };
 templated inline Snum makeStype(Snum s) { return s; };
 
-// takes an S type and builds a value with the underlying type
-template<typename num, typename e, typename p>
-inline num extractFromSType(S<num,e,p> n) { return n.number; };
-template<typename num>
-inline num extractFromSType(num n) { return n; }; // default case
-
-// takes two values, if the first value is a Stype and the second its numberType then it returns the Stype
-// otherwise it returns the type of the second value
-template<typename T1, typename T2>
-T2 keepSType(T1 original_type, T2 new_type) { return new_type; };
-template<typename num, typename e, typename p>
-inline S<num,e,p> keepSType(S<num,e,p> original_Stype, num new_type) { return original_Stype; };
-
-// takes two values and returns the type C++ would use as a return type for the sum of their underlying types
-// if the output type is part of one of the input Stypes then returns the Stype
-// if both values are Stypes with the same number type, it will use the first one by default
-#define typeOfSsum(t1,t2) keepSType(t2, keepSType(t1, extractFromSType(t1) + extractFromSType(t2)))
-
-// takes three values and returns the type C++ would use as a return type for the fma of their underlying types
-#define typeOfSfma(t1,t2,t3) keepSType(t3, keepSType(t2, keepSType(t1, std::fma(extractFromSType(t1), extractFromSType(t2), extractFromSType(t3)) )))
-
 // takes two values and builds a S type around the type C++ would use as a return type for their sum
-#define SreturnType(t1,t2) decltype(makeStype(typeOfSsum(t1, t2)))
-
+#define SreturnType(t1,t2) decltype(makeStype(t1 + t2))
 // takes three values and builds a S type around the type C++ would use as a return type for their fma
-#define SreturnType3(t1,t2,t3) decltype(makeStype(typeOfSfma(t1, t2, t3)))
+#define SreturnType3(t1,t2,t3) decltype(makeStype( std::fma(t1, t2, t3)))
 
 //-----
 
 // defines overload for arithmetic operators
 #define set_Soperator_casts(OPERATOR) \
-template<typename T1, typename T2> \
-inline auto operator OPERATOR (const T1& n1, const T2& n2) \
+template<typename N, typename E, typename P, typename T> \
+inline auto operator OPERATOR (const S<N,E,P>& n1, const T& n2) \
 { \
-    return SreturnType(n1,n2)(n1) OPERATOR SreturnType(n1,n2)(n2); \
+    return SreturnType(n1.number,n2)(n1) OPERATOR SreturnType(n1.number,n2)(n2); \
+} \
+template<typename N, typename E, typename P, typename T> \
+inline auto operator OPERATOR (const T& n1, const S<N,E,P>& n2) \
+{ \
+    return SreturnType(n1,n2.number)(n1) OPERATOR SreturnType(n1,n2.number)(n2); \
+} \
+template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2> \
+inline auto operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
+{ \
+    return SreturnType(n1.number,n2.number)(n1) OPERATOR SreturnType(n1.number,n2.number)(n2); \
 } \
 
 // defines overload for boolean operators
 #define set_Sbool_operator_casts(OPERATOR) \
-template<typename T1, typename T2> \
-inline bool operator OPERATOR (const T1& n1, const T2& n2) \
+template<typename N, typename E, typename P, typename T> \
+inline bool operator OPERATOR (const S<N,E,P>& n1, const T& n2) \
 { \
-    return SreturnType(n1,n2)(n1) OPERATOR SreturnType(n1,n2)(n2); \
+    return SreturnType(n1.number,n2)(n1) OPERATOR SreturnType(n1.number,n2)(n2); \
+} \
+template<typename N, typename E, typename P, typename T> \
+inline bool operator OPERATOR (const T& n1, const S<N,E,P>& n2) \
+{ \
+    return SreturnType(n1,n2.number)(n1) OPERATOR SreturnType(n1,n2.number)(n2); \
+} \
+template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2> \
+inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
+{ \
+    return SreturnType(n1.number,n2.number)(n1) OPERATOR SreturnType(n1.number,n2.number)(n2); \
 } \
 
 // defines overload for function taking two arguments
 #define set_Sfunction2_casts(FUN) \
-template<typename T1, typename T2> \
-inline auto FUN (const T1& n1, const T2& n2) \
+template<typename N, typename E, typename P, typename T> \
+inline auto FUN (const S<N,E,P>& n1, const T& n2) \
 { \
-    return FUN(SreturnType(n1,n2)(n1), SreturnType(n1,n2)(n2)); \
+    return FUN(SreturnType(n1.number,n2)(n1), SreturnType(n1.number,n2)(n2)); \
+} \
+template<typename N, typename E, typename P, typename T> \
+inline auto FUN (const T& n1, const S<N,E,P>& n2) \
+{ \
+    return FUN(SreturnType(n1,n2.number)(n1), SreturnType(n1,n2.number)(n2)); \
+} \
+template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2> \
+inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
+{ \
+    return FUN(SreturnType(n1.number,n2.number)(n1), SreturnType(n1.number,n2.number)(n2)); \
 } \
 
 // defines overload for function taking three arguments
 #define set_Sfunction3_casts(FUN) \
-template<typename T1, typename T2, typename T3> \
-inline auto FUN (const T1& n1, const T2& n2, const T3& n3) \
+template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename N3, typename E3, typename P3> \
+inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, const S<N3,E3,P3>& n3) \
 { \
-    return FUN(SreturnType3(n1,n2,n3)(n1), SreturnType3(n1,n2,n3)(n2), SreturnType3(n1,n2,n3)(n3)); \
+    return FUN(SreturnType3(n1.number,n2.number,n3.number)(n1), SreturnType3(n1.number,n2.number,n3.number)(n2), SreturnType3(n1.number,n2.number,n3.number)(n3)); \
+} \
+template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename T> \
+inline auto FUN (const T& n1, const S<N1,E1,P1>& n2, const S<N2,E2,P2>& n3) \
+{ \
+    return FUN(SreturnType3(n1,n2.number,n3.number)(n1), SreturnType3(n1,n2.number,n3.number)(n2), SreturnType3(n1,n2.number,n3.number)(n3)); \
+} \
+template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename T> \
+inline auto FUN (const S<N1,E1,P1>& n1, const T& n2, const S<N2,E2,P2>& n3) \
+{ \
+    return FUN(SreturnType3(n1.number,n2,n3.number)(n1), SreturnType3(n1.number,n2,n3.number)(n2), SreturnType3(n1.number,n2,n3.number)(n3)); \
+} \
+template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename T> \
+inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, const T& n3) \
+{ \
+    return FUN(SreturnType3(n1.number,n2.number,n3)(n1), SreturnType3(n1.number,n2.number,n3)(n2), SreturnType3(n1.number,n2.number,n3)(n3)); \
+} \
+template<typename N, typename E, typename P, typename T1, typename T2> \
+inline auto FUN (const S<N,E,P>& n1, const T1& n2, const T2& n3) \
+{ \
+    return FUN(SreturnType3(n1.number,n2,n3)(n1), SreturnType3(n1.number,n2,n3)(n2), SreturnType3(n1.number,n2,n3)(n3)); \
+} \
+template<typename N, typename E, typename P, typename T1, typename T2> \
+inline auto FUN (const T1& n1, const S<N,E,P>& n2, const T2& n3) \
+{ \
+    return FUN(SreturnType3(n1,n2.number,n3)(n1), SreturnType3(n1,n2.number,n3)(n2), SreturnType3(n1,n2.number,n3)(n3)); \
+} \
+template<typename N, typename E, typename P, typename T1, typename T2> \
+inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) \
+{ \
+    return FUN(SreturnType3(n1,n2,n3.number)(n1), SreturnType3(n1,n2,n3.number)(n2), SreturnType3(n1,n2,n3.number)(n3)); \
 } \
 
 #endif

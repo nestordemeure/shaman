@@ -6,13 +6,14 @@
 #include "tests/schrodinger.h"
 #include "tests/cadna.h"
 #include "tests/legendre.h"
+#include "tests/eigen.h"
 
 //---------------------------------------------------------------------------------------
 // MAIN
 
 int main()
 {
-    cadna_init(-1);
+    //cadna_init(-1);
     auto begin = std::chrono::steady_clock::now();
 
     // various tests
@@ -35,20 +36,25 @@ int main()
     //legendre20Test();
 
     // CADNA double
+    /*
     polynomial();
     secondOrder();
     hilbert();
     muller();
     newton();
     falsePositive();
-    //gauss();
-    //jacobi();
+    gauss();
+    jacobi();
+    */
+
+    // eigen
+    eigenDemo();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
     auto elapsedSec = std::chrono::duration<double>(end - begin).count();
     std::cout << "Time elapsed = " << elapsedSec << 's' << std::endl;
 
-    cadna_end();
+    //cadna_end();
     return 0;
 }

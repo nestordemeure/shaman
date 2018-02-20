@@ -37,26 +37,26 @@ void Compensatedsum(int size)
     generate(begin(data), end(data), gen);
 
     // usual sum
-    real sum = 0.0;
+    number sum = 0.0;
     // kahan sum
-    real kahanSum = 0.0;
-    real compensation = 0.0;
+    number kahanSum = 0.0;
+    number compensation = 0.0;
     // improved kahan sum
-    real improvedSum = 0.0;
-    real compensation2 = 0.0;
+    number improvedSum = 0.0;
+    number compensation2 = 0.0;
     for(double x : data)
     {
         // usual sum
         sum += x;
 
         // kahan sum
-        real y = x - compensation;
-        real t = kahanSum + y;
+        number y = x - compensation;
+        number t = kahanSum + y;
         compensation = (t - kahanSum) - y;
         kahanSum = t;
 
         // improved kahan
-        real t2 = improvedSum + x;
+        number t2 = improvedSum + x;
         if( fabs(improvedSum) >= fabs(x) )
         {
             compensation2 += (improvedSum - t2) + x;
@@ -72,13 +72,13 @@ void Compensatedsum(int size)
     // compute the exact sum using exblas
     double exactSum = exact::sum(data);
 
-    std::cout << "sum:" << std::endl;
+    std::cout << "sum: " << sum << std::endl;
     displayError(sum, exactSum);
 
-    std::cout << "improved_sum:" << std::endl;
+    std::cout << "improved_sum: " << improvedSum << std::endl;
     displayError(improvedSum, exactSum);
 
-    std::cout << "kahan_sum:" << std::endl;
+    std::cout << "kahan_sum: " << kahanSum << std::endl;
     displayError(kahanSum, exactSum);
 }
 
