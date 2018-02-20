@@ -73,6 +73,7 @@ templated const Snum operator*(const Snum& n1, const Snum& n2);
 templated const Snum operator/(const Snum& n1, const Snum& n2);
 
 // mathematical functions
+templated bool isfinite(const Snum& n);
 templated const Snum abs(const Snum& n);
 templated const Snum fabs(const Snum& n);
 templated const Snum sqrt(const Snum& n);
