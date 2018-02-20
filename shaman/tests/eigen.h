@@ -35,6 +35,17 @@ namespace Eigen
     };
 }
 
+/*
+ * adds the needed fucntions to Sdouble
+ */
+inline const Sdouble& conj(const Sdouble& x)  { return x; }
+inline const Sdouble& real(const Sdouble& x)  { return x; }
+inline Sdouble imag(const Sdouble&)    { return 0.; }
+inline Sdouble abs2(const Sdouble& x)  { return x*x; }
+
+/*
+ * define shortcuts for our matrix types
+ */
 using Smatrix = Eigen::Matrix<Sdouble, Eigen::Dynamic, Eigen::Dynamic>;
 using Svector = Eigen::Matrix<Sdouble, Eigen::Dynamic, 1>;
 
@@ -43,7 +54,7 @@ using Svector = Eigen::Matrix<Sdouble, Eigen::Dynamic, 1>;
 
 /*
  * create a kac matrix (also known as clement matrix)
- * its eigenvalues are the (2*k - n + 1)
+ * its eigenvalues are the (2*k - size + 1)
  */
 Smatrix KacMat(int size)
 {
@@ -65,31 +76,25 @@ Smatrix KacMat(int size)
  */
 void eigenDemo()
 {
-    int size = 11;
+    int size = 50;
 
     // defining the matrix
     Smatrix A = KacMat(size);
     //std::cout << "The matrix A is:\n" << A << '\n' << std::endl;
 
-    // finding the eigenvalues
-    Eigen::SelfAdjointEigenSolver<Smatrix> eigensolver(A);
-    if (eigensolver.info() != Eigen::Success)
-    {
-        abort();
-    }
-    else
-    {
-        Svector eigenvals = eigensolver.eigenvalues();
-        //std::cout << "Eigenvalues of A :\n" << eigenvals << std::endl;
-        //std::cout << "Corresponding eigenvectors of A :\n" << eigensolver.eigenvectors() << std::endl;
+    // computing the eigenvalues
+    Svector eigenvals = A.eigenvalues().real();
+    std::sort(eigenvals.data(), eigenvals.data() + eigenvals.size());
 
-        for(int k = 0; k < size; k++)
-        {
-            Sdouble computedEigenval = eigenvals(k);
-            int realeigenval = 2*k - size + 1;
-            //displayError(computedEigenval,realeigenval);
-            std::cout << computedEigenval << " instead of " << realeigenval << std::endl;
-        }
+    // displaying the result
+    //std::cout << "Eigenvalues of A :\n" << eigenvals << std::endl;
+    for(int k = 0; k < size; k++)
+    {
+        Sdouble computedEigenval = eigenvals(k);
+        int realeigenval = 2*k - size + 1;
+
+        //displayError(computedEigenval,realeigenval);
+        std::cout << computedEigenval << "\t\t\t(" << computedEigenval.number << " instead of " << realeigenval << ')' << std::endl;
     }
 }
 

@@ -350,6 +350,12 @@ set_Soperator_casts(/);
 //-----------------------------------------------------------------------------
 // MATHEMATICAL FUNCTIONS
 
+// isifnite
+templated inline bool isfinite(const Snum& n)
+{
+    return std::isfinite(n.number);
+};
+
 // abs
 templated inline const Snum abs(const Snum& n)
 {

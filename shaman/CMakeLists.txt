@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_CXX_COMPILER clang++-5.0)
 
 # flags
-#add_definitions(-DNUMERICAL_DEBUGGER)
+add_definitions(-DNUMERICAL_DEBUGGER)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mfma -O1 -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__ -m64 -frounding-math") # -Werror -fopenmp
