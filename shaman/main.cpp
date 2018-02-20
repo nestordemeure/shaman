@@ -22,7 +22,7 @@ int main()
     polynomialTest();
     fixedPointTest();
     //kahanIdentity();
-    mullerTest();
+    //mullerTest();
     */
 
     // sums
