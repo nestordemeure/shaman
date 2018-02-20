@@ -6,11 +6,13 @@
 #define COMPENSATIONS_TESTS_H
 
 #include <iostream>
-#include <cadna.h>
 #include "../shaman/shaman/Shaman.h"
 
-using Cdouble = double_st;
-using real = Sdouble;
+// CADNA
+//#include <cadna.h>
+//using Cdouble = double_st;
+
+using number = Sdouble;
 
 //---------------------------------------------------------------------------------------
 // FUNCTIONS
@@ -37,10 +39,11 @@ templated inline void displayError(Snum result, double expectedResult)
 /*
  * displays the absolute difference between a computed value and the expected value
  */
-inline void displayError(double result, double expectedResult)
+template<typename T> inline void displayError(T result, double expectedResult)
 {
-    double error = result - expectedResult;
-    double digits = -log10(std::abs(error / result));
+    double fresult = result;
+    double error = fresult - expectedResult;
+    double digits = -log10(std::abs(error / fresult));
 
     std::cout << "result=" << result
               << std::endl
@@ -64,15 +67,15 @@ inline void rumpTest()
 {
     std::cout << "rump test" << std::endl;
 
-    real x = 77617.0;
-    real y = 33096.0;
-    real x2 = x*x;
-    real y2 = y*y;
-    real y4 = y2*y2;
-    real y6 = y4*y2;
-    real y8 = y4*y4;
+    number x = 77617.0;
+    number y = 33096.0;
+    number x2 = x*x;
+    number y2 = y*y;
+    number y4 = y2*y2;
+    number y6 = y4*y2;
+    number y8 = y4*y4;
 
-    real result = 333.75*y6 + x2*(11.0*x2*y2 - y6 - 121.0*y4 - 2.0) + 5.5*y8 + x/(2.0*y);
+    number result = 333.75*y6 + x2*(11.0*x2*y2 - y6 - 121.0*y4 - 2.0) + 5.5*y8 + x/(2.0*y);
 
     displayError(result, -0.82739605994682136814116);
 }
@@ -89,13 +92,13 @@ inline void polynomialTest()
     std::cout << "polynomial test" << std::endl;
 
     // a*x² + b*x + c = 0
-    real a =  94906265.625;
-    real b = -189812534.0;
-    real c =  94906268.375;
+    number a =  94906265.625;
+    number b = -189812534.0;
+    number c =  94906268.375;
 
-    real delta = b*b - 4.0*a*c;
+    number delta = b*b - 4.0*a*c;
     //number r1 = (-b + sqrt(delta)) / (2*a);
-    real r2 = (-b - sqrt(delta)) / (2.0*a);
+    number r2 = (-b - sqrt(delta)) / (2.0*a);
 
     //displayError(r1, 1.000000028975958); //aproximate root
     displayError(r2, 1); //exact root
@@ -116,12 +119,12 @@ inline void fixedPointTest()
 {
     std::cout << "Fixed-point test" << std::endl;
 
-    real x0 = real(11.0) / real(2.0);
-    real x1 = real(61.0) / real(11.0);
+    number x0 = number(11.0) / number(2.0);
+    number x1 = number(61.0) / number(11.0);
 
     for(int i = 1; i <= 100; i++)
     {
-        real x2 = 111.0 - (1130.0 - 3000.0/x0)/x1;
+        number x2 = 111.0 - (1130.0 - 3000.0/x0)/x1;
         x0 = x1;
         x1 = x2;
     }
@@ -131,7 +134,7 @@ inline void fixedPointTest()
 
 //-----
 
-inline real identity(real x)
+inline number identity(number x)
 {
     std::cout << "Identity test (x=" << x << ')' << std::endl;
 
@@ -172,7 +175,7 @@ inline void kahanIdentity()
 
 //-----
 
-inline real E(real z)
+inline number E(number z)
 {
     if (z == 0.0)
     {
@@ -184,13 +187,13 @@ inline real E(real z)
     }
 }
 
-inline real Q(real x)
+inline number Q(number x)
 {
-    real sq = sqrt(x*x + 1.0);
+    number sq = sqrt(x*x + 1.0);
     return fabs(x - sq) - 1.0/(x + sq);
 }
 
-inline real H(real x)
+inline number H(number x)
 {
     std::cout << "Muller test (x=" << (float) x << ')' << std::endl;
 
