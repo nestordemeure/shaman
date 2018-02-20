@@ -36,7 +36,7 @@ namespace Eigen
 }
 
 /*
- * adds the needed fucntions to Sdouble
+ * adds the needed functions to Sdouble
  */
 inline const Sdouble& conj(const Sdouble& x)  { return x; }
 inline const Sdouble& real(const Sdouble& x)  { return x; }
@@ -53,7 +53,7 @@ using Svector = Eigen::Matrix<Sdouble, Eigen::Dynamic, 1>;
 // DEMO
 
 /*
- * create a kac matrix (also known as clement matrix)
+ * create a kac matrix (also known as Clement matrix)
  * its eigenvalues are the (2*k - size + 1)
  */
 Smatrix KacMat(int size)
@@ -76,7 +76,7 @@ Smatrix KacMat(int size)
  */
 void eigenDemo()
 {
-    int size = 50;
+    int size = 99;
 
     // defining the matrix
     Smatrix A = KacMat(size);
@@ -94,7 +94,7 @@ void eigenDemo()
         int realeigenval = 2*k - size + 1;
 
         //displayError(computedEigenval,realeigenval);
-        std::cout << computedEigenval << "\t\t\t(" << computedEigenval.number << " instead of " << realeigenval << ')' << std::endl;
+        std::cout << computedEigenval << "\t\t\t(" << std::setprecision(17) << computedEigenval.number << " instead of " << realeigenval << ')' << std::endl;
     }
 }
 

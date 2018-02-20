@@ -10,9 +10,9 @@ link_directories(./lib/exblas/gpu ./lib/cadna/)
 #link_directories(/opt/cadna/lib)
 
 # compiler
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_CXX_COMPILER /opt/verificarlo/bin/verificarlo)
-#set(CMAKE_CXX_COMPILER /ccc/home/cont001/opendev/opendev/RHEL7/gcc48/llvm/3.8.0/bin/clang)
+set(CMAKE_CXX_COMPILER /ccc/home/cont001/opendev/opendev/RHEL7/gcc48/llvm/3.8.0/bin/clang)
 #set(CMAKE_CXX_COMPILER g++)
 #set(CMAKE_CXX_COMPILER clang++-5.0)
 

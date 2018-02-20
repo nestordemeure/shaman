@@ -314,6 +314,9 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
     errorType newError = std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder));
 
+    // alternative formula with a small additional term (ignored by rump)
+    //errorType newError = std::fma(n1.error, n2.error, std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder)));
+
     #ifdef NUMERICAL_DEBUGGER
     if (n1.non_significativ() && n2.non_significativ())
     {
