@@ -1,4 +1,5 @@
-#include <blas1.hpp>
+
+//#include <blas1.hpp>
 #include <cmath>
 #include "exact.h"
 
@@ -7,6 +8,7 @@
  */
 double exact::sum(std::vector<double> V)
 {
+    /*
     // arguments for the exBLAS function
     const int increment = 1;
     const int offset = 0;
@@ -14,6 +16,8 @@ double exact::sum(std::vector<double> V)
     const bool earlyStop = false;
 
     return exsum(V.size(), V.data(), increment, offset, floatingPointExpansionSize, earlyStop);
+    */
+    throw("No exblass here.");
 }
 
 /*
@@ -36,7 +40,7 @@ double exact::dotProduct(std::vector<double> V, std::vector<double> W)
 
     // solution for cpu only installation of exblas
     // uses an EFT to turn the dot product into a summation problem
-    // could be more efficient if the sum was done on the fly
+    // could be more efficient
     int n = V.size();
     std::vector<double> eft(2*n);
 

@@ -5,22 +5,20 @@ project(shaman_demo)
 include_directories(./lib/exblas/ ./lib/cadna/ ./lib/eigen/)
 link_directories(./lib/exblas/gpu ./lib/cadna/)
 
-# folder for CADNA librairies
-#include_directories(/opt/cadna/include)
-#link_directories(/opt/cadna/lib)
-
 # compiler
 set(CMAKE_CXX_STANDARD 14)
+# ocre
 #set(CMAKE_CXX_COMPILER /opt/verificarlo/bin/verificarlo)
-set(CMAKE_CXX_COMPILER /ccc/home/cont001/opendev/opendev/RHEL7/gcc48/llvm/3.8.0/bin/clang)
-#set(CMAKE_CXX_COMPILER g++)
+#set(CMAKE_CXX_COMPILER /ccc/home/cont001/opendev/opendev/RHEL7/gcc48/llvm/3.8.0/bin/clang)
+# laptop
+#set(CMAKE_CXX_COMPILER verificarlo)
 #set(CMAKE_CXX_COMPILER clang++-5.0)
 
 # flags
 add_definitions(-DNUMERICAL_DEBUGGER)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mfma -O1 -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__ -m64 -frounding-math") # -Werror -fopenmp
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mfma -O1 -Werror -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__") # -fopenmp -m64 -frounding-math
 
 # files
 set(SOURCE_FILES main.cpp
@@ -34,9 +32,10 @@ set(SOURCE_FILES main.cpp
         tests/exact/exact.cpp tests/exact/exact.h tests/sum.h
         tests/schrodinger.cpp tests/schrodinger.h
         tests/cadna.h
-        tests/legendre.h tests/eigen.h)
+        tests/legendre.h
+        tests/eigen.h)
 
 # linking
 add_executable(shaman_demo ${SOURCE_FILES})
-target_link_libraries(shaman_demo "-lOpenCL -ltbb -lexblas -lcadnaC") # -lstdc++
-#target_link_libraries(shaman_demo "-lm -ltbb -lexblas")
+#target_link_libraries(shaman_demo "-lstdc++ -lOpenCL -ltbb -lexblas -lcadnaC")
+target_link_libraries(shaman_demo "-lstdc++ -lm -ltbb -lexblas -lcadnaC")

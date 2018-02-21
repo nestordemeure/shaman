@@ -1,0 +1,6 @@
+
+we might add a flag to active a boolean that tracks wether
+a value comes from an operation that might distord our error tracking
+
+the numerical debugger will detect the presence of such problems
+but not tell us if they were involved in the compatation of our value of interest

@@ -761,13 +761,19 @@ set_Sbool_operator_casts(>=);
 // SIGNIFICATIV DIGITS
 
 /*
- * returns the number of significative digits of a couple (number,error)
+ * returns the number of (relative) significative digits of a couple (number,error)
+ *
+ * 0 is handled by a special case (otherwise it cannot have any significativ digits)
  */
 templated inline numberType Snum::digits(numberType number, errorType error)
 {
     if (error == 0)
     {
         return INFINITY;
+    }
+    else if (number == 0)
+    {
+        return std::max(0., -log10(std::abs(error)) - 1);
     }
     else
     {
@@ -779,7 +785,7 @@ templated inline numberType Snum::digits(numberType number, errorType error)
         }
         else
         {
-            return -log10(relativeError);
+            return -std::log10(relativeError);
         }
     }
 }
