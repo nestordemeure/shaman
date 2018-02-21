@@ -641,7 +641,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         else
         {
             // some zero are significatives
-            os << std::fixed << std::setprecision(digits-1) << 0.0; // TODO should we add a '@' prefix ?
+            os << std::scientific << std::setprecision(digits-1) << 0.0; // TODO should we add a '@' prefix ?
         }
     }
     else
