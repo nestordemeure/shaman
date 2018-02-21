@@ -630,7 +630,19 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 
     if (fdigits <= 0)
     {
-        os << "@.0";    // the number has no meaning
+        // the first zeros might be valid
+        int digits = std::floor(Snum::digits(0, n.error));
+
+        if ((std::abs(n.number) >= 1) || (digits <= 0))
+        {
+            // the number has no meaning
+            os << "@.0";
+        }
+        else
+        {
+            // some zero are significatives
+            os << std::fixed << std::setprecision(digits-1) << 0.0; // TODO should we add a '@' prefix ?
+        }
     }
     else
     {
@@ -763,7 +775,7 @@ set_Sbool_operator_casts(>=);
 /*
  * returns the number of (relative) significative digits of a couple (number,error)
  *
- * 0 is handled by a special case (otherwise it cannot have any significativ digits)
+ * the exact 0 is handled by a special case (otherwise it cannot have any significativ digits)
  */
 templated inline numberType Snum::digits(numberType number, errorType error)
 {
