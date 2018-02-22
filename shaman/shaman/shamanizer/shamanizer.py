@@ -12,7 +12,12 @@
 cpp_extensions = (".h", ".c", ".cpp", ".hpp", ".cc", ".cxx", ".c++", ".hh", ".hxx", ".h++") # tuple required
 numericTypes = [("float","Sfloat"), ("double","Sdouble"), ("long double","Slong_double")]
 shamanHeader = "#include <Shaman.h>"
+mpiHeader = "#include <Shaman_mpi.h>"
 printfHeader = "#include <tinyformat.h>"
+
+mpiTypes = [("MPI_FLOAT","MPI_SFLOAT"), ("MPI_DOUBLE","MPI_SDOUBLE"), ("MPI_LONG_DOUBLE","MPI_SLONG_DOUBLE")]
+mpiOperations = [("MPI_MAX","MPI_SMAX"), ("MPI_MIN","MPI_SMIN"), ("MPI_SUM","MPI_SSUM"), ("MPI_PROD","MPI_SPROD")]
+mpiFunctions = [("MPI_Init","MPI_Shaman_Init"), ("MPI_Finalize","MPI_Shaman_Finalize")]
 
 #-----------------------------------------------------------------------------
 # MODIFICATION COUNT
@@ -91,12 +96,22 @@ def change_printf(filepath, lines):
     else:
         export_lines(filepath, lines)
 
+def change_mpi(filepath, lines):
+    """modifies the MPI calls if needed and exports the lines"""
+    newlines = replace_strings_in_text(mpiTypes + mpiOperations + mpiFunctions, lines)
+    if newlines is not None:
+        add_header(mpiHeader, newlines)
+        print("WARNING : MPI functions found in '" + filepath + "', don't forget to compile with the 'Shaman_mpi.h' file.")
+        change_printf(filepath, newlines)
+    else:
+        change_printf(filepath, lines)
+
 def change_type(filepath, lines):
     """if needed, modifies the types and forward to the printf"""
     newlines = replace_strings_in_text(numericTypes, lines)
     if newlines is not None:
         add_header(shamanHeader, newlines)
-        change_printf(filepath, newlines)
+        change_mpi(filepath, newlines)
 
 #-----------------------------------------------------------------------------
 # SHAMANIZER
