@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD 14)
 add_definitions(-DNUMERICAL_DEBUGGER)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mfma -O1 -Werror -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__") # -fopenmp -m64 -frounding-math
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O1 -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__ -Wno-unknown-pragmas") # -Werror -m64 -frounding-math
 
 # files
 set(SOURCE_FILES main.cpp
@@ -37,5 +37,5 @@ set(SOURCE_FILES main.cpp
 
 # linking
 add_executable(shaman_demo ${SOURCE_FILES})
-#target_link_libraries(shaman_demo "-lstdc++ -lOpenCL -ltbb -lexblas -lcadnaC")
-target_link_libraries(shaman_demo "-lstdc++ -lm -ltbb -lexblas -lcadnaC")
+target_link_libraries(shaman_demo "-lstdc++ -lOpenCL -ltbb -lexblas -lcadnaC")
+#target_link_libraries(shaman_demo "-lstdc++ -lm -ltbb -lexblas -lcadnaC")

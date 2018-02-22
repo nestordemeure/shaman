@@ -82,4 +82,57 @@ void Compensatedsum(int size)
     displayError(kahanSum, exactSum);
 }
 
+void parralelSum(int size)
+{
+    // data generation
+    std::random_device rnd_device;
+    std::mt19937 mersenne_engine(rnd_device()); // Specify the engine and distribution.
+    std::uniform_real_distribution<double> dist(1.0e10-15, 2.0e-15);
+    auto gen = std::bind(dist, mersenne_engine);
+    std::vector<double> data(size);
+    generate(begin(data), end(data), gen);
+
+    // compute the exact sum using exblas
+    double exactSum = exact::sum(data);
+    std::cout << "exact sum\t:\t" << std::setprecision(15) << exactSum << std::endl;
+
+    // sequential sum
+    number seqSum = 0;
+    for(Sdouble x : data)
+    {
+        seqSum += x;
+    }
+    std::cout << "sequential sum\t:\t" << seqSum << std::endl;
+
+    #ifdef _OPENMP
+    // parrallel sum with reduce
+    /*
+    number parSumR = 0;
+    #pragma omp parallel for reduction(+:parSumR)
+    for(unsigned int i = 0; i < data.size(); i++)
+    {
+        parSumR += data[i];
+    }
+    std::cout << "parallel sum\t:\t" << parSumR << " (with reduce)" << std::endl;
+    */
+
+    // parrallel sum without reduce
+    number parSum = 0;
+    #pragma omp parallel
+    {
+        number localParSum = 0;
+
+        #pragma omp for
+        for(unsigned int i = 0; i < data.size(); i++)
+        {
+            localParSum += data[i];
+        }
+
+        #pragma omp critical
+        parSum += localParSum;
+    };
+    std::cout << "parallel sum\t:\t" << parSum << " (without reduce)" << std::endl;
+    #endif //_OPENMP
+}
+
 #endif //COMPENSATIONS_SUM_H

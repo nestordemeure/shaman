@@ -27,6 +27,7 @@ int main()
 
     // sums
     //Compensatedsum(50000000);
+    parralelSum(50000000);
 
     // Schrodinger equation
     //Schrodinger numerov = Schrodinger();

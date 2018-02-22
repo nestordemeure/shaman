@@ -22,6 +22,11 @@ public:
     static unsigned int unstableFunctions;
     static unsigned int unstableBranchings;
     static unsigned int cancelations;
+    #ifdef _OPENMP
+    #pragma omp threadprivate (NumericalDebugger::unstabilityCount, NumericalDebugger::unstablePowerFunctions, NumericalDebugger::unstableDivisions, \
+                           NumericalDebugger::unstableMultiplications, NumericalDebugger::unstableFunctions, NumericalDebugger::unstableBranchings, \
+                           NumericalDebugger::cancelations)
+    #endif //_OPENMP
 
     // functions
     static void unstability();

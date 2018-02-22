@@ -35,6 +35,35 @@ void NumericalDebugger::printUnstabilities()
 {
     std::cout << '\n' << "*** SHAMAN ***" << '\n';
 
+    #ifdef _OPENMP // sum unstability counters
+    std::cout << "(With openMP)" << std::endl;
+    unsigned int unstabilityCount_red = 0;
+    unsigned int cancelations_red = 0;
+    unsigned int unstableDivisions_red = 0;
+    unsigned int unstableMultiplications_red = 0;
+    unsigned int unstableFunctions_red = 0;
+    unsigned int unstablePowerFunctions_red = 0;
+    unsigned int unstableBranchings_red = 0;
+    #pragma omp parallel reduction(+:unstabilityCount_red, cancelations_red, unstableDivisions_red, unstableMultiplications_red, \
+                                     unstableFunctions_red, unstablePowerFunctions_red, unstableBranchings_red)
+    {
+        unstabilityCount_red += unstabilityCount;
+        cancelations_red += cancelations;
+        unstableDivisions_red += unstableDivisions;
+        unstableMultiplications_red += unstableMultiplications;
+        unstableFunctions_red += unstableFunctions;
+        unstablePowerFunctions_red += unstablePowerFunctions;
+        unstableBranchings_red += unstableBranchings;
+    }
+    unstabilityCount = unstabilityCount_red;
+    cancelations = cancelations_red;
+    unstableDivisions = unstableDivisions_red;
+    unstableMultiplications = unstableMultiplications_red;
+    unstableFunctions = unstableFunctions_red;
+    unstablePowerFunctions = unstablePowerFunctions_red;
+    unstableBranchings = unstableBranchings_red;
+    #endif //_OPENMP
+
     if (unstabilityCount == 0)
     {
         std::cout << "No instability detected" << std::endl;
