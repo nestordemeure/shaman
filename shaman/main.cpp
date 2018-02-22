@@ -1,13 +1,13 @@
 
 #include <chrono>
 #include "shaman/shaman/Shaman.h"
-#include "shaman/shaman/Shaman_mpi.h"
 #include "tests/tests.h"
 #include "tests/sum.h"
 #include "tests/schrodinger.h"
 #include "tests/cadna.h"
 #include "tests/legendre.h"
 #include "tests/eigen.h"
+#include "tests/mpi_test.h"
 
 //---------------------------------------------------------------------------------------
 // MAIN
@@ -29,6 +29,7 @@ int main()
     // sums
     //Compensatedsum(50000000);
     //parralelSum(50000000);
+    mpiSum(50000000);
 
     // Schrodinger equation
     //Schrodinger numerov = Schrodinger();

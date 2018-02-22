@@ -29,7 +29,7 @@ MPI_Op MPI_SSUM;
 MPI_Op MPI_SPROD;
 
 //-------------------------------------------------------------------------------------------------
-// OPERATIONS
+// OPERATOR DECLARATIONS
 
 /*
  * applies an operation to two array of elements in any type
