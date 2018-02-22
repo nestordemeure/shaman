@@ -487,6 +487,8 @@ number squaredTriangleArea(number x, number y, number z)
 
 /*
  * cadna find 0 significative digits here, a false positive (identified by kahan)
+ *
+ * it seems that it was due to a bug in cadna since corrected
  */
 void falsePositive()
 {
@@ -502,6 +504,32 @@ void falsePositive()
     std::cout << "ratio of areas : " << r << " (exact result  1.238278374e-05)" << std::endl;
 
     displayError(r, 1.238278374e-05);
+}
+
+/*
+ * an example where cadna overestimate the number of significative digits
+ */
+void alternatingCounter()
+{
+    std::cout << "An example founc in verificarlo's main paper." << '\n'
+              << "CADNA overestimate the number of significative digits" << std::endl;
+
+    Sdouble c = -5e13;
+
+    for(unsigned int i = 0; i < 100000000; i++)
+    {
+        if (i%2 == 0)
+        {
+            c = c + 1.e6;
+        }
+        else
+        {
+            c = c - 1.e-6;
+        }
+    }
+
+    std::cout << "result=" << c << " expected result=" << -50 << std::endl;
+    displayError(c, -50);
 }
 
 #endif //COMPENSATIONS_CADNA_H
