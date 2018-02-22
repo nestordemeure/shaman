@@ -12,6 +12,8 @@ The main difference is that their aim is to do high precision computations while
 
 ## How to use Shaman ?
 
+### In a sequential code
+
 Put the 'shaman' folder in your project.
 
 Use the 'Sfloat', 'Sdouble' and 'Slong_double' types in your program.
@@ -25,6 +27,25 @@ Don't forget to enable FMA at compilation ('-mfma'), otherwise some operations (
 The 'NO_SHAMAN' flag let you deactivate SHAMAN and use the usual types instead.
 
 See also `Shamanizer`, a tool that automaticely converts your code to Shaman.
+
+### In a parallel code
+
+#### OpenMP
+
+Just add the '-fopenmp' flag as usual.
+
+You will need openMP 4.0 or more to use reduce operations.
+
+#### MPI
+
+To use :
+- include Shaman_mpi.h
+- replace 'MPI_Init' with 'MPI_Shaman_Init'
+- replace 'MPI_Finalize' with 'MPI_Shaman_Finalize'
+- use the shaman MPI types ('MPI_FLOAT' -> 'MPI_SFLOAT')
+- use the shaman MPI operations ('MPI_SUM' -> 'MPI_SSUM')
+
+You can also use Shamanizer.py to do your conversion automaticely.
 
 ## Numerical Debugger
 
