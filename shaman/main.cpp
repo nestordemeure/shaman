@@ -42,13 +42,14 @@ int main()
     hilbert();
     muller();
     newton();
-    falsePositive();
     gauss();
     jacobi();
+    falsePositive();
+    alternatingCounter();
     */
 
     // eigen
-    eigenDemo();
+    //eigenDemo();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
