@@ -1,6 +1,7 @@
 
 #include <chrono>
 #include "shaman/shaman/Shaman.h"
+#include "shaman/shaman/Shaman_mpi.h"
 #include "tests/tests.h"
 #include "tests/sum.h"
 #include "tests/schrodinger.h"
@@ -27,7 +28,7 @@ int main()
 
     // sums
     //Compensatedsum(50000000);
-    parralelSum(50000000);
+    //parralelSum(50000000);
 
     // Schrodinger equation
     //Schrodinger numerov = Schrodinger();
