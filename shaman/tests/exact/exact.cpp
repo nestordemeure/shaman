@@ -1,6 +1,7 @@
 
-//#include <blas1.hpp>
+#include <blas1.hpp>
 #include <cmath>
+#include <stdexcept>
 #include "exact.h"
 
 /*
@@ -8,7 +9,7 @@
  */
 double exact::sum(std::vector<double> V)
 {
-    /*
+
     // arguments for the exBLAS function
     const int increment = 1;
     const int offset = 0;
@@ -16,8 +17,8 @@ double exact::sum(std::vector<double> V)
     const bool earlyStop = false;
 
     return exsum(V.size(), V.data(), increment, offset, floatingPointExpansionSize, earlyStop);
-    */
-    throw("No exblass here.");
+
+    //throw std::invalid_argument( "Exblas was deactivated" );
 }
 
 /*
