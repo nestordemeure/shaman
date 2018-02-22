@@ -107,7 +107,7 @@ using Sfloat = S<float, float, double>;
 using Sdouble = S<double, double, long double>;
 using Slong_double = S<long double, long double, long double>;
 
-#endif
+#endif //NO_SHAMAN
 //-------------------------------------------------------------------------------------------------
 // OPENMP
 #ifdef _OPENMP

@@ -13,18 +13,21 @@ set(CMAKE_CXX_STANDARD 14)
 # laptop
 #set(CMAKE_CXX_COMPILER verificarlo)
 #set(CMAKE_CXX_COMPILER clang++-5.0)
+# mpi
+set(CMAKE_CXX_COMPILER /usr/local/libre/bin/mpic++)
 
 # flags
 add_definitions(-DNUMERICAL_DEBUGGER)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O1 -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__ -Wno-unknown-pragmas") # -Werror -m64 -frounding-math
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mfma -O1 -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__ -Wno-unknown-pragmas -fpermissive") # -fopenmp -Werror -m64 -frounding-math
 
 # files
 set(SOURCE_FILES main.cpp
         # shaman
         shaman/shaman/Shaman_Decl.h shaman/shaman/Shaman.h
         shaman/shaman/NumericalDebugger.cpp shaman/shaman/NumericalDebugger.h
+        shaman/shaman/Shaman_mpi.h
         # shamanizer
         shaman/shamanizer/tinyformat.h
         # tests
