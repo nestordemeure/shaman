@@ -20,7 +20,7 @@ set(CMAKE_CXX_COMPILER /usr/local/libre/bin/mpic++)
 add_definitions(-DNUMERICAL_DEBUGGER)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mfma -O1 -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__ -Wno-unknown-pragmas -fpermissive") # -fopenmp -Werror -m64 -frounding-math
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mfma -O1 -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__ -Wno-unknown-pragmas") # -fopenmp -Werror -m64 -frounding-math
 
 # files
 set(SOURCE_FILES main.cpp
@@ -36,7 +36,7 @@ set(SOURCE_FILES main.cpp
         tests/schrodinger.cpp tests/schrodinger.h
         tests/cadna.h
         tests/legendre.h
-        tests/eigen.h)
+        tests/eigen.h tests/mpi_test.h)
 
 # linking
 add_executable(shaman_demo ${SOURCE_FILES})
