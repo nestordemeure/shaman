@@ -15,6 +15,7 @@
  * inspired by :
  * https://github.com/wesleykendall/mpitutorial/blob/gh-pages/tutorials/mpi-reduce-and-allreduce/code/reduce_avg.c
  *
+ * TODO we should send a shaman type, get it back and check wether it was modified by MPI
  * compile with mpic++, run with mpirun
  */
 void mpiSum(int size)
