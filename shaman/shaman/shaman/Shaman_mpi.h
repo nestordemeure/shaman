@@ -100,18 +100,17 @@ int MPI_Shaman_Init(int argc, char **argv )
     // init MPI
     int errorValue = MPI_Init(&argc, &argv);
 
+    #ifdef NO_SHAMAN
+    MPI_SFLOAT = MPI_FLOAT;
+    MPI_SDOUBLE = MPI_DOUBLE;
+    MPI_SLONG_DOUBLE = MPI_LONG_DOUBLE;
+    MPI_SMAX = MPI_MAX;
+    MPI_SMIN = MPI_MIN;
+    MPI_SSUM = MPI_SUM;
+    MPI_SPROD = MPI_PROD;
+    #else
     if (errorValue == MPI_SUCCESS)
     {
-        #ifdef NO_SHAMAN
-        MPI_SFLOAT = MPI_FLOAT;
-        MPI_SDOUBLE = MPI_DOUBLE;
-        MPI_SLONG_DOUBLE = MPI_LONG_DOUBLE;
-        MPI_SMAX = MPI_MAX;
-        MPI_SMIN = MPI_MIN;
-        MPI_SSUM = MPI_SUM;
-        MPI_SPROD = MPI_PROD;
-        #else
-
         // Sfloat
         MPI_Type_contiguous(2, MPI_FLOAT, &MPI_SFLOAT);
         MPI_Type_commit(&MPI_SFLOAT);
@@ -129,8 +128,8 @@ int MPI_Shaman_Init(int argc, char **argv )
         MPI_Op_create(&MPI_ssum, isCommutative, &MPI_SSUM);
         MPI_Op_create(&MPI_sprod, isCommutative, &MPI_SPROD);
 
-        #endif //NO_SHAMAN
     }
+    #endif //NO_SHAMAN
 
     return errorValue;
 }
@@ -157,7 +156,7 @@ int MPI_Shaman_Finalize()
     int processNumber;
     MPI_Comm_rank(MPI_COMM_WORLD, &processNumber);
 
-    // reduces the unstability counts
+    // sum the unstability counts
     int unstabilityCount_red;
     int unstablePowerFunctions_red;
     int unstableDivisions_red;
@@ -201,5 +200,6 @@ int MPI_Shaman_Finalize()
  * http://pages.tacc.utexas.edu/~eijkhout/pcse/html/mpi-data.html
  * http://mpitutorial.com/tutorials/mpi-reduce-and-allreduce/
  *
- * TODO we might want to implement shaman using a struct instead of a class so that our implementation stays c/MPI compatible
+ * TODO works as long as the Shaman types have the declared size
+ * we might want to implement shaman using a struct instead of a class so that our implementation can easily be kept MPÏ compatible
  */
