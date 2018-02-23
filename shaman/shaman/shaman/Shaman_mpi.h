@@ -102,6 +102,16 @@ int MPI_Shaman_Init(int argc, char **argv )
 
     if (errorValue == MPI_SUCCESS)
     {
+        #ifdef NO_SHAMAN
+        MPI_SFLOAT = MPI_FLOAT;
+        MPI_SDOUBLE = MPI_DOUBLE;
+        MPI_SLONG_DOUBLE = MPI_LONG_DOUBLE;
+        MPI_SMAX = MPI_MAX;
+        MPI_SMIN = MPI_MIN;
+        MPI_SSUM = MPI_SUM;
+        MPI_SPROD = MPI_PROD;
+        #else
+
         // Sfloat
         MPI_Type_contiguous(2, MPI_FLOAT, &MPI_SFLOAT);
         MPI_Type_commit(&MPI_SFLOAT);
@@ -118,6 +128,8 @@ int MPI_Shaman_Init(int argc, char **argv )
         MPI_Op_create(&MPI_smin, isCommutative, &MPI_SMIN);
         MPI_Op_create(&MPI_ssum, isCommutative, &MPI_SSUM);
         MPI_Op_create(&MPI_sprod, isCommutative, &MPI_SPROD);
+
+        #endif //NO_SHAMAN
     }
 
     return errorValue;
@@ -128,6 +140,7 @@ int MPI_Shaman_Init(int argc, char **argv )
  */
 int MPI_Shaman_Finalize()
 {
+    #ifndef NO_SHAMAN
     // free types
     MPI_Type_free(&MPI_SFLOAT);
     MPI_Type_free(&MPI_SDOUBLE);
@@ -138,6 +151,42 @@ int MPI_Shaman_Finalize()
     MPI_Op_free(&MPI_SMIN);
     MPI_Op_free(&MPI_SSUM);
     MPI_Op_free(&MPI_SPROD);
+
+    #ifdef NUMERICAL_DEBUGGER
+    // gets the process number
+    int processNumber;
+    MPI_Comm_rank(MPI_COMM_WORLD, &processNumber);
+
+    // reduces the unstability counts
+    int unstabilityCount_red;
+    int unstablePowerFunctions_red;
+    int unstableDivisions_red;
+    int unstableMultiplications_red;
+    int unstableFunctions_red;
+    int unstableBranchings_red;
+    int cancelations_red;
+    MPI_Reduce(&NumericalDebugger::unstabilityCount, &unstabilityCount_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&NumericalDebugger::unstablePowerFunctions, &unstablePowerFunctions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&NumericalDebugger::unstableDivisions, &unstableDivisions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&NumericalDebugger::unstableMultiplications, &unstableMultiplications_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&NumericalDebugger::unstableFunctions, &unstableFunctions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&NumericalDebugger::unstableBranchings, &unstableBranchings_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&NumericalDebugger::cancelations, &cancelations_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    NumericalDebugger::unstabilityCount = unstabilityCount_red;
+    NumericalDebugger::unstablePowerFunctions = unstablePowerFunctions_red;
+    NumericalDebugger::unstableDivisions = unstableDivisions_red;
+    NumericalDebugger::unstableMultiplications = unstableMultiplications_red;
+    NumericalDebugger::unstableFunctions = unstableFunctions_red;
+    NumericalDebugger::unstableBranchings = unstableBranchings_red;
+    NumericalDebugger::cancelations = cancelations_red;
+
+    // deactivate display on all process but the main one
+    if (processNumber != 0)
+    {
+        NumericalDebugger::shouldDisplay = false;
+    }
+    #endif //NUMERICAL_DEBUGGER
+    #endif //NO_SHAMAN
 
     return MPI_Finalize();
 }
