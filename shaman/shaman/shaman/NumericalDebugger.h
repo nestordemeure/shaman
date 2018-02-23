@@ -15,13 +15,14 @@ class NumericalDebugger
 {
 public:
     // unstability counters
-    static unsigned int unstabilityCount;
-    static unsigned int unstablePowerFunctions;
-    static unsigned int unstableDivisions;
-    static unsigned int unstableMultiplications;
-    static unsigned int unstableFunctions;
-    static unsigned int unstableBranchings;
-    static unsigned int cancelations;
+    static bool shouldDisplay;
+    static int unstabilityCount;
+    static int unstablePowerFunctions;
+    static int unstableDivisions;
+    static int unstableMultiplications;
+    static int unstableFunctions;
+    static int unstableBranchings;
+    static int cancelations;
     #ifdef _OPENMP
     #pragma omp threadprivate (NumericalDebugger::unstabilityCount, NumericalDebugger::unstablePowerFunctions, NumericalDebugger::unstableDivisions, \
                            NumericalDebugger::unstableMultiplications, NumericalDebugger::unstableFunctions, NumericalDebugger::unstableBranchings, \
