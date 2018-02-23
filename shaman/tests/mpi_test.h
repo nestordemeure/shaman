@@ -35,7 +35,7 @@ void mpiSum(int size)
     std::vector<double> data(size);
     std::generate(begin(data), end(data), gen);
 
-    // ----- SEQUENTIAL -----
+    // ----- MPI -----
 
     // local sequential sum
     double local_sum = 0;
@@ -53,7 +53,7 @@ void mpiSum(int size)
         std::cout << "global double sum\t:\t" << global_sum << '\n' << std::endl;
     }
 
-    // ----- PARALLEL -----
+    // ----- MPI + SHAMAN -----
 
     // local sequential sum
     Sdouble local_par_sum = 0;
