@@ -359,6 +359,12 @@ templated inline bool isfinite(const Snum& n)
     return std::isfinite(n.number);
 };
 
+// isnan
+templated inline bool isnan(const Snum& n)
+{
+    return std::isnan(n.number);
+};
+
 // abs
 templated inline const Snum abs(const Snum& n)
 {
@@ -579,7 +585,7 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
     #endif
 
     return Snum(result, newError);
-}
+};
 set_Sfunction3_casts(fma);
 
 //-----------------------------------------------------------------------------
