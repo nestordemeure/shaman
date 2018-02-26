@@ -11,9 +11,10 @@
 
 cpp_extensions = (".h", ".c", ".cpp", ".hpp", ".cc", ".cxx", ".c++", ".hh", ".hxx", ".h++") # tuple required
 numericTypes = [("float","Sfloat"), ("double","Sdouble"), ("long double","Slong_double")]
-shamanHeader = "#include <Shaman.h>"
-mpiHeader = "#include <Shaman_mpi.h>"
-printfHeader = "#include <tinyformat.h>"
+pathToShaman = "."
+shamanHeader = "#include \"{}/shaman/Shaman.h\"".format(pathToShaman)
+mpiHeader = "#include \"{}shaman/Shaman_mpi.h\"".format(pathToShaman)
+printfHeader = "#include \"{}/shamanizer/tinyformat.h\"".format(pathToShaman)
 
 mpiTypes = [("MPI_FLOAT","MPI_SFLOAT"), ("MPI_DOUBLE","MPI_SDOUBLE"), ("MPI_LONG_DOUBLE","MPI_SLONG_DOUBLE")]
 mpiOperations = [("MPI_MAX","MPI_SMAX"), ("MPI_MIN","MPI_SMIN"), ("MPI_SUM","MPI_SSUM"), ("MPI_PROD","MPI_SPROD")]
@@ -112,6 +113,8 @@ def change_type(filepath, lines):
     if newlines is not None:
         add_header(shamanHeader, newlines)
         change_mpi(filepath, newlines)
+    else:
+        export_lines(filepath, lines)
 
 #-----------------------------------------------------------------------------
 # SHAMANIZER
@@ -154,3 +157,5 @@ def shamanizer(path):
 path_list = argv[1:] # skip the name of the program
 for rootpath in path_list:
     shamanizer(rootpath)
+
+# TODO might run on all single files when given a folder with a path that ends with '/'
