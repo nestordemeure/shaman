@@ -20,6 +20,13 @@ mpiTypes = [("MPI_FLOAT","MPI_SFLOAT"), ("MPI_DOUBLE","MPI_SDOUBLE"), ("MPI_LONG
 mpiOperations = [("MPI_MAX","MPI_SMAX"), ("MPI_MIN","MPI_SMIN"), ("MPI_SUM","MPI_SSUM"), ("MPI_PROD","MPI_SPROD")]
 mpiFunctions = [("MPI_Init","MPI_Shaman_Init"), ("MPI_Finalize","MPI_Shaman_Finalize")]
 
+stdFunctions = ['abs','labs','llabs','div','ldiv','lldiv','imaxabs','imaxdiv','fabs',
+                'fmod','remainder','remquo','fma','fmax','fmin','fdim','exp','exp2','expm1','log','log10','log2','log1p',
+                'pow','sqrt','cbrt','hypot','sin','cos','tan','asin','acos','atan','atan2','sinh','cosh','tanh','asinh','acosh','atanh',
+                'erf','erfc','tgamma','lgamma','ceil','floor','trunc','round','lround','llround','nearbyint','rint','lrint','llrint',
+                'frexp','ldexp','modf','scalbn','scalbln','ilogb','logb','nextafter','nexttoward','copysign','fpclassify',
+                'isfinite','isinf','isnan','isnormal','signbit','isgreater','isgreaterequal','isless','islessequal','islessgreater','isunordered']
+
 #-----------------------------------------------------------------------------
 # MODIFICATION COUNT
 
@@ -61,6 +68,13 @@ def replace_strings_in_text(strings, lines):
             changed = True
             lines[i] = newline
     return lines if changed else None
+
+def contains_string(string,lines):
+    """returns true if at least one of the lines contains the given string"""
+    for line in lines:
+        if string in line:
+            return True
+    return False
 
 #-----------------------------------------------------------------------------
 # HEADER
@@ -111,6 +125,10 @@ def change_type(filepath, lines):
     """if needed, modifies the types and forward to the printf"""
     newlines = replace_strings_in_text(numericTypes, lines)
     if newlines is not None:
+        # if contains stdFunction then warning with function name and file name
+        for functionName in stdFunctions:
+            if contains_string("std::" + functionName, lines):
+                print("WARNING : std::" + functionName + " found in '" + filepath + "', you might want to replace it with the equivalent shaman function.")
         add_header(shamanHeader, newlines)
         change_mpi(filepath, newlines)
     else:
