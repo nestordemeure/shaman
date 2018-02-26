@@ -92,6 +92,7 @@ templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3);
 
 // streaming operator
 templated std::ostream& operator<<(std::ostream& os, const Snum& n);
+templated std::istream& operator>>(std::istream& is, Snum& v);
 
 //-------------------------------------------------------------------------------------------------
 // TYPES

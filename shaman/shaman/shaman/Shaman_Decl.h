@@ -617,6 +617,9 @@ templated inline Snum& Snum::operator/=(const Snum& n)
     return *this;
 }
 
+//-----------------------------------------------------------------------------
+// STRING CONVERSIONS
+
 /*
  * streaming operator, displays only the significative digits
  * (alternative version : outputs the number, the error and the number of significative digits)
@@ -674,6 +677,22 @@ templated Snum::operator std::string() const
     std::ostringstream stream;
     stream << this;
     return stream.str();
+}
+
+/*
+ * extraction operator to cast a stream into an Snum
+ */
+templated std::istream& operator>>(std::istream& is, Snum& n)
+{
+    // extracts the number
+    numberType num;
+    is >> num;
+
+    // modifies the Snum
+    n.number = num;
+    n.error = 0;
+
+    return is;
 }
 
 //-----------------------------------------------------------------------------
