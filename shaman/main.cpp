@@ -29,14 +29,14 @@ int main()
     // sums
     //Compensatedsum(50000000);
     //parralelSum(50000000);
-    mpiSum(50000000);
+    //mpiSum(50000000);
 
     // Schrodinger equation
     //Schrodinger numerov = Schrodinger();
     //numerov.calculate();
 
     // legendre
-    //legendre20Test();
+    legendre20Test();
 
     // CADNA double
     /*
