@@ -69,12 +69,21 @@ def replace_strings_in_text(strings, lines):
             lines[i] = newline
     return lines if changed else None
 
+#-----------------------------------------------------------------------------
+# WARNING
+
 def contains_string(string,lines):
     """returns true if at least one of the lines contains the given string"""
     for line in lines:
         if string in line:
             return True
     return False
+
+def std_functions_warning(filepath, lines):
+    """if contains stdFunction then warning with function name and file name"""
+    for functionName in stdFunctions:
+        if contains_string("std::" + functionName, lines):
+            print("WARNING : std::" + functionName + " found in '" + filepath + "', you might want to replace it with the equivalent shaman function.")
 
 #-----------------------------------------------------------------------------
 # HEADER
@@ -125,10 +134,7 @@ def change_type(filepath, lines):
     """if needed, modifies the types and forward to the printf"""
     newlines = replace_strings_in_text(numericTypes, lines)
     if newlines is not None:
-        # if contains stdFunction then warning with function name and file name
-        for functionName in stdFunctions:
-            if contains_string("std::" + functionName, lines):
-                print("WARNING : std::" + functionName + " found in '" + filepath + "', you might want to replace it with the equivalent shaman function.")
+        std_functions_warning(filepath, lines)
         add_header(shamanHeader, newlines)
         change_mpi(filepath, newlines)
     else:
