@@ -637,7 +637,11 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     int nbDigitsMax = 17;
     numberType fdigits = std::floor(Snum::digits(n));
 
-    if (fdigits <= 0)
+    if (std::isnan(fdigits))
+    {
+        os << "nan";
+    }
+    else if (fdigits <= 0)
     {
         // the first zeros might be valid
         int digits = std::floor(Snum::digits(0, n.error));
@@ -655,15 +659,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     }
     else
     {
-        int digits;
-        if (fdigits >= nbDigitsMax)
-        {
-            digits = nbDigitsMax; // no need for too many digits
-        }
-        else
-        {
-            digits = (int) fdigits; // no risk of overflow
-        }
+        int digits = std::min(nbDigitsMax, int(fdigits));
 
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
