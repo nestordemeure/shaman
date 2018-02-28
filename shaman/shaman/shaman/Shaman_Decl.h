@@ -639,7 +639,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 
     if (std::isnan(fdigits))
     {
-        os << "nan";
+        os << "@nan";
     }
     else if (fdigits <= 0)
     {

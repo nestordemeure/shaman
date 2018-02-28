@@ -5,3 +5,11 @@ speed-up the debugger, maybe by using libunwind from C++ instead of a gdb script
 (posibility to get all of the informations directly from C++ without giving the hand to a debugger)
 see this tutorial for additional informations :
 https://eli.thegreenplace.net/2015/programmatic-access-to-the-call-stack-in-c/
+
+it would be very usefull to get a true profiler output
+up to know the output has been focusses on numerical "bugs" (cancelation and such)
+but most precision is lost gradualy
+it would be precious to get the evolution of relative error line by line
+a simple solution is, for every operation, to compute the evolution of the |relative error| (or just the absolute error produced ?)
+then, for each file/line in the stackframes, add that value to the line
+at the end of the run we have informations on the numerical behaviour of each line/function (the sum of precision modifications)
