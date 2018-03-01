@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_CXX_COMPILER verificarlo)
 #set(CMAKE_CXX_COMPILER clang++-5.0)
 # mpi
-set(CMAKE_CXX_COMPILER /usr/local/libre/bin/mpic++)
+#set(CMAKE_CXX_COMPILER /usr/local/libre/bin/mpic++)
 
 # flags
 add_definitions(-DNUMERICAL_DEBUGGER)
@@ -27,16 +27,17 @@ set(SOURCE_FILES main.cpp
         # shaman
         shaman/shaman/Shaman_Decl.h shaman/shaman/Shaman.h
         shaman/shaman/NumericalDebugger.cpp shaman/shaman/NumericalDebugger.h
-        shaman/shaman/Shaman_mpi.h
+        #shaman/shaman/Shaman_mpi.h
         # shamanizer
         shaman/shamanizer/tinyformat.h
         # tests
         tests/tests.h
         tests/exact/exact.cpp tests/exact/exact.h tests/sum.h
+        #tests/mpi_test.h
         tests/schrodinger.cpp tests/schrodinger.h
         tests/cadna.h
         tests/legendre.h
-        tests/eigen.h tests/mpi_test.h)
+        tests/eigen.h tests/fraction/fraction.h)
 
 # linking
 add_executable(shaman_demo ${SOURCE_FILES})

@@ -7,7 +7,7 @@
 #include "tests/cadna.h"
 #include "tests/legendre.h"
 #include "tests/eigen.h"
-#include "tests/mpi_test.h"
+//#include "tests/mpi_test.h"
 
 //---------------------------------------------------------------------------------------
 // MAIN
@@ -18,13 +18,13 @@ int main()
     auto begin = std::chrono::steady_clock::now();
 
     // various tests
-    /*
-    rumpTest();
-    polynomialTest();
+
+    //rumpTest();
+    //polynomialTest();
     fixedPointTest();
     //kahanIdentity();
     //mullerTest();
-    */
+
 
     // sums
     //Compensatedsum(50000000);
@@ -36,7 +36,7 @@ int main()
     //numerov.calculate();
 
     // legendre
-    legendre20Test();
+    //legendre20Test();
 
     // CADNA double
     /*
