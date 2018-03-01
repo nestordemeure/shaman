@@ -115,18 +115,31 @@ inline void polynomialTest()
 *
 *  This problem seems undetectable with MCA (which makes sense, MCA is all about perturbations)
 */
+
+#include "fraction/fraction.h"
+
 inline void fixedPointTest()
 {
     std::cout << "Fixed-point test" << std::endl;
 
-    number x0 = number(11.0) / number(2.0);
-    number x1 = number(61.0) / number(11.0);
+    Sdouble x0 = Sdouble(11.0) / Sdouble(2.0);
+    Sdouble x1 = Sdouble(61.0) / Sdouble(11.0);
+    Fraction f0 = Fraction(11,2);
+    Fraction f1 = Fraction(61,11);
 
-    for(int i = 1; i <= 100; i++)
+    for(int i = 1; i <= 50; i++)
     {
-        number x2 = 111.0 - (1130.0 - 3000.0/x0)/x1;
+        Sdouble x2 = 111.0 - (1130.0 - 3000.0/x0)/x1;
+        Fraction f2 = Fraction(111) - (Fraction(1130) - Fraction(3000)/f0)/f1;
+
         x0 = x1;
         x1 = x2;
+        f0 = f1;
+        f1 = f2;
+
+        //displayError(x1, double(f1));
+        //displayError(x1, 6);
+        std::cout << x1 << std::endl;
     }
 
     displayError(x1, 6);
