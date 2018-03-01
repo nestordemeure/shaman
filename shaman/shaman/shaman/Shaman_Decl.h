@@ -317,6 +317,13 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     // alternative formula with a small additional term (ignored by rump)
     //errorType newError = std::fma(n1.error, n2.error, std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder)));
 
+    /*
+     * TODO Why unstable multiplication kills error estimation ?
+     *
+     * we need true_n2 and true_n1
+     * but since they are non significative, we get nothing but noise
+     */
+
     #ifdef NUMERICAL_DEBUGGER
     if (n1.non_significativ() && n2.non_significativ())
     {
@@ -337,6 +344,13 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     numberType remainder = - std::fma(n2.number, result, -n1.number);
     //errorType newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error);
     errorType newError = - std::fma(result, n2.error, -(remainder + n1.error)) / (n2.number + n2.error);
+
+    /*
+     * TODO Why unstable division kills error estimation ?
+     *
+     * we need true_n2 so we compute (n2.number + n2.error)
+     * but since n2 is non significative, we get nothing but noise
+     */
 
     #ifdef NUMERICAL_DEBUGGER
     if (n2.non_significativ())
