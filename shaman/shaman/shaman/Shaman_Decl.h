@@ -272,7 +272,7 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     numberType remainder = (n1.number - (result - intermediateEFT)) + (n2.number - intermediateEFT);
     errorType newError = remainder + (n1.error + n2.error);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef CANCELATION_DEBUGGER
     if (Snum::isCancelation(Snum::minPrecision(n1,n2), result, newError))
     {
         NumericalDebugger::cancelations++;
@@ -293,7 +293,7 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     numberType remainder = (n1.number - (result - intermediateEFT)) + ((-n2.number) - intermediateEFT);
     errorType newError = remainder + (n1.error - n2.error);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef CANCELATION_DEBUGGER
     if (Snum::isCancelation(Snum::minPrecision(n1,n2), result, newError))
     {
         NumericalDebugger::cancelations++;
@@ -317,14 +317,7 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     // alternative formula with a small additional term (ignored by rump)
     //errorType newError = std::fma(n1.error, n2.error, std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder)));
 
-    /*
-     * TODO Why unstable multiplication kills error estimation ?
-     *
-     * we need true_n2 and true_n1
-     * but since they are non significative, we get nothing but noise
-     */
-
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n1.non_significativ() && n2.non_significativ())
     {
         NumericalDebugger::unstableMultiplications++;
@@ -345,14 +338,7 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     //errorType newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error);
     errorType newError = - std::fma(result, n2.error, -(remainder + n1.error)) / (n2.number + n2.error);
 
-    /*
-     * TODO Why unstable division kills error estimation ?
-     *
-     * we need true_n2 so we compute (n2.number + n2.error)
-     * but since n2 is non significative, we get nothing but noise
-     */
-
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n2.non_significativ())
     {
         NumericalDebugger::unstableDivisions++;
@@ -416,7 +402,7 @@ templated inline const Snum sqrt(const Snum& n)
     // alternativ formula that is not based on derivation :
     // newError = (errorType) std::sqrt((preciseType) std::abs(n.number + (n.error - remainder))) - result;
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n.non_significativ())
     {
         NumericalDebugger::unstableFunctions++;
@@ -435,7 +421,7 @@ templated inline const Snum cbrt(const Snum& n)
     preciseType preciseCorrectedResult = std::cbrt((preciseType) n.number + n.error);
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n.non_significativ())
     {
         NumericalDebugger::unstableFunctions++;
@@ -453,7 +439,7 @@ templated inline const Snum exp(const Snum& n)
     preciseType preciseCorrectedResult = std::exp((preciseType) n.number + n.error);
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n.non_significativ())
     {
         NumericalDebugger::unstableFunctions++;
@@ -471,7 +457,7 @@ templated inline const Snum sin(const Snum& n)
     preciseType preciseCorrectedResult = std::sin((preciseType) n.number + n.error);
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n.non_significativ())
     {
         NumericalDebugger::unstableFunctions++;
@@ -489,7 +475,7 @@ templated inline const Snum cos(const Snum& n)
     preciseType preciseCorrectedResult = std::cos((preciseType) n.number + n.error);
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n.non_significativ())
     {
         NumericalDebugger::unstableFunctions++;
@@ -507,7 +493,7 @@ templated inline const Snum tan(const Snum& n)
     preciseType preciseCorrectedResult = std::tan((preciseType) n.number + n.error);
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n.non_significativ())
     {
         NumericalDebugger::unstableFunctions++;
@@ -525,7 +511,7 @@ templated inline const Snum pow(const Snum& n1, const Snum& n2)
     preciseType preciseCorrectedResult = std::pow((preciseType) n1.number + n1.error, (preciseType) n2.number + n2.error);
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_OP_DEBUGGER
     if (n1.non_significativ() || n2.non_significativ())
     {
         NumericalDebugger::unstablePowerFunctions++;
@@ -540,7 +526,7 @@ set_Sfunction2_casts(pow);
 // min
 templated inline const Snum min(const Snum& n1, const Snum& n2)
 {
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
     if (Snum::isUnstableBranchings(n1, n2))
     {
         NumericalDebugger::unstableBranchings++;
@@ -562,7 +548,7 @@ set_Sfunction2_casts(min);
 // max
 templated inline const Snum max(const Snum& n1, const Snum& n2)
 {
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
     if (Snum::isUnstableBranchings(n1, n2))
     {
         NumericalDebugger::unstableBranchings++;
@@ -590,7 +576,7 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error) + n3.error;
     errorType newError = std::fma(n2.number, n1.error, std::fma(n1.number, n2.error, remainder + n3.error));
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef CANCELATION_DEBUGGER
     if (Snum::isCancelation(Snum::minPrecision(n1,Snum::minPrecision(n2,n3)), result, newError))
     {
         NumericalDebugger::cancelations++;
@@ -717,7 +703,7 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 // ==
 templated inline bool operator==(const Snum& n1, const Snum& n2)
 {
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
     if (Snum::isUnstableBranchings(n1, n2))
     {
         NumericalDebugger::unstableBranchings++;
@@ -732,7 +718,7 @@ set_Sbool_operator_casts(==);
 // !=
 templated inline bool operator!=(const Snum& n1, const Snum& n2)
 {
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
     if (Snum::isUnstableBranchings(n1, n2))
     {
         NumericalDebugger::unstableBranchings++;
@@ -747,7 +733,7 @@ set_Sbool_operator_casts(!=);
 // <
 templated inline bool operator<(const Snum& n1, const Snum& n2)
 {
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
     if (Snum::isUnstableBranchings(n1, n2))
     {
         NumericalDebugger::unstableBranchings++;
@@ -762,7 +748,7 @@ set_Sbool_operator_casts(<);
 // <=
 templated inline bool operator<=(const Snum& n1, const Snum& n2)
 {
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
     if (Snum::isUnstableBranchings(n1, n2))
     {
         NumericalDebugger::unstableBranchings++;
@@ -777,7 +763,7 @@ set_Sbool_operator_casts(<=);
 // >
 templated inline bool operator>(const Snum& n1, const Snum& n2)
 {
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
     if (Snum::isUnstableBranchings(n1, n2))
     {
         NumericalDebugger::unstableBranchings++;
@@ -792,7 +778,7 @@ set_Sbool_operator_casts(>);
 // >=
 templated inline bool operator>=(const Snum& n1, const Snum& n2)
 {
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
     if (Snum::isUnstableBranchings(n1, n2))
     {
         NumericalDebugger::unstableBranchings++;

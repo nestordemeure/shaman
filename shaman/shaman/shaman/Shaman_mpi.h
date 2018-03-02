@@ -151,7 +151,7 @@ int MPI_Shaman_Finalize()
     MPI_Op_free(&MPI_SSUM);
     MPI_Op_free(&MPI_SPROD);
 
-    #ifdef NUMERICAL_DEBUGGER
+    #ifdef NUMERICAL_DEBUGGER_ENABLED
     // gets the process number
     int processNumber;
     MPI_Comm_rank(MPI_COMM_WORLD, &processNumber);
@@ -164,6 +164,7 @@ int MPI_Shaman_Finalize()
     int unstableFunctions_red;
     int unstableBranchings_red;
     int cancelations_red;
+    int numericalZeros_red;
     MPI_Reduce(&NumericalDebugger::unstabilityCount, &unstabilityCount_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&NumericalDebugger::unstablePowerFunctions, &unstablePowerFunctions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&NumericalDebugger::unstableDivisions, &unstableDivisions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -171,6 +172,7 @@ int MPI_Shaman_Finalize()
     MPI_Reduce(&NumericalDebugger::unstableFunctions, &unstableFunctions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&NumericalDebugger::unstableBranchings, &unstableBranchings_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&NumericalDebugger::cancelations, &cancelations_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&NumericalDebugger::numericalZeros, &numericalZeros_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     NumericalDebugger::unstabilityCount = unstabilityCount_red;
     NumericalDebugger::unstablePowerFunctions = unstablePowerFunctions_red;
     NumericalDebugger::unstableDivisions = unstableDivisions_red;
@@ -178,13 +180,14 @@ int MPI_Shaman_Finalize()
     NumericalDebugger::unstableFunctions = unstableFunctions_red;
     NumericalDebugger::unstableBranchings = unstableBranchings_red;
     NumericalDebugger::cancelations = cancelations_red;
+    NumericalDebugger::numericalZeros = numericalZeros_red;
 
     // deactivate display on all process but the main one
     if (processNumber != 0)
     {
         NumericalDebugger::shouldDisplay = false;
     }
-    #endif //NUMERICAL_DEBUGGER
+    #endif //NUMERICAL_DEBUGGER_ENABLED
     #endif //NO_SHAMAN
 
     return MPI_Finalize();
