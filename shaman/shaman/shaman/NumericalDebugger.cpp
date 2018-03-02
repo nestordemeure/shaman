@@ -2,8 +2,6 @@
 // Created by nestor on 02/02/18.
 //
 
-#ifdef NUMERICAL_DEBUGGER
-
 #include <cstdlib>
 #include <iostream>
 #include "NumericalDebugger.h"
@@ -11,17 +9,20 @@
 /*
  * adds a function that will display the number of unstability and cancelation when the code terminate
  */
+#ifdef NUMERICAL_DEBUGGER_ENABLED
 int init = []()
 {
     std::atexit(NumericalDebugger::printUnstabilities);
     return 0;
 }();
+#endif //NUMERICAL_DEBUGGER_ENABLED
 
 /*
  * keep a tab of the number of instabilities and cancelations in the code
  */
 int NumericalDebugger::unstabilityCount = 0;
 int NumericalDebugger::cancelations = 0;
+int NumericalDebugger::numericalZeros = 0;
 int NumericalDebugger::unstableDivisions = 0;
 int NumericalDebugger::unstableMultiplications = 0;
 int NumericalDebugger::unstableFunctions = 0;
@@ -41,16 +42,18 @@ void NumericalDebugger::printUnstabilities()
         #ifdef _OPENMP // sum unstability counters
         std::cout << "(With openMP)" << std::endl;
         int unstabilityCount_red = 0;
+        int numericalZeros_red = 0;
         int cancelations_red = 0;
         int unstableDivisions_red = 0;
         int unstableMultiplications_red = 0;
         int unstableFunctions_red = 0;
         int unstablePowerFunctions_red = 0;
         int unstableBranchings_red = 0;
-        #pragma omp parallel reduction(+:unstabilityCount_red, cancelations_red, unstableDivisions_red, unstableMultiplications_red, \
+        #pragma omp parallel reduction(+:unstabilityCount_red, numericalZeros_red, cancelations_red, unstableDivisions_red, unstableMultiplications_red, \
                                          unstableFunctions_red, unstablePowerFunctions_red, unstableBranchings_red)
         {
             unstabilityCount_red += unstabilityCount;
+            numericalZeros_red += numericalZeros;
             cancelations_red += cancelations;
             unstableDivisions_red += unstableDivisions;
             unstableMultiplications_red += unstableMultiplications;
@@ -60,6 +63,7 @@ void NumericalDebugger::printUnstabilities()
         }
         unstabilityCount = unstabilityCount_red;
         cancelations = cancelations_red;
+        numericalZeros = numericalZeros_red;
         unstableDivisions = unstableDivisions_red;
         unstableMultiplications = unstableMultiplications_red;
         unstableFunctions = unstableFunctions_red;
@@ -74,19 +78,29 @@ void NumericalDebugger::printUnstabilities()
         else
         {
             // detection of a deep numerical anomaly that might throw the error model off
-            if ((unstableDivisions > 0) || (unstablePowerFunctions > 0) || (unstableMultiplications > 0))
+            if ((unstableDivisions > 0) || (unstablePowerFunctions > 0) || (unstableMultiplications > 0) || (unstableFunctions > 0))
             {
                 std::cout << "WARNING : the self-validation detects major problem(s)." << '\n'
                           << "The results are NOT guaranteed" << '\n';
             }
 
             std::cout << "There are " << unstabilityCount << " numerical unstabilities" << '\n'
+                      #ifdef NUMERICAL_ZERO_DEBUGGER
+                      << numericalZeros << " NUMERICAL ZERO(S)" << '\n'
+                      #endif
+                      #ifdef CANCELATION_DEBUGGER
                       << cancelations << " UNSTABLE CANCELLATION(S)" << '\n'
+                      #endif
+                      #ifdef UNSTABLE_OP_DEBUGGER
                       << unstableDivisions << " UNSTABLE DIVISION(S)" << '\n'
                       << unstableMultiplications << " UNSTABLE MULTIPLICATION(S)" << '\n'
                       << unstableFunctions << " UNSTABLE MATHEMATICAL FUNCTION(S)" << '\n'
                       << unstablePowerFunctions << " UNSTABLE POWER FUNCTION(S)" << '\n'
-                      << unstableBranchings << " UNSTABLE BRANCHING(S)" << std::endl;
+                      #endif
+                      #ifdef UNSTABLE_BRANCH_DEBUGGER
+                      << unstableBranchings << " UNSTABLE BRANCHING(S)" << '\n'
+                      #endif
+                      << std::endl;
         }
     }
 }
@@ -100,5 +114,3 @@ void NumericalDebugger::unstability()
 {
     unstabilityCount++;
 };
-
-#endif //NUMERICAL_DEBUGGER
