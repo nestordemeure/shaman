@@ -130,9 +130,7 @@ inline void fixedPointTest()
         x0 = x1;
         x1 = x2;
 
-        //displayError(x1, double(f1));
-        //displayError(x1, 6);
-        std::cout << "i=" << i << '\t' << x1 << std::endl;
+        std::cout << x1 << std::endl;
     }
 
     displayError(x1, 6);
@@ -143,17 +141,25 @@ inline void fixedPointTest()
 inline number identity(number x)
 {
     std::cout << "Identity test (x=" << x << ')' << std::endl;
+    //Sdouble xinit = x;
 
     // sqrt(x) 128 times
     for(int i = 1; i <= 128; i++)
     {
         x = sqrt(x);
+
+        //Sdouble xTarget = pow(xinit,1./pow(2,i));
+        //std::cout << x << std::endl;
     }
 
     // x squared 128 times
     for(int i = 1; i <= 128; i++)
     {
         x = x*x;
+
+        //Sdouble xTarget = pow(xinit,1./pow(2,128-i));
+        //std::cout << x << " (number=" << x.number << " error=" << x.error << ")" << '\t' << xTarget << std::endl;
+        //std::cout << x << std::endl;
     }
 
     return x;
@@ -168,6 +174,9 @@ inline number identity(number x)
  *
  * MCA fail to detect problems around 0
  * (we might detect such comportment by analysing the sensitivity to perturbations in inputs)
+ *
+ * SHAMAN detects problems if we use the full form of the multiplication error : x1*e2 + x2*e1 + e1*e2
+ * and not the abreviated form used by Rump (x1*e2 + x2*e1)
  */
 inline void kahanIdentity()
 {
