@@ -853,7 +853,11 @@ templated inline bool Snum::non_significativ(numberType number, errorType error)
  */
 templated inline bool Snum::non_significativ() const
 {
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    return isNumericalZero;
+    #else
     return non_significativ(number, error);
+    #endif
 }
 
 /*

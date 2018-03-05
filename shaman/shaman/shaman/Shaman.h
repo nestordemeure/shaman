@@ -2,6 +2,7 @@
 #define SHAMAN_H
 
 #include <string>
+#include "NumericalDebugger.h"
 
 // some macro to shorten template notations
 #define templated template<typename numberType, typename errorType, typename preciseType>
@@ -19,11 +20,20 @@ public :
     // trueNumber = number + error
     numberType number; // current computed number
     errorType error; // current error
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero;
+    #endif
 
     // constructors
+    #ifndef NUMERICAL_ZERO_FIELD_ENABLED
     inline S(): number(0), error(0) {};
     inline S(numberType numberArg): number(numberArg), error(0) {}; // we accept implicit cast from T to S<T>
     inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
+    #else
+    inline S(): number(0), error(0), isNumericalZero(false) {};
+    inline S(numberType numberArg): number(numberArg), error(0), isNumericalZero(false) {}; // we accept implicit cast from T to S<T>
+    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) { isNumericalZero = non_significativ(numberArg,errorArg); };
+    #endif
 
     // casting
     inline explicit operator int() const { return (int) number; };
@@ -34,12 +44,12 @@ public :
     #ifdef EXPLICIT_CASTING
     // requires explicit cast from other S types
     template<typename n, typename e, typename p>
-    inline explicit S(const S<n,e,p>& s): number(s.number), error(s.error) {};
+    inline explicit S(const S<n,e,p>& s): S(s.number, s.error) {};
     // refuse cast from types other than numberType
     template<typename T> S(T s) = delete;
     #else
     template<typename n, typename e, typename p>
-    inline S(const S<n,e,p>& s): number(s.number), error(s.error) {};
+    inline S(const S<n,e,p>& s): S(s.number, s.error) {};
     #endif
 
     // arithmetic operators
