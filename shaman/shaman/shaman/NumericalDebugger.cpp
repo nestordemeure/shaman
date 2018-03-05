@@ -22,6 +22,7 @@ int init = []()
  */
 int NumericalDebugger::unstabilityCount = 0;
 int NumericalDebugger::cancelations = 0;
+int NumericalDebugger::restorations = 0;
 int NumericalDebugger::numericalZeros = 0;
 int NumericalDebugger::unstableDivisions = 0;
 int NumericalDebugger::unstableMultiplications = 0;
@@ -44,17 +45,19 @@ void NumericalDebugger::printUnstabilities()
         int unstabilityCount_red = 0;
         int numericalZeros_red = 0;
         int cancelations_red = 0;
+        int restorations_red = 0;
         int unstableDivisions_red = 0;
         int unstableMultiplications_red = 0;
         int unstableFunctions_red = 0;
         int unstablePowerFunctions_red = 0;
         int unstableBranchings_red = 0;
         #pragma omp parallel reduction(+:unstabilityCount_red, numericalZeros_red, cancelations_red, unstableDivisions_red, unstableMultiplications_red, \
-                                         unstableFunctions_red, unstablePowerFunctions_red, unstableBranchings_red)
+                                         unstableFunctions_red, unstablePowerFunctions_red, unstableBranchings_red, restorations_red)
         {
             unstabilityCount_red += unstabilityCount;
             numericalZeros_red += numericalZeros;
             cancelations_red += cancelations;
+            restorations_red += restorations;
             unstableDivisions_red += unstableDivisions;
             unstableMultiplications_red += unstableMultiplications;
             unstableFunctions_red += unstableFunctions;
@@ -63,6 +66,7 @@ void NumericalDebugger::printUnstabilities()
         }
         unstabilityCount = unstabilityCount_red;
         cancelations = cancelations_red;
+        restorations = restorations_red;
         numericalZeros = numericalZeros_red;
         unstableDivisions = unstableDivisions_red;
         unstableMultiplications = unstableMultiplications_red;
@@ -89,7 +93,7 @@ void NumericalDebugger::printUnstabilities()
                       << numericalZeros << " NUMERICAL ZERO(S)" << '\n'
                       #endif
                       #ifdef CANCELATION_DEBUGGER
-                      << cancelations << " UNSTABLE CANCELLATION(S)" << '\n'
+                      << cancelations << " CANCELLATION(S)" << '\n'
                       #endif
                       #ifdef UNSTABLE_OP_DEBUGGER
                       << unstableDivisions << " UNSTABLE DIVISION(S)" << '\n'

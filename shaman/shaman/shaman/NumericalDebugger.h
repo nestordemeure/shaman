@@ -14,12 +14,11 @@
     #define CANCELATION_DEBUGGER
     #define UNSTABLE_OP_DEBUGGER
     #define UNSTABLE_BRANCH_DEBUGGER
-    //#define RESTAURATION_DEBUGGER // TODO
 #endif //NUMERICAL_DEBUGGER
 
 // is at least one counter enabled ?
 #if defined(NUMERICAL_ZERO_DEBUGGER) || defined(CANCELATION_DEBUGGER) || defined(UNSTABLE_OP_DEBUGGER) \
-                                     || defined(UNSTABLE_BRANCH_DEBUGGER) || defined(RESTAURATION_DEBUGGER)
+                                     || defined(UNSTABLE_BRANCH_DEBUGGER)
     #define NUMERICAL_DEBUGGER_ENABLED
 #endif
 
@@ -52,6 +51,8 @@ public:
     static int numericalZeros;
     // cancelations
     static int cancelations;
+    // restorations
+    static int restorations;
     // unstable operations
     static int unstablePowerFunctions;
     static int unstableDivisions;
@@ -62,7 +63,7 @@ public:
     #ifdef _OPENMP
     #pragma omp threadprivate (NumericalDebugger::unstabilityCount, NumericalDebugger::unstablePowerFunctions, NumericalDebugger::unstableDivisions, \
                            NumericalDebugger::unstableMultiplications, NumericalDebugger::unstableFunctions, NumericalDebugger::unstableBranchings, \
-                           NumericalDebugger::cancelations, NumericalDebugger::numericalZeros)
+                           NumericalDebugger::cancelations, NumericalDebugger::restorations, NumericalDebugger::numericalZeros)
     #endif //_OPENMP
 
     // functions

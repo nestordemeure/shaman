@@ -213,6 +213,7 @@ int MPI_Shaman_Finalize()
     int unstableFunctions_red;
     int unstableBranchings_red;
     int cancelations_red;
+    int restorations_red;
     int numericalZeros_red;
     MPI_Reduce(&NumericalDebugger::unstabilityCount, &unstabilityCount_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&NumericalDebugger::unstablePowerFunctions, &unstablePowerFunctions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -221,6 +222,7 @@ int MPI_Shaman_Finalize()
     MPI_Reduce(&NumericalDebugger::unstableFunctions, &unstableFunctions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&NumericalDebugger::unstableBranchings, &unstableBranchings_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&NumericalDebugger::cancelations, &cancelations_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&NumericalDebugger::restorations, &restorations_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&NumericalDebugger::numericalZeros, &numericalZeros_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     NumericalDebugger::unstabilityCount = unstabilityCount_red;
     NumericalDebugger::unstablePowerFunctions = unstablePowerFunctions_red;
@@ -229,6 +231,7 @@ int MPI_Shaman_Finalize()
     NumericalDebugger::unstableFunctions = unstableFunctions_red;
     NumericalDebugger::unstableBranchings = unstableBranchings_red;
     NumericalDebugger::cancelations = cancelations_red;
+    NumericalDebugger::restorations = restorations_red;
     NumericalDebugger::numericalZeros = numericalZeros_red;
 
     // deactivate display on all process but the main one
@@ -253,5 +256,4 @@ int MPI_Shaman_Finalize()
  * http://mpitutorial.com/tutorials/mpi-reduce-and-allreduce/
  *
  * TODO works as long as the Shaman types have the declared size
- * we might want to implement shaman using a struct instead of a class so that our implementation can easily be kept MPÏ compatible
  */
