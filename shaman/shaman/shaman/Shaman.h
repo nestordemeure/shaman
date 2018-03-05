@@ -33,6 +33,7 @@ public :
     inline S(): number(0), error(0), isNumericalZero(false) {};
     inline S(numberType numberArg): number(numberArg), error(0), isNumericalZero(false) {}; // we accept implicit cast from T to S<T>
     inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) { isNumericalZero = non_significativ(numberArg,errorArg); };
+    inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg) {};
     #endif
 
     // casting
