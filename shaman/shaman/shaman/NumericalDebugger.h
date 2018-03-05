@@ -23,6 +23,11 @@
     #define NUMERICAL_DEBUGGER_ENABLED
 #endif
 
+// is usefull to keep track of the fact that a number has no significative digits ?
+#if defined(NUMERICAL_ZERO_DEBUGGER) || defined(UNSTABLE_OP_DEBUGGER)
+    #define NUMERICAL_ZERO_FIELD_ENABLED
+#endif
+
 /*
  * TODO :
  * - add a boolean that stores wheter a Snum is a numerical zero

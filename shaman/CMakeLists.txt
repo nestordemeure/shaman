@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_CXX_COMPILER /ccc/home/cont001/opendev/opendev/RHEL7/gcc48/llvm/3.8.0/bin/clang)
 # laptop
 #set(CMAKE_CXX_COMPILER verificarlo)
-set(CMAKE_CXX_COMPILER clang++-5.0)
+#set(CMAKE_CXX_COMPILER clang++-5.0)
 # mpi
 #set(CMAKE_CXX_COMPILER /usr/local/libre/bin/mpic++)
 
@@ -25,8 +25,8 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mfma -O1 -Wall -Wextra -Wno-unused-par
 # files
 set(SOURCE_FILES main.cpp
         # shaman
-        shaman/shaman/Shaman_Decl.h shaman/shaman/Shaman.h
         shaman/shaman/NumericalDebugger.cpp shaman/shaman/NumericalDebugger.h
+        shaman/shaman/Shaman_Decl.h shaman/shaman/Shaman.h
         #shaman/shaman/Shaman_mpi.h
         # shamanizer
         shaman/shamanizer/tinyformat.h
@@ -41,5 +41,5 @@ set(SOURCE_FILES main.cpp
 
 # linking
 add_executable(shaman_demo ${SOURCE_FILES})
-#target_link_libraries(shaman_demo "-lstdc++ -lOpenCL -ltbb -lexblas -lcadnaC")
-target_link_libraries(shaman_demo "-lstdc++ -lm -ltbb -lexblas -lcadnaC")
+target_link_libraries(shaman_demo "-lstdc++ -lOpenCL -ltbb -lexblas -lcadnaC")
+#target_link_libraries(shaman_demo "-lstdc++ -lm -ltbb -lexblas -lcadnaC")

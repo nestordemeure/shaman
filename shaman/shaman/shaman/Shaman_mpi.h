@@ -1,4 +1,5 @@
 #include <mpi.h>
+#include <cstddef>
 
 /*
  * to use :
@@ -10,14 +11,58 @@
  */
 
 //-------------------------------------------------------------------------------------------------
-// DEFINITIONS
+// TYPES
 
 /*
  * type definitions
  */
+MPI_Datatype MPI_SBOOL;
 MPI_Datatype MPI_SFLOAT;
 MPI_Datatype MPI_SDOUBLE;
 MPI_Datatype MPI_SLONG_DOUBLE;
+
+//----------
+
+/*
+ * builds an MPI type around a shaman type
+ * TODO we could automatically deduce the required MPI_Datatypes
+ *
+ * simpler solution for a type being just two identical types :
+ * MPI_Type_contiguous(2, numberType, newType);
+ */
+template<typename ShamanType>
+int MPI_Type_shaman(MPI_Datatype numberType, MPI_Datatype errorType, MPI_Datatype* newType)
+{
+    int structlen = 2;
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    structlen++;
+    #endif
+    int blocklengths[structlen];
+    MPI_Datatype types[structlen];
+    MPI_Aint displacements[structlen];
+
+    // number
+    blocklengths[0] = 1;
+    types[0] = numberType;
+    displacements[0] = offsetof(ShamanType,number);
+
+    // error
+    blocklengths[1] = 1;
+    types[1] = errorType;
+    displacements[1] = offsetof(ShamanType,error);
+
+    // boolean
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    blocklengths[2] = 1;
+    types[2] = MPI_SBOOL;
+    displacements[2] = offsetof(ShamanType,error);
+    #endif
+
+    return MPI_Type_create_struct(structlen, blocklengths, displacements, types, newType);
+}
+
+//-------------------------------------------------------------------------------------------------
+// OPERATORS
 
 /*
  * operator definition
@@ -28,8 +73,7 @@ MPI_Op MPI_SMIN;
 MPI_Op MPI_SSUM;
 MPI_Op MPI_SPROD;
 
-//-------------------------------------------------------------------------------------------------
-// OPERATOR DECLARATIONS
+//----------
 
 /*
  * applies an operation to two array of elements in any type
@@ -63,7 +107,7 @@ MPI_Op MPI_SPROD;
         throw std::invalid_argument("A Shaman MPI operation ( operation ) was done with a type that is not a shaman type.");\
     }\
 
-//-----------------------------------------------
+//----------
 
 // sum
 void MPI_smin( void *invec, void *inoutvec, int *len, MPI_Datatype *datatype)
@@ -111,14 +155,17 @@ int MPI_Shaman_Init(int argc, char **argv )
     #else
     if (errorValue == MPI_SUCCESS)
     {
+        // bool
+        MPI_Type_contiguous(sizeof(bool), MPI_BYTE, &MPI_SBOOL);
+        MPI_Type_commit(&MPI_SBOOL);
         // Sfloat
-        MPI_Type_contiguous(2, MPI_FLOAT, &MPI_SFLOAT);
+        MPI_Type_shaman<Sfloat>(MPI_FLOAT, MPI_FLOAT, &MPI_SFLOAT);
         MPI_Type_commit(&MPI_SFLOAT);
         // Sdouble
-        MPI_Type_contiguous(2, MPI_DOUBLE, &MPI_SDOUBLE);
+        MPI_Type_shaman<Sdouble>(MPI_DOUBLE, MPI_DOUBLE, &MPI_SDOUBLE);
         MPI_Type_commit(&MPI_SDOUBLE);
         // Slong_double
-        MPI_Type_contiguous(2, MPI_LONG_DOUBLE, &MPI_SLONG_DOUBLE);
+        MPI_Type_shaman<Slong_double>(MPI_LONG_DOUBLE, MPI_LONG_DOUBLE, &MPI_SLONG_DOUBLE);
         MPI_Type_commit(&MPI_SLONG_DOUBLE);
 
         // operator for reduce
@@ -140,7 +187,9 @@ int MPI_Shaman_Init(int argc, char **argv )
 int MPI_Shaman_Finalize()
 {
     #ifndef NO_SHAMAN
+
     // free types
+    MPI_Type_free(&MPI_SBOOL);
     MPI_Type_free(&MPI_SFLOAT);
     MPI_Type_free(&MPI_SDOUBLE);
     MPI_Type_free(&MPI_SLONG_DOUBLE);
