@@ -27,12 +27,6 @@
     #define NUMERICAL_ZERO_FIELD_ENABLED
 #endif
 
-/*
- * TODO :
- * - implement and add the detection and handling of restauration
- *   (error should not grow on a restaurarion if enable)
- */
-
 //-----------------------------------------------------------------------------
 // CLASS
 

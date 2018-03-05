@@ -18,13 +18,11 @@ int main()
     auto begin = std::chrono::steady_clock::now();
 
     // various tests
-    /*
-    rumpTest();
-    polynomialTest();
+    //rumpTest();
+    //polynomialTest();
     fixedPointTest();
-    kahanIdentity();
-    mullerTest();
-    */
+    //kahanIdentity();
+    //mullerTest();
 
     // sums
     //Compensatedsum(50000000);

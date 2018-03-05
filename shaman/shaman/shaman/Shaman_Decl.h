@@ -334,10 +334,10 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
 
     numberType remainder = std::fma(n1.number, n2.number, - result);
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
-    errorType newError = std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder));
+    //errorType newError = std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder));
 
-    // alternative formula with a small additional term (ignored by rump)
-    //errorType newError = std::fma(n1.error, n2.error, std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder)));
+    // alternative formula with a small additional term (ignored by rump but cruxial when n1*n2==0 while n1!=0 and n2!=0)
+    errorType newError = std::fma(n1.error, n2.error, std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder)));
 
     #ifdef UNSTABLE_OP_DEBUGGER
     if (n1.non_significativ() && n2.non_significativ())
@@ -376,6 +376,15 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     {
         NumericalDebugger::unstableDivisions++;
         NumericalDebugger::unstability();
+
+        // understanding unstable divisions
+        // TODO the remainder is exactly 0 just before the number stops being non-significativ => coinscidence
+        std::cout << "UNSTABLE ";
+        double r1 = std::abs(n1.error/n1.number);
+        double r2 = std::abs(n2.error/n2.number);
+        double r = std::abs(newError/result);
+        std::cout << std::setprecision(6) << "r1=" << r1 << " r2=" << r2 << " r=" << r
+                  << " remainder=0:" << (remainder==0) << " e=0:" << (newError==0) << std::endl;
     }
     #endif
 
@@ -786,13 +795,13 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         else
         {
             // some zero are significatives
+            digits = std::min(nbDigitsMax, digits);
             os << std::scientific << std::setprecision(digits-1) << 0.0; // TODO should we add a '@' prefix ?
         }
     }
     else
     {
         int digits = std::min(nbDigitsMax, int(fdigits));
-
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
 
