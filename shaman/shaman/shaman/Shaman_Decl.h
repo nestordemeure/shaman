@@ -280,7 +280,18 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && !(n1.non_significativ() || n2.non_significativ()))
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 set_Soperator_casts(+);
 
@@ -301,7 +312,18 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && !(n1.non_significativ() || n2.non_significativ()))
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 set_Soperator_casts(-);
 
@@ -325,7 +347,18 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && !(n1.non_significativ() || n2.non_significativ()))
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 set_Soperator_casts(*);
 
@@ -346,7 +379,18 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && !(n1.non_significativ() || n2.non_significativ()))
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 set_Soperator_casts(/);
 
@@ -368,7 +412,7 @@ templated inline bool isnan(const Snum& n)
 // abs
 templated inline const Snum abs(const Snum& n)
 {
-    if (n.number >= 0)
+    if (n >= 0)
     {
         return Snum(n.number, n.error);
     }
@@ -410,7 +454,18 @@ templated inline const Snum sqrt(const Snum& n)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 
 // cubic root
@@ -429,7 +484,18 @@ templated inline const Snum cbrt(const Snum& n)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 
 // exp
@@ -447,7 +513,18 @@ templated inline const Snum exp(const Snum& n)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 
 // sin
@@ -465,7 +542,18 @@ templated inline const Snum sin(const Snum& n)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 
 // cos
@@ -483,7 +571,18 @@ templated inline const Snum cos(const Snum& n)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 
 // tan
@@ -501,7 +600,18 @@ templated inline const Snum tan(const Snum& n)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 
 // pow
@@ -519,7 +629,18 @@ templated inline const Snum pow(const Snum& n1, const Snum& n2)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && !(n1.non_significativ() || n2.non_significativ()))
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 set_Sfunction2_casts(pow);
 
@@ -584,7 +705,18 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
     }
     #endif
 
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && !(n1.non_significativ() || n2.non_significativ() || n3.non_significativ()))
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
     return Snum(result, newError);
+    #endif
 };
 set_Sfunction3_casts(fma);
 

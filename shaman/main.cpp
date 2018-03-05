@@ -21,7 +21,7 @@ int main()
 
     //rumpTest();
     //polynomialTest();
-    //fixedPointTest();
+    fixedPointTest();
     //kahanIdentity();
     //mullerTest();
 

@@ -10,7 +10,7 @@
 
 // general macro that enable most counters
 #ifdef NUMERICAL_DEBUGGER
-    #define NUMERICAL_ZERO_DEBUGGER // TODO
+    #define NUMERICAL_ZERO_DEBUGGER
     #define CANCELATION_DEBUGGER
     #define UNSTABLE_OP_DEBUGGER
     #define UNSTABLE_BRANCH_DEBUGGER
@@ -23,15 +23,13 @@
     #define NUMERICAL_DEBUGGER_ENABLED
 #endif
 
-// is usefull to keep track of the fact that a number has no significative digits ?
+// is it usefull to keep track of the fact that a number has no significative digits ?
 #if defined(NUMERICAL_ZERO_DEBUGGER) || defined(UNSTABLE_OP_DEBUGGER)
     #define NUMERICAL_ZERO_FIELD_ENABLED
 #endif
 
 /*
  * TODO :
- * - add a boolean that stores wheter a Snum is a numerical zero
- * - add a test to see if numerical zeros where created during execution
  * - implement and add the detection and handling of restauration
  *   (error should not grow on a restaurarion if enable)
  */
