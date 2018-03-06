@@ -20,7 +20,7 @@ int main()
     // various tests
     //rumpTest();
     //polynomialTest();
-    fixedPointTest();
+    //fixedPointTest();
     //kahanIdentity();
     //mullerTest();
 
@@ -50,7 +50,7 @@ int main()
     */
 
     // eigen
-    //eigenDemo();
+    eigenDemo();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();

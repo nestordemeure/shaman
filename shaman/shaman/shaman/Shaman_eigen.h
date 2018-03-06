@@ -12,6 +12,27 @@
 namespace Eigen
 {
     /*
+     * adds Slong_double to eigen
+     * TODO NumTraits<long double> should give us the epsilon, dummy_precision, lowest and highest functions
+     */
+    template<> struct NumTraits<Slong_double> : NumTraits<long double>
+    {
+        typedef Slong_double Real;
+        typedef Slong_double NonInteger;
+        typedef Slong_double Nested;
+        enum
+        {
+            IsComplex = 0,
+            IsInteger = 0,
+            IsSigned = 1,
+            RequireInitialization = 0,
+            ReadCost = 1,
+            AddCost = 1,
+            MulCost = 1
+        };
+    };
+
+    /*
      * adds Sdouble to eigen
      * NumTraits<double> gives us the epsilon, dummy_precision, lowest and highest functions
      */
