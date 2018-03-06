@@ -21,8 +21,6 @@ MPI_Datatype MPI_SFLOAT;
 MPI_Datatype MPI_SDOUBLE;
 MPI_Datatype MPI_SLONG_DOUBLE;
 
-//----------
-
 /*
  * builds an MPI type around a shaman type
  * TODO we could automatically deduce the required MPI_Datatypes
@@ -55,7 +53,7 @@ int MPI_Type_shaman(MPI_Datatype numberType, MPI_Datatype errorType, MPI_Datatyp
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     blocklengths[2] = 1;
     types[2] = MPI_SBOOL;
-    displacements[2] = offsetof(ShamanType,error);
+    displacements[2] = offsetof(ShamanType,isNumericalZero);
     #endif
 
     return MPI_Type_create_struct(structlen, blocklengths, displacements, types, newType);
@@ -72,8 +70,6 @@ MPI_Op MPI_SMAX;
 MPI_Op MPI_SMIN;
 MPI_Op MPI_SSUM;
 MPI_Op MPI_SPROD;
-
-//----------
 
 /*
  * applies an operation to two array of elements in any type

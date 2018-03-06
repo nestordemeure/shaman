@@ -28,6 +28,7 @@ set(SOURCE_FILES main.cpp
         # shaman
         shaman/shaman/NumericalDebugger.cpp shaman/shaman/NumericalDebugger.h
         shaman/shaman/Shaman_Decl.h shaman/shaman/Shaman.h
+        shaman/shaman/Shaman_eigen.h
         #shaman/shaman/Shaman_mpi.h
         # shamanizer
         shaman/shamanizer/tinyformat.h
