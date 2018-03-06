@@ -28,10 +28,11 @@ Eigen::SMatrixXd KacMat(int size)
 
 /*
  * short demo of eigen
+ * Shaman is very pessimistic due to some unstable operations
  */
 void eigenDemo()
 {
-    int size = 99;
+    int size = 50; // 99
 
     // defining the matrix
     Eigen::SMatrixXd A = KacMat(size);
@@ -52,5 +53,11 @@ void eigenDemo()
         std::cout << computedEigenval << "\t\t\t(" << std::setprecision(17) << computedEigenval.number << " instead of " << realeigenval << ')' << std::endl;
     }
 }
+
+/*
+ * TODO :
+ * - do a small test such as a matrix multiplication (should avoid unstable operations found in eigenvalue decomposition)
+ * - test to insure that results with double are binary compatible with result using Sdouble
+ */
 
 #endif //SHAMAN_DEMO_EIGEN_H
