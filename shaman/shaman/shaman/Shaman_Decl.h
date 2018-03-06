@@ -376,15 +376,6 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     {
         NumericalDebugger::unstableDivisions++;
         NumericalDebugger::unstability();
-
-        // understanding unstable divisions
-        // TODO the remainder is exactly 0 just before the number stops being non-significativ => coinscidence
-        std::cout << "UNSTABLE ";
-        double r1 = std::abs(n1.error/n1.number);
-        double r2 = std::abs(n2.error/n2.number);
-        double r = std::abs(newError/result);
-        std::cout << std::setprecision(6) << "r1=" << r1 << " r2=" << r2 << " r=" << r
-                  << " remainder=0:" << (remainder==0) << " e=0:" << (newError==0) << std::endl;
     }
     #endif
 
