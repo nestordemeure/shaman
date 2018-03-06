@@ -428,6 +428,35 @@ templated inline const Snum fabs(const Snum& n)
     return abs(n);
 };
 
+// floor
+templated inline const Snum floor(const Snum& n)
+{
+    numberType result = std::floor(n.number);
+    preciseType preciseCorrectedResult = std::floor((preciseType) n.number + n.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef UNSTABLE_OP_DEBUGGER
+    if (n.non_significativ())
+    {
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
+    return Snum(result, newError);
+    #endif
+};
+
 // sqrt
 templated inline const Snum sqrt(const Snum& n)
 {
@@ -503,6 +532,35 @@ templated inline const Snum exp(const Snum& n)
 {
     numberType result = std::exp(n.number);
     preciseType preciseCorrectedResult = std::exp((preciseType) n.number + n.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef UNSTABLE_OP_DEBUGGER
+    if (n.non_significativ())
+    {
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
+    return Snum(result, newError);
+    #endif
+};
+
+// erf
+templated inline const Snum erf(const Snum& n)
+{
+    numberType result = std::erf(n.number);
+    preciseType preciseCorrectedResult = std::erf((preciseType) n.number + n.error);
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
     #ifdef UNSTABLE_OP_DEBUGGER

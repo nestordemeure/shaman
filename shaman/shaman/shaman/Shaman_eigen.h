@@ -150,6 +150,15 @@ namespace Eigen
     typedef Eigen::Matrix< std::complex< Sfloat >, Eigen::Dynamic, 1 > SVectorXcf;
     typedef Eigen::Matrix< Sdouble, Eigen::Dynamic, 1 > SVectorXd;
     typedef Eigen::Matrix< Sfloat, Eigen::Dynamic, 1 > SVectorXf;
+
+    /*
+     * TODO adds global arrays typedefs
+     * see : https://eigen.tuxfamily.org/dox/Array_8h_source.html
+     */
+    typedef Eigen::Array<Sfloat,Eigen::Dynamic,Eigen::Dynamic> SArrayXXf;
+    typedef Eigen::Array<Sdouble,Eigen::Dynamic,1> SArrayXd;
+    typedef Eigen::Array<Sfloat,3,3> SArray33f;
+    typedef Eigen::Array<Sfloat,4,1> SArray4f;
 }
 
 /*
@@ -169,3 +178,10 @@ inline Sfloat imag(const Sfloat&)    { return 0.f; }
 inline Sfloat abs2(const Sfloat& x)  { return x*x; }
 
 #endif //SHAMAN_DEMO_SHAMAN_EIGEN_H
+
+/*
+ * TODO :
+ * - complete the Array typedefs
+ * - WARNING, Sdouble matrix can be multiplied by Sdouble but not double (it raises a compilation exeption)
+ */
+

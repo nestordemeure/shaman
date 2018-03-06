@@ -19,6 +19,7 @@ cpp_extensions = (".h", ".c", ".cpp", ".hpp", ".cc", ".cxx", ".c++", ".hh", ".hx
 
 # STANDARD LIBRARY
 printfHeader = "#include \"{}/shamanizer/tinyformat.h\"".format(pathToShaman)
+printfFunctions = [("fprintf","tfm::fprintf"), ("printf","tfm::printf")]
 stdFunctions = ['abs','labs','llabs','div','ldiv','lldiv','imaxabs','imaxdiv','fabs',
                 'fmod','remainder','remquo','fma','fmax','fmin','fdim','exp','exp2','expm1','log','log10','log2','log1p',
                 'pow','sqrt','cbrt','hypot','sin','cos','tan','asin','acos','atan','atan2','sinh','cosh','tanh','asinh','acosh','atanh',
@@ -27,14 +28,14 @@ stdFunctions = ['abs','labs','llabs','div','ldiv','lldiv','imaxabs','imaxdiv','f
                 'isfinite','isinf','isnan','isnormal','signbit','isgreater','isgreaterequal','isless','islessequal','islessgreater','isunordered']
 
 # MPI
-mpiHeader = "#include \"{}shaman/Shaman_mpi.h\"".format(pathToShaman)
+mpiHeader = "#include \"{}/shaman/Shaman_mpi.h\"".format(pathToShaman)
 mpiTypes = [("MPI_FLOAT","MPI_SFLOAT"), ("MPI_DOUBLE","MPI_SDOUBLE"), ("MPI_LONG_DOUBLE","MPI_SLONG_DOUBLE")]
 mpiOperations = [("MPI_MAX","MPI_SMAX"), ("MPI_MIN","MPI_SMIN"), ("MPI_SUM","MPI_SSUM"), ("MPI_PROD","MPI_SPROD")]
 mpiFunctions = [("MPI_Init","MPI_Shaman_Init"), ("MPI_Finalize","MPI_Shaman_Finalize")]
 
 # EIGEN
-eigenHeader = "#include \"{}shaman/Shaman_eigen.h\"".format(pathToShaman)
-eigenTypes = [("Matrix2cd","SMatrix2cd"), ("Matrix2cf","SMatrix2cf"), ("Matrix2d","SMatrix2d"), ("Matrix2f","SMatrix2f"),("Matrix2Xcd","SMatrix2Xcd"),
+eigenHeader = "#include \"{}/shaman/Shaman_eigen.h\"".format(pathToShaman)
+eigenMatrixTypes = [("Matrix2cd","SMatrix2cd"), ("Matrix2cf","SMatrix2cf"), ("Matrix2d","SMatrix2d"), ("Matrix2f","SMatrix2f"),("Matrix2Xcd","SMatrix2Xcd"),
               ("Matrix2Xcf","SMatrix2Xcf"), ("Matrix3cd","SMatrix3cd"), ("Matrix3cf","SMatrix3cf"), ("Matrix3d","SMatrix3d"), ("Matrix3f","SMatrix3f"),
               ("Matrix2Xd","SMatrix2Xd"), ("Matrix2Xf","SMatrix2Xf"), ("Matrix3Xcd","SMatrix3Xcd"), ("Matrix3Xcf","SMatrix3Xcf"), ("Matrix3Xd","SMatrix3Xd"),
               ("Matrix3Xf","SMatrix3Xf"), ("Matrix4cd","SMatrix4cd"), ("Matrix4cf","SMatrix4cf"), ("Matrix4d","SMatrix4d"), ("Matrix4f","SMatrix4f"),
@@ -50,6 +51,8 @@ eigenTypes = [("Matrix2cd","SMatrix2cd"), ("Matrix2cf","SMatrix2cf"), ("Matrix2d
               ("Vector3cf","SVector3cf"), ("Vector3d","SVector3d"), ("Vector3f","SVector3f"), ("Vector4cd","SVector4cd"), ("Vector4cf","SVector4cf"),
               ("Vector4d","SVector4d"), ("Vector4f","SVector4f"), ("VectorXcd","SVectorXcd"), ("VectorXcf","SVectorXcf"), ("VectorXd","SVectorXd"),
               ("VectorXf","SVectorXf")]
+eigenArrayTypes = [("ArrayXXf","SArrayXXf"), ("ArrayXd","SArrayXd"), ("Array33f","SArray33f"), ("Array4f","SArray4f")]
+eigenTypes = eigenMatrixTypes + eigenArrayTypes
 
 #-----------------------------------------------------------------------------
 # MODIFICATION COUNT
@@ -136,7 +139,7 @@ def export_lines(filepath,lines):
 
 def change_printf(filepath, lines):
     """modifies the printf if needed and exports the lines"""
-    newlines = replace_strings_in_text([("printf","tfm::printf")], lines)
+    newlines = replace_strings_in_text(printfFunctions, lines)
     if newlines is not None:
         add_header(printfHeader, newlines)
         print("WARNING : 'printf' found in '" + filepath + "', don't forget to compile with the 'tinyformat' library.")
