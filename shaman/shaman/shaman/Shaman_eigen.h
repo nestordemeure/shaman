@@ -7,6 +7,7 @@
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
+#include <thirdparty/eigen-3.3.2/unsupported/Eigen/MatrixFunctions>
 #include "Shaman.h"
 
 namespace Eigen
@@ -159,6 +160,62 @@ namespace Eigen
     typedef Eigen::Array<Sdouble,Eigen::Dynamic,1> SArrayXd;
     typedef Eigen::Array<Sfloat,3,3> SArray33f;
     typedef Eigen::Array<Sfloat,4,1> SArray4f;
+
+    /*
+     * overload functions from the unsupported section of Eigen
+     */
+    namespace internal
+    {
+        template <typename MatrixType>
+        struct matrix_exp_computeUV<MatrixType, Sfloat>
+        {
+            static void run(const MatrixType& arg, MatrixType& U, MatrixType& V, int& squarings)
+            {
+                using std::frexp;
+                using std::pow;
+                const Sfloat l1norm = arg.cwiseAbs().colwise().sum().maxCoeff();
+                squarings = 0;
+                if (l1norm < 4.258730016922831e-001f) {
+                    matrix_exp_pade3(arg, U, V);
+                } else if (l1norm < 1.880152677804762e+000f) {
+                    matrix_exp_pade5(arg, U, V);
+                } else {
+                    const Sfloat maxnorm = 3.925724783138660f;
+                    frexp(l1norm / maxnorm, &squarings);
+                    if (squarings < 0) squarings = 0;
+                    MatrixType A = arg.unaryExpr(MatrixExponentialScalingOp<Sfloat>(squarings));
+                    matrix_exp_pade7(A, U, V);
+                }
+            }
+        };
+
+        template <typename MatrixType>
+        struct matrix_exp_computeUV<MatrixType, Sdouble>
+        {
+            static void run(const MatrixType& arg, MatrixType& U, MatrixType& V, int& squarings)
+            {
+                using std::frexp;
+                using std::pow;
+                const Sdouble l1norm = arg.cwiseAbs().colwise().sum().maxCoeff();
+                squarings = 0;
+                if (l1norm < 1.495585217958292e-002) {
+                    matrix_exp_pade3(arg, U, V);
+                } else if (l1norm < 2.539398330063230e-001) {
+                    matrix_exp_pade5(arg, U, V);
+                } else if (l1norm < 9.504178996162932e-001) {
+                    matrix_exp_pade7(arg, U, V);
+                } else if (l1norm < 2.097847961257068e+000) {
+                    matrix_exp_pade9(arg, U, V);
+                } else {
+                    const Sdouble maxnorm = 5.371920351148152;
+                    frexp(l1norm / maxnorm, &squarings);
+                    if (squarings < 0) squarings = 0;
+                    MatrixType A = arg.unaryExpr(MatrixExponentialScalingOp<Sdouble>(squarings));
+                    matrix_exp_pade13(A, U, V);
+                }
+            }
+        };
+    }
 }
 
 /*
@@ -178,10 +235,3 @@ inline Sfloat imag(const Sfloat&)    { return 0.f; }
 inline Sfloat abs2(const Sfloat& x)  { return x*x; }
 
 #endif //SHAMAN_DEMO_SHAMAN_EIGEN_H
-
-/*
- * TODO :
- * - complete the Array typedefs
- * - WARNING, Sdouble matrix can be multiplied by Sdouble but not double (it raises a compilation exeption)
- */
-

@@ -556,6 +556,65 @@ templated inline const Snum exp(const Snum& n)
     #endif
 };
 
+// frexp
+templated inline const Snum frexp(const Snum& n, int* exp)
+{
+    numberType result = std::frexp(n.number, exp);
+    int dummyExp;
+    preciseType preciseCorrectedResult = std::frexp((preciseType) n.number + n.error, &dummyExp);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef UNSTABLE_OP_DEBUGGER
+    if (n.non_significativ())
+    {
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
+    return Snum(result, newError);
+    #endif
+};
+
+// ldexp
+templated inline const Snum ldexp(const Snum& n, int exp)
+{
+    numberType result = std::ldexp(n.number, exp);
+    preciseType preciseCorrectedResult = std::ldexp((preciseType) n.number + n.error, exp);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef UNSTABLE_OP_DEBUGGER
+    if (n.non_significativ())
+    {
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    if (isNumericalZero && ! n.non_significativ() )
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+
+    return Snum(result, newError, isNumericalZero);
+    #else
+    return Snum(result, newError);
+    #endif
+};
+
 // erf
 templated inline const Snum erf(const Snum& n)
 {
@@ -780,6 +839,22 @@ set_Sfunction3_casts(fma);
 
 //-----------------------------------------------------------------------------
 // CLASS OPERATORS
+
+// ++
+templated inline Snum& Snum::operator++(int)
+{
+    *this = (*this) + 1;
+
+    return *this;
+}
+
+// --
+templated inline Snum& Snum::operator--(int)
+{
+    *this = (*this) - 1;
+
+    return *this;
+}
 
 // +=
 templated inline Snum& Snum::operator+=(const Snum& n)
