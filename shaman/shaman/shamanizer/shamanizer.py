@@ -12,14 +12,13 @@
 #   deals with Eigen
 
 # SHAMAN
-pathToShaman = "."
-shamanHeader = "#include \"{}/shaman/Shaman.h\"".format(pathToShaman)
+shamanHeader = "#include <shaman/Shaman.h>"
 numericTypes = [("float","Sfloat"), ("double","Sdouble"), ("long double","Slong_double")]
 cpp_extensions = (".h", ".c", ".cpp", ".hpp", ".cc", ".cxx", ".c++", ".hh", ".hxx", ".h++") # tuple required
 
 # STANDARD LIBRARY
-printfHeader = "#include \"{}/shamanizer/tinyformat.h\"".format(pathToShaman)
-printfFunctions = [("fprintf","tfm::fprintf"), ("printf","tfm::printf")]
+printfHeader = "#include <shamanizer/tinyformat.h>"
+printfFunctions = [("printf","tfm::printf")] # TODO add a warning for 'fprintf'
 stdFunctions = ['abs','labs','llabs','div','ldiv','lldiv','imaxabs','imaxdiv','fabs',
                 'fmod','remainder','remquo','fma','fmax','fmin','fdim','exp','exp2','expm1','log','log10','log2','log1p',
                 'pow','sqrt','cbrt','hypot','sin','cos','tan','asin','acos','atan','atan2','sinh','cosh','tanh','asinh','acosh','atanh',
@@ -28,13 +27,13 @@ stdFunctions = ['abs','labs','llabs','div','ldiv','lldiv','imaxabs','imaxdiv','f
                 'isfinite','isinf','isnan','isnormal','signbit','isgreater','isgreaterequal','isless','islessequal','islessgreater','isunordered']
 
 # MPI
-mpiHeader = "#include \"{}/shaman/Shaman_mpi.h\"".format(pathToShaman)
+mpiHeader = "#include <shaman/Shaman_mpi.h>"
 mpiTypes = [("MPI_FLOAT","MPI_SFLOAT"), ("MPI_DOUBLE","MPI_SDOUBLE"), ("MPI_LONG_DOUBLE","MPI_SLONG_DOUBLE")]
 mpiOperations = [("MPI_MAX","MPI_SMAX"), ("MPI_MIN","MPI_SMIN"), ("MPI_SUM","MPI_SSUM"), ("MPI_PROD","MPI_SPROD")]
 mpiFunctions = [("MPI_Init","MPI_Shaman_Init"), ("MPI_Finalize","MPI_Shaman_Finalize")]
 
 # EIGEN
-eigenHeader = "#include \"{}/shaman/Shaman_eigen.h\"".format(pathToShaman)
+eigenHeader = "#include <shaman/Shaman_eigen.h>"
 eigenMatrixTypes = [("Matrix2cd","SMatrix2cd"), ("Matrix2cf","SMatrix2cf"), ("Matrix2d","SMatrix2d"), ("Matrix2f","SMatrix2f"),("Matrix2Xcd","SMatrix2Xcd"),
               ("Matrix2Xcf","SMatrix2Xcf"), ("Matrix3cd","SMatrix3cd"), ("Matrix3cf","SMatrix3cf"), ("Matrix3d","SMatrix3d"), ("Matrix3f","SMatrix3f"),
               ("Matrix2Xd","SMatrix2Xd"), ("Matrix2Xf","SMatrix2Xf"), ("Matrix3Xcd","SMatrix3Xcd"), ("Matrix3Xcf","SMatrix3Xcf"), ("Matrix3Xd","SMatrix3Xd"),
