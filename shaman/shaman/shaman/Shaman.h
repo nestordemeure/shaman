@@ -54,6 +54,8 @@ public :
     #endif
 
     // arithmetic operators
+    S& operator++(int);
+    S& operator--(int);
     S& operator+=(const S& n);
     S& operator-=(const S& n);
     S& operator*=(const S& n);
@@ -95,6 +97,8 @@ templated const Snum floor(const Snum& n);
 templated const Snum sqrt(const Snum& n);
 templated const Snum cbrt(const Snum& n);
 templated const Snum exp(const Snum& n);
+templated const Snum frexp(const Snum& n, int* exp);
+templated const Snum ldexp(const Snum& n, int exp);
 templated const Snum erf(const Snum& n);
 templated const Snum sin(const Snum& n);
 templated const Snum cos(const Snum& n);
