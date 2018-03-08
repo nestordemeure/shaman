@@ -6,7 +6,7 @@
 #include "tests/schrodinger.h"
 #include "tests/cadna.h"
 #include "tests/legendre.h"
-#include "tests/eigen.h"
+//#include "tests/eigen.h"
 //#include "tests/mpi_test.h"
 
 //---------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ int main()
     */
 
     // eigen
-    eigenDemo();
+    //eigenDemo();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
