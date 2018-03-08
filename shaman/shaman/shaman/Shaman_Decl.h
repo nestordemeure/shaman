@@ -925,7 +925,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     }
     else
     {
-        int digits = std::min(nbDigitsMax, int(fdigits));
+        int digits = std::min((numberType) nbDigitsMax, fdigits);
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
 
