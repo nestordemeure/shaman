@@ -26,11 +26,11 @@ templated inline void displayError(Snum result, double expectedResult)
     double digits = -log10(std::abs(error / result.number));
     double estimatedDigits = Snum::digits(result);
 
-    std::cout << "result=" << result.number
-              << std::endl
+    std::cout << "result=" << result << " (" << result.number << ')'
+              << '\n'
               << " absolut_error=" << error
               << " estimated_absolut_error=" << result.error
-              << std::endl
+              << '\n'
               << " significativ_digits=" << digits
               << " estimated_significativ_digits=" << estimatedDigits
               << '\n' << std::endl;
@@ -149,7 +149,7 @@ inline number identity(number x)
         x = sqrt(x);
 
         //Sdouble xTarget = pow(xinit,1./pow(2,i));
-        //std::cout << x << std::endl;
+        std::cout << x << std::endl;
     }
 
     // x squared 128 times
@@ -159,7 +159,7 @@ inline number identity(number x)
 
         //Sdouble xTarget = pow(xinit,1./pow(2,128-i));
         //std::cout << x << " (number=" << x.number << " error=" << x.error << ")" << '\t' << xTarget << std::endl;
-        //std::cout << x << std::endl;
+        std::cout << x << std::endl;
     }
 
     return x;

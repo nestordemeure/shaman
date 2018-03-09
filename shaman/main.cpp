@@ -21,7 +21,7 @@ int main()
     //rumpTest();
     //polynomialTest();
     //fixedPointTest();
-    //kahanIdentity();
+    kahanIdentity();
     //mullerTest();
 
     // sums
@@ -37,17 +37,15 @@ int main()
     //legendre20Test();
 
     // CADNA double
-    /*
-    polynomial();
-    secondOrder();
-    hilbert();
-    muller();
-    newton();
-    gauss();
-    jacobi();
-    falsePositive();
-    alternatingCounter();
-    */
+    //polynomial();
+    //secondOrder();
+    //hilbert();
+    //muller();
+    //newton();
+    //gauss();
+    //jacobi();
+    //falsePositive();
+    //alternatingCounter();
 
     // eigen
     //eigenDemo();

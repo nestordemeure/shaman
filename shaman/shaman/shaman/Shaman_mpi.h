@@ -35,25 +35,40 @@ int MPI_Type_shaman(MPI_Datatype numberType, MPI_Datatype errorType, MPI_Datatyp
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     structlen++;
     #endif
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    structlen++;
+    #endif
     int blocklengths[structlen];
     MPI_Datatype types[structlen];
     MPI_Aint displacements[structlen];
+    int blockNum = 0;
 
     // number
-    blocklengths[0] = 1;
-    types[0] = numberType;
-    displacements[0] = offsetof(ShamanType,number);
+    blocklengths[blockNum] = 1;
+    types[blockNum] = numberType;
+    displacements[blockNum] = offsetof(ShamanType,number);
+    blockNum++;
 
     // error
-    blocklengths[1] = 1;
-    types[1] = errorType;
-    displacements[1] = offsetof(ShamanType,error);
+    blocklengths[blockNum] = 1;
+    types[blockNum] = errorType;
+    displacements[blockNum] = offsetof(ShamanType,error);
+    blockNum++;
 
-    // boolean
+    // isNumericalZero
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    blocklengths[2] = 1;
-    types[2] = MPI_SBOOL;
-    displacements[2] = offsetof(ShamanType,isNumericalZero);
+    blocklengths[blockNum] = 1;
+    types[blockNum] = MPI_SBOOL;
+    displacements[blockNum] = offsetof(ShamanType,isNumericalZero);
+    blockNum++;
+    #endif
+
+    // doubtLevel
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    blocklengths[blockNum] = 1;
+    types[blockNum] = MPI_INT;
+    displacements[blockNum] = offsetof(ShamanType,doubtLevel);
+    blockNum++;
     #endif
 
     return MPI_Type_create_struct(structlen, blocklengths, displacements, types, newType);

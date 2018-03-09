@@ -23,18 +23,25 @@ public :
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     bool isNumericalZero;
     #endif
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel;
+    #endif
 
     // constructors
-    #ifndef NUMERICAL_ZERO_FIELD_ENABLED
-    inline S(): number(0), error(0) {};
-    inline S(numberType numberArg): number(numberArg), error(0) {}; // we accept implicit cast from T to S<T>
-    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg, int doubt): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg), doubtLevel(doubt) {};
+    inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): S(numberArg, errorArg, isNumericalZeroArg, 0) {};
     #else
-    inline S(): number(0), error(0), isNumericalZero(false) {};
-    inline S(numberType numberArg): number(numberArg), error(0), isNumericalZero(false) {}; // we accept implicit cast from T to S<T>
-    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) { isNumericalZero = non_significativ(numberArg,errorArg); };
     inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg) {};
     #endif
+    inline S(numberType numberArg, errorType errorArg): S(numberArg, errorArg, non_significativ(numberArg,errorArg)) {};
+    inline S(numberType numberArg): S(numberArg,0,false) {}; // we accept implicit cast from T to S<T>
+    #else
+    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
+    inline S(numberType numberArg): S(numberArg,0) {}; // we accept implicit cast from T to S<T>
+    #endif
+    inline S(): S(0) {};
 
     // casting
     inline explicit operator int() const { return (int) number; };
