@@ -32,7 +32,7 @@ Eigen::SMatrixXd KacMat(int size)
  */
 void eigenDemo()
 {
-    int size = 50; // 99
+    int size = 75; // 99
 
     // defining the matrix
     Eigen::SMatrixXd A = KacMat(size);
@@ -53,6 +53,20 @@ void eigenDemo()
         std::cout << computedEigenval << "\t\t\t(" << std::setprecision(17) << computedEigenval.number << " instead of " << realeigenval << ')' << std::endl;
     }
 }
+
+/*
+ * significativ digits lost as a function of doubt (digits : doubt) :
+ * 6 : 228
+ * 6 : 228
+ * 13 : 237
+ * 13 : 238
+ * 13 : 239
+ * 12 : 238
+ * 12 : 238
+ * ...
+ * 9 : 204
+ * 10 : 185
+ */
 
 /*
  * TODO :

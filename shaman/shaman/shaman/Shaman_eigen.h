@@ -7,7 +7,7 @@
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
-#include <thirdparty/eigen-3.3.2/unsupported/Eigen/MatrixFunctions>
+//#include <thirdparty/eigen-3.3.2/unsupported/Eigen/MatrixFunctions>
 #include "Shaman.h"
 
 namespace Eigen
@@ -167,6 +167,7 @@ namespace Eigen
     /*
      * overload functions from the unsupported section of Eigen
      */
+    /*
     namespace internal
     {
         template<typename MatrixType>
@@ -233,7 +234,16 @@ namespace Eigen
             }
         };
     }
+     */
 }
+
+/*
+ * adds the needed functions to Slong_double
+ */
+inline const Slong_double &conj(const Slong_double &x) { return x; }
+inline const Slong_double &real(const Slong_double &x) { return x; }
+inline Slong_double imag(const Slong_double &) { return 0.; }
+inline Slong_double abs2(const Slong_double &x) { return x * x; }
 
 /*
  * adds the needed functions to Sdouble
