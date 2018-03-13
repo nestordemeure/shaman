@@ -219,11 +219,15 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 // macro used in constructors
 #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     #define ISNUMERICALZERO , isNumericalZero
+#else
+    #define ISNUMERICALZERO
 #endif
 
 // macro used in constructors
 #ifdef DOUBT_LEVEL_FIELD_ENABLED
     #define DOUBTLEVEL , doubtLevel
+#else
+    #define DOUBTLEVEL
 #endif
 
 // macro that encapsulate cancellation test
@@ -234,6 +238,8 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
         NumericalDebugger::cancelations++; \
         NumericalDebugger::unstability(); \
         }
+#else
+    #define CANCELATION_TEST(n_minPrecision)
 #endif
 
 // macro that encapsulate numerical zero test
@@ -244,6 +250,8 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
         NumericalDebugger::numericalZeros++; \
         NumericalDebugger::unstability(); \
         }
+#else
+    #define NUMERICAL_ZERO_TEST(is_non_significativ)
 #endif
 
 // macro that encapsulate branch unstability test
@@ -254,6 +262,8 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
         NumericalDebugger::unstableBranchings++; \
         NumericalDebugger::unstability(); \
         }
+#else
+    #define UNSTABLE_BRANCH_TEST
 #endif
 
 //-----------------------------------------------------------------------------
