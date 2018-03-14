@@ -37,26 +37,26 @@ void Compensatedsum(int size)
     generate(begin(data), end(data), gen);
 
     // usual sum
-    number sum = 0.0;
+    Sdouble sum = 0.0;
     // kahan sum
-    number kahanSum = 0.0;
-    number compensation = 0.0;
+    Sdouble kahanSum = 0.0;
+    Sdouble compensation = 0.0;
     // improved kahan sum
-    number improvedSum = 0.0;
-    number compensation2 = 0.0;
+    Sdouble improvedSum = 0.0;
+    Sdouble compensation2 = 0.0;
     for(double x : data)
     {
         // usual sum
         sum += x;
 
         // kahan sum
-        number y = x - compensation;
-        number t = kahanSum + y;
+        Sdouble y = x - compensation;
+        Sdouble t = kahanSum + y;
         compensation = (t - kahanSum) - y;
         kahanSum = t;
 
         // improved kahan
-        number t2 = improvedSum + x;
+        Sdouble t2 = improvedSum + x;
         if( fabs(improvedSum) >= fabs(x) )
         {
             compensation2 += (improvedSum - t2) + x;
@@ -97,7 +97,7 @@ void parralelSum(int size)
     std::cout << "exact sum\t:\t" << std::setprecision(15) << exactSum << std::endl;
 
     // sequential sum
-    number seqSum = 0;
+    Sdouble seqSum = 0;
     for(Sdouble x : data)
     {
         seqSum += x;
@@ -117,10 +117,10 @@ void parralelSum(int size)
     */
 
     // parrallel sum without reduce
-    number parSum = 0;
+    Sdouble parSum = 0;
     #pragma omp parallel
     {
-        number localParSum = 0;
+        Sdouble localParSum = 0;
 
         #pragma omp for
         for(unsigned int i = 0; i < data.size(); i++)

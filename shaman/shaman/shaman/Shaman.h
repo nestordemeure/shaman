@@ -109,6 +109,7 @@ templated const Snum ldexp(const Snum& n, int exp);
 templated const Snum erf(const Snum& n);
 templated const Snum sin(const Snum& n);
 templated const Snum cos(const Snum& n);
+templated const Snum acos(const Snum& n);
 templated const Snum tan(const Snum& n);
 templated const Snum pow(const Snum& n1, const Snum& n2);
 templated const Snum min(const Snum& n1, const Snum& n2);

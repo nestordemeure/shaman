@@ -745,6 +745,47 @@ templated inline const Snum cos(const Snum& n)
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
 
+// acos
+templated inline const Snum acos(const Snum& n)
+{
+    numberType result = std::acos(n.number);
+    preciseType correctedNumber = n.number + n.error;
+    preciseType preciseCorrectedResult;
+    if (correctedNumber > 1)
+    {
+        preciseCorrectedResult = 0;
+    }
+    else if (correctedNumber < -1)
+    {
+        preciseCorrectedResult = M_PI;
+    }
+    else
+    {
+        preciseCorrectedResult = std::acos(correctedNumber);
+    }
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
 // tan
 templated inline const Snum tan(const Snum& n)
 {

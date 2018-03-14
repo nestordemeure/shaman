@@ -16,7 +16,7 @@
 Schrodinger::Schrodinger()
 {
     ECurrent = EMin;
-    psi = std::vector<number>(numberDivisions+1);
+    psi = std::vector<Sdouble>(numberDivisions+1);
     psi[0] = 0.0;
     psi[1] = -1e-9;
     psi[numberDivisions] = 1.0;
@@ -29,23 +29,23 @@ Schrodinger::Schrodinger()
 /*
  * compute Kn using the numeric values that we already found
  */
-number Schrodinger::calculateKSSquared(int n)
+Sdouble Schrodinger::calculateKSSquared(int n)
 {
     //number x = (hZero * n) + xMin;
-    number x = (((double) n)*xMax + xMin*((double) numberDivisions-n)) / ((double) numberDivisions);
+    Sdouble x = (((double) n)*xMax + xMin*((double) numberDivisions-n)) / ((double) numberDivisions);
     return ((0.05 * ECurrent) - ((x*x) * 5.63e-3));
 }
 
 /*
  * uses the Numerov algorithm to get the next value of psi
  */
-number Schrodinger::calculateNextPsi(int n)
+Sdouble Schrodinger::calculateNextPsi(int n)
 {
-    number KSqNMinusOne = calculateKSSquared(n - 1);
-    number KSqN = calculateKSSquared(n);
-    number KSqNPlusOne = calculateKSSquared(n + 1);
+    Sdouble KSqNMinusOne = calculateKSSquared(n - 1);
+    Sdouble KSqN = calculateKSSquared(n);
+    Sdouble KSqNPlusOne = calculateKSSquared(n + 1);
 
-    number nextPsi = 2.0 * (1.0 - (5.0 * hZero * hZero * KSqN / 12.0)) * psi[n];
+    Sdouble nextPsi = 2.0 * (1.0 - (5.0 * hZero * hZero * KSqN / 12.0)) * psi[n];
     nextPsi = nextPsi - (1.0 + (hZero * hZero * KSqNMinusOne / 12.0)) * psi[n-1];
     nextPsi = nextPsi / (1.0 + (hZero * hZero * KSqNPlusOne / 12.0));
 

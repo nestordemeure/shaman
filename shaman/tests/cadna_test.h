@@ -11,6 +11,12 @@
 #include "../shaman/shamanizer/tinyformat.h"
 #include "tests.h"
 
+// CADNA
+#include <cadna.h>
+using Cdouble = double_st;
+
+using number = Sdouble;
+
 //---------------------------------------------------------------------------------------
 // POLYNOMIAL
 
@@ -506,6 +512,8 @@ void falsePositive()
     displayError(r, 1.238278374e-05);
 }
 
+//-----
+
 /*
  * an example where cadna overestimate the number of significative digits
  */
@@ -530,6 +538,57 @@ void alternatingCounter()
 
     std::cout << "result=" << c << " expected result=" << -50 << std::endl;
     displayError(c, -50);
+}
+
+//-----
+
+/*
+ * demonstration of error followed through a trigonometric function
+ *
+ * useful to showcase shaman's ability to follow error in transcendentalfunctions while others (Verrou, Cadna?, verificarlo?) just ignore them
+ */
+inline void trigoTest()
+{
+    std::cout << "An example, using a trigonometric function, where CADNA overestimate the number of significative digits." << std::endl;
+
+    /*
+     * 2e20 : no significativ digits, everybody is correct
+     * 2e25 : there is one significative digit (pure luck),  shaman might detect it
+     * 2e30 : no significative digits, cadna is optimistic by 2 digits, shaman is correct
+     */
+    double bigNum = 2e30;
+    double epsi = 10;
+    double result = cos(epsi);
+
+    // double
+    {
+        double x = bigNum;
+        double y = x + epsi;
+
+        double sum1 = cos(x-y);
+        double sum2 = cos(x)*cos(y) + sin(x)*sin(y);
+        std::cout << "DOUBLE cos(x-y) = " << sum1 << " = " << sum2 << " (true result=" << result << ')' << std::endl;
+    }
+
+    // cadna
+    {
+        Cdouble x = bigNum;
+        Cdouble y = x + epsi;
+
+        Cdouble sum1 = cos(x-y);
+        Cdouble sum2 = cos(x)*cos(y) + sin(x)*sin(y);
+        std::cout << "CADNA  cos(x-y) = " << sum1 << " = " << sum2 << " (true result=" << result << ')' << std::endl;
+    }
+
+    // shaman
+    {
+        Sdouble x = bigNum;
+        Sdouble y = x + epsi;
+
+        Sdouble sum1 = cos(x-y);
+        Sdouble sum2 = cos(x)*cos(y) + sin(x)*sin(y);
+        std::cout << "SHAMAN cos(x-y) = " << sum1 << " = " << sum2 << " (true result=" << result << " estimated-true-result=" << (sum1.number+sum1.error) << ')' << std::endl;
+    }
 }
 
 #endif //COMPENSATIONS_CADNA_H
