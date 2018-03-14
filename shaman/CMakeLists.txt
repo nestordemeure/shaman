@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.9)
 project(shaman_demo)
 
 # folder for librairies
-include_directories(./lib/exblas/ ./lib/cadna/ ./lib/eigen/)
-link_directories(./lib/exblas/gpu ./lib/cadna/)
+include_directories(./lib/exblas/ ./lib/eigen/ /opt//programs/c++/CADNA/cadna_c-2.0.2/src)
+link_directories(./lib/exblas/gpu /opt//programs/c++/CADNA/cadna_c-2.0.2/src)
 
 # compiler
 set(CMAKE_CXX_STANDARD 14)
@@ -38,7 +38,7 @@ set(SOURCE_FILES main.cpp
         #tests/mpi_test.h
         #tests/eigen.h
         tests/schrodinger.cpp tests/schrodinger.h
-        tests/cadna.h
+        tests/cadna_test.h
         tests/legendre.h)
 
 # linking

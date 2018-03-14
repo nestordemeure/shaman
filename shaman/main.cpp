@@ -4,7 +4,7 @@
 #include "tests/tests.h"
 #include "tests/sum.h"
 #include "tests/schrodinger.h"
-#include "tests/cadna.h"
+#include "tests/cadna_test.h"
 #include "tests/legendre.h"
 #include "tests/eigen.h"
 //#include "tests/mpi_test.h"
@@ -46,9 +46,10 @@ int main()
     //jacobi();
     //falsePositive();
     //alternatingCounter();
+    //trigoTest();
 
     // eigen
-    eigenDemo();
+    //eigenDemo();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
