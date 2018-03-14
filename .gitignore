@@ -5,3 +5,6 @@
 \mpfrc++-3.6.2
 \Sci-Hub
 \workshop_viHps
+*.o
+*.idea
+*cmake-build-*
