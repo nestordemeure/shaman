@@ -50,7 +50,7 @@ void eigenDemo()
         int realeigenval = 2*k - size + 1;
 
         //displayError(computedEigenval,realeigenval);
-        std::cout << computedEigenval << "\t\t\t(" << std::setprecision(17) << computedEigenval.number << " instead of " << realeigenval << ')' << std::endl;
+        std::cout << computedEigenval << "\t\t\t(" << std::setprecision(5) << computedEigenval.number << " instead of " << realeigenval << ')' << std::endl;
     }
 }
 
