@@ -14,7 +14,6 @@
 
 int main()
 {
-    //cadna_init(-1);
     auto begin = std::chrono::steady_clock::now();
 
     // various tests
@@ -36,7 +35,8 @@ int main()
     // legendre
     //legendre20Test();
 
-    // CADNA double
+    // CADNA
+    //cadna_init(-1);
     //polynomial();
     //secondOrder();
     //hilbert();
@@ -47,6 +47,7 @@ int main()
     //falsePositive();
     //alternatingCounter();
     //trigoTest();
+    //cadna_end();
 
     // eigen
     //eigenDemo();
@@ -56,6 +57,5 @@ int main()
     auto elapsedSec = std::chrono::duration<double>(end - begin).count();
     std::cout << "Time elapsed = " << elapsedSec << 's' << std::endl;
 
-    //cadna_end();
     return 0;
 }
