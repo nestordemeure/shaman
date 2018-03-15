@@ -271,8 +271,12 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 
 /*
  * NOTE :
- * some of these EFT requires a rounding to nearest (addition)
- * see the handbook of floating point arithmetic for an exact analysis and potential substitute
+ * see the handbook of floating point arithmetic for an exact analysis
+ * some of these EFT (addition) requires a rounding to nearest but could be replaced (priest)
+ * some of these EFT (FMA based EFT) are not proved for all rounding types (in particular toward infinity)
+ *
+ * However it was shown that these EFT stay accurate even with directed rounding (toward infinite)
+ * (Numerical validation of compensated algorithms with stochastic arithmetic)
  */
 
 // basic EFT for a sum
