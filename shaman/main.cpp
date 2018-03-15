@@ -29,8 +29,8 @@ int main()
     //mpiSum(50000000);
 
     // Schrodinger equation
-    //Schrodinger numerov = Schrodinger();
-    //numerov.calculate();
+    Schrodinger numerov = Schrodinger();
+    numerov.calculate();
 
     // legendre
     //legendre20Test();

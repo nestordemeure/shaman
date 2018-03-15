@@ -339,17 +339,17 @@ template <typename T> inline const T eftFast2Mult(const T n1, const T n2, const 
 template <typename T> inline const T eftErrFma(const T n1, const T n2, const T n3, const T result)
 {
     T u1 = n1*n2;
-    T u2 = eftFast2Mult(n1,n2,u1);
+    T u2 = eftFast2Mult(n1, n2, u1);
 
     T alpha1 = n3 + u2;
-    T alpha2 = eft2Sum(n3,u2,alpha1);
+    T alpha2 = eft2Sum(n3, u2, alpha1);
 
     T beta1 = u1 + alpha1;
-    T beta2 = eft2Sum(u1,alpha1,beta1);
+    T beta2 = eft2Sum(u1, alpha1, beta1);
 
     T gamma = (beta1 - result) + beta2;
     T error1 = gamma + alpha2;
-    T error2 = eftFast2Sum(gamma,alpha2,error1);
+    T error2 = eftFast2Sum(gamma, alpha2, error1);
 
     // TODO if we sum error1 and error2 it might be better to ignore error2 (or to add it later)
     return error1 + error2;
@@ -377,8 +377,7 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number + n2.number;
 
-    numberType intermediateEFT = result - n1.number;
-    numberType remainder = (n1.number - (result - intermediateEFT)) + (n2.number - intermediateEFT);
+    numberType remainder = eft2Sum(n1.number, n2.number, result);
     errorType newError = remainder + (n1.error + n2.error);
 
     #ifdef DOUBT_LEVEL_FIELD_ENABLED
@@ -402,8 +401,7 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number - n2.number;
 
-    numberType intermediateEFT = result - n1.number;
-    numberType remainder = (n1.number - (result - intermediateEFT)) + ((-n2.number) - intermediateEFT);
+    numberType remainder = eft2Sum(n1.number, -n2.number, result);
     errorType newError = remainder + (n1.error - n2.error);
 
     #ifdef DOUBT_LEVEL_FIELD_ENABLED
@@ -427,7 +425,7 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number * n2.number;
 
-    numberType remainder = std::fma(n1.number, n2.number, - result);
+    numberType remainder = eftFast2Mult(n1.number, n2.number, result);
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
     errorType newError = std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder));
     // TODO alternative formula with a small additional term (ignored by rump but useful when n1*n2==0 while n1!=0 and n2!=0)
