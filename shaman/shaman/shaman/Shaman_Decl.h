@@ -269,7 +269,14 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 //-----------------------------------------------------------------------------
 // ERROR FREE TRANSFORM
 
+/*
+ * NOTE :
+ * some of these EFT requires a rounding to nearest (addition)
+ * see the handbook of floating point arithmetic for an exact analysis and potential substitute
+ */
+
 // basic EFT for a sum
+// WARNING requires rounding to nearest (see Priest)
 template <typename T> inline const T eft2Sum(const T n1, const T n2, const T result)
 {
     T n22 = result - n1;
@@ -281,6 +288,8 @@ template <typename T> inline const T eft2Sum(const T n1, const T n2, const T res
 }
 
 // fast EFT for a sum
+// NOTE requires hypothesis on the inputs
+// WARNING requires rounding to nearest (see Priest)
 template <typename T> inline const T eftFast2Sum(const T n1, const T n2, const T result)
 {
     T n22 = result - n1;
@@ -288,14 +297,45 @@ template <typename T> inline const T eftFast2Sum(const T n1, const T n2, const T
     return error;
 }
 
+// EFT for a sum
+// NOTE does not require rounding to nearest
+// NOTE see also "Error-Free Transformation in Rounding Mode toward Zero" for an algorithm faster for rounding toward zero
+template <typename T> inline const T eftPriest2Sum(const T n1, const T n2, const T result)
+{
+    if (std::abs(n1) < std::abs(n2))
+    {
+        T temp = n1;
+        n1 = n2;
+        n1 = temp;
+    }
+
+    T e = result - n1;
+    T g = result - e;
+    T h = g - n1;
+    T f = n2 - h;
+    T d = f - e;
+
+    if ((d+e) != f)
+    {
+        //result = n1;
+        d = n2;
+    }
+
+    return d;
+}
+
 // fast EFT for a multiplication
+// see also dekker's multiplication algorithm (rounding to nearest) when an FMA is unavailable
+// NOTE proof for rounding toward zero in "Error-Free Transformation in Rounding Mode toward Zero"
+// WARNING proved only for rounding to nearest and toward zero
 template <typename T> inline const T eftFast2Mult(const T n1, const T n2, const T result)
 {
     T error = std::fma(n1,n2,-result);
     return error;
 }
 
-// EFT for an FMA (cf "Some Functions Computable with a Fused-mac")
+// EFT for an FMA
+// NOTE cf "Some Functions Computable with a Fused-mac" (handbook of floating point computations)
 template <typename T> inline const T eftErrFma(const T n1, const T n2, const T n3, const T result)
 {
     T u1 = n1*n2;
