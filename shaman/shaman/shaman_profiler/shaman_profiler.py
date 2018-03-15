@@ -30,6 +30,22 @@ def abreviate_file_name(file_name):
     index_path = file_name.rindex('/')
     return file_name[index_path+1:]
 
+def common_substring(string1, string2):
+    """return the common substring between two string (starting at 0)"""
+    min_length = min(len(string1), len(string2))
+    i = 0
+    while (i < min_length) and (string1[i] == string2[i]):
+        i += 1
+    return string1[:i]
+
+def common_path(list):
+    """return the minimum common path between the values in a dictionnary.items()"""
+    common = None
+    for function,path in list:
+        if common is None: common = path
+        else: common = common_substring(common, path)
+    return common
+
 def program_name():
     """outputs the name of the current program"""
     progspace = gdb.current_progspace()
@@ -68,13 +84,15 @@ def export_call_tree(filepath):
         functions = group_by_function(call_tree.items())
         functions.sort(reverse=True) # sort by call number
         # displays the result
+        root_length = len(common_path(file_of_function.items()))
         for function_calls,function_name,lines in functions:
-            file_name = abreviate_file_name(file_of_function[function_name])
+            file_name = file_of_function[function_name][root_length:]
             write("{}\t{} (file {})".format(function_calls,function_name,file_name))
             lines.sort(reverse=True) # sort by call number
             for call_number,function_line,operation_name in lines:
                 abreviated_opname = remove_template_parameters(operation_name)
                 write("{}\t\t{} (line {})".format(call_number,abreviated_opname,function_line))
+            write('\n')
 
 #------------------------------------------------------------------------------
 # BREAKPOINT CLASS
@@ -119,7 +137,7 @@ class ShamanDebugBreakpoint(gdb.Breakpoint):
 
         # avoid functions called by the stl (such as std::min)
         function_name = function.name()
-        while function_name.startswith("std::"):
+        while function_name.startswith("std::") or function_file.endswith("stl_algobase.h"):
             operation = function
             function = next(frames)
             function_position = function.find_sal()
