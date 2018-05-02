@@ -199,7 +199,7 @@ templated inline const Snum sqrt(const Snum& n)
     }
     else
     {
-        numberType remainder = - std::fma(result, result, - n.number);
+        numberType remainder = EFT::RemainderSqrt(n.number, result);
         newError = (remainder + n.error) / (result + result);
     }
     // alternativ formula that is not based on derivation :
