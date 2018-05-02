@@ -74,11 +74,11 @@ templated inline bool Snum::non_significativ(numberType number, errorType error)
  */
 templated inline bool Snum::non_significativ() const
 {
-#ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     return isNumericalZero;
-#else
+    #else
     return non_significativ(number, error);
-#endif
+    #endif
 }
 
 /*
@@ -126,8 +126,9 @@ templated inline bool Snum::isUnstableBranchings(const Snum &n1, const Snum &n2)
  */
 templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 {
-    // full information
+    // raw information :
     //os << n.number << " (error:" << n.error << " digits:" << Snum::digits(n) << ')';
+
     int nbDigitsMax = 17;
     numberType fdigits = std::floor(Snum::digits(n));
 
@@ -202,7 +203,7 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 // DEBUGGING MACROS
 
 /*
- * TODO : some of those macro could be replaced by inline functions
+ * TODO : some of those macro could be replaced by inlined functions
  * pro : improved readability, reduced probability of errors
  * con : gdb will need to travel through more functions
  */

@@ -44,10 +44,18 @@ public :
     inline S(): S(0) {};
 
     // casting
+    inline explicit operator short int() const { return (short int) number; };
+    inline explicit operator unsigned short int() const { return (unsigned short int) number; };
     inline explicit operator int() const { return (int) number; };
+    inline explicit operator unsigned int() const { return (unsigned int) number; };
+    inline explicit operator long int() const { return (long int) number; };
+    inline explicit operator unsigned long int() const { return (unsigned long int) number; };
+    inline explicit operator long long int() const { return (long long int) number; };
+    inline explicit operator unsigned long long int() const { return (unsigned long long int) number; };
     inline explicit operator float() const { return (float) number; };
     inline explicit operator double() const { return (double) number; };
     inline explicit operator long double() const { return (long double) number; };
+
     explicit operator std::string() const;
     #ifdef EXPLICIT_CASTING
     // requires explicit cast from other S types
