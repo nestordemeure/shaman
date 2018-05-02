@@ -996,7 +996,7 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::fma(n1.number, n2.number, n3.number);
 
-    numberType remainder = EFT::eftErrFma(n1.number, n2.number, n3.number, result);
+    numberType remainder = EFT::ErrorFma(n1.number, n2.number, n3.number, result);
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error) + n3.error;
     errorType newError = std::fma(n2.number, n1.error, std::fma(n1.number, n2.error, remainder + n3.error));
 

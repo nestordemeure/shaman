@@ -37,8 +37,7 @@
 #endif //NUMERICAL_DEBUGGER
 
 // should we activate the debugger ?
-#if defined(NUMERICAL_ZERO_DEBUGGER) || defined(CANCELATION_DEBUGGER) || defined(UNSTABLE_OP_DEBUGGER) \
-                                     || defined(UNSTABLE_BRANCH_DEBUGGER)
+#if defined(NUMERICAL_ZERO_DEBUGGER) || defined(CANCELATION_DEBUGGER) || defined(UNSTABLE_OP_DEBUGGER) || defined(UNSTABLE_BRANCH_DEBUGGER)
     #define NUMERICAL_DEBUGGER_ENABLED
 #endif
 
@@ -67,7 +66,6 @@ namespace NumericalDebugger
     static int unstabilityCount = 0;
     static int numericalZeros = 0;
     static int cancelations = 0;
-    static int restorations = 0;
     static int unstablePowerFunctions = 0;
     static int unstableDivisions = 0;
     static int unstableMultiplications = 0;
@@ -76,8 +74,8 @@ namespace NumericalDebugger
     static bool shouldDisplay = true; // useful for MPI and debugging
     #ifdef _OPENMP
     #pragma omp threadprivate (NumericalDebugger::unstabilityCount, NumericalDebugger::unstablePowerFunctions, NumericalDebugger::unstableDivisions, \
-                           NumericalDebugger::unstableMultiplications, NumericalDebugger::unstableFunctions, NumericalDebugger::unstableBranchings, \
-                           NumericalDebugger::cancelations, NumericalDebugger::restorations, NumericalDebugger::numericalZeros)
+                               NumericalDebugger::unstableMultiplications, NumericalDebugger::unstableFunctions, NumericalDebugger::unstableBranchings, \
+                               NumericalDebugger::cancelations, NumericalDebugger::numericalZeros)
     #endif //_OPENMP
 
     /*
@@ -102,19 +100,17 @@ namespace NumericalDebugger
             int unstabilityCount_red = 0;
             int numericalZeros_red = 0;
             int cancelations_red = 0;
-            int restorations_red = 0;
             int unstableDivisions_red = 0;
             int unstableMultiplications_red = 0;
             int unstableFunctions_red = 0;
             int unstablePowerFunctions_red = 0;
             int unstableBranchings_red = 0;
             #pragma omp parallel reduction(+:unstabilityCount_red, numericalZeros_red, cancelations_red, unstableDivisions_red, unstableMultiplications_red, \
-                                         unstableFunctions_red, unstablePowerFunctions_red, unstableBranchings_red, restorations_red)
+                                         unstableFunctions_red, unstablePowerFunctions_red, unstableBranchings_red)
             {
                 unstabilityCount_red += unstabilityCount;
                 numericalZeros_red += numericalZeros;
                 cancelations_red += cancelations;
-                restorations_red += restorations;
                 unstableDivisions_red += unstableDivisions;
                 unstableMultiplications_red += unstableMultiplications;
                 unstableFunctions_red += unstableFunctions;
@@ -123,7 +119,6 @@ namespace NumericalDebugger
             }
             unstabilityCount = unstabilityCount_red;
             cancelations = cancelations_red;
-            restorations = restorations_red;
             numericalZeros = numericalZeros_red;
             unstableDivisions = unstableDivisions_red;
             unstableMultiplications = unstableMultiplications_red;

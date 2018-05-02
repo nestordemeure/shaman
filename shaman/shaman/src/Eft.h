@@ -20,7 +20,7 @@ namespace EFT
     // basic EFT for a sum
     // WARNING requires rounding to nearest (see Priest)
     template<typename T>
-    inline const T eft2Sum(const T n1, const T n2, const T result)
+    inline const T TwoSum(const T n1, const T n2, const T result)
     {
         T n22 = result - n1;
         T n11 = result - n22;
@@ -31,10 +31,10 @@ namespace EFT
     }
 
     // fast EFT for a sum
-    // NOTE requires hypothesis on the inputs
+    // NOTE requires hypothesis on the inputs (n1 > n2)
     // WARNING requires rounding to nearest (see Priest)
     template<typename T>
-    inline const T eftFast2Sum(const T n1, const T n2, const T result)
+    inline const T FastTwoSum(const T n1, const T n2, const T result)
     {
         T n22 = result - n1;
         T error = n2 - n22;
@@ -45,7 +45,7 @@ namespace EFT
     // NOTE does not require rounding to nearest
     // NOTE see also "Error-Free Transformation in Rounding Mode toward Zero" for an algorithm faster for rounding toward zero
     template<typename T>
-    inline const T eftPriest2Sum(const T n1, const T n2, const T result)
+    inline const T PriestTwoSum(const T n1, const T n2, const T result)
     {
         if (std::abs(n1) < std::abs(n2))
         {
@@ -74,7 +74,7 @@ namespace EFT
     // NOTE proof for rounding toward zero in "Error-Free Transformation in Rounding Mode toward Zero"
     // WARNING proved only for rounding to nearest and toward zero
     template<typename T>
-    inline const T eftFast2Mult(const T n1, const T n2, const T result)
+    inline const T FastTwoProd(const T n1, const T n2, const T result)
     {
         T error = std::fma(n1, n2, -result);
         return error;
@@ -83,20 +83,20 @@ namespace EFT
     // EFT for an FMA
     // NOTE cf "Some Functions Computable with a Fused-mac" (handbook of floating point computations)
     template<typename T>
-    inline const T eftErrFma(const T n1, const T n2, const T n3, const T result)
+    inline const T ErrorFma(const T n1, const T n2, const T n3, const T result)
     {
         T u1 = n1 * n2;
-        T u2 = eftFast2Mult(n1, n2, u1);
+        T u2 = FastTwoProd(n1, n2, u1);
 
         T alpha1 = n3 + u2;
-        T alpha2 = eft2Sum(n3, u2, alpha1);
+        T alpha2 = TwoSum(n3, u2, alpha1);
 
         T beta1 = u1 + alpha1;
-        T beta2 = eft2Sum(u1, alpha1, beta1);
+        T beta2 = TwoSum(u1, alpha1, beta1);
 
         T gamma = (beta1 - result) + beta2;
         T error1 = gamma + alpha2;
-        T error2 = eftFast2Sum(gamma, alpha2, error1);
+        T error2 = FastTwoSum(gamma, alpha2, error1);
 
         // TODO if we sum error1 and error2 it might be better to ignore error2 (or to add it later)
         return error1 + error2;

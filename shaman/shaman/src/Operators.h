@@ -105,7 +105,7 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number + n2.number;
 
-    numberType remainder = EFT::eft2Sum(n1.number, n2.number, result);
+    numberType remainder = EFT::TwoSum(n1.number, n2.number, result);
     errorType newError = remainder + (n1.error + n2.error);
 
 #ifdef DOUBT_LEVEL_FIELD_ENABLED
@@ -129,7 +129,7 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number - n2.number;
 
-    numberType remainder = EFT::eft2Sum(n1.number, -n2.number, result);
+    numberType remainder = EFT::TwoSum(n1.number, -n2.number, result);
     errorType newError = remainder + (n1.error - n2.error);
 
 #ifdef DOUBT_LEVEL_FIELD_ENABLED
@@ -153,7 +153,7 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number * n2.number;
 
-    numberType remainder = EFT::eftFast2Mult(n1.number, n2.number, result);
+    numberType remainder = EFT::FastTwoProd(n1.number, n2.number, result);
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
     errorType newError = std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder));
     // TODO alternative formula with a small additional term (ignored by rump but useful when n1*n2==0 while n1!=0 and n2!=0)
