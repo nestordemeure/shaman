@@ -6,7 +6,7 @@
 #define COMPENSATIONS_LEGENDRE_H
 
 #include <array>
-#include "../shaman/shaman/Shaman.h"
+#include "../shaman/Shaman.h"
 
 //-----------------------------------------------------------------------------
 // POLYNOMIAL EVALUATION

@@ -9,7 +9,7 @@
 #include <random>
 #include <functional>
 #include <algorithm>
-#include "../shaman/shaman/Shaman_mpi.h"
+#include "../shaman/lib/Shaman_mpi.h"
 
 /*
  * inspired by :

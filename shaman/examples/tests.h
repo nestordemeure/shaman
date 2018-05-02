@@ -6,7 +6,7 @@
 #define COMPENSATIONS_TESTS_H
 
 #include <iostream>
-#include "../shaman/shaman/Shaman.h"
+#include "../shaman/Shaman.h"
 
 //---------------------------------------------------------------------------------------
 // FUNCTIONS

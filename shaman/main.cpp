@@ -1,6 +1,6 @@
 
 #include <chrono>
-#include "shaman/shaman/Shaman.h"
+#include "shaman/Shaman.h"
 #include "tests/tests.h"
 #include "tests/sum.h"
 #include "tests/schrodinger.h"
