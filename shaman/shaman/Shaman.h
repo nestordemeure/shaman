@@ -150,5 +150,10 @@ using Slong_double = S<long double, long double, long double>;
 #endif //_OPENMP
 //-------------------------------------------------------------------------------------------------
 
-#endif //SHAMAN_H
 #include "src/Shaman_Decl.h"
+#include "src/Significativity.h"
+#include "src/Operators.h"
+#include "src/Functions.h"
+#include "src/Methods.h"
+
+#endif //SHAMAN_H
