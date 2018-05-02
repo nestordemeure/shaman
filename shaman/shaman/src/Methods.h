@@ -194,4 +194,5 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
     return is;
 }
 
+//-----------------------------------------------------------------------------
 #endif //SHAMAN_SIGNIFICATIVITY_H

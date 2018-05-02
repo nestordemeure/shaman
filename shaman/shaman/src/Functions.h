@@ -576,4 +576,9 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 };
 set_Sfunction3_casts(fma);
 
+//-----------------------------------------------------------------------------
+
+#undef set_Sfunction2_casts
+#undef set_Sfunction3_casts
+
 #endif //SHAMAN_FUNCTIONS_H

@@ -313,4 +313,9 @@ templated inline bool operator>=(const Snum& n1, const Snum& n2)
 };
 set_Sbool_operator_casts(>=);
 
+//-----------------------------------------------------------------------------
+
+#undef set_Soperator_casts
+#undef set_Sbool_operator_casts
+
 #endif //SHAMAN_OPERATORS_H

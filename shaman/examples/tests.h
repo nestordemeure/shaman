@@ -14,11 +14,12 @@
 /*
  * displays the absolute difference between a computed value and the expected value
  */
-templated inline void displayError(Snum result, double expectedResult)
+template<typename numberType, typename errorType, typename preciseType>
+inline void displayError(S<numberType,errorType,preciseType> result, double expectedResult)
 {
     double error = result.number - expectedResult;
     double digits = -log10(std::abs(error / result.number));
-    double estimatedDigits = Snum::digits(result);
+    double estimatedDigits = S<numberType,errorType,preciseType>::digits(result);
 
     std::cout << "result=" << result << " (" << result.number << ')'
               << '\n'
