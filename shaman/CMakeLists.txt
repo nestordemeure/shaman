@@ -15,7 +15,6 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O1 -Wall -Wextra -Wno-u
 set(SOURCE_FILES main.cpp
         # shaman
         shaman/src/NumericalDebugger.cpp shaman/src/NumericalDebugger.h
-        shaman/src/Shaman_Decl.h
         shaman/Shaman.h
         # examples
         examples/tests.h

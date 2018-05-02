@@ -6,6 +6,7 @@
 #define SHAMAN_OPERATORS_H
 
 #include "../Shaman.h"
+#include "Eft.h"
 
 //-----------------------------------------------------------------------------
 // CASTING MACROS
