@@ -151,9 +151,8 @@ using Slong_double = S<long double, long double, long double>;
 //-------------------------------------------------------------------------------------------------
 
 #include "src/Shaman_Decl.h"
-#include "src/Significativity.h"
+#include "src/Methods.h"
 #include "src/Operators.h"
 #include "src/Functions.h"
-#include "src/Methods.h"
 
 #endif //SHAMAN_H

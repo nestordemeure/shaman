@@ -10,8 +10,13 @@
 
 //-----------------------------------------------------------------------------
 // CASTING MACROS
-#ifdef EXPLICIT_CASTING
 
+/*
+ * this section uses templates and macro to take a function and produce overloads for all the needed combination of types
+ * while preserving implicit cast conventions
+ */
+
+#ifdef EXPLICIT_CASTING
 // function (between n and S<n,e,p> only)
 #define set_Sfunction2_casts(FUN) \
 template<typename n, typename e, typename p> \
@@ -59,12 +64,6 @@ inline const S<n,e,p> FUN (const S<n,e,p>& n1, const n& n2, const S<n,e,p>& n3) 
 } \
 
 #else
-
-/*
- * this section uses templates and macro (and the curry howard isomorphism)
- * to take a function and produce overloads for all the needed combinaison of types
- * while preserving C++ implicit cast conventions
- */
 
 // defines overload for function taking two arguments
 #define set_Sfunction2_casts(FUN) \
