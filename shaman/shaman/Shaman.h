@@ -80,6 +80,13 @@ public :
     static bool isUnstableBranchings(const S& n1, const S& n2);
 };
 
+// arithmetic operators
+templated const Snum operator-(const Snum& n);
+templated const Snum operator+(const Snum& n1, const Snum& n2);
+templated const Snum operator-(const Snum& n1, const Snum& n2);
+templated const Snum operator*(const Snum& n1, const Snum& n2);
+templated const Snum operator/(const Snum& n1, const Snum& n2);
+
 // boolean operators
 templated bool operator==(const Snum& n1, const Snum& n2);
 templated bool operator!=(const Snum& n1, const Snum& n2);
@@ -87,13 +94,6 @@ templated bool operator<(const Snum& n1, const Snum& n2);
 templated bool operator<=(const Snum& n1, const Snum& n2);
 templated bool operator>(const Snum& n1, const Snum& n2);
 templated bool operator>=(const Snum& n1, const Snum& n2);
-
-// arithmetic operators
-templated const Snum operator-(const Snum& n);
-templated const Snum operator+(const Snum& n1, const Snum& n2);
-templated const Snum operator-(const Snum& n1, const Snum& n2);
-templated const Snum operator*(const Snum& n1, const Snum& n2);
-templated const Snum operator/(const Snum& n1, const Snum& n2);
 
 // mathematical functions
 templated bool isfinite(const Snum& n);
@@ -122,23 +122,21 @@ templated std::istream& operator>>(std::istream& is, Snum& v);
 
 //-------------------------------------------------------------------------------------------------
 // TYPES
-#ifdef NO_SHAMAN
 
+#ifdef NO_SHAMAN
 using Sfloat = float;
 using Sdouble = double;
 using Slong_double = long double;
-
 #else
-
 using Sfloat = S<float, float, double>;
 using Sdouble = S<double, double, long double>;
 using Slong_double = S<long double, long double, long double>;
-
 #endif //NO_SHAMAN
+
 //-------------------------------------------------------------------------------------------------
 // OPENMP
-#ifdef _OPENMP
 
+#ifdef _OPENMP
 // require openMP 4.0+ to get reductions on user defined types
 #pragma omp declare reduction(+:Sfloat : omp_out=omp_in+omp_out)    initializer(omp_priv=Sfloat(0.f))
 #pragma omp declare reduction(+:Sdouble: omp_out=omp_in+omp_out)	initializer(omp_priv=Sdouble(0.))
@@ -146,13 +144,19 @@ using Slong_double = S<long double, long double, long double>;
 #pragma omp declare reduction(-:Sdouble: omp_out=omp_in+omp_out)	initializer(omp_priv=Sdouble(0.))
 #pragma omp declare reduction(*:Sfloat : omp_out=omp_in*omp_out)	initializer(omp_priv=Sfloat(1.f))
 #pragma omp declare reduction(*:Sdouble: omp_out=omp_in*omp_out)	initializer(omp_priv=Sdouble(1.))
-
 #endif //_OPENMP
+
 //-------------------------------------------------------------------------------------------------
+// SOURCE
 
 #include "src/Shaman_Decl.h"
 #include "src/Methods.h"
 #include "src/Operators.h"
 #include "src/Functions.h"
+
+//-------------------------------------------------------------------------------------------------
+
+#undef templated
+#undef Snum
 
 #endif //SHAMAN_H
