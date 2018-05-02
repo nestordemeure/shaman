@@ -158,12 +158,12 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
 
-#ifdef DOUBT_LEVEL_FIELD_ENABLED
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
     if (n.doubtLevel > 0)
     {
-        os << " (doubt=" << n.doubtLevel << ')';
+        os << " (#unstabilities=" << n.doubtLevel << ')';
     }
-#endif
+    #endif
 
     return os;
 }
