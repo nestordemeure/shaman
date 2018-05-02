@@ -3,8 +3,6 @@ project(shaman)
 
 # compiler
 set(CMAKE_CXX_STANDARD 11)
-# mpi
-#set(CMAKE_CXX_COMPILER /usr/local/libre/bin/mpic++)
 
 # flags
 add_definitions(-DNUMERICAL_DEBUGGER)
@@ -26,5 +24,3 @@ set(SOURCE_FILES main.cpp
 
 # linking
 add_executable(shaman ${SOURCE_FILES})
-#target_link_libraries(shaman "-lstdc++ -lOpenCL -ltbb -lexblas -lcadnaC")
-#target_link_libraries(shaman_demo "-lstdc++ -lm -ltbb -lexblas -lcadnaC")
