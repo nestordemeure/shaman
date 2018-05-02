@@ -143,7 +143,7 @@ inline Sdouble identity(Sdouble x)
         x = sqrt(x);
 
         //Sdouble xTarget = pow(xinit,1./pow(2,i));
-        std::cout << x << std::endl;
+        //std::cout << x << std::endl;
     }
 
     // x squared 128 times
@@ -153,7 +153,7 @@ inline Sdouble identity(Sdouble x)
 
         //Sdouble xTarget = pow(xinit,1./pow(2,128-i));
         //std::cout << x << " (number=" << x.number << " error=" << x.error << ")" << '\t' << xTarget << std::endl;
-        std::cout << x << std::endl;
+        //std::cout << x << std::endl;
     }
 
     return x;

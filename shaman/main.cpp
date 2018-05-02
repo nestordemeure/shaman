@@ -2,8 +2,8 @@
 #include <chrono>
 #include "shaman/Shaman.h"
 #include "examples/tests.h"
-#include "examples/schrodinger.h"
 #include "examples/legendre.h"
+#include "examples/schrodinger.h"
 
 //---------------------------------------------------------------------------------------
 // MAIN
@@ -13,40 +13,18 @@ int main()
     auto begin = std::chrono::steady_clock::now();
 
     // various tests
-    //rumpTest();
-    //polynomialTest();
-    //fixedPointTest();
-    //kahanIdentity();
-    //mullerTest();
+    rumpTest();
+    polynomialTest();
+    fixedPointTest();
+    kahanIdentity();
+    mullerTest();
 
-    // sums
-    //Compensatedsum(50000000);
-    //parralelSum(50000000);
-    //mpiSum(50000000);
+    // legendre
+    legendre20Test();
 
     // Schrodinger equation
     Schrodinger numerov = Schrodinger();
     numerov.calculate();
-
-    // legendre
-    //legendre20Test();
-
-    // CADNA
-    //cadna_init(-1);
-    //polynomial();
-    //secondOrder();
-    //hilbert();
-    //muller();
-    //newton();
-    //gauss();
-    //jacobi();
-    //falsePositive();
-    //alternatingCounter();
-    //trigoTest();
-    //cadna_end();
-
-    // eigen
-    //eigenDemo();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
