@@ -2,7 +2,7 @@
 #define SHAMAN_H
 
 #include <string>
-#include "NumericalDebugger.h"
+#include "src/NumericalDebugger.h"
 
 // some macro to shorten template notations
 #define templated template<typename numberType, typename errorType, typename preciseType>
@@ -151,4 +151,4 @@ using Slong_double = S<long double, long double, long double>;
 //-------------------------------------------------------------------------------------------------
 
 #endif //SHAMAN_H
-#include "Shaman_Decl.h"
+#include "src/Shaman_Decl.h"

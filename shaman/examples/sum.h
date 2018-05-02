@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <functional>
 #include <random>
-#include "../shaman/shaman/Shaman.h"
+#include "../shaman/Shaman.h"
 #include "exact/exact.h"
 #include "tests.h"
 

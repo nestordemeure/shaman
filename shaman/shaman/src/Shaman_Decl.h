@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <cmath>
 #include <sstream>
-#include "Shaman.h"
+#include "../Shaman.h"
 #include "NumericalDebugger.h"
 
 //-----------------------------------------------------------------------------

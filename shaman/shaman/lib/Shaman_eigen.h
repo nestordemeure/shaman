@@ -8,7 +8,7 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 //#include <thirdparty/eigen-3.3.2/unsupported/Eigen/MatrixFunctions>
-#include "Shaman.h"
+#include "../Shaman.h"
 
 namespace Eigen
 {

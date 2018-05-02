@@ -6,7 +6,7 @@
 #define COMPENSATIONS_SCHRODINGER_H
 
 #include <vector>
-#include "../shaman/shaman/Shaman.h"
+#include "../shaman/Shaman.h"
 #include "tests.h"
 
 /*

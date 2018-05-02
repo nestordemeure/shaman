@@ -5,7 +5,7 @@
 #ifndef SHAMAN_DEMO_EIGEN_H
 #define SHAMAN_DEMO_EIGEN_H
 
-#include "../shaman/shaman/Shaman_eigen.h"
+#include "../shaman/lib/Shaman_eigen.h"
 
 /*
  * create a kac matrix (also known as Clement matrix)

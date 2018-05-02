@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <array>
-#include "../shaman/shaman/Shaman.h"
+#include "../shaman/Shaman.h"
 #include "../shaman/shamanizer/tinyformat.h"
 #include "tests.h"
 
