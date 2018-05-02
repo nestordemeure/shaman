@@ -3,6 +3,7 @@ project(shaman)
 
 # compiler
 set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_COMPILER g++)
 
 # flags
 add_definitions(-DNUMERICAL_DEBUGGER)
