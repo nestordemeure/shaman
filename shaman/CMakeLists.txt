@@ -1,18 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
-project(shaman_demo)
-
-# folder for librairies
-include_directories(./lib/exblas/ ./lib/eigen/ /opt//programs/c++/CADNA/cadna_c-2.0.2/src)
-link_directories(./lib/exblas/gpu /opt//programs/c++/CADNA/cadna_c-2.0.2/src)
+project(shaman)
 
 # compiler
-set(CMAKE_CXX_STANDARD 14)
-# ocre
-#set(CMAKE_CXX_COMPILER /opt/verificarlo/bin/verificarlo)
-#set(CMAKE_CXX_COMPILER /ccc/home/cont001/opendev/opendev/RHEL7/gcc48/llvm/3.8.0/bin/clang)
-# laptop
-#set(CMAKE_CXX_COMPILER verificarlo)
-#set(CMAKE_CXX_COMPILER clang++-5.0)
+set(CMAKE_CXX_STANDARD 11)
 # mpi
 #set(CMAKE_CXX_COMPILER /usr/local/libre/bin/mpic++)
 
@@ -21,27 +11,20 @@ add_definitions(-DNUMERICAL_DEBUGGER)
 #add_definitions(-DNUMERICAL_ZERO_DEBUGGER)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O1 -Wall -Wextra -Wno-unused-parameter -D__STRICT_ANSI__ -Wno-unknown-pragmas") # -Werror -m64 -frounding-math
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O1 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")
 
 # files
 set(SOURCE_FILES main.cpp
         # shaman
         shaman/src/NumericalDebugger.cpp shaman/src/NumericalDebugger.h
-        shaman/src/Shaman_Decl.h shaman/Shaman.h
-        shaman/lib/Shaman_eigen.h
-        #shaman/shaman/Shaman_mpi.h
-        # shamanizer
-        shaman/shamanizer/tinyformat.h
-        # tests
-        tests/tests.h
-        tests/exact/exact.cpp tests/exact/exact.h tests/sum.h
-        #tests/mpi_test.h
-        #tests/eigen.h
-        tests/schrodinger.cpp tests/schrodinger.h
-        tests/cadna_test.h
-        tests/legendre.h)
+        shaman/src/Shaman_Decl.h
+        shaman/Shaman.h
+        # examples
+        examples/tests.h
+        examples/schrodinger.cpp examples/schrodinger.h
+        examples/legendre.h)
 
 # linking
-add_executable(shaman_demo ${SOURCE_FILES})
-target_link_libraries(shaman_demo "-lstdc++ -lOpenCL -ltbb -lexblas -lcadnaC")
+add_executable(shaman ${SOURCE_FILES})
+#target_link_libraries(shaman "-lstdc++ -lOpenCL -ltbb -lexblas -lcadnaC")
 #target_link_libraries(shaman_demo "-lstdc++ -lm -ltbb -lexblas -lcadnaC")
