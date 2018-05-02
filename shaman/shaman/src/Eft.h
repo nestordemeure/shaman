@@ -80,6 +80,24 @@ namespace EFT
         return error;
     }
 
+    // computes the remainder of the division
+    // see Handbook of floating point arithmetic
+    template<typename T>
+    inline const T RemainderDiv(const T n1, const T n2, const T result)
+    {
+        T remainder = -std::fma(n2, result, -n1);
+        return remainder;
+    }
+
+    // computes the remainder of the sqrt
+    // see Handbook of floating point arithmetic
+    template<typename T>
+    inline const T RemainderSqrt(const T n, const T result)
+    {
+        T remainder = - std::fma(result, result, - n);
+        return remainder;
+    }
+
     // EFT for an FMA
     // NOTE cf "Some Functions Computable with a Fused-mac" (handbook of floating point computations)
     template<typename T>
