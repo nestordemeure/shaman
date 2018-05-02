@@ -65,6 +65,9 @@ inline const S<n,e,p> FUN (const S<n,e,p>& n1, const n& n2, const S<n,e,p>& n3) 
 
 #else
 
+// takes three values and builds a S type around the type C++ would use as a return type for their fma
+#define SreturnType3(t1,t2,t3) decltype(makeStype(std::fma(t1, t2, t3)))
+
 // defines overload for function taking two arguments
 #define set_Sfunction2_casts(FUN) \
 template<typename N, typename E, typename P, typename arithmeticTYPE(T)> \
