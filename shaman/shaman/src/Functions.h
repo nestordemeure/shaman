@@ -283,6 +283,34 @@ templated inline const Snum exp(const Snum& n)
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
 
+// exp2
+templated inline const Snum exp2(const Snum& n)
+{
+    numberType result = std::exp2(n.number);
+    preciseType preciseCorrectedResult = std::exp2((preciseType) n.number + n.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+#ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+#ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+#endif
+        doubtLevel++;
+    }
+#endif
+
+#ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+#endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
 // frexp
 templated inline const Snum frexp(const Snum& n, int* exp)
 {
@@ -368,6 +396,123 @@ templated inline const Snum erf(const Snum& n)
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
 
+// log
+templated inline const Snum log(const Snum& n)
+{
+    numberType result = std::log(n.number);
+    preciseType correctedNumber = (preciseType) n.number + n.error;
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber < 0)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::log(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// log2
+templated inline const Snum log2(const Snum& n)
+{
+    numberType result = std::log2(n.number);
+    preciseType correctedNumber = (preciseType) n.number + n.error;
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber < 0)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::log2(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// log10
+templated inline const Snum log10(const Snum& n)
+{
+    numberType result = std::log10(n.number);
+    preciseType correctedNumber = (preciseType) n.number + n.error;
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber < 0)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::log10(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
 // sin
 templated inline const Snum sin(const Snum& n)
 {
@@ -396,14 +541,14 @@ templated inline const Snum sin(const Snum& n)
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
 
-// cos
-templated inline const Snum cos(const Snum& n)
+// sinh
+templated inline const Snum sinh(const Snum& n)
 {
-    numberType result = std::cos(n.number);
-    preciseType preciseCorrectedResult = std::cos((preciseType) n.number + n.error);
+    numberType result = std::sinh(n.number);
+    preciseType preciseCorrectedResult = std::sinh((preciseType) n.number + n.error);
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
-#ifdef DOUBT_LEVEL_FIELD_ENABLED
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
     int doubtLevel = n.doubtLevel;
     if (n.non_significativ())
     {
@@ -413,11 +558,134 @@ templated inline const Snum cos(const Snum& n)
         #endif
         doubtLevel++;
     }
-#endif
+    #endif
 
-#ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     bool isNumericalZero = Snum::non_significativ(result,newError);
-#endif
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// asinh
+templated inline const Snum asinh(const Snum& n)
+{
+    numberType result = std::asinh(n.number);
+    preciseType preciseCorrectedResult = std::asinh((preciseType) n.number + n.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// cos
+templated inline const Snum cos(const Snum& n)
+{
+    numberType result = std::cos(n.number);
+    preciseType preciseCorrectedResult = std::cos((preciseType) n.number + n.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// cosh
+templated inline const Snum cosh(const Snum& n)
+{
+    numberType result = std::cosh(n.number);
+    preciseType preciseCorrectedResult = std::cosh((preciseType) n.number + n.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// acosh
+templated inline const Snum acosh(const Snum& n)
+{
+    numberType result = std::acosh(n.number);
+    preciseType correctedNumber = (preciseType) n.number + n.error;
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber < 1.)
+    {
+        preciseCorrectedResult = 0.;
+    }
+    else
+    {
+        preciseCorrectedResult = std::acosh(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
 
     NUMERICAL_ZERO_TEST(n.non_significativ());
 
@@ -428,7 +696,8 @@ templated inline const Snum cos(const Snum& n)
 templated inline const Snum acos(const Snum& n)
 {
     numberType result = std::acos(n.number);
-    preciseType correctedNumber = n.number + n.error;
+    preciseType correctedNumber = (preciseType)n.number + n.error;
+
     preciseType preciseCorrectedResult;
     if (correctedNumber > 1)
     {
@@ -442,9 +711,10 @@ templated inline const Snum acos(const Snum& n)
     {
         preciseCorrectedResult = std::acos(correctedNumber);
     }
+
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
-#ifdef DOUBT_LEVEL_FIELD_ENABLED
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
     int doubtLevel = n.doubtLevel;
     if (n.non_significativ())
     {
@@ -454,11 +724,82 @@ templated inline const Snum acos(const Snum& n)
         #endif
         doubtLevel++;
     }
-#endif
+    #endif
 
-#ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     bool isNumericalZero = Snum::non_significativ(result,newError);
-#endif
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// asin
+templated inline const Snum asin(const Snum& n)
+{
+    numberType result = std::asin(n.number);
+    preciseType correctedNumber = (preciseType)n.number + n.error;
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber > 1)
+    {
+        preciseCorrectedResult = M_PI/2.;
+    }
+    else if (correctedNumber < -1)
+    {
+        preciseCorrectedResult = -M_PI/2;
+    }
+    else
+    {
+        preciseCorrectedResult = std::asin(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// atan
+templated inline const Snum atan(const Snum& n)
+{
+    numberType result = std::atan(n.number);
+    preciseType preciseCorrectedResult = std::atan((preciseType)n.number + n.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
 
     NUMERICAL_ZERO_TEST(n.non_significativ());
 
@@ -492,6 +833,102 @@ templated inline const Snum tan(const Snum& n)
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
+
+// tanh
+templated inline const Snum tanh(const Snum& n)
+{
+    numberType result = std::tanh(n.number);
+    preciseType preciseCorrectedResult = std::tanh((preciseType) n.number + n.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// atanh
+templated inline const Snum atanh(const Snum& n)
+{
+    numberType result = std::atanh(n.number);
+    preciseType correctedNumber = (preciseType) n.number + n.error;
+
+    preciseType preciseCorrectedResult;
+    if(correctedNumber > 1. || correctedNumber < 1.)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::atanh(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
+// atan2
+templated inline const Snum atan2(const Snum& n1, const Snum& n2)
+{
+    numberType result = std::atan2(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::atan2((preciseType) n1.number + n1.error, (preciseType) n2.number + n2.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
+    if (n1.non_significativ() || n2.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstablePowerFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n1.non_significativ() || n2.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+set_Sfunction2_casts(atan2);
 
 // pow
 templated inline const Snum pow(const Snum& n1, const Snum& n2)
@@ -578,6 +1015,64 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
 set_Sfunction3_casts(fma);
+
+// hypot
+templated inline const Snum hypot(const Snum& n1, const Snum& n2)
+{
+    numberType result = std::hypot(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::hypot((preciseType) n1.number + n1.error, (preciseType) n2.number + n2.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
+    if (n1.non_significativ() || n2.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstablePowerFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n1.non_significativ() || n2.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+set_Sfunction2_casts(hypot);
+
+// hypot
+templated inline const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3)
+{
+    numberType result = std::hypot(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::hypot((preciseType) n1.number + n1.error, (preciseType) n2.number + n2.error, (preciseType) n3.number + n3.error);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel =  std::max( std::max(n1.doubtLevel, n2.doubtLevel), n3.doubtLevel);
+    if (n1.non_significativ() || n2.non_significativ() || n3.non_significativ())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstablePowerFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significativ(result,newError);
+    #endif
+
+    NUMERICAL_ZERO_TEST(n1.non_significativ() || n2.non_significativ() || n3.non_significativ());
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+set_Sfunction3_casts(hypot);
 
 //-----------------------------------------------------------------------------
 
