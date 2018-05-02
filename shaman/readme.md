@@ -1,6 +1,8 @@
 # SHAMAN
 
 This folder contains :
- - the SHAMAN librairy
- - associated tools
+ - the SHAMAN library
  - tests
+ - examples
+ - prototypes for potential improvements
+ - associated tools
