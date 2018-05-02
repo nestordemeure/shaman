@@ -49,9 +49,7 @@ namespace EFT
     {
         if (std::abs(n1) < std::abs(n2))
         {
-            T temp = n1;
-            n1 = n2;
-            n1 = temp;
+            std::swap(n1, n2);
         }
 
         T e = result - n1;
@@ -94,7 +92,7 @@ namespace EFT
     template<typename T>
     inline const T RemainderSqrt(const T n, const T result)
     {
-        T remainder = - std::fma(result, result, - n);
+        T remainder = -std::fma(result, result, - n);
         return remainder;
     }
 
@@ -117,7 +115,7 @@ namespace EFT
         T error2 = FastTwoSum(gamma, alpha2, error1);
 
         // TODO if we sum error1 and error2 it might be better to ignore error2 (or to add it later)
-        return error1 + error2;
+        return (error1 + error2);
     }
 }
 
