@@ -7,6 +7,7 @@
 // some macro to shorten template notations
 #define templated template<typename numberType, typename errorType, typename preciseType>
 #define Snum S<numberType,errorType,preciseType>
+#define INTEGER_CAST_CONSTRUCTOR(n) S((numberType)n, (preciseType)n - (numberType)n)
 
 //-------------------------------------------------------------------------------------------------
 // SHAMAN OPERATIONS
@@ -21,27 +22,35 @@ public :
     numberType number; // current computed number
     errorType error; // current error
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero;
+        bool isNumericalZero;
     #endif
     #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    int doubtLevel;
+        int doubtLevel;
     #endif
 
     // constructors
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg, int doubt): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg), doubtLevel(doubt) {};
-    inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): S(numberArg, errorArg, isNumericalZeroArg, 0) {};
+        #ifdef DOUBT_LEVEL_FIELD_ENABLED
+            inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg, int doubt): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg), doubtLevel(doubt) {};
+            inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): S(numberArg, errorArg, isNumericalZeroArg, 0) {};
+        #else
+            inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg) {};
+        #endif
+        inline S(numberType numberArg, errorType errorArg): S(numberArg, errorArg, non_significativ(numberArg,errorArg)) {};
+        inline S(numberType numberArg): S(numberArg,0,false) {}; // we accept implicit cast from T to S<T>
     #else
-    inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg) {};
+        inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
+        inline S(numberType numberArg): S(numberArg,0) {}; // we accept implicit cast from T to S<T>
     #endif
-    inline S(numberType numberArg, errorType errorArg): S(numberArg, errorArg, non_significativ(numberArg,errorArg)) {};
-    inline S(numberType numberArg): S(numberArg,0,false) {}; // we accept implicit cast from T to S<T>
-    #else
-    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
-    inline S(numberType numberArg): S(numberArg,0) {}; // we accept implicit cast from T to S<T>
-    #endif
-    inline S(): S(0) {};
+    inline S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline S(unsigned int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline S(long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline S(unsigned long int n):INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline S(long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline S(unsigned long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline S(): S(0.) {};
 
     // casting
     inline explicit operator short int() const { return (short int) number; };
@@ -55,17 +64,14 @@ public :
     inline explicit operator float() const { return (float) number; };
     inline explicit operator double() const { return (double) number; };
     inline explicit operator long double() const { return (long double) number; };
-
     explicit operator std::string() const;
     #ifdef EXPLICIT_CASTING
-    // requires explicit cast from other S types
     template<typename n, typename e, typename p>
-    inline explicit S(const S<n,e,p>& s): S(s.number, s.error) {};
-    // refuse cast from types other than numberType
-    template<typename T> S(T s) = delete;
+    inline explicit S(const S<n,e,p>& s): S(s.number, s.error) {}; // requires explicit cast from other S types
+    template<typename T> S(T s) = delete; // refuse cast from types other than numberType
     #else
     template<typename n, typename e, typename p>
-    inline S(const S<n,e,p>& s): S(s.number, s.error) {};
+    inline S(const S<n,e,p>& s): S(s.number, s.error) {}; // allow cast from any Stype to any Stype
     #endif
 
     // arithmetic operators
