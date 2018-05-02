@@ -1,13 +1,9 @@
 
 #include <chrono>
 #include "shaman/Shaman.h"
-#include "tests/tests.h"
-#include "tests/sum.h"
-#include "tests/schrodinger.h"
-#include "tests/cadna_test.h"
-#include "tests/legendre.h"
-#include "tests/eigen.h"
-//#include "tests/mpi_test.h"
+#include "examples/tests.h"
+#include "examples/schrodinger.h"
+#include "examples/legendre.h"
 
 //---------------------------------------------------------------------------------------
 // MAIN
