@@ -2,7 +2,7 @@
 #define SHAMAN_H
 
 #include <string>
-#include "src/NumericalDebugger.h"
+#include "src/Debugger.h"
 
 // some macro to shorten template notations
 #define templated template<typename numberType, typename errorType, typename preciseType>
