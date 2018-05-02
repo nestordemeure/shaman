@@ -1,6 +1,6 @@
 
-#load "../various/Eft.fsx"
-#load "../various/Precision.fsx"
+#load "../common_functions/Eft.fsx"
+#load "../common_functions/Precision.fsx"
 
 //-----------------------------------------------------------------------------
 // Sdouble
