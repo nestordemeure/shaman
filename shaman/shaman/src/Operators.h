@@ -9,8 +9,13 @@
 
 //-----------------------------------------------------------------------------
 // CASTING MACROS
-#ifdef EXPLICIT_CASTING
 
+/*
+ * this section uses templates and macro to take an operator and produce overloads for all the needed combination of types
+ * while preserving implicit cast conventions
+ */
+
+#ifdef EXPLICIT_CASTING
 // arithmetic operator (between n and S<n,e,p> only)
 #define set_Soperator_casts(OPERATOR) \
 template<typename n, typename e, typename p> \

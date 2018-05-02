@@ -20,7 +20,7 @@ set(SOURCE_FILES main.cpp
         # examples
         examples/tests.h
         examples/schrodinger.cpp examples/schrodinger.h
-        examples/legendre.h shaman/src/Eft.h shaman/src/Operators.h shaman/src/Functions.h shaman/src/Methods.h shaman/src/Significativity.h)
+        examples/legendre.h shaman/src/Eft.h shaman/src/Operators.h shaman/src/Functions.h shaman/src/Methods.h)
 
 # linking
 add_executable(shaman ${SOURCE_FILES})
