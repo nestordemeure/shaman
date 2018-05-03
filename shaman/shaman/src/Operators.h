@@ -17,6 +17,7 @@
  */
 
 #ifdef EXPLICIT_CASTING
+
 // arithmetic operator (between n and S<n,e,p> only)
 #define set_Soperator_casts(OPERATOR) \
 template<typename n, typename e, typename p> \
@@ -46,8 +47,6 @@ inline bool operator OPERATOR (const S<n,e,p>& n1, const n& n2) \
 #else
 
 // takes a value and builds an Stype around its type
-template<typename T>
-inline S<T,T,T> makeStype(T t) { return S<T,T,T>(t); }; // default case
 inline Sfloat makeStype(float t) { return Sfloat(t); };
 inline Sdouble makeStype(double t) { return Sdouble(t); };
 inline Slong_double makeStype(long double t) { return Slong_double(t); };
@@ -98,6 +97,65 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
 #endif
 
 //-----------------------------------------------------------------------------
+// DEBUGGING MACROS
+
+/*
+ * TODO : some of those macro could be replaced by inlined functions
+ * pro : improved readability, reduced probability of errors
+ * con : gdb will need to travel through more functions
+ */
+
+// macro used in constructors
+#ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    #define ISNUMERICALZERO , isNumericalZero
+#else
+    #define ISNUMERICALZERO
+#endif
+
+// macro used in constructors
+#ifdef DOUBT_LEVEL_FIELD_ENABLED
+    #define DOUBTLEVEL , doubtLevel
+#else
+    #define DOUBTLEVEL
+#endif
+
+// macro that encapsulate cancellation test
+#ifdef CANCELATION_DEBUGGER
+    #define CANCELATION_TEST(n_minPrecision) \
+        if (Snum::isCancelation(n_minPrecision, result, newError)) \
+        { \
+        NumericalDebugger::cancelations++; \
+        NumericalDebugger::unstability(); \
+        }
+#else
+    #define CANCELATION_TEST(n_minPrecision)
+#endif
+
+/*
+ * encapsulate numerical zero test
+ */
+inline void numericalZeroTest(bool isNumericalZero, bool isNonSignificant)
+{
+    if (isNumericalZero && !isNonSignificant)
+    {
+        NumericalDebugger::numericalZeros++;
+        NumericalDebugger::unstability();
+    }
+}
+
+/*
+ * encapsulate branch unstability test
+ */
+templated inline void unstableBranchTest(const Snum &n1, const Snum &n2)
+{
+    if (Snum::isUnstableBranchings(n1, n2))
+    {
+        NumericalDebugger::unstableBranchings++;
+        NumericalDebugger::unstability();
+    }
+}
+
+//-----------------------------------------------------------------------------
 // ARITHMETIC OPERATORS
 
 // -
@@ -132,7 +190,9 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     bool isNumericalZero = Snum::non_significant(result, newError);
     #endif
 
-    NUMERICAL_ZERO_TEST(n1.non_significant() || n2.non_significant());
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    numericalZeroTest(isNumericalZero, n1.non_significant() || n2.non_significant());
+    #endif
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
@@ -156,7 +216,9 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     bool isNumericalZero = Snum::non_significant(result, newError);
     #endif
 
-    NUMERICAL_ZERO_TEST(n1.non_significant() || n2.non_significant());
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    numericalZeroTest(isNumericalZero, n1.non_significant() || n2.non_significant());
+    #endif
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
@@ -189,7 +251,9 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     bool isNumericalZero = Snum::non_significant(result, newError);
     #endif
 
-    NUMERICAL_ZERO_TEST(n1.non_significant() || n2.non_significant());
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    numericalZeroTest(isNumericalZero, n1.non_significant() || n2.non_significant());
+    #endif
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
@@ -209,7 +273,7 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     if (n2.non_significant())
     {
         #ifdef UNSTABLE_OP_DEBUGGER
-        NumericalDebugger::unstableMultiplications++;
+        NumericalDebugger::unstableDivisions++;
         NumericalDebugger::unstability();
         #endif
         doubtLevel++;
@@ -220,7 +284,9 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     bool isNumericalZero = Snum::non_significant(result, newError);
     #endif
 
-    NUMERICAL_ZERO_TEST(n1.non_significant() || n2.non_significant());
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    numericalZeroTest(isNumericalZero, n1.non_significant() || n2.non_significant());
+    #endif
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
@@ -283,7 +349,10 @@ templated inline Snum& Snum::operator/=(const Snum& n)
 // ==
 templated inline bool operator==(const Snum& n1, const Snum& n2)
 {
-    UNSTABLE_BRANCH_TEST;
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
+    unstableBranchTest(n1, n2);
+    #endif
+
     return n1.number == n2.number;
 };
 set_Sbool_operator_casts(==);
@@ -291,7 +360,10 @@ set_Sbool_operator_casts(==);
 // !=
 templated inline bool operator!=(const Snum& n1, const Snum& n2)
 {
-    UNSTABLE_BRANCH_TEST;
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
+    unstableBranchTest(n1, n2);
+    #endif
+
     return n1.number != n2.number;
 };
 set_Sbool_operator_casts(!=);
@@ -299,7 +371,10 @@ set_Sbool_operator_casts(!=);
 // <
 templated inline bool operator<(const Snum& n1, const Snum& n2)
 {
-    UNSTABLE_BRANCH_TEST;
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
+    unstableBranchTest(n1, n2);
+    #endif
+
     return n1.number < n2.number;
 };
 set_Sbool_operator_casts(<);
@@ -307,7 +382,10 @@ set_Sbool_operator_casts(<);
 // <=
 templated inline bool operator<=(const Snum& n1, const Snum& n2)
 {
-    UNSTABLE_BRANCH_TEST;
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
+    unstableBranchTest(n1, n2);
+    #endif
+
     return n1.number <= n2.number;
 };
 set_Sbool_operator_casts(<=);
@@ -315,7 +393,10 @@ set_Sbool_operator_casts(<=);
 // >
 templated inline bool operator>(const Snum& n1, const Snum& n2)
 {
-    UNSTABLE_BRANCH_TEST;
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
+    unstableBranchTest(n1, n2);
+    #endif
+
     return n1.number > n2.number;
 };
 set_Sbool_operator_casts(>);
@@ -323,7 +404,10 @@ set_Sbool_operator_casts(>);
 // >=
 templated inline bool operator>=(const Snum& n1, const Snum& n2)
 {
-    UNSTABLE_BRANCH_TEST;
+    #ifdef UNSTABLE_BRANCH_DEBUGGER
+    unstableBranchTest(n1, n2);
+    #endif
+
     return n1.number >= n2.number;
 };
 set_Sbool_operator_casts(>=);
