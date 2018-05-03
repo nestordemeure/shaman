@@ -4,18 +4,13 @@
 #include <string>
 #include "src/Debugger.h"
 
-// some macro to shorten template notations
-#define templated template<typename numberType, typename errorType, typename preciseType>
-#define Snum S<numberType,errorType,preciseType>
-#define INTEGER_CAST_CONSTRUCTOR(n) S((numberType)n, (preciseType)n - (numberType)n)
-
 //-------------------------------------------------------------------------------------------------
-// SHAMAN OPERATIONS
+// SHAMAN CLASS
 
 /*
  * the base SHAMAN class, represents a number and its error
  */
-templated class S
+template<typename numberType, typename errorType, typename preciseType> class S
 {
 public :
     // trueNumber = number + error
@@ -28,7 +23,7 @@ public :
         int doubtLevel;
     #endif
 
-    // constructors
+    // base constructors
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
         #ifdef DOUBT_LEVEL_FIELD_ENABLED
             inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg, int doubt): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg), doubtLevel(doubt) {};
@@ -36,20 +31,12 @@ public :
         #else
             inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg) {};
         #endif
-        inline S(numberType numberArg, errorType errorArg): S(numberArg, errorArg, non_significativ(numberArg,errorArg)) {};
+        inline S(numberType numberArg, errorType errorArg): S(numberArg, errorArg, non_significant(numberArg, errorArg)) {};
         inline S(numberType numberArg): S(numberArg,0,false) {}; // we accept implicit cast from T to S<T>
     #else
         inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
         inline S(numberType numberArg): S(numberArg,0) {}; // we accept implicit cast from T to S<T>
     #endif
-    inline S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(unsigned int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(unsigned long int n):INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(unsigned long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline S(): S(0.) {};
 
     // casting
@@ -66,13 +53,24 @@ public :
     inline explicit operator long double() const { return (long double) number; };
     explicit operator std::string() const;
     #ifdef EXPLICIT_CASTING
-    template<typename n, typename e, typename p>
-    inline explicit S(const S<n,e,p>& s): S(s.number, s.error) {}; // requires explicit cast from other S types
-    template<typename T> S(T s) = delete; // refuse cast from types other than numberType
+        #define EXPLICIT_CAST explicit
+        template<typename T> S(T s) = delete;
     #else
-    template<typename n, typename e, typename p>
-    inline S(const S<n,e,p>& s): S(s.number, s.error) {}; // allow cast from any Stype to any Stype
+        #define EXPLICIT_CAST
     #endif
+    #define INTEGER_CAST_CONSTRUCTOR(n) S((numberType)n, (preciseType)n - (numberType)n)
+    template<typename n, typename e, typename p>
+    inline EXPLICIT_CAST S(const S<n,e,p>& s): S(s.number, s.error) {};
+    inline EXPLICIT_CAST S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline EXPLICIT_CAST S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline EXPLICIT_CAST S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline EXPLICIT_CAST S(unsigned int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline EXPLICIT_CAST S(long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline EXPLICIT_CAST S(unsigned long int n):INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline EXPLICIT_CAST S(long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    inline EXPLICIT_CAST S(unsigned long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
+    #undef INTEGER_CAST_CONSTRUCTOR
+    #undef EXPLICIT_CAST
 
     // arithmetic operators
     S& operator++(int);
@@ -82,17 +80,25 @@ public :
     S& operator*=(const S& n);
     S& operator/=(const S& n);
 
-    // operations
+    // methods
     static numberType digits(numberType number, errorType error);
-    static numberType digits(const S& n);
+    numberType digits() const;
+    preciseType corrected_number() const;
 
     // unstability detection
-    static bool non_significativ(numberType number, errorType error);
-    bool non_significativ() const;
+    static bool non_significant(numberType number, errorType error);
+    bool non_significant() const;
     static S minPrecision(const S& n1, const S& n2);
     static bool isCancelation(const S& n, numberType result, errorType resultingError);
     static bool isUnstableBranchings(const S& n1, const S& n2);
 };
+
+//-------------------------------------------------------------------------------------------------
+// SHAMAN OPERATIONS
+
+// some macro to shorten template notations
+#define templated template<typename numberType, typename errorType, typename preciseType>
+#define Snum S<numberType,errorType,preciseType>
 
 // arithmetic operators
 templated const Snum operator-(const Snum& n);
@@ -110,6 +116,7 @@ templated bool operator>(const Snum& n1, const Snum& n2);
 templated bool operator>=(const Snum& n1, const Snum& n2);
 
 // mathematical functions
+// TODO the ideal would be able to define std overload for our types
 templated const Snum sqrt(const Snum& n);
 templated const Snum cbrt(const Snum& n);
 templated const Snum pow(const Snum& n1, const Snum& n2);
@@ -137,6 +144,7 @@ templated const Snum erf(const Snum& n);
 templated const Snum abs(const Snum& n);
 templated const Snum fabs(const Snum& n);
 templated const Snum floor(const Snum& n);
+templated const Snum ceil(const Snum& n);
 templated const Snum min(const Snum& n1, const Snum& n2);
 templated const Snum max(const Snum& n1, const Snum& n2);
 templated const Snum hypot(const Snum& n1, const Snum& n2);
@@ -182,9 +190,8 @@ using Slong_double = S<long double, long double, long double>;
 #include "src/Operators.h"
 #include "src/Functions.h"
 
-//-------------------------------------------------------------------------------------------------
-
 #undef templated
 #undef Snum
 
+//-------------------------------------------------------------------------------------------------
 #endif //SHAMAN_H

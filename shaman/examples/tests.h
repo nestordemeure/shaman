@@ -19,7 +19,7 @@ inline void displayError(S<numberType,errorType,preciseType> result, double expe
 {
     double error = result.number - expectedResult;
     double digits = -log10(std::abs(error / result.number));
-    double estimatedDigits = S<numberType,errorType,preciseType>::digits(result);
+    double estimatedDigits = result.digits();
 
     std::cout << "result=" << result << " (" << result.number << ')'
               << '\n'

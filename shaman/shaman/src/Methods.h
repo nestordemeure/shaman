@@ -12,6 +12,17 @@
 #include "../Shaman.h"
 
 //-----------------------------------------------------------------------------
+// HIGH PRECISION APPROXIMATION
+
+/*
+ * tries to return a better approximation of the number by taking the numerical error into account
+ */
+templated inline preciseType Snum::corrected_number() const
+{
+    return preciseType(number) + preciseType(error);
+}
+
+//-----------------------------------------------------------------------------
 // SIGNIFICATIV DIGITS
 
 /*
@@ -47,9 +58,9 @@ templated inline numberType Snum::digits(numberType number, errorType error)
 /*
  * returns the number of significative digits of a S
  */
-templated inline numberType Snum::digits(const Snum &n)
+templated inline numberType Snum::digits() const
 {
-    return digits(n.number, n.error);
+    return digits(number, error);
 }
 
 //-----------------------------------------------------------------------------
@@ -63,7 +74,7 @@ templated inline numberType Snum::digits(const Snum &n)
  * since it is common to have numbers with 0 error
  * (any number that just been turned into a S)
  */
-templated inline bool Snum::non_significativ(numberType number, errorType error)
+templated inline bool Snum::non_significant(numberType number, errorType error)
 {
     int base = 10;
     return (error != 0) && (std::abs(number) < base * std::abs(error));
@@ -72,7 +83,7 @@ templated inline bool Snum::non_significativ(numberType number, errorType error)
 /*
  * returns true if the current S has no significative digits in the base
  */
-templated inline bool Snum::non_significativ() const
+templated inline bool Snum::non_significant() const
 {
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     return isNumericalZero;
@@ -114,7 +125,7 @@ templated inline bool Snum::isCancelation(const Snum &n, numberType result, erro
  */
 templated inline bool Snum::isUnstableBranchings(const Snum &n1, const Snum &n2)
 {
-    return non_significativ(n1.number - n2.number, n1.error - n2.error);
+    return non_significant(n1.number - n2.number, n1.error - n2.error);
 }
 
 //-----------------------------------------------------------------------------
@@ -130,7 +141,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     //os << n.number << " (error:" << n.error << " digits:" << Snum::digits(n) << ')';
 
     int nbDigitsMax = 17;
-    numberType fdigits = std::floor(Snum::digits(n));
+    numberType fdigits = std::floor(n.digits());
 
     if (std::isnan(fdigits))
     {

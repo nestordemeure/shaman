@@ -17,25 +17,25 @@ std::array<Sdouble, 21> legendre20 = []()
     std::array<Sdouble, 21> result;
 
     result[20] = Sdouble(34461632205) / Sdouble(262144);
-    result[19] = 0;
+    result[19] = 0.;
     result[18] = Sdouble(-83945001525) / Sdouble(131072);
-    result[17] = 0;
+    result[17] = 0.;
     result[16] = Sdouble(347123925225) / Sdouble(262144);
-    result[15] = 0;
+    result[15] = 0.;
     result[14] = Sdouble(-49589132175) / Sdouble(32768);
-    result[13] = 0;
+    result[13] = 0.;
     result[12] = Sdouble(136745788725) / Sdouble(131072);
-    result[11] = 0;
+    result[11] = 0.;
     result[10] = Sdouble(-29113619535) / Sdouble(65536);
-    result[9] = 0;
+    result[9] = 0.;
     result[8] = Sdouble(15058768725) / Sdouble(131072);
-    result[7] = 0;
+    result[7] = 0.;
     result[6] = Sdouble(-557732175) / Sdouble(32768);
-    result[5] = 0;
+    result[5] = 0.;
     result[4] = Sdouble(334639305) / Sdouble(262144);
-    result[3] = 0;
+    result[3] = 0.;
     result[2] = Sdouble(-4849845) / Sdouble(131072);
-    result[1] = 0;
+    result[1] = 0.;
     result[0] = Sdouble(46189) / Sdouble(262144);
 
     return result;
@@ -68,7 +68,7 @@ Sdouble legendreNaive(Sdouble x)
     for (int i = 20; i >= 0; i--)
     {
         Sdouble coef = legendre20[i];
-        result += coef * pow(x,i);
+        result += coef * pow(x,Sdouble(i));
     }
 
     return result;
@@ -94,7 +94,7 @@ Sdouble legendreRec(int q, Sdouble x)
         for (int n = 2; n <= q; n++)
         {
             //pn = (1/Sdouble(n)) * (x*(2*n-1)*p1 - (n-1)*p0);
-            pn = (x*(2*n-1)*p1 - (n-1)*p0) / n;
+            pn = (x * Sdouble(2*n-1) * p1 - Sdouble(n-1) * p0) / Sdouble(n);
             p0 = p1;
             p1 = pn;
         }

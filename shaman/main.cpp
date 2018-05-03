@@ -18,7 +18,6 @@ int main()
     // tests
     test_eft();
 
-    /*
     // various tests
     rumpTest();
     polynomialTest();
@@ -32,7 +31,6 @@ int main()
     // Schrodinger equation
     Schrodinger numerov = Schrodinger();
     numerov.calculate();
-    */
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
