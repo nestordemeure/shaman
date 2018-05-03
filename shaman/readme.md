@@ -14,15 +14,15 @@ One day I hope to put interactive examples here, in the meantime see `shaman/exa
  - the Shaman library (and a well documented readme)
  - examples of usage on simple computations
  - tests
- - prototypes for future developments
- - tools to help with the collect of results and instrument a library with Shaman
+ - prototypes for future developments (we have some cool ideas coming)
+ - tools to help with the collection of results and instrumentation of a code
 
 ## How does Shaman works ?
 
 For common operations (+, -, *, /, sqrt), it uses Error Free Transforms to deduce the propagation of error.
 On other operations (exp ,cos, etc) we fall back to higher precision to compute the error propagated.
 
-The underlying number type is similar to some double-double arithmetics, the main differences being that their aim is to do high precision computations while we are interested in error propagation.
+The underlying number type is similar to some double-double arithmetics, the main differences being that their aim is to do high precision computations while we are interested in error propagation.  
 Hence we garantee the separation between the computed number and the numerical error and we can use higher precision arithmetic on operations were the error cannot be computed with the base precision (implementing all usual operations contrary to usual double-double types).
 
 There is a paper coming with all the explanations and reference needed to understand and reproduce the concept.
