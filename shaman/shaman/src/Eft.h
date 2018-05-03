@@ -6,8 +6,14 @@
 /*
  * ERROR FREE TRANSFORM
  *
+ * gives us the exact error|remainder of an arithmetic operation using :
+ * - twoSum for + (might be killed by aggressive compilation)
+ * - std::fma for *, /, sqrt (reliable independent of the compilations flags)
+ * - fastTwoSum for shaman::fma via errorFma (rarely|never useful, might be killed by aggressive compilation)
+ *
  * NOTE :
  * see the handbook of floating point arithmetic for an exact analysis
+ * all of these EFT are perfectly accurate when rounding to nearest
  * some of these EFT (addition) requires a rounding to nearest but could be replaced (priest)
  * some of these EFT (FMA based EFT) are not proved for all rounding types (in particular toward infinity)
  *
@@ -28,43 +34,6 @@ namespace EFT
         T epsilon1 = n1 - n11;
         T error = epsilon1 + epsilon2;
         return error;
-    }
-
-    // fast EFT for a sum
-    // NOTE requires hypothesis on the inputs (n1 > n2)
-    // WARNING requires rounding to nearest (see Priest)
-    template<typename T>
-    inline const T FastTwoSum(const T n1, const T n2, const T result)
-    {
-        T n22 = result - n1;
-        T error = n2 - n22;
-        return error;
-    }
-
-    // EFT for a sum
-    // NOTE does not require rounding to nearest
-    // NOTE see also "Error-Free Transformation in Rounding Mode toward Zero" for an algorithm faster for rounding toward zero
-    template<typename T>
-    inline const T PriestTwoSum(const T n1, const T n2, const T result)
-    {
-        if (std::abs(n1) < std::abs(n2))
-        {
-            std::swap(n1, n2);
-        }
-
-        T e = result - n1;
-        T g = result - e;
-        T h = g - n1;
-        T f = n2 - h;
-        T d = f - e;
-
-        if ((d + e) != f)
-        {
-            //result = n1;
-            d = n2;
-        }
-
-        return d;
     }
 
     // fast EFT for a multiplication
@@ -92,8 +61,45 @@ namespace EFT
     template<typename T>
     inline const T RemainderSqrt(const T n, const T result)
     {
-        T remainder = -std::fma(result, result, - n);
+        T remainder = -std::fma(result, result, -n);
         return remainder;
+    }
+
+    // fast EFT for a sum
+    // NOTE requires hypothesis on the inputs (n1 > n2)
+    // WARNING requires rounding to nearest (see Priest)
+    template<typename T>
+    inline const T FastTwoSum(const T n1, const T n2, const T result)
+    {
+        T n22 = result - n1;
+        T error = n2 - n22;
+        return error;
+    }
+
+    // EFT for a sum
+    // NOTE does not require rounding to nearest
+    // NOTE see also "Error-Free Transformation in Rounding Mode toward Zero" for an algorithm faster for rounding toward zero
+    template<typename T>
+    inline const T PriestTwoSum(const T n1, const T n2, const T result)
+    {
+        if (std::abs(n1) < std::abs(n2))
+        {
+            std::swap(n1, n2);
+        }
+
+        T n22 = result - n1;
+        T n11 = result - n22;
+        T epsilon1 = n11 - n1;
+        T n222 = n2 - epsilon1;
+        T error = n222 - n22;
+
+        if ((error + n22) != n222)
+        {
+            //result = n1;
+            error = n2;
+        }
+
+        return error;
     }
 
     // EFT for an FMA

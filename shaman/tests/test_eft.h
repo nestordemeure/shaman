@@ -19,7 +19,8 @@ void test_eft()
     if (error != y)
     {
         std::cout << "KO : Test eft::sum failed." << std::endl;
-    } else
+    }
+    else
     {
         std::cout << "OK : Test eft::sum pass." << std::endl;
     }
