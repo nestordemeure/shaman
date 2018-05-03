@@ -166,7 +166,7 @@ namespace NumericalDebugger
  * adds a function that will display the number of unstability and cancelation when the code terminate
  */
 #ifdef NUMERICAL_DEBUGGER_ENABLED
-static int init = []()
+static int initializeNumericalDebugger = []()
 {
     std::atexit(NumericalDebugger::printUnstabilities);
     return 0;
