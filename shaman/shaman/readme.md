@@ -2,7 +2,7 @@
 
 ## What is Shaman ?
 
-Shaman is a library that lets you do your computation while running a model of the propagation of error in your code.
+Shaman is a header-only library that lets you do your computation while running a model of the propagation of error in your code.
 
 It uses EFT (error free transformation) and formulas to deduce the propagation of error on the most common operations (+, -, *, /, sqrt).
 On other operations (exp ,cos, etc) we fall back to higher precision to compute the error propagated.
