@@ -115,10 +115,10 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     CANCELATION_TEST(Snum::minPrecision(n1,n2));
 
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = Snum::non_significativ(result,newError);
+    bool isNumericalZero = Snum::non_significant(result, newError);
     #endif
 
-    NUMERICAL_ZERO_TEST(n1.non_significativ() || n2.non_significativ());
+    NUMERICAL_ZERO_TEST(n1.non_significant() || n2.non_significant());
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
@@ -139,10 +139,10 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     CANCELATION_TEST(Snum::minPrecision(n1,n2));
 
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = Snum::non_significativ(result,newError);
+    bool isNumericalZero = Snum::non_significant(result, newError);
     #endif
 
-    NUMERICAL_ZERO_TEST(n1.non_significativ() || n2.non_significativ());
+    NUMERICAL_ZERO_TEST(n1.non_significant() || n2.non_significant());
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
@@ -161,7 +161,7 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
 
     #ifdef DOUBT_LEVEL_FIELD_ENABLED
     int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
-    if (n1.non_significativ() && n2.non_significativ())
+    if (n1.non_significant() && n2.non_significant())
     {
         #ifdef UNSTABLE_OP_DEBUGGER
         NumericalDebugger::unstableMultiplications++;
@@ -172,10 +172,10 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     #endif
 
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = Snum::non_significativ(result,newError);
+    bool isNumericalZero = Snum::non_significant(result, newError);
     #endif
 
-    NUMERICAL_ZERO_TEST(n1.non_significativ() || n2.non_significativ());
+    NUMERICAL_ZERO_TEST(n1.non_significant() || n2.non_significant());
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
@@ -192,7 +192,7 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
 
     #ifdef DOUBT_LEVEL_FIELD_ENABLED
     int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
-    if (n2.non_significativ())
+    if (n2.non_significant())
     {
         #ifdef UNSTABLE_OP_DEBUGGER
         NumericalDebugger::unstableMultiplications++;
@@ -203,10 +203,10 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     #endif
 
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = Snum::non_significativ(result,newError);
+    bool isNumericalZero = Snum::non_significant(result, newError);
     #endif
 
-    NUMERICAL_ZERO_TEST(n1.non_significativ() || n2.non_significativ());
+    NUMERICAL_ZERO_TEST(n1.non_significant() || n2.non_significant());
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
