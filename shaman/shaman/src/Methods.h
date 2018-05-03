@@ -34,10 +34,12 @@ templated inline numberType Snum::digits(numberType number, errorType error)
 {
     if (error == 0)
     {
+        // no error -> theorically infinite precision
         return INFINITY;
     }
     else if (number == 0)
     {
+        // we count the number of significant zeroes
         return std::max(0., -log10(std::abs(error)) - 1);
     }
     else
@@ -56,7 +58,7 @@ templated inline numberType Snum::digits(numberType number, errorType error)
 }
 
 /*
- * returns the number of significative digits of a S
+ * returns the number of significative digits of a Snum
  */
 templated inline numberType Snum::digits() const
 {
@@ -77,7 +79,8 @@ templated inline numberType Snum::digits() const
 templated inline bool Snum::non_significant(numberType number, errorType error)
 {
     int base = 10;
-    return (error != 0) && (std::abs(number) < base * std::abs(error));
+    return (error != 0) &&
+           (std::abs(number) < base * std::abs(error));
 }
 
 /*
@@ -140,16 +143,16 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     // raw information :
     //os << n.number << " (error:" << n.error << " digits:" << Snum::digits(n) << ')';
 
-    int nbDigitsMax = 17;
+    int nbDigitsMax = std::numeric_limits<numberType>::digits10 + 2; // since this is a maximum, we add two to avoid being too pessimistic (17 for double)
     numberType fdigits = std::floor(n.digits());
 
-    if (std::isnan(fdigits))
+    if (std::isnan(n.number)) // not a number
     {
         os << "@nan";
     }
-    else if (fdigits <= 0)
+    else if (fdigits <= 0) // no significant digits
     {
-        // the first zeros might be valid
+        // the first zeros might be significant
         int digits = std::floor(Snum::digits(0, n.error));
 
         if ((std::abs(n.number) >= 1) || (digits <= 0))
@@ -159,12 +162,12 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         }
         else
         {
-            // some zero are significatives
+            // some zeros are significant
             digits = std::min(nbDigitsMax, digits);
             os << std::scientific << std::setprecision(digits-1) << 0.0; // TODO should we add a '@' prefix ?
         }
     }
-    else
+    else // a perfectly fine number
     {
         int digits = std::min((numberType) nbDigitsMax, fdigits);
         os << std::scientific << std::setprecision(digits-1) << n.number;
@@ -181,11 +184,10 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 }
 
 /*
- * convert a Ntype into a string
+ * convert a Snum into a string
  *
  * using the streaming operator
- * there is probably a more efficient implementation
- * but it is the easier way to benefit from std::scientific and std::setprecision
+ * there is probably a more efficient implementation but it was the easiest way to benefit from std::scientific and std::setprecision
  */
 templated Snum::operator std::string() const
 {
@@ -203,7 +205,7 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
     numberType num;
     is >> num;
 
-    // modifies the Snum
+    // modifies the Snum in place
     n.number = num;
     n.error = 0;
 
@@ -267,26 +269,6 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
         }
 #else
     #define UNSTABLE_BRANCH_TEST
-#endif
-
-//-----------------------------------------------------------------------------
-// CASTING MACROS
-
-#ifndef EXPLICIT_CASTING
-
-#define arithmeticTYPE(T) T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type
-
-// takes a value and builds an S type around its type
-template<typename T>
-inline S<T,T,T> makeStype(T t) { return S<T,T,T>(t); }; // default case
-inline Sfloat makeStype(float t) { return Sfloat(t); };
-inline Sdouble makeStype(double t) { return Sdouble(t); };
-inline Slong_double makeStype(long double t) { return Slong_double(t); };
-templated inline Snum makeStype(Snum s) { return s; };
-
-// takes two values and builds a S type around the type C++ would use as a return type for their sum
-#define SreturnType(t1,t2) decltype(makeStype(t1 + t2))
-
 #endif
 
 //-----------------------------------------------------------------------------

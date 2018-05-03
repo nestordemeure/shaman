@@ -2,6 +2,7 @@
 #define SHAMAN_H
 
 #include <string>
+#include <limits>
 #include "src/Debugger.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -13,7 +14,7 @@
 template<typename numberType, typename errorType, typename preciseType> class S
 {
 public :
-    // trueNumber = number + error
+    // true number ≈ number + error
     numberType number; // current computed number
     errorType error; // current error
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
@@ -174,7 +175,6 @@ using Slong_double = S<long double, long double, long double>;
 // OPENMP (require openMP 4.0+ to get reductions on user defined types)
 
 #ifdef _OPENMP
-#include <limits>
 
 // +
 #pragma omp declare reduction(+:Sfloat : omp_out=omp_in+omp_out)                initializer(omp_priv=Sfloat(0.f))

@@ -45,6 +45,20 @@ inline bool operator OPERATOR (const S<n,e,p>& n1, const n& n2) \
 
 #else
 
+// takes a value and builds an Stype around its type
+template<typename T>
+inline S<T,T,T> makeStype(T t) { return S<T,T,T>(t); }; // default case
+inline Sfloat makeStype(float t) { return Sfloat(t); };
+inline Sdouble makeStype(double t) { return Sdouble(t); };
+inline Slong_double makeStype(long double t) { return Slong_double(t); };
+templated inline Snum makeStype(Snum s) { return s; };
+
+// takes two values and builds an Stype around the type C++ would use as a return type for their sum
+#define SreturnType(t1,t2) decltype(makeStype(t1 + t2))
+
+// makes sure that a template type is an arithmetic type
+#define arithmeticTYPE(T) T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type
+
 // defines overload for arithmetic operators
 #define set_Soperator_casts(OPERATOR) \
 template<typename N, typename E, typename P, typename arithmeticTYPE(T)> \
