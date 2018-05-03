@@ -7,8 +7,8 @@ Shaman is a library that lets you do your computation while running a model of t
 It uses EFT (error free transformation) and formulas to deduce the propagation of error on the most common operations (+, -, *, /, sqrt).
 On other operations (exp ,cos, etc) we fall back to higher precision to compute the error propagated.
 
-The underlying number type works like the pair arithmetic introduced in Faithfully Rounded Floating-point Computations by MARKO LANGE and SIEGFRIED M. RUMP.
-The main difference is that their aim is to do high precision computations while we are interested in error propagation.
+The underlying number type is similar to some double-double arithmetics, the main differences being that their aim is to do high precision computations while we are interested in error propagation.
+Hence we garantee the separation between the computed number and the numerical error and we can use higher precision arithmetic on operations were the error cannot be computed with the base precision (implementing all usual operations contrary to usual double-double types).
 
 ## How to use Shaman ?
 
