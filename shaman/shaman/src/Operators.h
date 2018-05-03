@@ -99,12 +99,6 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
 //-----------------------------------------------------------------------------
 // DEBUGGING MACROS
 
-/*
- * TODO : some of those macro could be replaced by inlined functions
- * pro : improved readability, reduced probability of errors
- * con : gdb will need to travel through more functions
- */
-
 // macro used in constructors
 #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     #define ISNUMERICALZERO , isNumericalZero
@@ -119,17 +113,17 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
     #define DOUBTLEVEL
 #endif
 
-// macro that encapsulate cancellation test
-#ifdef CANCELATION_DEBUGGER
-    #define CANCELATION_TEST(n_minPrecision) \
-        if (Snum::isCancelation(n_minPrecision, result, newError)) \
-        { \
-        NumericalDebugger::cancelations++; \
-        NumericalDebugger::unstability(); \
-        }
-#else
-    #define CANCELATION_TEST(n_minPrecision)
-#endif
+/*
+ * encapsulate cancellation test
+ */
+templated inline void cancelationTest(const Snum& n, numberType result, errorType resultingError)
+{
+    if (Snum::isCancelation(n, result, resultingError))
+    {
+        NumericalDebugger::cancelations++;
+        NumericalDebugger::unstability();
+    }
+}
 
 /*
  * encapsulate numerical zero test
@@ -184,7 +178,9 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
     #endif
 
-    CANCELATION_TEST(Snum::minPrecision(n1,n2));
+    #ifdef CANCELATION_DEBUGGER
+    cancelationTest(Snum::minPrecision(n1,n2), result, newError);
+    #endif
 
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     bool isNumericalZero = Snum::non_significant(result, newError);
@@ -210,7 +206,9 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
     #endif
 
-    CANCELATION_TEST(Snum::minPrecision(n1,n2));
+    #ifdef CANCELATION_DEBUGGER
+    cancelationTest(Snum::minPrecision(n1,n2), result, newError);
+    #endif
 
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     bool isNumericalZero = Snum::non_significant(result, newError);
