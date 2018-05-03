@@ -14,25 +14,27 @@ Hence we garantee the separation between the computed number and the numerical e
 
 ### In a sequential code
 
-Put the 'shaman' folder in your project.
+Put the `shaman` folder in your project and the `shaman.h` in your file.
 
-Use the 'Sfloat', 'Sdouble' and 'Slong_double' types in your program.
+Use the `Sfloat`, `Sdouble` and `Slong_double` types in your program.
 
-If you use 'printf' you can either switch to the C++ streaming operator or explicitely cast shaman types into strings.
+#### Notes :
 
-To forbid any implicit casting (as usually done by C++) you can add the 'EXPLICIT_CASTING' flag to the compilation (note that the resulting error messages might not be very clear).
+If you use `printf` you can either switch to the C++ streaming operator, explicitely cast shaman types into strings or use the `tinyformat` implementation of printf.
 
-Don't forget to enable FMA at compilation ('-mfma'), otherwise some operations (*, /, sqrt) will be much slower.
+To forbid any implicit casting (as usually done by C++) you can add the `EXPLICIT_CASTING` flag to the compilation (note that the resulting error messages might not be very clear).
 
-The 'NO_SHAMAN' flag let you deactivate SHAMAN and use the usual types instead.
+Don't forget to enable Fused-Multiply-Add at compilation (`-mfma`), otherwise some operations (*, /, sqrt) will be much slower.
 
-See also `Shamanizer`, a tool that automaticely converts your code to Shaman.
+The `NO_SHAMAN` flag let you deactivate Shaman to run your computation as if you used the base floating point arithmetic.
+
+See also `Shamanizer`, a tool that automatically instrument your code with Shaman.
 
 ### In a parallel code
 
 #### OpenMP
 
-Just add the '-fopenmp' flag as usual.
+Just add the `-fopenmp` flag as usual.
 
 You will need openMP 4.0 or more to use reduce operations.
 
@@ -40,20 +42,28 @@ You will need openMP 4.0 or more to use reduce operations.
 
 To use :
 - include Shaman_mpi.h
-- replace 'MPI_Init' with 'MPI_Shaman_Init'
-- replace 'MPI_Finalize' with 'MPI_Shaman_Finalize'
-- use the shaman MPI types ('MPI_FLOAT' -> 'MPI_SFLOAT')
-- use the shaman MPI operations ('MPI_SUM' -> 'MPI_SSUM')
+- replace `MPI_Init` with `MPI_Shaman_Init`
+- replace `MPI_Finalize` with `MPI_Shaman_Finalize`
+- use the shaman MPI types (`MPI_FLOAT` -> `MPI_SFLOAT`)
+- use the shaman MPI operations instead of the corresponding `MPI_Op` (`MPI_SUM` -> `MPI_SSUM`)
 
-You can also use Shamanizer.py to do your conversion automaticely.
+You can also use `Shamanizer.py` to do your conversion automatically.
 
 ## Numerical Debugger
 
 ### How to use the numerical debugger ?
 
-Add the 'NUMERICAL_DEBUGGER' flag to your compilation, your program will now print the number of unstabilities and cancelations when it terminates.
+You can add flags to print the number of unstabilities and cancelations when the program terminates : 
+- `NUMERICAL_DEBUGGER` enable all subsecent flags
+- `UNSTABLE_BRANCH_DEBUGGER` detects unstable boolean operations
+- `CANCELATION_DEBUGGER` detects cancelations
+- `NUMERICAL_ZERO_DEBUGGER` counts the number of numerical zeros appearing in the code
+- `UNSTABLE_OP_DEBUGGER` detects unstable operations
+- `DOUBT_LEVEL_FIELD_ENABLED` to count and print the number of unstable operations leading to a number
 
-Put a breakpoint on the 'unstability' function in the 'NumericalDebugger.h' file to debug single operations.
+Put a breakpoint on the `unstability` function in the `Debugger.h` file to beaks on single operations.
+
+As an example, you can compile with the `UNSTABLE_BRANCH_DEBUGGER` flag and put a breakpoint on the `unstability` function with gdb to break on all unstable branches.
 
 ### What are numerical unstabilities and cancelations ?
 
@@ -66,7 +76,7 @@ An unstability can be :
   both operands are non-significant
 - unstable branching :
   the difference between the two operands is non-significant (a computational zero).
-  The chosen branching statement is associated with the equality.
+  Note that unstable branchings can lead to a pessimistic estimation of the final error.
 - unstable mathematical function :
   in the log, sqrt, exp or log10 function, the argument is non-significant.
 - unstable instrinsic function :
