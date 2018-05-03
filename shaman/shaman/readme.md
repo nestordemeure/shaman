@@ -5,12 +5,6 @@
 Shaman is a header-only library that lets you do a computation while running a model of the propagation of numerical error in your code.
 In short you instrument your code, you run it and it will only display the significant digits of your outputs.
 
-For common operations (+, -, *, /, sqrt), it uses Error Free Transforms to deduce the propagation of error.
-On other operations (exp ,cos, etc) we fall back to higher precision to compute the error propagated.
-
-The underlying number type is similar to some implementations of double-double arithmetic, the main differences being that their aim is to do high precision computations while we are interested in error propagation.
-Hence we garantee the separation between the computed number and the numerical error and we can use higher precision arithmetic on operations were the error cannot be computed with the base precision (implementing all usual operations contrary to usual double-double types).
-
 ## How to use Shaman ?
 
 ### In a sequential code
@@ -88,3 +82,11 @@ An unstability can be :
   the difference between the number of exact significant digits of the result of an addition or a subtraction
   and the minimimum of the number of exact significant digits of the two operands is greater than the cancel level argument (4 by default).
   when one loses more than cancel level significant digits in one addition or subtraction
+
+## How does Shaman works ?
+
+For common operations (+, -, *, /, sqrt), it uses Error Free Transforms to deduce the propagation of error.
+On other operations (exp ,cos, etc) we fall back to higher precision to compute the error propagated.
+
+The underlying number type is similar to some implementations of double-double arithmetic, the main differences being that their aim is to do high precision computations while we are interested in error propagation.
+Hence we garantee the separation between the computed number and the numerical error and we can use higher precision arithmetic on operations were the error cannot be computed with the base precision (implementing all usual operations contrary to usual double-double types).
