@@ -1088,7 +1088,9 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
     int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel, n3.doubtLevel);
     #endif
 
-    CANCELATION_TEST(Snum::minPrecision(n1,Snum::minPrecision(n2,n3)));
+    #ifdef CANCELATION_DEBUGGER
+    cancelationTest(Snum::minPrecision(n1,Snum::minPrecision(n2,n3)), result, newError);
+    #endif
 
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     bool isNumericalZero = Snum::non_significant(result, newError);
