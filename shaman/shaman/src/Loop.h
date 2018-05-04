@@ -8,6 +8,7 @@
 /*
  * I need a foreach macro
  * maybe using https://github.com/swansontec/map-macro
+ * or no macro at all
  */
 
 // creates temporary storage for some variables
