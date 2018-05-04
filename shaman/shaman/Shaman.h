@@ -210,6 +210,7 @@ using Slong_double = S<long double, long double, long double>;
 #include "src/Methods.h"
 #include "src/Operators.h"
 #include "src/Functions.h"
+#include "src/Loop.h"
 
 #undef templated
 #undef Snum
