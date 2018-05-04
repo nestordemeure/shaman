@@ -219,6 +219,36 @@ templated inline const Snum ceil(const Snum& n)
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
 
+// trunc
+templated inline const Snum trunc(const Snum& n)
+{
+    numberType result = std::trunc(n.number);
+    preciseType preciseCorrectedResult = std::trunc(n.corrected_number());
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significant())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significant(result, newError);
+    #endif
+
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    numericalZeroTest(isNumericalZero, n.non_significant());
+    #endif
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
 // sqrt
 templated inline const Snum sqrt(const Snum& n)
 {
