@@ -37,8 +37,7 @@ You will need openMP 4.0 or more to use reduce operations.
 
 To use :
 - include Shaman_mpi.h
-- replace `MPI_Init` with `MPI_Shaman_Init`
-- replace `MPI_Finalize` with `MPI_Shaman_Finalize`
+- replace `MPI_Init` with `MPI_Shaman_Init` and `MPI_Finalize` with `MPI_Shaman_Finalize`
 - use the shaman MPI types (`MPI_FLOAT` -> `MPI_SFLOAT`)
 - use the shaman MPI operations instead of the corresponding `MPI_Op` (`MPI_SUM` -> `MPI_SSUM`)
 
