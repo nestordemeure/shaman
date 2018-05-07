@@ -101,6 +101,8 @@ let inline SdoubleToDouble s =
    s.number + (totalError s.errors)
 
 /// takes an Sdouble and produces a human readable string
+/// Note : we might decide to only print error terms over a given relative error
+/// (1 ulp or at least enough to lose a significant digit)
 let toString s =
    let errors = 
       s.errors 
