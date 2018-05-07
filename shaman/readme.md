@@ -34,6 +34,6 @@ Having both the result and a good approximation of its numerical error, we can d
 The error is deduced using Error Free Transforms and higher precision arithmetic, detailled explainations and further references are included in a paper that will soon be published.
 
 It is important to note that we don't take the impact of the control flow of the code into account.
-In other words, if your code had taken a different branch (due to an unstable test) its numerical error might have been vastly different.
+In other words, if your code had taken a different branch (due to an unstable test) its numerical error might have been vastly different
+(this will usually lead to Shaman underestimating the stability of codes that have been designed to be resilient to numerical errors in intermediate steps).
 Hence you need to be sure that meaninful branches are stable before starting to trust the number of significant digits that is displayed by Shaman.
-

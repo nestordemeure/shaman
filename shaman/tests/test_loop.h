@@ -22,12 +22,11 @@
 void test_loop()
 {
     Sdouble finalError = 2.;
-    Sdouble targetNumber = 1.;
     Sdouble bigNumber = 1e100;
-
     Sdouble result = (finalError + bigNumber) - bigNumber;
     std::cout << "intermediate result = " << result << std::endl;
 
+    Sdouble targetNumber = 1.;
     Sdouble epsilon = 0.1;
     Sdouble minThreshold = targetNumber - epsilon / 2.;
     Sdouble maxThreshold = targetNumber + epsilon / 2.;
