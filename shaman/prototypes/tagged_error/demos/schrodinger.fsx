@@ -18,6 +18,8 @@ let psi =
    psi
 let EMin = Sdouble(1.490)
 let mutable ECurrent = EMin
+let mutable deltaNumber = 0
+
 let xMin = Sdouble(-15.)
 let xMax = Sdouble(15.)
 let hZero = (xMax -. xMin) /. (SdoubleOfInt numberDivisions)
@@ -72,10 +74,20 @@ let calculate () =
       match psi.[numberDivisions] > Sdouble(0.0) with 
       | true -> ECurrent <- ECurrent -. EDelta // we need to subtract deltaE and try again
       | false -> ECurrent <- ECurrent +. EDelta // we need to add deltaE and try again
+      //deltaNumber <- if psi.[numberDivisions] > Sdouble(0.0) then deltaNumber-1 else deltaNumber+1
+      //ECurrent <- EMin +. (SdoubleOfInt deltaNumber)*.EDelta
       // print the current result
       if k % 1000 = 0 then printfn "%d\tPsi200: %s\n%d\t E: %s" k (toString psi.[numberDivisions]) k (toString ECurrent)
    endBlock ()
    printfn "The ground state energy is %s MeV (analytic solution : 1.5 MeV, psi : %s)." (toString ECurrent) (toString psi.[numberDivisions])
+
+// double incrementation
+// Ecurrent : 1.50066620001e+000 MeV      psi : -9.82940e-009
+// [main loop:-6.2e-012] [main loop:-6.0e-014, NextPsi:-2.3e-016, KSSquared:-4.6e-019, Initialisation:-3.7e-024]
+
+// int incrementation
+// Ecurrent : 1.500666200000000e+000 MeV  psi : -9.82945858e-009
+// [main loop:4.0e-017] [NextPsi:-9.5e-017, main loop:9.6e-019, KSSquared:6.1e-019, Initialisation:-3.7e-024]
 
 //-----------------------------------------------------------------------------
 // TEST
