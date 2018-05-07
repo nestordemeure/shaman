@@ -146,6 +146,7 @@ templated const Snum abs(const Snum& n);
 templated const Snum fabs(const Snum& n);
 templated const Snum floor(const Snum& n);
 templated const Snum ceil(const Snum& n);
+templated const Snum trunc(const Snum& n);
 templated const Snum min(const Snum& n1, const Snum& n2);
 templated const Snum max(const Snum& n1, const Snum& n2);
 templated const Snum hypot(const Snum& n1, const Snum& n2);
@@ -209,6 +210,7 @@ using Slong_double = S<long double, long double, long double>;
 #include "src/Methods.h"
 #include "src/Operators.h"
 #include "src/Functions.h"
+#include "src/Loop.h"
 
 #undef templated
 #undef Snum
