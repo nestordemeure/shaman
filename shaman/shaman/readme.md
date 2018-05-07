@@ -2,10 +2,7 @@
 
 ## What is Shaman ?
 
-Shaman is a header-only library that lets you do a computation while running a model of the propagation of numerical error in your code.
-In short you can instrument your code, run it and it will only display the significant digits for your outputs.
-
-In can be used to evaluate the numerical accuracy of an application but also to locate and reduce numerical unstabilities.
+Shaman is a header-only library that can be used to evaluate the numerical accuracy of an application but also to locate and reduce numerical unstabilities.
 
 ## How to use Shaman ?
 
