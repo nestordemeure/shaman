@@ -3,31 +3,49 @@
 
 #include "../shaman/Shaman.h"
 
-void loop_test()
+/*
+ * a test designed to produce an arbitrary error using the pattern :
+ *
+ * x <- initialisation()
+ * while not valid(x) do
+ *    x <- correction(x)
+ * return x
+ *
+ * shaman will take the initialisation and correction error into account in the quality of the result
+ * but they have no impact since we use an iterativ process that validates x
+ * (we can even make those errors arbitrarly large)
+ * such cases can be detected and manually corrected with tagged error
+ *
+ * asynchronous stochastic approaches can deal with such algorithms
+ * but, for the same reasons, they fail for systems that converges toward a wrong answer
+ */
+void test_loop()
 {
-    {
-        Sdouble x = 0.;
+    Sdouble finalError = 2.;
+    Sdouble targetNumber = 1.;
+    Sdouble bigNumber = 1e100;
 
-        while(x < 1.)
+    Sdouble result = (finalError + bigNumber) - bigNumber;
+    std::cout << "intermediate result = " << result << std::endl;
+
+    Sdouble epsilon = 0.1;
+    Sdouble minThreshold = targetNumber - epsilon / 2.;
+    Sdouble maxThreshold = targetNumber + epsilon / 2.;
+    while (result <= minThreshold || result >= maxThreshold)
+    {
+        if (result <= minThreshold)
         {
-            x += 0.01;
+            result += epsilon;
+        }
+        else
+        {
+            result -= epsilon;
         }
 
-        std::cout << "x=" << x << std::endl;
+        std::cout << result << " (number=" << result.number << " error=" << result.error << ')' << std::endl;
     }
 
-    {
-        Sdouble x = 0.;
-
-        LOOP_BEGIN(x);
-        while LOOP_COND(lower(x, Sdouble(1.)))
-        {
-            x += 0.01;
-        }
-        LOOP_END(x);
-
-        std::cout << "x=" << x << std::endl;
-    }
+    std::cout << "result = " << result << std::endl;
 }
 
 #endif //SHAMAN_TEST_LOOP_H

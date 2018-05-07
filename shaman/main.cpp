@@ -3,8 +3,9 @@
 #include "shaman/Shaman.h"
 // tests
 #include "tests/test_eft.h"
+#include "tests/test_loop.h"
 // examples
-#include "examples/tests.h"
+#include "examples/various.h"
 #include "examples/legendre.h"
 #include "examples/schrodinger.h"
 
@@ -16,21 +17,22 @@ int main()
     auto begin = std::chrono::steady_clock::now();
 
     // tests
-    test_eft();
+    //test_eft();
+    test_loop();
 
     // various tests
-    rumpTest();
-    polynomialTest();
-    fixedPointTest();
-    kahanIdentity();
-    mullerTest();
+    //rumpTest();
+    //polynomialTest();
+    //fixedPointTest();
+    //kahanIdentity();
+    //mullerTest();
 
     // legendre
-    legendre20Test();
+    //legendre20Test();
 
     // Schrodinger equation
-    Schrodinger numerov = Schrodinger();
-    numerov.calculate();
+    //Schrodinger numerov = Schrodinger();
+    //numerov.calculate();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();

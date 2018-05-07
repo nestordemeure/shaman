@@ -10,7 +10,7 @@
 #include <random>
 #include "../shaman/Shaman.h"
 #include "exact/exact.h"
-#include "tests.h"
+#include "various.h"
 
 /*
  * computing time for 50000000 elements on nestor's laptop using clang++5.0

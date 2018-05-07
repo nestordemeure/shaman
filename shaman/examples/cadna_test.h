@@ -9,7 +9,7 @@
 #include <array>
 #include "../shaman/Shaman.h"
 #include "../shaman/shamanizer/tinyformat.h"
-#include "tests.h"
+#include "various.h"
 
 // CADNA
 #include <cadna.h>
