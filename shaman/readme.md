@@ -12,7 +12,7 @@ Shaman is meant to be used with a test suite (usual recommendations such as havi
 - Stabilize meaninful branches (unstable branches can be detected with the numerical debugger, see the `shaman/how_to_debug.md` file).
 - Get the number of significant digits over a specified threshold (by default Shaman will only output digits it considers significant).
 
-Once your branches are stable and your error is low enough (in this order), your code is verified.
+Once your branches are stable and your error is low enough, your code is verified.
 
 ## Give me an example !
 
@@ -33,7 +33,7 @@ Having both the result and a good approximation of its numerical error, we can d
 
 The error is deduced using Error Free Transforms and higher precision arithmetic, detailled explainations and further references are included in a paper that will soon be published.
 
-It is important to note that we don't take the impact of the control flow of the computation into account.
+It is important to note that we don't take the impact of the control flow of the code into account.
 In other words, if your code had taken a different branch (due to an unstable test) its numerical error might have been vastly different.
 Hence you need to be sure that meaninful branches are stable before starting to trust the number of significant digits that is displayed by Shaman.
 
