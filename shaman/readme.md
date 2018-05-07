@@ -3,11 +3,23 @@
 ## What is Shaman ?
 
 Shaman is a header-only library that lets you do a computation while running a model of the propagation of numerical error in your code.
-In short you instrument your code, you run it and it will only display the significant digits of your outputs.
+In short you can instrument your code, run it and it will only display the significant digits for your outputs.
+
+In can be used to evaluate the numerical accuracy of an application but also to locate and reduce numerical unstabilities.
+
+## How to use Shaman ?
+
+Shaman is meant to be used with a test suite (usual recommendations such as having a good coverage apply), for all tests :
+
+- Instrument the code with Shaman (see the `shaman/how_to_instrument.md` file).
+- Stabilize meaninful branches (unstable branches can be detected with the numerical debugger, see the `shaman/how_to_debug.md` file).
+- Get the number of significant digits over a specified threshold (by default Shaman will only output digits it considers significant).
+
+Once your branches are stable and your error is low enough (in this order), your code is verified.
 
 ## Give me an example !
 
-One day I hope to put interactive examples here, in the meantime see `shaman/examples`.
+One day I hope to put interactive examples here, in the meantime see the `examples` folder.
 
 ## What will you find in this repository ?
 
@@ -19,10 +31,12 @@ One day I hope to put interactive examples here, in the meantime see `shaman/exa
 
 ## How does Shaman works ?
 
-For common operations (+, -, *, /, sqrt), it uses Error Free Transforms to deduce the propagation of error.
-On other operations (exp ,cos, etc) we fall back to higher precision to compute the error propagated.
+Shaman lets you do a computation while running a model of the propagation of numerical error in your code.
+Having both the result and a good approximation of its numerical error, we can deduce the number of significant digits and numerical unstabilities such as unstable tests.
 
-The underlying number type is similar to some double-double arithmetics, the main differences being that their aim is to do high precision computations while we are interested in error propagation.  
-Hence we garantee the separation between the computed number and the numerical error and we can use higher precision arithmetic on operations were the error cannot be computed with the base precision (implementing all usual operations contrary to usual double-double types).
+The error is deduced using Error Free Transforms and higher precision arithmetic, detailled explainations and further references are included in a paper that will soon be published.
 
-There is a paper coming with all the explanations and reference needed to understand and reproduce the concept.
+It is important to note that we don't take the impact of the control flow of the computation into account.
+In other words, if your code had taken a different branch (due to an unstable test) its numerical error might have been vastly different.
+Hence you need to be sure that meaninful branches are stable before starting to trust the number of significant digits that is displayed by Shaman.
+
