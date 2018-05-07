@@ -7,7 +7,7 @@
 
 #include <vector>
 #include "../shaman/Shaman.h"
-#include "tests.h"
+#include "various.h"
 
 /*
  * timing on Nestor's ubuntu with g++5.4 and clang++5.0 :
