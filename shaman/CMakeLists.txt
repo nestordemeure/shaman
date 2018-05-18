@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 11)
 #set(CMAKE_CXX_COMPILER g++)
 
 # flags
-#add_definitions(-DNUMERICAL_DEBUGGER)
-add_definitions(-DUNSTABLE_BRANCH_DEBUGGER)
+add_definitions(-DNUMERICAL_DEBUGGER)
+#add_definitions(-DUNSTABLE_BRANCH_DEBUGGER)
 #add_definitions(-DNUMERICAL_ZERO_DEBUGGER)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
@@ -23,7 +23,7 @@ set(SOURCE_FILES main.cpp
         # examples
         examples/various.h
         examples/schrodinger.cpp examples/schrodinger.h
-        examples/legendre.h)
+        examples/legendre.h examples/paper/demo.h)
 
 # linking
 add_executable(shaman ${SOURCE_FILES})

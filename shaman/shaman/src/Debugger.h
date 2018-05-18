@@ -88,15 +88,14 @@ namespace NumericalDebugger
 
     /*
      * print the number of instabilities detected
+     * this function is run only if there are indeed unstabilities
+     * TODO display subsections only if they have something to display
      */
     static void printUnstabilities()
     {
         if (shouldDisplay)
         {
-            std::cout << '\n' << "*** SHAMAN ***" << '\n';
-
             #ifdef _OPENMP // sum unstability counters
-            std::cout << "(With openMP)" << std::endl;
             int unstabilityCount_red = 0;
             int numericalZeros_red = 0;
             int cancelations_red = 0;
@@ -127,17 +126,18 @@ namespace NumericalDebugger
             unstableBranchings = unstableBranchings_red;
             #endif //_OPENMP
 
-            if (unstabilityCount == 0)
+            if (unstabilityCount > 0)
             {
-                std::cout << "No instability detected" << std::endl;
-            }
-            else
-            {
+                #ifdef _OPENMP
+                std::cout << '\n' << "*** SHAMAN (with openMP) ***" << '\n';
+                #else
+                std::cout << '\n' << "*** SHAMAN ***" << '\n';
+                #endif
+
                 // detection of a deep numerical anomaly that might throw the error model off
                 if ((unstableDivisions > 0) || (unstablePowerFunctions > 0) || (unstableMultiplications > 0) || (unstableFunctions > 0))
                 {
-                    std::cout << "WARNING : the self-validation detects major problem(s)." << '\n'
-                              << "The results are NOT guaranteed" << '\n';
+                    std::cout << "WARNING : the self-validation detects major problem(s)." << '\n';
                 }
 
                 std::cout << "There are " << unstabilityCount << " numerical unstabilities" << '\n'
@@ -164,11 +164,14 @@ namespace NumericalDebugger
 
 /*
  * adds a function that will display the number of unstability and cancelation when the code terminate
+ * note that this might be called several times as the header is compiler several time
+ * however only one header should colelct errors and thus display something
  */
 #ifdef NUMERICAL_DEBUGGER_ENABLED
 static int initializeNumericalDebugger [[gnu::unused]] = []()
 {
     std::atexit(NumericalDebugger::printUnstabilities);
+    std::at_quick_exit(NumericalDebugger::printUnstabilities);
     return 0;
 }();
 #endif //NUMERICAL_DEBUGGER_ENABLED
