@@ -7,19 +7,22 @@
 
 #include "../../shaman/Shaman.h"
 
-void demo()
+/*
+ * computing sqrt(x) using Heron's algorithm
+ *
+ * iterations with unstable operations (6 being the last iteration) :
+ * - cancelation in test : 4,5,6
+ * - unstable abs and < in test : 6
+ */
+void sqrtHeron()
 {
-    Sdouble u0 = 0.;
-    Sdouble u1 = 1.;
+    Sdouble x = 2;
+    Sdouble sqrtx = x/2;
 
-    for(int i = 1; i < 100; i++)
+    while(1e-15 < abs(sqrtx*sqrtx - x))
     {
-        Sdouble u2 = u0 + u1;
-        u0 = u1;
-        u1 = u2;
-        std::cout << "output:" << u2
-                  << " number:" << u2.number
-                  << " error:" << u2.error << std::endl;
+        sqrtx = (sqrtx + x/sqrtx) / 2;
+        printf("result=%.15e error≈%.15e\n", sqrtx.number, sqrtx.error);
     }
 }
 
