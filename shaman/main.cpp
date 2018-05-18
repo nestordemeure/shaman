@@ -8,6 +8,7 @@
 #include "examples/various.h"
 #include "examples/legendre.h"
 #include "examples/schrodinger.h"
+#include "examples/paper/demo.h"
 
 //---------------------------------------------------------------------------------------
 // MAIN
@@ -16,11 +17,16 @@ int main()
 {
     auto begin = std::chrono::steady_clock::now();
 
-    // tests
-    //test_eft();
-    test_loop();
+    // TESTS
 
-    // various tests
+    //test_eft();
+    //test_loop();
+
+    // EXAMPLES
+
+    demo();
+
+    // various examples
     //rumpTest();
     //polynomialTest();
     //fixedPointTest();
