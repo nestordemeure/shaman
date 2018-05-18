@@ -17,12 +17,12 @@
 void sqrtHeron()
 {
     Sdouble x = 2;
-    Sdouble sqrtx = x/2;
+    Sdouble r = x/2;
 
-    while(1e-15 < abs(sqrtx*sqrtx - x))
+    while(1e-15 < abs(r*r - x))
     {
-        sqrtx = (sqrtx + x/sqrtx) / 2;
-        printf("result=%.15e error≈%.15e\n", sqrtx.number, sqrtx.error);
+        r = (r + x/r) / 2;
+        printf("sqrt=%.15e error=%.15e\n", r.number, r.error);
     }
 }
 
