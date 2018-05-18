@@ -24,7 +24,7 @@ int main()
 
     // EXAMPLES
 
-    demo();
+    sqrtHeron();
 
     // various examples
     //rumpTest();
