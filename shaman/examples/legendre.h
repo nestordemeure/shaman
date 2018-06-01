@@ -54,7 +54,7 @@ Sdouble legendreHorner(Sdouble x)
         result = result*x + coef;
 
         // TODO it might be interesting to implement this operation with an FMA to see the impact on precision
-        // result = std::fma(result,x,coef);
+        // result = fma(result,x,coef);
     }
 
     return result;

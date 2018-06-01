@@ -5,7 +5,7 @@
 #ifndef SHAMAN_DEMO_H
 #define SHAMAN_DEMO_H
 
-#include "../../shaman/Shaman.h"
+#include "../shaman/Shaman.h"
 
 /*
  * computing sqrt(x) using Heron's algorithm

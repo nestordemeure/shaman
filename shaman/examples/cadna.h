@@ -11,11 +11,10 @@
 #include "../shaman/shamanizer/tinyformat.h"
 #include "various.h"
 
-// CADNA
-#include <cadna.h>
-using Cdouble = double_st;
-
-using number = Sdouble;
+/*
+ * Examples inspired by Cadna numerical examples page :
+ * http://cadna.lip6.fr/Examples_Dir/Accueil.php
+ */
 
 //---------------------------------------------------------------------------------------
 // POLYNOMIAL
@@ -519,7 +518,7 @@ void falsePositive()
  */
 void alternatingCounter()
 {
-    std::cout << "An example founc in verificarlo's main paper." << '\n'
+    std::cout << "An example founc in verificarlo's main schrodinger." << '\n'
               << "CADNA overestimate the number of significative digits" << std::endl;
 
     Sdouble c = -5e13;
