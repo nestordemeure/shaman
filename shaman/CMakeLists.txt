@@ -24,8 +24,8 @@ set(SOURCE_FILES main.cpp
         tests/test_loop.h
         # examples
         examples/various.h
-        examples/schrodinger.cpp examples/schrodinger.h
-        examples/legendre.h examples/paper/demo.h)
+        examples/schrodinger/schrodinger.cpp examples/schrodinger/schrodinger.h
+        examples/legendre.h examples/sqrtHeron.h)
 
 # linking
 add_executable(shaman ${SOURCE_FILES})

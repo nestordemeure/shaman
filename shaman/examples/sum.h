@@ -9,7 +9,6 @@
 #include <functional>
 #include <random>
 #include "../shaman/Shaman.h"
-#include "exact/exact.h"
 #include "various.h"
 
 /*
@@ -69,17 +68,9 @@ void Compensatedsum(int size)
     }
     improvedSum += compensation2;
 
-    // compute the exact sum using exblas
-    double exactSum = exact::sum(data);
-
     std::cout << "sum: " << sum << std::endl;
-    displayError(sum, exactSum);
-
     std::cout << "improved_sum: " << improvedSum << std::endl;
-    displayError(improvedSum, exactSum);
-
     std::cout << "kahan_sum: " << kahanSum << std::endl;
-    displayError(kahanSum, exactSum);
 }
 
 void parralelSum(int size)
@@ -91,10 +82,6 @@ void parralelSum(int size)
     auto gen = std::bind(dist, mersenne_engine);
     std::vector<double> data(size);
     generate(begin(data), end(data), gen);
-
-    // compute the exact sum using exblas
-    double exactSum = exact::sum(data);
-    std::cout << "exact sum\t:\t" << std::setprecision(15) << exactSum << std::endl;
 
     // sequential sum
     Sdouble seqSum = 0;

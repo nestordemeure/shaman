@@ -6,8 +6,8 @@
 #define COMPENSATIONS_SCHRODINGER_H
 
 #include <vector>
-#include "../shaman/Shaman.h"
-#include "various.h"
+#include "../../shaman/Shaman.h"
+#include "../various.h"
 
 /*
  * timing on Nestor's ubuntu with g++5.4 and clang++5.0 :

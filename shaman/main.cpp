@@ -7,8 +7,8 @@
 // examples
 #include "examples/various.h"
 #include "examples/legendre.h"
-#include "examples/schrodinger.h"
-#include "examples/paper/demo.h"
+#include "examples/schrodinger/schrodinger.h"
+#include "examples/sqrtHeron.h"
 
 //---------------------------------------------------------------------------------------
 // MAIN

@@ -1,4 +1,4 @@
+# TODO :
 
-TODO :
 - include a testing framework (google test)
-- test to check EFT (add and fma)
+- clean-up tests
