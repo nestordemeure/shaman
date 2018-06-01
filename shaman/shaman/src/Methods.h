@@ -148,7 +148,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 
     if (std::isnan(n.number)) // not a number
     {
-        os << "@nan";
+        os << "nan";
     }
     else if (fdigits <= 0) // no significant digits
     {
@@ -158,13 +158,13 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         if ((std::abs(n.number) >= 1) || (digits <= 0))
         {
             // the number has no meaning
-            os << "@.0";
+            os << "~numerical-noise~"; // TODO is it better to use CADNA notation : "@.0" ?
         }
         else
         {
             // some zeros are significant
             digits = std::min(nbDigitsMax, digits);
-            os << std::scientific << std::setprecision(digits-1) << 0.0; // TODO should we add a '@' prefix ?
+            os << std::scientific << std::setprecision(digits-1) << 0.0; // TODO should we add a prefix to indicate that the number is non significant beyond the zeros ?
         }
     }
     else // a perfectly fine number

@@ -10,9 +10,10 @@
 /*
  * computing sqrt(x) using Heron's algorithm
  *
- * iterations with unstable operations (6 being the last iteration) :
+ * iterations with unstable operations :
  * - cancelation in test : 4,5,6
  * - unstable abs and < in test : 6
+ * (6 being the last iteration) 
  */
 void sqrtHeron()
 {
