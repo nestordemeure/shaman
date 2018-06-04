@@ -332,21 +332,6 @@ set_Sbool_operator_casts(>=);
 
 //-----------------------------------------------------------------------------
 
-// abs
-templated inline const Snum abs(const Snum& n)
-{
-    if (n >= 0.)
-    {
-        return n;
-    }
-    else
-    {
-        return -n;
-    }
-};
-
-//-----------------------------------------------------------------------------
-
 #undef set_Soperator_casts
 #undef set_Sbool_operator_casts
 

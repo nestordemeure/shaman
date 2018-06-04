@@ -105,7 +105,6 @@ templated bool operator>=(const Snum& n1, const Snum& n2);
 // mathematical functions
 // TODO the ideal would be able to define std overload for our types
 templated const Snum abs(const Snum& n);
-/*
 templated const Snum fabs(const Snum& n);
 templated const Snum sqrt(const Snum& n);
 templated const Snum cbrt(const Snum& n);
@@ -141,7 +140,6 @@ templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3);
 templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3);
 templated bool isfinite(const Snum& n);
 templated bool isnan(const Snum& n);
-*/
 
 // streaming operator
 templated std::ostream& operator<<(std::ostream& os, const Snum& n);
@@ -197,7 +195,7 @@ using Slong_double = S<long double, long double, long double>;
 
 #include "src/Methods.h"
 #include "src/Operators.h"
-//#include "src/Functions.h"
+#include "src/Functions.h"
 
 #undef templated
 #undef Snum
