@@ -114,6 +114,15 @@ public:
     }
 
     /*
+     * += error
+     */
+    inline void addError(errorType error)
+    {
+        Tag name = Block::currentBlock();
+        errors[name] += error;
+    }
+
+    /*
      * -= errors
      */
     inline void subErrors(const ErrorSum& errors2)
