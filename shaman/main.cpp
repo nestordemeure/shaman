@@ -2,11 +2,11 @@
 #include <chrono>
 #include "shaman/Shaman.h"
 // tests
-#include "tests/test_eft.h"
-#include "tests/test_loop.h"
+//#include "tests/test_eft.h"
+//#include "tests/test_loop.h"
 // examples
-#include "examples/various.h"
-#include "examples/legendre.h"
+//#include "examples/various.h"
+//#include "examples/legendre.h"
 #include "examples/schrodinger/schrodinger.h"
 #include "examples/sqrtHeron.h"
 
@@ -23,8 +23,7 @@ int main()
     //test_loop();
 
     // EXAMPLES
-
-    sqrtHeron();
+    //sqrtHeron();
 
     // various examples
     //rumpTest();
@@ -37,8 +36,8 @@ int main()
     //legendre20Test();
 
     // Schrodinger equation
-    //Schrodinger numerov = Schrodinger();
-    //numerov.calculate();
+    Schrodinger numerov = Schrodinger();
+    numerov.calculate();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();

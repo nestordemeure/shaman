@@ -102,7 +102,9 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
 // -
 templated inline const Snum operator-(const Snum& n)
 {
-    return Snum(-n.number, n.error.unaryNeg());
+    Serror newErrors = Serror::unaryNeg(n.errors);
+    numberType newNumber = -n.number;
+    return Snum(newNumber, newErrors);
 };
 
 // +
@@ -112,9 +114,9 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::TwoSum(n1.number, n2.number, result);
 
     // newError = remainder + n1.error + n2.error
-    ErrorSum newError = ErrorSum(remainder);
+    Serror newError = Serror(remainder);
     newError.addErrors(n1.errors);
-    newError.addErrors(n2.error);
+    newError.addErrors(n2.errors);
 
     return Snum(result, newError);
 };
@@ -127,9 +129,9 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::TwoSum(n1.number, -n2.number, result);
 
     // newError = remainder + n1.error - n2.error
-    ErrorSum newError = ErrorSum(remainder);
+    Serror newError = Serror(remainder);
     newError.addErrors(n1.errors);
-    newError.subErrors(n2.error);
+    newError.subErrors(n2.errors);
 
     return Snum(result, newError);
 };
@@ -142,7 +144,7 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::FastTwoProd(n1.number, n2.number, result);
 
     // newError = remainder + (n1.number*n2.error + n2.number*n1.error)
-    ErrorSum newError = ErrorSum(remainder);
+    Serror newError = Serror(remainder);
     newError.addErrorsTimeScalar(n2.errors, n1.number);
     newError.addErrorsTimeScalar(n1.errors, n2.number);
     // TODO we ignore second order error terms
@@ -159,7 +161,7 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     errorType n2Precise = n2.number + n2.errors.totalError;
 
     // newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error)
-    ErrorSum newError = ErrorSum(remainder);
+    Serror newError = Serror(remainder);
     newError.addErrors(n1.errors);
     newError.subErrorsTimeScalar(n2.errors, result);
     newError.divByScalar(n2Precise);
@@ -291,6 +293,21 @@ templated inline bool operator>=(const Snum& n1, const Snum& n2)
     return n1.number >= n2.number;
 };
 set_Sbool_operator_casts(>=);
+
+//-----------------------------------------------------------------------------
+
+// abs
+templated inline const Snum abs(const Snum& n)
+{
+    if (n >= 0.)
+    {
+        return n;
+    }
+    else
+    {
+        return -n;
+    }
+};
 
 //-----------------------------------------------------------------------------
 

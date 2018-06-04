@@ -88,7 +88,7 @@ templated inline bool Snum::non_significant(numberType number, errorType error)
  */
 templated inline bool Snum::non_significant() const
 {
-    return non_significativ(number, errors.totalError);
+    return non_significant(number, errors.totalError);
 }
 
 /*
@@ -195,7 +195,7 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 
     // modifies the Snum in place
     n.number = num;
-    n.error = ErrorSum(0);
+    n.errors = Serror(0);
 
     return is;
 }

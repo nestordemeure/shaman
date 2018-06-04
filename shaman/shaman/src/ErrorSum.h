@@ -5,34 +5,33 @@
 #ifndef SHAMAN_ERRORSUM_H
 #define SHAMAN_ERRORSUM_H
 
+#include <unordered_map>
 #include <algorithm>
 #include <numeric>
+#include <sstream>
+#include <iomanip>
 
-template<typename numberType, typename errorType, typename preciseType> class S
-class ErrorSum
+template<typename numberType, typename errorType, typename preciseType> class ErrorSum
 {
-private :
+public:
+    // contains the sum of the error so far
+    errorType totalError;
 
     // contains the error decomposed in composants (one per block encountered)
     // TODO might use a more efficient representation
     std::unordered_map<Tag,errorType> errors;
-
-public:
-
-    // contains the sum of the error so far
-    errorType totalError;
 
     //-------------------------------------------------------------------------
 
     /*
      * builds a new errorSum using the content of an existing errorSum
      */
-    ErrorSum(std::unordered_map<Tag,errorType> errorsArg, errortype totalErrorArg): totalError(totalErrorArg), errors(errorsArg) {}
+    ErrorSum(std::unordered_map<Tag,errorType> errorsArg, errorType totalErrorArg): totalError(totalErrorArg), errors(errorsArg) {}
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    ErrorSum(const Tag& name, errortype error): totalError(error)
+    ErrorSum(const Tag& name, errorType error): totalError(error)
     {
         errors[name] = error;
     }
@@ -40,7 +39,7 @@ public:
     /*
      * returns an errorSum with a single element (singleton)
      */
-    ErrorSum(errortype error): totalError(error)
+    ErrorSum(errorType error): totalError(error)
     {
         Tag name = Block::currentBlock();
         errors[name] = error;
@@ -58,9 +57,9 @@ public:
      */
     operator std::string() const
     {
-        ostringstream output;
+        std::ostringstream output;
 
-        output << std::scientific << std::setprecision(2) << '[';
+        output << std::scientific << std::setprecision(2) << '[' << ' ';
         for(auto kv : errors)
         {
             output << kv.first << ':' << kv.second << ' ';
@@ -73,12 +72,14 @@ public:
     //-------------------------------------------------------------------------
 
     /*
-    * ~-
-    */
-    inline ErrorSum unaryNeg()
+     * ~-
+     * TODO there might be a more efficient way to build the new unordered map
+     */
+    static inline ErrorSum unaryNeg(const ErrorSum& errorSum)
     {
-        std::unordered_map<Tag,errorType> newErrors = std::transform(errors.begin(), errors.end(), [](errorType e){ return -e; }); // TODO is this an inplace modification ?
-        errorType newtotalError = -totalError;
+        std::unordered_map<Tag,errorType> newErrors(errorSum.errors);
+        transform(newErrors, [](errorType e){return -e;});
+        errorType newtotalError = -errorSum.totalError;
         return ErrorSum(newErrors, newtotalError);
     }
 
@@ -88,7 +89,7 @@ public:
     inline void multByScalar(errorType scalar)
     {
         totalError *= scalar;
-        std::transform(errors.begin(), errors.end(), [](errorType e){ return e*scalar; });
+        transform(errors, [scalar](errorType e){return e * scalar;});
     }
 
     /*
@@ -97,7 +98,7 @@ public:
     inline void divByScalar(errorType scalar)
     {
         totalError /= scalar;
-        std::transform(errors.begin(), errors.end(), [](errorType e){ return e/scalar; });
+        transform(errors, [scalar](errorType e){return e / scalar;});
     }
 
     /*
@@ -106,7 +107,7 @@ public:
     inline void addErrors(const ErrorSum& errors2)
     {
         totalError += errors2.totalError;
-        for(auto kv : errors2)
+        for(auto kv : errors2.errors)
         {
             errors[kv.first] += kv.second;
         }
@@ -118,7 +119,7 @@ public:
     inline void subErrors(const ErrorSum& errors2)
     {
         totalError -= errors2.totalError;
-        for(auto kv : errors2)
+        for(auto kv : errors2.errors)
         {
             errors[kv.first] -= kv.second;
         }
@@ -130,7 +131,7 @@ public:
     inline void addErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
         totalError += scalar * errors2.totalError;
-        for(auto kv : errors2)
+        for(auto kv : errors2.errors)
         {
             errors[kv.first] += kv.second * scalar;
         }
@@ -142,13 +143,26 @@ public:
     inline void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
         totalError -= scalar * errors2.totalError;
-        for(auto kv : errors2)
+        for(auto kv : errors2.errors)
         {
             errors[kv.first] -= kv.second * scalar;
         }
     }
 
     //-------------------------------------------------------------------------
+
+    /*
+     * homemade implementation of std::transform since I was unable to use the original
+     * TODO find a way to use std::transform
+     */
+    template<typename FUN>
+    inline static void transform(std::unordered_map<Tag,errorType>& dict, FUN f)
+    {
+        for(auto kv : dict)
+        {
+            dict[kv.first] = f(kv.second);
+        }
+    }
 
     /*
      * given f, x and y such that f(x) = y, updates the errors

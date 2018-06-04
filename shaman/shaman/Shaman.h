@@ -20,7 +20,7 @@ public :
     ErrorSum<numberType, errorType, preciseType> errors; // current errors
 
     // base constructors
-    inline S(numberType numberArg, ErrorSum errorsArg): number(numberArg), errors(errorsArg) {};
+    inline S(numberType numberArg, ErrorSum<numberType, errorType, preciseType> errorsArg): number(numberArg), errors(errorsArg) {};
     inline S(numberType numberArg, errorType errorArg): number(numberArg), errors(errorArg) {};
     inline S(numberType numberArg): number(numberArg), errors(errorType(0.)) {}; // we accept implicit cast from T to S<T>
     inline S(): number(0.), errors(errorType(0.)) {};
@@ -85,6 +85,7 @@ public :
 // some macro to shorten template notations
 #define templated template<typename numberType, typename errorType, typename preciseType>
 #define Snum S<numberType,errorType,preciseType>
+#define Serror ErrorSum<numberType, errorType, preciseType>
 
 // arithmetic operators
 templated const Snum operator-(const Snum& n);
@@ -103,7 +104,9 @@ templated bool operator>=(const Snum& n1, const Snum& n2);
 
 // mathematical functions
 // TODO the ideal would be able to define std overload for our types
+templated const Snum abs(const Snum& n);
 /*
+templated const Snum fabs(const Snum& n);
 templated const Snum sqrt(const Snum& n);
 templated const Snum cbrt(const Snum& n);
 templated const Snum pow(const Snum& n1, const Snum& n2);
@@ -128,8 +131,6 @@ templated const Snum asinh(const Snum& n);
 templated const Snum acosh(const Snum& n);
 templated const Snum atanh(const Snum& n);
 templated const Snum erf(const Snum& n);
-templated const Snum abs(const Snum& n);
-templated const Snum fabs(const Snum& n);
 templated const Snum floor(const Snum& n);
 templated const Snum ceil(const Snum& n);
 templated const Snum trunc(const Snum& n);
