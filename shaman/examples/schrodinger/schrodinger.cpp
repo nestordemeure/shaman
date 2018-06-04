@@ -31,6 +31,7 @@ Schrodinger::Schrodinger()
  */
 Sdouble Schrodinger::calculateKSSquared(int n)
 {
+    FUNCTION_BLOCK;
     //number x = (hZero * n) + xMin;
     Sdouble x = (((double) n)*xMax + xMin*((double) numberDivisions-n)) / ((double) numberDivisions);
     return ((0.05 * ECurrent) - ((x*x) * 5.63e-3));
@@ -41,6 +42,7 @@ Sdouble Schrodinger::calculateKSSquared(int n)
  */
 Sdouble Schrodinger::calculateNextPsi(int n)
 {
+    FUNCTION_BLOCK;
     Sdouble KSqNMinusOne = calculateKSSquared(n - 1);
     Sdouble KSqN = calculateKSSquared(n);
     Sdouble KSqNPlusOne = calculateKSSquared(n + 1);
@@ -59,10 +61,11 @@ Sdouble Schrodinger::calculateNextPsi(int n)
  */
 void Schrodinger::calculate()
 {
+    FUNCTION_BLOCK;
     unsigned int k = 0;
 
     // if abs(psi[200]) < maximum allowed psi, we have the answer, our guess for the energy is correct
-    while(fabs(psi[numberDivisions]) > maxPsi)
+    while(abs(psi[numberDivisions]) > maxPsi)
     {
         k++;
 
@@ -82,7 +85,10 @@ void Schrodinger::calculate()
             ECurrent = ECurrent + EDelta;
         }
 
-        //std::cout << k << " Psi200: " << psi[numberDivisions] << " E: " << ECurrent << '\n';
+        if(k % 500 == 0)
+        {
+            std::cout << k << " Psi200: " << psi[numberDivisions] << " E: " << ECurrent << '\n';
+        }
     }
 
     std::cout << "The ground state energy is " << ECurrent << " MeV (analytic solution : 1.5 MeV, psi : " << psi[numberDivisions] << ")." << std::endl;
