@@ -3,42 +3,27 @@
 
 #include <string>
 #include <limits>
-#include "src/Debugger.h"
+#include "src/Tagger.h"
+#include "src/ErrorSum.h"
 
 //-------------------------------------------------------------------------------------------------
 // SHAMAN CLASS
 
 /*
- * the base SHAMAN class, represents a number and its error
+ * the base SHAMAN class, represents a number and its errors
  */
 template<typename numberType, typename errorType, typename preciseType> class S
 {
 public :
-    // true number ≈ number + error
+    // true number ≈ number + errors
     numberType number; // current computed number
-    errorType error; // current error
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-        bool isNumericalZero;
-    #endif
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-        int doubtLevel;
-    #endif
+    ErrorSum<numberType, errorType, preciseType> errors; // current errors
 
     // base constructors
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-        #ifdef DOUBT_LEVEL_FIELD_ENABLED
-            inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg, int doubt): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg), doubtLevel(doubt) {};
-            inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): S(numberArg, errorArg, isNumericalZeroArg, 0) {};
-        #else
-            inline S(numberType numberArg, errorType errorArg, bool isNumericalZeroArg): number(numberArg), error(errorArg), isNumericalZero(isNumericalZeroArg) {};
-        #endif
-        inline S(numberType numberArg, errorType errorArg): S(numberArg, errorArg, non_significant(numberArg, errorArg)) {};
-        inline S(numberType numberArg): S(numberArg,0,false) {}; // we accept implicit cast from T to S<T>
-    #else
-        inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
-        inline S(numberType numberArg): S(numberArg,0) {}; // we accept implicit cast from T to S<T>
-    #endif
-    inline S(): S(0.) {};
+    inline S(numberType numberArg, ErrorSum errorsArg): number(numberArg), errors(errorsArg) {};
+    inline S(numberType numberArg, errorType errorArg): number(numberArg), errors(errorArg) {};
+    inline S(numberType numberArg): number(numberArg), errors(errorType(0.)) {}; // we accept implicit cast from T to S<T>
+    inline S(): number(0.), errors(errorType(0.)) {};
 
     // casting
     inline explicit operator short int() const { return (short int) number; };
@@ -59,9 +44,9 @@ public :
     #else
         #define EXPLICIT_CAST
     #endif
-    #define INTEGER_CAST_CONSTRUCTOR(n) S((numberType)n, (preciseType)n - (numberType)n)
+    #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), errors((preciseType)n - (numberType)n)
     template<typename n, typename e, typename p>
-    inline EXPLICIT_CAST S(const S<n,e,p>& s): S(s.number, s.error) {};
+    inline EXPLICIT_CAST S(const S<n,e,p>& s): number(s.number), errors(s.errors) {};
     inline EXPLICIT_CAST S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline EXPLICIT_CAST S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline EXPLICIT_CAST S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
@@ -118,6 +103,7 @@ templated bool operator>=(const Snum& n1, const Snum& n2);
 
 // mathematical functions
 // TODO the ideal would be able to define std overload for our types
+/*
 templated const Snum sqrt(const Snum& n);
 templated const Snum cbrt(const Snum& n);
 templated const Snum pow(const Snum& n1, const Snum& n2);
@@ -154,6 +140,7 @@ templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3);
 templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3);
 templated bool isfinite(const Snum& n);
 templated bool isnan(const Snum& n);
+*/
 
 // streaming operator
 templated std::ostream& operator<<(std::ostream& os, const Snum& n);
@@ -209,7 +196,7 @@ using Slong_double = S<long double, long double, long double>;
 
 #include "src/Methods.h"
 #include "src/Operators.h"
-#include "src/Functions.h"
+//#include "src/Functions.h"
 
 #undef templated
 #undef Snum

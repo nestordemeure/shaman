@@ -10,7 +10,7 @@ Use the `Sfloat`, `Sdouble` and `Slong_double` types in your program.
 
 If you use `printf` you can either switch to the C++ streaming operator, explicitely cast shaman types into strings or use the `tinyformat` implementation of printf.
 
-To forbid any implicit casting (as usually done by C++) you can add the `EXPLICIT_CASTING` flag to the compilation (note that the resulting error messages might not be very clear).
+To forbid any implicit casting (as usually done by C++) you can add the `EXPLICIT_CASTING` flag to the compilation (note that the resulting errors messages might not be very clear).
 
 Don't forget to enable Fused-Multiply-Add at compilation (`-mfma`), otherwise some operations (*, /, sqrt) will be much slower.
 

@@ -14,7 +14,7 @@ void test_eft()
     float z = x + y;
     float error = EFT::TwoSum(x, y, z);
 
-    std::cout << x << " + " << y << " = " << z << " (error=" << error << ')' << std::endl;
+    std::cout << x << " + " << y << " = " << z << " (errors=" << error << ')' << std::endl;
 
     if (error != y)
     {

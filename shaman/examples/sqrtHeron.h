@@ -23,7 +23,7 @@ void sqrtHeron()
     while(1e-15 < abs(r*r - x))
     {
         r = (r + x/r) / 2;
-        printf("sqrt=%.15e error=%.15e\n", r.number, r.error);
+        printf("sqrt=%.15e errors=%.15e\n", r.number, r.errors);
     }
 }
 

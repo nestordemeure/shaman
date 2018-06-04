@@ -97,100 +97,26 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
 #endif
 
 //-----------------------------------------------------------------------------
-// DEBUGGING MACROS
-
-// macro used in constructors
-#ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    #define ISNUMERICALZERO , isNumericalZero
-#else
-    #define ISNUMERICALZERO
-#endif
-
-// macro used in constructors
-#ifdef DOUBT_LEVEL_FIELD_ENABLED
-    #define DOUBTLEVEL , doubtLevel
-#else
-    #define DOUBTLEVEL
-#endif
-
-/*
- * encapsulate cancellation test
- */
-templated inline void cancelationTest(const Snum& n, numberType result, errorType resultingError)
-{
-    if (Snum::isCancelation(n, result, resultingError))
-    {
-        NumericalDebugger::cancelations++;
-        NumericalDebugger::unstability();
-    }
-}
-
-/*
- * encapsulate numerical zero test
- */
-inline void numericalZeroTest(bool isNumericalZero, bool isNonSignificant)
-{
-    if (isNumericalZero && !isNonSignificant)
-    {
-        NumericalDebugger::numericalZeros++;
-        NumericalDebugger::unstability();
-    }
-}
-
-/*
- * encapsulate branch unstability test
- */
-templated inline void unstableBranchTest(const Snum &n1, const Snum &n2)
-{
-    if (Snum::isUnstableBranchings(n1, n2))
-    {
-        NumericalDebugger::unstableBranchings++;
-        NumericalDebugger::unstability();
-    }
-}
-
-//-----------------------------------------------------------------------------
 // ARITHMETIC OPERATORS
 
 // -
 templated inline const Snum operator-(const Snum& n)
 {
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = n.isNumericalZero;
-    #endif
-
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    int doubtLevel = n.doubtLevel;
-    #endif
-
-    return Snum(-n.number, -n.error ISNUMERICALZERO DOUBTLEVEL);
+    return Snum(-n.number, n.error.unaryNeg());
 };
 
 // +
 templated inline const Snum operator+(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number + n2.number;
-
     numberType remainder = EFT::TwoSum(n1.number, n2.number, result);
-    errorType newError = remainder + (n1.error + n2.error);
 
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
-    #endif
+    // newError = remainder + n1.error + n2.error
+    ErrorSum newError = ErrorSum(remainder);
+    newError.addErrors(n1.errors);
+    newError.addErrors(n2.error);
 
-    #ifdef CANCELATION_DEBUGGER
-    cancelationTest(Snum::minPrecision(n1,n2), result, newError);
-    #endif
-
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = Snum::non_significant(result, newError);
-    #endif
-
-    #ifdef NUMERICAL_ZERO_DEBUGGER
-    numericalZeroTest(isNumericalZero, n1.non_significant() || n2.non_significant());
-    #endif
-
-    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+    return Snum(result, newError);
 };
 set_Soperator_casts(+);
 
@@ -198,27 +124,14 @@ set_Soperator_casts(+);
 templated inline const Snum operator-(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number - n2.number;
-
     numberType remainder = EFT::TwoSum(n1.number, -n2.number, result);
-    errorType newError = remainder + (n1.error - n2.error);
 
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
-    #endif
+    // newError = remainder + n1.error - n2.error
+    ErrorSum newError = ErrorSum(remainder);
+    newError.addErrors(n1.errors);
+    newError.subErrors(n2.error);
 
-    #ifdef CANCELATION_DEBUGGER
-    cancelationTest(Snum::minPrecision(n1,n2), result, newError);
-    #endif
-
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = Snum::non_significant(result, newError);
-    #endif
-
-    #ifdef NUMERICAL_ZERO_DEBUGGER
-    numericalZeroTest(isNumericalZero, n1.non_significant() || n2.non_significant());
-    #endif
-
-    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+    return Snum(result, newError);
 };
 set_Soperator_casts(-);
 
@@ -226,34 +139,15 @@ set_Soperator_casts(-);
 templated inline const Snum operator*(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number * n2.number;
-
     numberType remainder = EFT::FastTwoProd(n1.number, n2.number, result);
-    //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
-    errorType newError = std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder));
-    // TODO alternative formula with a small additional term (ignored by rump but useful when n1*n2==0 while n1!=0 and n2!=0)
-    //errorType newError = std::fma(n1.error, n2.error, std::fma(n1.number, n2.error, std::fma(n2.number, n1.error, remainder)));
 
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
-    if (n1.non_significant() && n2.non_significant())
-    {
-        #ifdef UNSTABLE_OP_DEBUGGER
-        NumericalDebugger::unstableMultiplications++;
-        NumericalDebugger::unstability();
-        #endif
-        doubtLevel++;
-    }
-    #endif
+    // newError = remainder + (n1.number*n2.error + n2.number*n1.error)
+    ErrorSum newError = ErrorSum(remainder);
+    newError.addErrorsTimeScalar(n2.errors, n1.number);
+    newError.addErrorsTimeScalar(n1.errors, n2.number);
+    // TODO we ignore second order error terms
 
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = Snum::non_significant(result, newError);
-    #endif
-
-    #ifdef NUMERICAL_ZERO_DEBUGGER
-    numericalZeroTest(isNumericalZero, n1.non_significant() || n2.non_significant());
-    #endif
-
-    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+    return Snum(result, newError);
 };
 set_Soperator_casts(*);
 
@@ -261,37 +155,25 @@ set_Soperator_casts(*);
 templated inline const Snum operator/(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number / n2.number;
-
     numberType remainder = EFT::RemainderDiv(n1.number, n2.number, result);
-    //errorType newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error);
-    errorType newError = - std::fma(result, n2.error, -(remainder + n1.error)) / (n2.number + n2.error);
+    errorType n2Precise = n2.number + n2.errors.totalError;
 
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    int doubtLevel = std::max(n1.doubtLevel, n2.doubtLevel);
-    if (n2.non_significant())
-    {
-        #ifdef UNSTABLE_OP_DEBUGGER
-        NumericalDebugger::unstableDivisions++;
-        NumericalDebugger::unstability();
-        #endif
-        doubtLevel++;
-    }
-    #endif
+    // newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error)
+    ErrorSum newError = ErrorSum(remainder);
+    newError.addErrors(n1.errors);
+    newError.subErrorsTimeScalar(n2.errors, result);
+    newError.divByScalar(n2Precise);
 
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    bool isNumericalZero = Snum::non_significant(result, newError);
-    #endif
-
-    #ifdef NUMERICAL_ZERO_DEBUGGER
-    numericalZeroTest(isNumericalZero, n1.non_significant() || n2.non_significant());
-    #endif
-
-    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+    return Snum(result, newError);
 };
 set_Soperator_casts(/);
 
 //-----------------------------------------------------------------------------
 // CLASS OPERATORS
+
+/*
+ * TODO those operation might be speed up by using directly the core ErrorSum operations
+ */
 
 // ++
 templated inline Snum& Snum::operator++(int)

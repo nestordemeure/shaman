@@ -4,17 +4,17 @@
 #include "../shaman/Shaman.h"
 
 /*
- * a test designed to produce an arbitrary error using the pattern :
+ * a test designed to produce an arbitrary errors using the pattern :
  *
  * x <- initialisation()
  * while not valid(x) do
  *    x <- correction(x)
  * return x
  *
- * shaman will take the initialisation and correction error into account in the quality of the result
+ * shaman will take the initialisation and correction errors into account in the quality of the result
  * but they have no impact since we use an iterativ process that validates x
  * (we can even make those errors arbitrarly large)
- * such cases can be detected and manually corrected with tagged error
+ * such cases can be detected and manually corrected with tagged errors
  *
  * asynchronous stochastic approaches can deal with such algorithms
  * but, for the same reasons, they fail for systems that converges toward a wrong answer
@@ -41,7 +41,7 @@ void test_loop()
             result -= epsilon;
         }
 
-        std::cout << result << " (number=" << result.number << " error=" << result.error << ')' << std::endl;
+        std::cout << result << " (number=" << result.number << " errors=" << result.errors << ')' << std::endl;
     }
 
     std::cout << "result = " << result << std::endl;
