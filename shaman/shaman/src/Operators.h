@@ -173,14 +173,15 @@ set_Soperator_casts(/);
 //-----------------------------------------------------------------------------
 // CLASS OPERATORS
 
-/*
- * TODO those operation might be speed up by using directly the core ErrorSum operations
- */
-
 // ++
 templated inline Snum& Snum::operator++(int)
 {
-    *this = (*this) + 1;
+    numberType result = number + 1;
+    numberType remainder = EFT::TwoSum(number, 1, result);
+
+    // newError = this.error + remainder
+    errors.addError(remainder);
+    number = result;
 
     return *this;
 }
@@ -188,7 +189,12 @@ templated inline Snum& Snum::operator++(int)
 // --
 templated inline Snum& Snum::operator--(int)
 {
-    *this = (*this) - 1;
+    numberType result = number - 1;
+    numberType remainder = EFT::TwoSum(number, -1, result);
+
+    // newError = this.error + remainder
+    errors.addError(remainder);
+    number = result;
 
     return *this;
 }
@@ -196,7 +202,14 @@ templated inline Snum& Snum::operator--(int)
 // +=
 templated inline Snum& Snum::operator+=(const Snum& n)
 {
-    *this = (*this) + n;
+    numberType result = number + n.number;
+    numberType remainder = EFT::TwoSum(number, n.number, result);
+
+    // newError = this.error + remainder + n.error
+    errors.addError(remainder);
+    errors.addErrors(n.errors);
+
+    number = result;
 
     return *this;
 }
@@ -204,7 +217,14 @@ templated inline Snum& Snum::operator+=(const Snum& n)
 // -=
 templated inline Snum& Snum::operator-=(const Snum& n)
 {
-    *this = (*this) - n;
+    numberType result = number - n.number;
+    numberType remainder = EFT::TwoSum(number, -n.number, result);
+
+    // newError = this.error + remainder - n.error
+    errors.addError(remainder);
+    errors.subErrors(n.errors);
+
+    number = result;
 
     return *this;
 }
@@ -212,7 +232,16 @@ templated inline Snum& Snum::operator-=(const Snum& n)
 // *=
 templated inline Snum& Snum::operator*=(const Snum& n)
 {
-    *this = (*this) * n;
+    numberType result = number * n.number;
+    numberType remainder = EFT::FastTwoProd(number, n.number, result);
+
+    // newError = n.number*this.error + remainder + number*n.error
+    errors.multByScalar(n.number);
+    errors.addError(remainder);
+    errors.addErrorsTimeScalar(n.errors, number);
+    // TODO we ignore second order error terms
+
+    number = result;
 
     return *this;
 }
@@ -220,7 +249,14 @@ templated inline Snum& Snum::operator*=(const Snum& n)
 // /=
 templated inline Snum& Snum::operator/=(const Snum& n)
 {
-    *this = (*this) / n;
+    numberType result = number / n.number;
+    numberType remainder = EFT::RemainderDiv(number, n.number, result);
+    errorType n2Precise = n.number + n.errors.totalError;
+
+    // newError = (this.error + remainder - result*n.error) / (n.number + n.error)
+    errors.addError(remainder);
+    errors.subErrorsTimeScalar(n.errors, result);
+    errors.divByScalar(n2Precise);
 
     return *this;
 }

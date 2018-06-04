@@ -8,9 +8,8 @@
 #include <stack>
 #include <stdexcept>
 
-// TODO use a more efficient representation for block identifiers
-using Tag = std::string;
-static std::stack<std::string> blockNamesStack({"main"}); // TODO make threadsafe
+using Tag = std::string; // TODO use a more efficient representation for block identifiers
+static std::stack<std::string> tagStack({"main"}); // TODO make threadsafe
 
 /*
  * tracks the current section of the code
@@ -26,7 +25,7 @@ public:
      */
     Block(const Tag& name): blockName(name)
     {
-        blockNamesStack.push(name);
+        tagStack.push(name);
     }
 
     /*
@@ -34,15 +33,15 @@ public:
      */
     ~Block()
     {
-        blockNamesStack.pop();
+        tagStack.pop();
         /*
-        if(blockNamesStack.top() == blockName)
+        if(tagStack.top() == blockName)
         {
-            blockNamesStack.pop();
+            tagStack.pop();
         }
         else
         {
-            Tag currentBlock = blockNamesStack.top();
+            Tag currentBlock = tagStack.top();
             std::string errorMessage = "Tried to leave block '" + blockName + "' while still in inner block '" + currentBlock + "'.";
             throw std::runtime_error(errorMessage);
         }
@@ -54,7 +53,7 @@ public:
      */
     inline static Tag currentBlock()
     {
-        return blockNamesStack.top();
+        return tagStack.top();
     }
 };
 
