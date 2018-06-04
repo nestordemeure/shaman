@@ -19,7 +19,7 @@
  */
 templated inline preciseType Snum::corrected_number() const
 {
-    return preciseType(number) + preciseType(error);
+    return preciseType(number) + preciseType(errors.totalError);
 }
 
 //-----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ templated inline numberType Snum::digits(numberType number, errorType error)
  */
 templated inline numberType Snum::digits() const
 {
-    return digits(number, error);
+    return digits(number, errors.totalError);
 }
 
 //-----------------------------------------------------------------------------
@@ -88,11 +88,7 @@ templated inline bool Snum::non_significant(numberType number, errorType error)
  */
 templated inline bool Snum::non_significant() const
 {
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    return isNumericalZero;
-    #else
-    return non_significativ(number, error);
-    #endif
+    return non_significativ(number, errors.totalError);
 }
 
 /*
@@ -100,7 +96,7 @@ templated inline bool Snum::non_significant() const
  */
 templated inline Snum Snum::minPrecision(const Snum &n1, const Snum &n2)
 {
-    if (std::abs(n1.error * n2.number) > std::abs(n1.number * n2.error))
+    if (std::abs(n1.errors.totalError * n2.number) > std::abs(n1.number * n2.errors.totalError))
     {
         return n1;
     }
@@ -119,8 +115,8 @@ templated inline bool Snum::isCancelation(const Snum &n, numberType result, erro
     int base = 10;
 
     // have we lost more than cancel_level significative digits ?
-    return (n.error != 0) &&
-           (std::abs(resultingError * n.number) > pow(base, cancel_level) * std::abs(n.error * result));
+    return (n.errors.totalError != 0) &&
+           (std::abs(resultingError * n.number) > pow(base, cancel_level) * std::abs(n.errors.totalError * result));
 }
 
 /*
@@ -128,7 +124,7 @@ templated inline bool Snum::isCancelation(const Snum &n, numberType result, erro
  */
 templated inline bool Snum::isUnstableBranchings(const Snum &n1, const Snum &n2)
 {
-    return non_significant(n1.number - n2.number, n1.error - n2.error);
+    return non_significant(n1.number - n2.number, n1.errors.totalError - n2.errors.totalError);
 }
 
 //-----------------------------------------------------------------------------
@@ -140,9 +136,6 @@ templated inline bool Snum::isUnstableBranchings(const Snum &n1, const Snum &n2)
  */
 templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 {
-    // raw information :
-    //os << n.number << " (error:" << n.error << " digits:" << Snum::digits(n) << ')';
-
     int nbDigitsMax = std::numeric_limits<numberType>::digits10 + 2; // since this is a maximum, we add two to avoid being too pessimistic (17 for double)
     numberType fdigits = std::floor(n.digits());
 
@@ -153,12 +146,12 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     else if (fdigits <= 0) // no significant digits
     {
         // the first zeros might be significant
-        int digits = std::floor(Snum::digits(0, n.error));
+        int digits = std::floor(Snum::digits(0, n.errors.totalError));
 
         if ((std::abs(n.number) >= 1) || (digits <= 0))
         {
             // the number has no meaning
-            os << "~numerical-noise~"; // TODO is it better to use CADNA notation : "@.0" ?
+            os << "~numerical-noise~";
         }
         else
         {
@@ -173,12 +166,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
 
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    if (n.doubtLevel > 0)
-    {
-        os << " (#unstabilities=" << n.doubtLevel << ')';
-    }
-    #endif
+    os << ' ' << std::string(n.errors);
 
     return os;
 }
@@ -207,7 +195,7 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 
     // modifies the Snum in place
     n.number = num;
-    n.error = 0;
+    n.error = ErrorSum(0);
 
     return is;
 }

@@ -24,7 +24,7 @@ inline void displayError(S<numberType,errorType,preciseType> result, double expe
     std::cout << "result=" << result << " (" << result.number << ')'
               << '\n'
               << " absolut_error=" << error
-              << " estimated_absolut_error=" << result.error
+              << " estimated_absolut_error=" << result.errors
               << '\n'
               << " significativ_digits=" << digits
               << " estimated_significativ_digits=" << estimatedDigits
@@ -153,7 +153,7 @@ inline Sdouble identity(Sdouble x)
         x = x*x;
 
         //Sdouble xTarget = pow(xinit,1./pow(2,128-i));
-        //std::cout << x << " (number=" << x.number << " error=" << x.error << ")" << '\t' << xTarget << std::endl;
+        //std::cout << x << " (number=" << x.number << " errors=" << x.errors << ")" << '\t' << xTarget << std::endl;
         //std::cout << x << std::endl;
     }
 
@@ -170,7 +170,7 @@ inline Sdouble identity(Sdouble x)
  * MCA fail to detect problems around 0
  * (we might detect such comportment by analysing the sensitivity to perturbations in inputs)
  *
- * SHAMAN detects problems if we use the full form of the multiplication error : x1*e2 + x2*e1 + e1*e2
+ * SHAMAN detects problems if we use the full form of the multiplication errors : x1*e2 + x2*e1 + e1*e2
  * and not the abreviated form used by Rump (x1*e2 + x2*e1)
  */
 inline void kahanIdentity()

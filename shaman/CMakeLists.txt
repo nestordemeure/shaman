@@ -6,11 +6,6 @@ set(CMAKE_CXX_STANDARD 11)
 #set(CMAKE_CXX_COMPILER g++)
 
 # flags
-#add_definitions(-DNUMERICAL_DEBUGGER)
-add_definitions(-DUNSTABLE_BRANCH_DEBUGGER)
-add_definitions(-DCANCELATION_DEBUGGER)
-add_definitions(-DUNSTABLE_OP_DEBUGGER)
-#add_definitions(-DNUMERICAL_ZERO_DEBUGGER)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O1 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")

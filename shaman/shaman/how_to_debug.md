@@ -25,11 +25,11 @@ An unstability can be :
   both operands are non-significant
 - unstable branching :
   the difference between the two operands is non-significant (a computational zero).
-  Note that unstable branchings can lead to a pessimistic estimation of the final error.
+  Note that unstable branchings can lead to a pessimistic estimation of the final errors.
 - unstable mathematical function :
   in the log, sqrt, exp or log10 function, the argument is non-significant.
 - unstable instrinsic function :
-  - when using integer cast functions, the integral part of the argument can not be exactly determined due to the round-off error propagation
+  - when using integer cast functions, the integral part of the argument can not be exactly determined due to the round-off errors propagation
   - in the fabs function: the argument is non-significant
   - the floor, ceil or trunc function returns different values for each component of the stochastic argument.
 - loss of accuracy due to cancelation :
