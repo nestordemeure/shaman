@@ -31,7 +31,10 @@ public:
      */
     explicit ErrorSum(const Shaman::Tag& name, errorType error)
     {
-        errors[name] = error;
+        if(error != 0)
+        {
+            errors[name] = error;
+        }
     }
 
     /*
@@ -40,8 +43,11 @@ public:
      */
     explicit ErrorSum(errorType error)
     {
-        Shaman::Tag name = Block::currentBlock();
-        errors[name] = error;
+        if(error != 0)
+        {
+            Shaman::Tag name = Block::currentBlock();
+            errors[name] = error;
+        }
     }
 
     /*
