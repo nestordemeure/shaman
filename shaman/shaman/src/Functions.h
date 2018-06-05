@@ -1168,7 +1168,7 @@ set_Sfunction2_casts(hypot);
 // hypot
 templated inline const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3)
 {
-    numberType result = std::hypot(n1.number, n2.number);
+    numberType result = std::hypot(n1.number, n2.number, n3.number);
     preciseType preciseCorrectedResult = std::hypot(n1.corrected_number(), n2.corrected_number(), n3.corrected_number());
     errorType newError = (errorType) (preciseCorrectedResult - result);
 
