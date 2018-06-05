@@ -125,52 +125,6 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 } \
 
 #endif
-//-----------------------------------------------------------------------------
-// GENERAL FUNCTIONS
-
-/*
- * functions that computes the error of a function
- * given the function for the base precision, a more precise version and the argument of the function
- */
-template<typename FUNnumberType, typename FUNpreciseType, typename numberType, typename errorType, typename preciseType>
-inline const Snum general_function(FUNnumberType fn, FUNpreciseType fp, const Snum& n)
-{
-    numberType result = fn(n.number);
-    preciseType preciseResult = fp(n.number);
-    preciseType preciseCorrectedResult = fp(n.corrected_number());
-
-    preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
-
-    return Snum(result, totalError, newErrorComp);
-};
-
-// macro that turns a function into a shaman function
-#define SHAMAN_FUNCTION(functionName) \
-templated inline const Snum functionName(const Snum& argument) \
-{ \
-    return general_function(functionName<numberType>, functionName<preciseType>, argument); \
-} \
-
-SHAMAN_FUNCTION(std::floor);
-SHAMAN_FUNCTION(std::ceil);
-SHAMAN_FUNCTION(std::trunc);
-SHAMAN_FUNCTION(std::cbrt);
-SHAMAN_FUNCTION(std::exp);
-SHAMAN_FUNCTION(std::exp2);
-SHAMAN_FUNCTION(std::erf);
-SHAMAN_FUNCTION(std::sin);
-SHAMAN_FUNCTION(std::sinh);
-SHAMAN_FUNCTION(std::asinh);
-SHAMAN_FUNCTION(std::cos);
-SHAMAN_FUNCTION(std::cosh);
-SHAMAN_FUNCTION(std::atan);
-SHAMAN_FUNCTION(std::tan);
-SHAMAN_FUNCTION(std::tanh);
 
 //-----------------------------------------------------------------------------
 // TEST BASED FUNCTIONS
@@ -245,26 +199,33 @@ set_Sfunction2_casts(max);
 //-----------------------------------------------------------------------------
 // LINEARISABLE FUNCTIONS
 
-// TODO sqrt
+// sqrt
 templated inline const Snum sqrt(const Snum& n)
 {
     numberType result = std::sqrt(n.number);
 
     errorType newError;
+    Serror newErrorComp;
     if (result == 0)
     {
         newError = (errorType) std::sqrt((preciseType) std::abs(n.error));
+        newErrorComp = Serror(n.errorComposants);
+        newErrorComp.multByScalar(newError / n.error);
     }
     else
     {
         numberType remainder = EFT::RemainderSqrt(n.number, result);
         newError = (remainder + n.error) / (result + result);
+
+        newErrorComp = Serror(remainder);
+        newErrorComp.addError(n.errorComposants);
+        newErrorComp.divByScalar(result + result);
     }
 
-    return Snum(result, newError);
+    return Snum(result, newError, newErrorComp);
 };
 
-// TODO fma
+// fma
 templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::fma(n1.number, n2.number, n3.number);
@@ -273,104 +234,181 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error) + n3.error;
     errorType newError = std::fma(n2.number, n1.error, std::fma(n1.number, n2.error, remainder + n3.error));
 
-    return Snum(result, newError);
+    Serror newErrorComp = Serror(remainder);
+    newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
+    newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
+    newErrorComp.addError(n3.errorComposants);
+
+    return Snum(result, newError, newErrorComp);
 };
 set_Sfunction3_casts(fma);
 
 //-----------------------------------------------------------------------------
+// GENERAL FUNCTIONS
+
+/*
+ * functions that computes the error of a function
+ * given the function for the base precision, a more precise version and the argument of the function
+ */
+template<typename FUNnumberType, typename FUNpreciseType, typename numberType, typename errorType, typename preciseType>
+inline const Snum general_function(FUNnumberType fn, FUNpreciseType fp, const Snum& n)
+{
+    numberType result = fn(n.number);
+    preciseType preciseResult = fp(n.number);
+    preciseType preciseCorrectedResult = fp(n.corrected_number());
+
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
+
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
+};
+
+// macro that turns a function into a shaman function
+#define SHAMAN_FUNCTION(functionName) \
+templated inline const Snum functionName(const Snum& argument) \
+{ \
+    return general_function(functionName<numberType>, functionName<preciseType>, argument); \
+} \
+
+SHAMAN_FUNCTION(std::floor);
+SHAMAN_FUNCTION(std::ceil);
+SHAMAN_FUNCTION(std::trunc);
+SHAMAN_FUNCTION(std::cbrt);
+SHAMAN_FUNCTION(std::exp);
+SHAMAN_FUNCTION(std::exp2);
+SHAMAN_FUNCTION(std::erf);
+SHAMAN_FUNCTION(std::sin);
+SHAMAN_FUNCTION(std::sinh);
+SHAMAN_FUNCTION(std::asinh);
+SHAMAN_FUNCTION(std::cos);
+SHAMAN_FUNCTION(std::cosh);
+SHAMAN_FUNCTION(std::atan);
+SHAMAN_FUNCTION(std::tan);
+SHAMAN_FUNCTION(std::tanh);
+
+//-----------------------------------------------------------------------------
 // CONSTRAINED FUNCTIONS
 
-// TODO log
+// log
 templated inline const Snum log(const Snum& n)
 {
-    numberType result = std::log(n.number);
-    preciseType correctedNumber = n.corrected_number();
+    numberType result = std::log<numberType>(n.number);
+    preciseType preciseResult = std::log<preciseType>(n.number);
 
     preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
     if (correctedNumber < 0)
     {
         preciseCorrectedResult = -INFINITY;
     }
     else
     {
-        preciseCorrectedResult = std::log(correctedNumber);
+        preciseCorrectedResult = std::log<preciseType>(correctedNumber);
     }
 
-    errorType newError = (errorType) (preciseCorrectedResult - result);
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
 
-    return Snum(result, newError);
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
 };
 
-// TODO log2
+// log2
 templated inline const Snum log2(const Snum& n)
 {
-    numberType result = std::log2(n.number);
-    preciseType correctedNumber = n.corrected_number();
+    numberType result = std::log2<numberType>(n.number);
+    preciseType preciseResult = std::log2<preciseType>(n.number);
 
     preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
     if (correctedNumber < 0)
     {
         preciseCorrectedResult = -INFINITY;
     }
     else
     {
-        preciseCorrectedResult = std::log2(correctedNumber);
+        preciseCorrectedResult = std::log2<preciseType>(correctedNumber);
     }
 
-    errorType newError = (errorType) (preciseCorrectedResult - result);
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
 
-    return Snum(result, newError);
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
 };
 
-// TODO log10
+// log10
 templated inline const Snum log10(const Snum& n)
 {
-    numberType result = std::log10(n.number);
-    preciseType correctedNumber = n.corrected_number();
+    numberType result = std::log10<numberType>(n.number);
+    preciseType preciseResult = std::log10<preciseType>(n.number);
 
     preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
     if (correctedNumber < 0)
     {
         preciseCorrectedResult = -INFINITY;
     }
     else
     {
-        preciseCorrectedResult = std::log10(correctedNumber);
+        preciseCorrectedResult = std::log10<preciseType>(correctedNumber);
     }
 
-    errorType newError = (errorType) (preciseCorrectedResult - result);
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
 
-    return Snum(result, newError);
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
 };
 
-// TODO acosh
+// acosh
 templated inline const Snum acosh(const Snum& n)
 {
-    numberType result = std::acosh(n.number);
-    preciseType correctedNumber = n.corrected_number();
+    numberType result = std::acosh<numberType>(n.number);
+    preciseType preciseResult = std::acosh<preciseType>(n.number);
 
     preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
     if (correctedNumber < 1.)
     {
         preciseCorrectedResult = 0.;
     }
     else
     {
-        preciseCorrectedResult = std::acosh(correctedNumber);
+        preciseCorrectedResult = std::acosh<preciseType>(correctedNumber);
     }
 
-    errorType newError = (errorType) (preciseCorrectedResult - result);
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
 
-    return Snum(result, newError);
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
 };
 
-// TODO acos
+// acos
 templated inline const Snum acos(const Snum& n)
 {
-    numberType result = std::acos(n.number);
-    preciseType correctedNumber = n.corrected_number();
+    numberType result = std::acos<numberType>(n.number);
+    preciseType preciseResult = std::acos<preciseType>(n.number);
 
     preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
     if (correctedNumber > 1)
     {
         preciseCorrectedResult = 0;
@@ -381,21 +419,27 @@ templated inline const Snum acos(const Snum& n)
     }
     else
     {
-        preciseCorrectedResult = std::acos(correctedNumber);
+        preciseCorrectedResult = std::acos<preciseType>(correctedNumber);
     }
 
-    errorType newError = (errorType) (preciseCorrectedResult - result);
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
 
-    return Snum(result, newError);
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
 };
 
-// TODO asin
+// asin
 templated inline const Snum asin(const Snum& n)
 {
-    numberType result = std::asin(n.number);
-    preciseType correctedNumber = n.corrected_number();
+    numberType result = std::asin<numberType>(n.number);
+    preciseType preciseResult = std::asin<preciseType>(n.number);
 
     preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
     if (correctedNumber > 1)
     {
         preciseCorrectedResult = M_PI/2.;
@@ -406,33 +450,44 @@ templated inline const Snum asin(const Snum& n)
     }
     else
     {
-        preciseCorrectedResult = std::asin(correctedNumber);
+        preciseCorrectedResult = std::asin<preciseType>(correctedNumber);
     }
 
-    errorType newError = (errorType) (preciseCorrectedResult - result);
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
 
-    return Snum(result, newError);
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
 };
 
-// TODO atanh
+// atanh
 templated inline const Snum atanh(const Snum& n)
 {
-    numberType result = std::atanh(n.number);
-    preciseType correctedNumber = n.corrected_number();
+    numberType result = std::atanh<numberType>(n.number);
+    preciseType preciseResult = std::asin<preciseType>(n.number);
 
     preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
     if(correctedNumber > 1. || correctedNumber < 1.)
     {
         preciseCorrectedResult = -INFINITY;
     }
     else
     {
-        preciseCorrectedResult = std::atanh(correctedNumber);
+        preciseCorrectedResult = std::atanh<preciseType>(correctedNumber);
     }
 
-    errorType newError = (errorType) (preciseCorrectedResult - result);
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
 
-    return Snum(result, newError);
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
 };
 
 //-----------------------------------------------------------------------------
