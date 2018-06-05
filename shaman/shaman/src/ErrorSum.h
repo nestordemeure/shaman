@@ -52,32 +52,44 @@ public:
 
     /*
      * produces a readable string representation of the error terms
-     *
-     * TODO
-     * sort by abs
-     * convert to key:value (value being printed with 2 significant digits)
-     * concats with separating ', '
-     *
-     * maybe keep at most the ten most important terms (and displays the number of terms ?)
+     * TODO maybe keep at most the ten most important terms (and displays the number of terms ?) or just display terms that have an impact on the number of digits
      */
     explicit operator std::string() const
     {
         std::ostringstream output;
+        unsigned int defaultPrecision = 2;
+        output << std::scientific << std::setprecision(defaultPrecision) << '[';
 
         if(errors.empty())
         {
-            output << "[no-error]";
+            output << "no-error";
         }
         else
         {
-            output << std::scientific << std::setprecision(2) << '[';
+            // load the data in a vector
+            std::vector<std::pair<Shaman::Tag, errorType>> data;
             for(auto kv : errors)
             {
-                output << kv.first << ':' << kv.second << ' ';
+                data.push_back(kv);
             }
-            output << ']';
+
+            // sorts the vector by abs(error) descending
+            auto compare = [](const std::pair<Shaman::Tag, errorType>& p1, const std::pair<Shaman::Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
+            std::sort(data.begin(), data.end(), compare);
+
+            // add the first element
+            auto kv = data[0];
+            output << kv.first << ':' << kv.second;
+
+            // add each other element prefixed by a ", " separator
+            for(int i = 1; i < data.size(); i++)
+            {
+                kv = data[i];
+                output << ", " << kv.first << ':' << kv.second;
+            }
         }
 
+        output << ']';
         return output.str();
     }
 
