@@ -6,7 +6,7 @@
 //#include "tests/test_loop.h"
 // examples
 //#include "examples/various.h"
-//#include "examples/legendre.h"
+#include "examples/legendre.h"
 #include "examples/schrodinger/schrodinger.h"
 #include "examples/sqrtHeron.h"
 
@@ -33,7 +33,7 @@ int main()
     //mullerTest();
 
     // legendre
-    //legendre20Test();
+    legendre20Test();
 
     // Schrodinger equation
     //Schrodinger numerov = Schrodinger();

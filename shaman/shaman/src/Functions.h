@@ -249,7 +249,7 @@ template<typename FUNnumberType, typename FUNpreciseType, typename numberType, t
 inline const Snum general_function(FUNnumberType fn, FUNpreciseType fp, const Snum& n)
 {
     numberType result = fn(n.number);
-    preciseType preciseResult = fp(n.number);
+    preciseType preciseResult = fp((preciseType)n.number);
     preciseType preciseCorrectedResult = fp(n.corrected_number());
 
     preciseType totalError = preciseCorrectedResult - result;
@@ -292,7 +292,7 @@ SHAMAN_FUNCTION(std::tanh);
 templated inline const Snum log(const Snum& n)
 {
     numberType result = std::log<numberType>(n.number);
-    preciseType preciseResult = std::log<preciseType>(n.number);
+    preciseType preciseResult = std::log<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -319,7 +319,7 @@ templated inline const Snum log(const Snum& n)
 templated inline const Snum log2(const Snum& n)
 {
     numberType result = std::log2<numberType>(n.number);
-    preciseType preciseResult = std::log2<preciseType>(n.number);
+    preciseType preciseResult = std::log2<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -346,7 +346,7 @@ templated inline const Snum log2(const Snum& n)
 templated inline const Snum log10(const Snum& n)
 {
     numberType result = std::log10<numberType>(n.number);
-    preciseType preciseResult = std::log10<preciseType>(n.number);
+    preciseType preciseResult = std::log10<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -373,7 +373,7 @@ templated inline const Snum log10(const Snum& n)
 templated inline const Snum acosh(const Snum& n)
 {
     numberType result = std::acosh<numberType>(n.number);
-    preciseType preciseResult = std::acosh<preciseType>(n.number);
+    preciseType preciseResult = std::acosh<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -400,7 +400,7 @@ templated inline const Snum acosh(const Snum& n)
 templated inline const Snum acos(const Snum& n)
 {
     numberType result = std::acos<numberType>(n.number);
-    preciseType preciseResult = std::acos<preciseType>(n.number);
+    preciseType preciseResult = std::acos<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -431,7 +431,7 @@ templated inline const Snum acos(const Snum& n)
 templated inline const Snum asin(const Snum& n)
 {
     numberType result = std::asin<numberType>(n.number);
-    preciseType preciseResult = std::asin<preciseType>(n.number);
+    preciseType preciseResult = std::asin<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -462,7 +462,7 @@ templated inline const Snum asin(const Snum& n)
 templated inline const Snum atanh(const Snum& n)
 {
     numberType result = std::atanh<numberType>(n.number);
-    preciseType preciseResult = std::asin<preciseType>(n.number);
+    preciseType preciseResult = std::asin<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -498,7 +498,7 @@ templated inline const Snum frexp(const Snum& n, int* exp)
 {
     numberType result = std::frexp<numberType>(n.number, exp);
     int dummyExp; // a pointer integer in which to store the result, it can be safely discarded
-    preciseType preciseResult = std::frexp<preciseType>(n.number, &dummyExp);
+    preciseType preciseResult = std::frexp<preciseType>((preciseType)n.number, &dummyExp);
     preciseType preciseCorrectedResult = std::frexp<preciseType>(n.corrected_number(), &dummyExp);
 
     preciseType totalError = preciseCorrectedResult - result;
@@ -515,7 +515,7 @@ templated inline const Snum frexp(const Snum& n, int* exp)
 templated inline const Snum ldexp(const Snum& n, int exp)
 {
     numberType result = std::ldexp<numberType>(n.number, exp);
-    preciseType preciseResult = std::ldexp<preciseType>(n.number, exp);
+    preciseType preciseResult = std::ldexp<preciseType>((preciseType)n.number, exp);
     preciseType preciseCorrectedResult = std::ldexp<preciseType>(n.corrected_number(), exp);
 
     preciseType totalError = preciseCorrectedResult - result;
@@ -532,10 +532,10 @@ templated inline const Snum ldexp(const Snum& n, int exp)
 templated inline const Snum pow(const Snum& n1, const Snum& n2)
 {
     numberType result = std::pow<numberType>(n1.number, n2.number);
-    preciseType preciseResult = std::pow<preciseType>(n1.number, n2.number);
+    preciseType preciseResult = std::pow<preciseType>((preciseType)n1.number, (preciseType)n2.number);
     preciseType preciseCorrectedResult = std::pow<preciseType>(n1.corrected_number(), n2.corrected_number());
-    preciseType preciseCorrectedBut1Result = std::pow<preciseType>(n1, n2.corrected_number());
-    preciseType preciseCorrectedBut2Result = std::pow<preciseType>(n1.corrected_number(), n2);
+    preciseType preciseCorrectedBut1Result = std::pow<preciseType>((preciseType)n1, n2.corrected_number());
+    preciseType preciseCorrectedBut2Result = std::pow<preciseType>(n1.corrected_number(), (preciseType)n2);
 
     preciseType totalError = preciseCorrectedResult - result;
     preciseType functionError = preciseResult - result;
@@ -558,10 +558,10 @@ set_Sfunction2_casts(pow);
 templated inline const Snum atan2(const Snum& n1, const Snum& n2)
 {
     numberType result = std::atan2<numberType>(n1.number, n2.number);
-    preciseType preciseResult = std::atan2<preciseType>(n1.number, n2.number);
+    preciseType preciseResult = std::atan2<preciseType>((preciseType)n1.number, (preciseType)n2.number);
     preciseType preciseCorrectedResult = std::atan2<preciseType>(n1.corrected_number(), n2.corrected_number());
-    preciseType preciseCorrectedBut1Result = std::atan2<preciseType>(n1, n2.corrected_number());
-    preciseType preciseCorrectedBut2Result = std::atan2<preciseType>(n1.corrected_number(), n2);
+    preciseType preciseCorrectedBut1Result = std::atan2<preciseType>((preciseType)n1, n2.corrected_number());
+    preciseType preciseCorrectedBut2Result = std::atan2<preciseType>(n1.corrected_number(), (preciseType)n2);
 
     preciseType totalError = preciseCorrectedResult - result;
     preciseType functionError = preciseResult - result;
@@ -584,10 +584,10 @@ set_Sfunction2_casts(atan2);
 templated inline const Snum hypot(const Snum& n1, const Snum& n2)
 {
     numberType result = std::hypot<numberType>(n1.number, n2.number);
-    preciseType preciseResult = std::hypot<preciseType>(n1.number, n2.number);
+    preciseType preciseResult = std::hypot<preciseType>((preciseType)n1.number, (preciseType)n2.number);
     preciseType preciseCorrectedResult = std::hypot<preciseType>(n1.corrected_number(), n2.corrected_number());
-    preciseType preciseCorrectedBut1Result = std::hypot<preciseType>(n1, n2.corrected_number());
-    preciseType preciseCorrectedBut2Result = std::hypot<preciseType>(n1.corrected_number(), n2);
+    preciseType preciseCorrectedBut1Result = std::hypot<preciseType>((preciseType)n1, n2.corrected_number());
+    preciseType preciseCorrectedBut2Result = std::hypot<preciseType>(n1.corrected_number(), (preciseType)n2);
 
     preciseType totalError = preciseCorrectedResult - result;
     preciseType functionError = preciseResult - result;
@@ -610,11 +610,11 @@ set_Sfunction2_casts(hypot);
 templated inline const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::hypot<numberType>(n1.number, n2.number, n3.number);
-    preciseType preciseResult = std::hypot<preciseType>(n1.number, n2.number, n3.number);
+    preciseType preciseResult = std::hypot<preciseType>((preciseType)n1.number, (preciseType)n2.number, (preciseType)n3.number);
     preciseType preciseCorrectedResult = std::hypot<preciseType>(n1.corrected_number(), n2.corrected_number(), n3.corrected_number());
-    preciseType preciseCorrectedBut1Result = std::hypot<preciseType>(n1, n2.corrected_number(), n3.corrected_number());
-    preciseType preciseCorrectedBut2Result = std::hypot<preciseType>(n1.corrected_number(), n2, n3.corrected_number());
-    preciseType preciseCorrectedBut3Result = std::hypot<preciseType>(n1.corrected_number(), n2.corrected_number(), n3);
+    preciseType preciseCorrectedBut1Result = std::hypot<preciseType>((preciseType)n1, n2.corrected_number(), n3.corrected_number());
+    preciseType preciseCorrectedBut2Result = std::hypot<preciseType>(n1.corrected_number(), (preciseType)n2, n3.corrected_number());
+    preciseType preciseCorrectedBut3Result = std::hypot<preciseType>(n1.corrected_number(), n2.corrected_number(), (preciseType)n3);
 
     preciseType totalError = preciseCorrectedResult - result;
     preciseType functionError = preciseResult - result;
