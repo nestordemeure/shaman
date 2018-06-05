@@ -23,21 +23,23 @@ int main()
     //test_loop();
 
     // EXAMPLES
-    sqrtHeron();
+    //sqrtHeron();
 
     // various examples
+    /*
     rumpTest();
     polynomialTest();
     fixedPointTest();
     kahanIdentity();
     mullerTest();
+    */
 
     // legendre
-    legendre20Test();
+    //legendre20Test();
 
     // Schrodinger equation
-    //Schrodinger numerov = Schrodinger();
-    //numerov.calculate();
+    Schrodinger numerov = Schrodinger();
+    numerov.calculate();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
