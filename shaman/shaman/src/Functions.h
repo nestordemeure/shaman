@@ -195,7 +195,7 @@ set_Sfunction2_casts(max);
 // LINEARISABLE FUNCTIONS
 
 // sqrt
-templated inline const Snum sqrt(const Snum& n)
+templated const Snum sqrt(const Snum& n)
 {
     numberType result = std::sqrt(n.number);
 
@@ -203,9 +203,16 @@ templated inline const Snum sqrt(const Snum& n)
     Serror newErrorComp;
     if (result == 0)
     {
-        newError = (errorType) std::sqrt((preciseType) std::abs(n.error));
-        newErrorComp = Serror(n.errorComposants);
-        newErrorComp.multByScalar(newError / n.error);
+        if(n.error == 0)
+        {
+            newErrorComp = Serror();
+        }
+        else
+        {
+            newError = (errorType) std::sqrt((preciseType) std::abs(n.error));
+            newErrorComp = Serror(n.errorComposants);
+            newErrorComp.multByScalar(newError / n.error);
+        }
     }
     else
     {
@@ -221,7 +228,7 @@ templated inline const Snum sqrt(const Snum& n)
 };
 
 // fma
-templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
+templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::fma(n1.number, n2.number, n3.number);
 
@@ -249,22 +256,29 @@ template<typename FUNnumberType, typename FUNpreciseType, typename numberType, t
 inline const Snum general_function(FUNnumberType fn, FUNpreciseType fp, const Snum& n)
 {
     numberType result = fn(n.number);
-    preciseType preciseResult = fp((preciseType)n.number);
     preciseType preciseCorrectedResult = fp(n.corrected_number());
-
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
 
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    Serror newErrorComp;
+    if(n.error == 0.)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = fp((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // macro that turns a function into a shaman function
 #define SHAMAN_FUNCTION(functionName) \
-templated inline const Snum functionName(const Snum& argument) \
+templated const Snum functionName(const Snum& argument) \
 { \
     return general_function(functionName<numberType>, functionName<preciseType>, argument); \
 } \
@@ -289,10 +303,9 @@ SHAMAN_FUNCTION(std::tanh);
 // CONSTRAINED FUNCTIONS
 
 // log
-templated inline const Snum log(const Snum& n)
+templated const Snum log(const Snum& n)
 {
     numberType result = std::log<numberType>(n.number);
-    preciseType preciseResult = std::log<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -305,21 +318,28 @@ templated inline const Snum log(const Snum& n)
         preciseCorrectedResult = std::log<preciseType>(correctedNumber);
     }
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::log<preciseType>((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // log2
-templated inline const Snum log2(const Snum& n)
+templated const Snum log2(const Snum& n)
 {
     numberType result = std::log2<numberType>(n.number);
-    preciseType preciseResult = std::log2<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -332,21 +352,28 @@ templated inline const Snum log2(const Snum& n)
         preciseCorrectedResult = std::log2<preciseType>(correctedNumber);
     }
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::log2<preciseType>((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // log10
-templated inline const Snum log10(const Snum& n)
+templated const Snum log10(const Snum& n)
 {
     numberType result = std::log10<numberType>(n.number);
-    preciseType preciseResult = std::log10<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -359,21 +386,28 @@ templated inline const Snum log10(const Snum& n)
         preciseCorrectedResult = std::log10<preciseType>(correctedNumber);
     }
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::log10<preciseType>((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // acosh
-templated inline const Snum acosh(const Snum& n)
+templated const Snum acosh(const Snum& n)
 {
     numberType result = std::acosh<numberType>(n.number);
-    preciseType preciseResult = std::acosh<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -386,21 +420,28 @@ templated inline const Snum acosh(const Snum& n)
         preciseCorrectedResult = std::acosh<preciseType>(correctedNumber);
     }
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::acosh<preciseType>((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // acos
-templated inline const Snum acos(const Snum& n)
+templated const Snum acos(const Snum& n)
 {
     numberType result = std::acos<numberType>(n.number);
-    preciseType preciseResult = std::acos<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -417,21 +458,28 @@ templated inline const Snum acos(const Snum& n)
         preciseCorrectedResult = std::acos<preciseType>(correctedNumber);
     }
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::acos<preciseType>((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // asin
-templated inline const Snum asin(const Snum& n)
+templated const Snum asin(const Snum& n)
 {
     numberType result = std::asin<numberType>(n.number);
-    preciseType preciseResult = std::asin<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -448,21 +496,28 @@ templated inline const Snum asin(const Snum& n)
         preciseCorrectedResult = std::asin<preciseType>(correctedNumber);
     }
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::asin<preciseType>((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // atanh
-templated inline const Snum atanh(const Snum& n)
+templated const Snum atanh(const Snum& n)
 {
     numberType result = std::atanh<numberType>(n.number);
-    preciseType preciseResult = std::asin<preciseType>((preciseType)n.number);
 
     preciseType preciseCorrectedResult;
     preciseType correctedNumber = n.corrected_number();
@@ -475,12 +530,20 @@ templated inline const Snum atanh(const Snum& n)
         preciseCorrectedResult = std::atanh<preciseType>(correctedNumber);
     }
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::asin<preciseType>((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
@@ -494,120 +557,188 @@ templated inline const Snum atanh(const Snum& n)
  */
 
 // frexp
-templated inline const Snum frexp(const Snum& n, int* exp)
+templated const Snum frexp(const Snum& n, int* exp)
 {
     numberType result = std::frexp<numberType>(n.number, exp);
     int dummyExp; // a pointer integer in which to store the result, it can be safely discarded
-    preciseType preciseResult = std::frexp<preciseType>((preciseType)n.number, &dummyExp);
     preciseType preciseCorrectedResult = std::frexp<preciseType>(n.corrected_number(), &dummyExp);
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::frexp<preciseType>((preciseType)n.number, &dummyExp);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // ldexp
-templated inline const Snum ldexp(const Snum& n, int exp)
+templated const Snum ldexp(const Snum& n, int exp)
 {
     numberType result = std::ldexp<numberType>(n.number, exp);
-    preciseType preciseResult = std::ldexp<preciseType>((preciseType)n.number, exp);
     preciseType preciseCorrectedResult = std::ldexp<preciseType>(n.corrected_number(), exp);
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
-    preciseType functionError = preciseResult - result;
-    preciseType proportionalInputError = (totalError - functionError) / n.error;
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::ldexp<preciseType>((preciseType)n.number, exp);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 
 // pow
-templated inline const Snum pow(const Snum& n1, const Snum& n2)
+templated const Snum pow(const Snum& n1, const Snum& n2)
 {
     numberType result = std::pow<numberType>(n1.number, n2.number);
     preciseType preciseResult = std::pow<preciseType>((preciseType)n1.number, (preciseType)n2.number);
     preciseType preciseCorrectedResult = std::pow<preciseType>(n1.corrected_number(), n2.corrected_number());
-    preciseType preciseCorrectedBut1Result = std::pow<preciseType>((preciseType)n1, n2.corrected_number());
-    preciseType preciseCorrectedBut2Result = std::pow<preciseType>(n1.corrected_number(), (preciseType)n2);
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
     preciseType functionError = preciseResult - result;
-    preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
-    preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-
-    preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-    preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-    preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
-    newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    if((n1.error == 0.) && (n2.error == 0.))
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else if (n1.error == 0.)
+    {
+        preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
+    }
+    else if (n2.error == 0.)
+    {
+        preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    }
+    else
+    {
+        preciseType preciseCorrectedBut1Result = std::pow<preciseType>((preciseType)n1, n2.corrected_number());
+        preciseType preciseCorrectedBut2Result = std::pow<preciseType>(n1.corrected_number(), (preciseType)n2);
+        preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+        preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+        preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
+        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
+        newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(pow);
 
 // atan2
-templated inline const Snum atan2(const Snum& n1, const Snum& n2)
+templated const Snum atan2(const Snum& n1, const Snum& n2)
 {
     numberType result = std::atan2<numberType>(n1.number, n2.number);
     preciseType preciseResult = std::atan2<preciseType>((preciseType)n1.number, (preciseType)n2.number);
     preciseType preciseCorrectedResult = std::atan2<preciseType>(n1.corrected_number(), n2.corrected_number());
-    preciseType preciseCorrectedBut1Result = std::atan2<preciseType>((preciseType)n1, n2.corrected_number());
-    preciseType preciseCorrectedBut2Result = std::atan2<preciseType>(n1.corrected_number(), (preciseType)n2);
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
     preciseType functionError = preciseResult - result;
-    preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
-    preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-
-    preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-    preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-    preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
-    newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    if((n1.error == 0.) && (n2.error == 0.))
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else if (n1.error == 0.)
+    {
+        preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
+    }
+    else if (n2.error == 0.)
+    {
+        preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    }
+    else
+    {
+        preciseType preciseCorrectedBut1Result = std::atan2<preciseType>((preciseType)n1, n2.corrected_number());
+        preciseType preciseCorrectedBut2Result = std::atan2<preciseType>(n1.corrected_number(), (preciseType)n2);
+        preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+        preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+        preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
+        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
+        newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(atan2);
 
 // hypot
-templated inline const Snum hypot(const Snum& n1, const Snum& n2)
+templated const Snum hypot(const Snum& n1, const Snum& n2)
 {
     numberType result = std::hypot<numberType>(n1.number, n2.number);
     preciseType preciseResult = std::hypot<preciseType>((preciseType)n1.number, (preciseType)n2.number);
     preciseType preciseCorrectedResult = std::hypot<preciseType>(n1.corrected_number(), n2.corrected_number());
-    preciseType preciseCorrectedBut1Result = std::hypot<preciseType>((preciseType)n1, n2.corrected_number());
-    preciseType preciseCorrectedBut2Result = std::hypot<preciseType>(n1.corrected_number(), (preciseType)n2);
 
+    Serror newErrorComp;
     preciseType totalError = preciseCorrectedResult - result;
     preciseType functionError = preciseResult - result;
-    preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
-    preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-
-    preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-    preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-    preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-
-    Serror newErrorComp = Serror(functionError);
-    newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
-    newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    if((n1.error == 0.) && (n2.error == 0.))
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else if (n1.error == 0.)
+    {
+        preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
+    }
+    else if (n2.error == 0.)
+    {
+        preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    }
+    else
+    {
+        preciseType preciseCorrectedBut1Result = std::hypot<preciseType>((preciseType)n1, n2.corrected_number());
+        preciseType preciseCorrectedBut2Result = std::hypot<preciseType>(n1.corrected_number(), (preciseType)n2);
+        preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+        preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+        preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
+        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n1.errorComposants, proportionalInput1Error);
+        newErrorComp.addErrorsTimeScalar(n2.errorComposants, proportionalInput2Error);
+    }
 
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(hypot);
 
 // hypot
-templated inline const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3)
+templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::hypot<numberType>(n1.number, n2.number, n3.number);
     preciseType preciseResult = std::hypot<preciseType>((preciseType)n1.number, (preciseType)n2.number, (preciseType)n3.number);
