@@ -270,10 +270,7 @@ templated inline Snum& Snum::operator/=(const Snum& n)
 // ==
 templated inline bool operator==(const Snum& n1, const Snum& n2)
 {
-    #ifdef UNSTABLE_BRANCH_DEBUGGER
-    unstableBranchTest(n1, n2);
-    #endif
-
+    Snum::checkUnstableBranch(n1, n2);
     return n1.number == n2.number;
 };
 set_Sbool_operator_casts(==);
@@ -281,10 +278,7 @@ set_Sbool_operator_casts(==);
 // !=
 templated inline bool operator!=(const Snum& n1, const Snum& n2)
 {
-    #ifdef UNSTABLE_BRANCH_DEBUGGER
-    unstableBranchTest(n1, n2);
-    #endif
-
+    Snum::checkUnstableBranch(n1, n2);
     return n1.number != n2.number;
 };
 set_Sbool_operator_casts(!=);
@@ -292,10 +286,7 @@ set_Sbool_operator_casts(!=);
 // <
 templated inline bool operator<(const Snum& n1, const Snum& n2)
 {
-    #ifdef UNSTABLE_BRANCH_DEBUGGER
-    unstableBranchTest(n1, n2);
-    #endif
-
+    Snum::checkUnstableBranch(n1, n2);
     return n1.number < n2.number;
 };
 set_Sbool_operator_casts(<);
@@ -303,10 +294,7 @@ set_Sbool_operator_casts(<);
 // <=
 templated inline bool operator<=(const Snum& n1, const Snum& n2)
 {
-    #ifdef UNSTABLE_BRANCH_DEBUGGER
-    unstableBranchTest(n1, n2);
-    #endif
-
+    Snum::checkUnstableBranch(n1, n2);
     return n1.number <= n2.number;
 };
 set_Sbool_operator_casts(<=);
@@ -314,10 +302,7 @@ set_Sbool_operator_casts(<=);
 // >
 templated inline bool operator>(const Snum& n1, const Snum& n2)
 {
-    #ifdef UNSTABLE_BRANCH_DEBUGGER
-    unstableBranchTest(n1, n2);
-    #endif
-
+    Snum::checkUnstableBranch(n1, n2);
     return n1.number > n2.number;
 };
 set_Sbool_operator_casts(>);
@@ -325,10 +310,7 @@ set_Sbool_operator_casts(>);
 // >=
 templated inline bool operator>=(const Snum& n1, const Snum& n2)
 {
-    #ifdef UNSTABLE_BRANCH_DEBUGGER
-    unstableBranchTest(n1, n2);
-    #endif
-
+    Snum::checkUnstableBranch(n1, n2);
     return n1.number >= n2.number;
 };
 set_Sbool_operator_casts(>=);

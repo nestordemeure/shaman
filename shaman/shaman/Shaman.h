@@ -3,14 +3,14 @@
 
 #include <string>
 #include <limits>
-#include "src/Tagger.h"
+#include <atomic>
 #include "src/ErrorSum.h"
 
 //-------------------------------------------------------------------------------------------------
 // SHAMAN CLASS
 
 /*
- * the base SHAMAN class, represents a number and its errorComposants
+ * the base SHAMAN class, represents a number and its error
  */
 template<typename numberType, typename errorType, typename preciseType> class S
 {
@@ -74,9 +74,8 @@ public :
     // unstability detection
     static bool non_significant(numberType number, errorType error);
     bool non_significant() const;
-    static S minPrecision(const S& n1, const S& n2);
-    static bool isCancelation(const S& n, numberType result, errorType resultingError);
-    static bool isUnstableBranchings(const S& n1, const S& n2);
+    static void checkUnstableBranch(S n1, S n2);
+    static void unstability();
 };
 
 //-------------------------------------------------------------------------------------------------
