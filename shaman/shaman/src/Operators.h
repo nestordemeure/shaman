@@ -102,23 +102,25 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
 // -
 templated inline const Snum operator-(const Snum& n)
 {
-    Serror newErrors = Serror::unaryNeg(n.errors);
     numberType newNumber = -n.number;
-    return Snum(newNumber, newErrors);
+    errorType newError = -n.error;
+    Serror newErrors = Serror::unaryNeg(n.errorComposants);
+    return Snum(newNumber, newError, newErrors);
 };
 
 // +
 templated inline const Snum operator+(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number + n2.number;
+
     numberType remainder = EFT::TwoSum(n1.number, n2.number, result);
+    errorType newError = remainder + n1.error + n2.error;
 
-    // newError = remainder + n1.error + n2.error
-    Serror newError = Serror(remainder);
-    newError.addErrors(n1.errors);
-    newError.addErrors(n2.errors);
+    Serror newErrorComp = Serror(remainder);
+    newErrorComp.addErrors(n1.errorComposants);
+    newErrorComp.addErrors(n2.errorComposants);
 
-    return Snum(result, newError);
+    return Snum(result, newError, newErrorComp);
 };
 set_Soperator_casts(+);
 
@@ -126,30 +128,32 @@ set_Soperator_casts(+);
 templated inline const Snum operator-(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number - n2.number;
+
     numberType remainder = EFT::TwoSum(n1.number, -n2.number, result);
+    errorType newError = remainder + n1.error - n2.error;
 
-    // newError = remainder + n1.error - n2.error
-    Serror newError = Serror(remainder);
-    newError.addErrors(n1.errors);
-    newError.subErrors(n2.errors);
+    Serror newErrorComp = Serror(remainder);
+    newErrorComp.addErrors(n1.errorComposants);
+    newErrorComp.subErrors(n2.errorComposants);
 
-    return Snum(result, newError);
+    return Snum(result, newError, newErrorComp);
 };
 set_Soperator_casts(-);
 
 // *
+// note : we ignore second order terms
 templated inline const Snum operator*(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number * n2.number;
+
     numberType remainder = EFT::FastTwoProd(n1.number, n2.number, result);
+    errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
 
-    // newError = remainder + (n1.number*n2.error + n2.number*n1.error)
-    Serror newError = Serror(remainder);
-    newError.addErrorsTimeScalar(n2.errors, n1.number);
-    newError.addErrorsTimeScalar(n1.errors, n2.number);
-    // TODO we ignore second order error terms
+    Serror newErrorComp = Serror(remainder);
+    newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
+    newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
 
-    return Snum(result, newError);
+    return Snum(result, newError, newErrorComp);
 };
 set_Soperator_casts(*);
 
@@ -157,16 +161,17 @@ set_Soperator_casts(*);
 templated inline const Snum operator/(const Snum& n1, const Snum& n2)
 {
     numberType result = n1.number / n2.number;
+
     numberType remainder = EFT::RemainderDiv(n1.number, n2.number, result);
-    errorType n2Precise = n2.number + n2.errors.totalError;
+    errorType n2Precise = n2.number + n2.error;
+    errorType newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error);
 
-    // newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error)
-    Serror newError = Serror(remainder);
-    newError.addErrors(n1.errors);
-    newError.subErrorsTimeScalar(n2.errors, result);
-    newError.divByScalar(n2Precise);
+    Serror newErrorComp = Serror(remainder);
+    newErrorComp.addErrors(n1.errorComposants);
+    newErrorComp.subErrorsTimeScalar(n2.errorComposants, result);
+    newErrorComp.divByScalar(n2Precise);
 
-    return Snum(result, newError);
+    return Snum(result, newError, newErrorComp);
 };
 set_Soperator_casts(/);
 
@@ -179,8 +184,8 @@ templated inline Snum& Snum::operator++(int)
     numberType result = number + 1;
     numberType remainder = EFT::TwoSum(number, 1, result);
 
-    // newError = this.error + remainder
-    errors.addError(remainder);
+    error += remainder;
+    errorComposants.addError(remainder);
     number = result;
 
     return *this;
@@ -192,8 +197,8 @@ templated inline Snum& Snum::operator--(int)
     numberType result = number - 1;
     numberType remainder = EFT::TwoSum(number, -1, result);
 
-    // newError = this.error + remainder
-    errors.addError(remainder);
+    error += remainder;
+    errorComposants.addError(remainder);
     number = result;
 
     return *this;
@@ -205,10 +210,9 @@ templated inline Snum& Snum::operator+=(const Snum& n)
     numberType result = number + n.number;
     numberType remainder = EFT::TwoSum(number, n.number, result);
 
-    // newError = this.error + remainder + n.error
-    errors.addError(remainder);
-    errors.addErrors(n.errors);
-
+    error += remainder + n.error;
+    errorComposants.addError(remainder);
+    errorComposants.addErrors(n.errorComposants);
     number = result;
 
     return *this;
@@ -220,27 +224,25 @@ templated inline Snum& Snum::operator-=(const Snum& n)
     numberType result = number - n.number;
     numberType remainder = EFT::TwoSum(number, -n.number, result);
 
-    // newError = this.error + remainder - n.error
-    errors.addError(remainder);
-    errors.subErrors(n.errors);
-
+    error += remainder - n.error;
+    errorComposants.addError(remainder);
+    errorComposants.subErrors(n.errorComposants);
     number = result;
 
     return *this;
 }
 
 // *=
+// note : we ignore second order terms
 templated inline Snum& Snum::operator*=(const Snum& n)
 {
     numberType result = number * n.number;
     numberType remainder = EFT::FastTwoProd(number, n.number, result);
 
-    // newError = n.number*this.error + remainder + number*n.error
-    errors.multByScalar(n.number);
-    errors.addError(remainder);
-    errors.addErrorsTimeScalar(n.errors, number);
-    // TODO we ignore second order error terms
-
+    error = n.number*error + remainder + number*n.error;
+    errorComposants.multByScalar(n.number);
+    errorComposants.addError(remainder);
+    errorComposants.addErrorsTimeScalar(n.errorComposants, number);
     number = result;
 
     return *this;
@@ -251,12 +253,13 @@ templated inline Snum& Snum::operator/=(const Snum& n)
 {
     numberType result = number / n.number;
     numberType remainder = EFT::RemainderDiv(number, n.number, result);
-    errorType n2Precise = n.number + n.errors.totalError;
+    errorType n2Precise = n.number + n.error;
 
-    // newError = (this.error + remainder - result*n.error) / (n.number + n.error)
-    errors.addError(remainder);
-    errors.subErrorsTimeScalar(n.errors, result);
-    errors.divByScalar(n2Precise);
+    error = (error + remainder - result*n.error) / (n.number + n.error);
+    errorComposants.addError(remainder);
+    errorComposants.subErrorsTimeScalar(n.errorComposants, result);
+    errorComposants.divByScalar(n2Precise);
+    number = result;
 
     return *this;
 }

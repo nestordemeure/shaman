@@ -10,20 +10,20 @@
 // SHAMAN CLASS
 
 /*
- * the base SHAMAN class, represents a number and its errors
+ * the base SHAMAN class, represents a number and its errorComposants
  */
 template<typename numberType, typename errorType, typename preciseType> class S
 {
 public :
-    // true number ≈ number + errors
+    // true number ≈ number + errorComposants
     numberType number; // current computed number
-    ErrorSum<numberType, errorType, preciseType> errors; // current errors
+    errorType error; // approximation of the current error
+    ErrorSum<errorType> errorComposants; // error decomposed per functions
 
     // base constructors
-    inline S(numberType numberArg, ErrorSum<numberType, errorType, preciseType> errorsArg): number(numberArg), errors(errorsArg) {};
-    inline S(numberType numberArg, errorType errorArg): number(numberArg), errors(errorArg) {};
-    inline S(numberType numberArg): number(numberArg), errors(errorType(0.)) {}; // we accept implicit cast from T to S<T>
-    inline S(): number(0.), errors(errorType(0.)) {};
+    inline S(numberType numberArg, errorType errorArg, ErrorSum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {}; // TODO would a ref improve perfs here ?
+    inline S(numberType numberArg): number(numberArg), error(0.), errorComposants() {}; // we accept implicit cast from T to S<T>
+    inline S(): number(0.), error(0.), errorComposants() {};
 
     // casting
     inline explicit operator short int() const { return (short int) number; };
@@ -44,9 +44,9 @@ public :
     #else
         #define EXPLICIT_CAST
     #endif
-    #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), errors((preciseType)n - (numberType)n)
+    #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants("integer_cast", (preciseType)n - (numberType)n)
     template<typename n, typename e, typename p>
-    inline EXPLICIT_CAST S(const S<n,e,p>& s): number(s.number), errors(s.errors) {};
+    inline EXPLICIT_CAST S(const S<n,e,p>& s): number(s.number), errorComposants(s.errorComposants) {};
     inline EXPLICIT_CAST S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline EXPLICIT_CAST S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline EXPLICIT_CAST S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
@@ -85,7 +85,7 @@ public :
 // some macro to shorten template notations
 #define templated template<typename numberType, typename errorType, typename preciseType>
 #define Snum S<numberType,errorType,preciseType>
-#define Serror ErrorSum<numberType, errorType, preciseType>
+#define Serror ErrorSum<errorType>
 
 // arithmetic operators
 templated const Snum operator-(const Snum& n);
@@ -108,11 +108,11 @@ templated const Snum abs(const Snum& n);
 templated const Snum fabs(const Snum& n);
 templated const Snum sqrt(const Snum& n);
 templated const Snum cbrt(const Snum& n);
-templated const Snum pow(const Snum& n1, const Snum& n2);
+// TODO templated const Snum pow(const Snum& n1, const Snum& n2);
 templated const Snum exp(const Snum& n);
 templated const Snum exp2(const Snum& n);
-templated const Snum frexp(const Snum& n, int* exp);
-templated const Snum ldexp(const Snum& n, int exp);
+// TODO templated const Snum frexp(const Snum& n, int* exp);
+// TODO templated const Snum ldexp(const Snum& n, int exp);
 templated const Snum log(const Snum& n);
 templated const Snum log2(const Snum& n);
 templated const Snum log10(const Snum& n);
@@ -122,7 +122,7 @@ templated const Snum tan(const Snum& n);
 templated const Snum asin(const Snum& n);
 templated const Snum acos(const Snum& n);
 templated const Snum atan(const Snum& n);
-templated const Snum atan2(const Snum& n1, const Snum& n2);
+// TODO templated const Snum atan2(const Snum& n1, const Snum& n2);
 templated const Snum sinh(const Snum& n);
 templated const Snum cosh(const Snum& n);
 templated const Snum tanh(const Snum& n);
@@ -135,8 +135,8 @@ templated const Snum ceil(const Snum& n);
 templated const Snum trunc(const Snum& n);
 templated const Snum min(const Snum& n1, const Snum& n2);
 templated const Snum max(const Snum& n1, const Snum& n2);
-templated const Snum hypot(const Snum& n1, const Snum& n2);
-templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3);
+// TODO templated const Snum hypot(const Snum& n1, const Snum& n2);
+// TODO templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3);
 templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3);
 templated bool isfinite(const Snum& n);
 templated bool isnan(const Snum& n);

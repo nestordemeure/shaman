@@ -19,7 +19,7 @@
  */
 templated inline preciseType Snum::corrected_number() const
 {
-    return preciseType(number) + preciseType(errors.totalError);
+    return preciseType(number) + preciseType(error);
 }
 
 //-----------------------------------------------------------------------------
@@ -62,16 +62,16 @@ templated inline numberType Snum::digits(numberType number, errorType error)
  */
 templated inline numberType Snum::digits() const
 {
-    return digits(number, errors.totalError);
+    return digits(number, error);
 }
 
 //-----------------------------------------------------------------------------
 // UNSTABILITY DETECTION
 
 /*
- * returns true if the couple (number,error) has no significative digits in the base
+ * returns true if the couple (number,error) has no significant digits in the base
  *
- * NOTE : 'error != 0' is facultative
+ * NOTE : 'error != 0' is optional
  * it slightly improves the performances on some test cases
  * since it is common to have numbers with 0 error
  * (any number that just been turned into a S)
@@ -79,8 +79,7 @@ templated inline numberType Snum::digits() const
 templated inline bool Snum::non_significant(numberType number, errorType error)
 {
     int base = 10;
-    return (error != 0) &&
-           (std::abs(number) < base * std::abs(error));
+    return (error != 0) && (std::abs(number) < base * std::abs(error));
 }
 
 /*
@@ -88,35 +87,7 @@ templated inline bool Snum::non_significant(numberType number, errorType error)
  */
 templated inline bool Snum::non_significant() const
 {
-    return non_significant(number, errors.totalError);
-}
-
-/*
- * return the Snum with the lowest precision
- */
-templated inline Snum Snum::minPrecision(const Snum &n1, const Snum &n2)
-{
-    if (std::abs(n1.errors.totalError * n2.number) > std::abs(n1.number * n2.errors.totalError))
-    {
-        return n1;
-    }
-    else
-    {
-        return n2;
-    }
-}
-
-/*
- * detects cancelations
- */
-templated inline bool Snum::isCancelation(const Snum &n, numberType result, errorType resultingError)
-{
-    int cancel_level = 4;
-    int base = 10;
-
-    // have we lost more than cancel_level significative digits ?
-    return (n.errors.totalError != 0) &&
-           (std::abs(resultingError * n.number) > pow(base, cancel_level) * std::abs(n.errors.totalError * result));
+    return non_significant(number, error);
 }
 
 /*
@@ -124,7 +95,7 @@ templated inline bool Snum::isCancelation(const Snum &n, numberType result, erro
  */
 templated inline bool Snum::isUnstableBranchings(const Snum &n1, const Snum &n2)
 {
-    return non_significant(n1.number - n2.number, n1.errors.totalError - n2.errors.totalError);
+    return non_significant(n1.number - n2.number, n1.error - n2.error);
 }
 
 //-----------------------------------------------------------------------------
@@ -146,7 +117,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     else if (fdigits <= 0) // no significant digits
     {
         // the first zeros might be significant
-        int digits = std::floor(Snum::digits(0, n.errors.totalError));
+        int digits = std::floor(Snum::digits(0, n.error));
 
         if ((std::abs(n.number) >= 1) || (digits <= 0))
         {
@@ -166,7 +137,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
 
-    os << ' ' << std::string(n.errors);
+    os << ' ' << (std::string) n.errorComposants;
 
     return os;
 }
@@ -195,7 +166,7 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 
     // modifies the Snum in place
     n.number = num;
-    n.errors = Serror(0);
+    n.errorComposants = Serror(0);
 
     return is;
 }

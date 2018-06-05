@@ -126,7 +126,54 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 
 #endif
 //-----------------------------------------------------------------------------
-// MATHEMATICAL FUNCTIONS
+// GENERAL FUNCTIONS
+
+/*
+ * functions that computes the error of a function
+ * given the function for the base precision, a more precise version and the argument of the function
+ */
+template<typename FUNnumberType, typename FUNpreciseType, typename numberType, typename errorType, typename preciseType>
+inline const Snum general_function(FUNnumberType fn, FUNpreciseType fp, const Snum& n)
+{
+    numberType result = fn(n.number);
+    preciseType preciseResult = fp(n.number);
+    preciseType preciseCorrectedResult = fp(n.corrected_number());
+
+    preciseType totalError = preciseCorrectedResult - result;
+    preciseType functionError = preciseResult - result;
+    preciseType proportionalInputError = (totalError - functionError) / n.error;
+
+    Serror newErrorComp = Serror(functionError);
+    newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+
+    return Snum(result, totalError, newErrorComp);
+};
+
+// macro that turns a function into a shaman function
+#define SHAMAN_FUNCTION(functionName) \
+templated inline const Snum functionName(const Snum& argument) \
+{ \
+    return general_function(functionName<numberType>, functionName<preciseType>, argument); \
+} \
+
+SHAMAN_FUNCTION(std::floor);
+SHAMAN_FUNCTION(std::ceil);
+SHAMAN_FUNCTION(std::trunc);
+SHAMAN_FUNCTION(std::cbrt);
+SHAMAN_FUNCTION(std::exp);
+SHAMAN_FUNCTION(std::exp2);
+SHAMAN_FUNCTION(std::erf);
+SHAMAN_FUNCTION(std::sin);
+SHAMAN_FUNCTION(std::sinh);
+SHAMAN_FUNCTION(std::asinh);
+SHAMAN_FUNCTION(std::cos);
+SHAMAN_FUNCTION(std::cosh);
+SHAMAN_FUNCTION(std::atan);
+SHAMAN_FUNCTION(std::tan);
+SHAMAN_FUNCTION(std::tanh);
+
+//-----------------------------------------------------------------------------
+// TEST BASED FUNCTIONS
 
 // isifnite
 templated inline bool isfinite(const Snum& n)
@@ -158,373 +205,6 @@ templated inline const Snum fabs(const Snum& n)
 {
     return abs(n);
 };
-
-// floor
-templated inline const Snum floor(const Snum& n)
-{
-    numberType result = std::floor(n.number);
-    preciseType preciseCorrectedResult = std::floor(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// ceil
-templated inline const Snum ceil(const Snum& n)
-{
-    numberType result = std::ceil(n.number);
-    preciseType preciseCorrectedResult = std::ceil(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// trunc
-templated inline const Snum trunc(const Snum& n)
-{
-    numberType result = std::trunc(n.number);
-    preciseType preciseCorrectedResult = std::trunc(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// sqrt
-templated inline const Snum sqrt(const Snum& n)
-{
-    numberType result = std::sqrt(n.number);
-
-    errorType newError;
-    if (result == 0)
-    {
-        newError = (errorType) std::sqrt((preciseType) std::abs(n.error));
-    }
-    else
-    {
-        numberType remainder = EFT::RemainderSqrt(n.number, result);
-        newError = (remainder + n.error) / (result + result);
-    }
-
-    return Snum(result, newError);
-};
-
-// cubic root
-templated inline const Snum cbrt(const Snum& n)
-{
-    numberType result = std::cbrt(n.number);
-    preciseType preciseCorrectedResult = std::cbrt(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// exp
-templated inline const Snum exp(const Snum& n)
-{
-    numberType result = std::exp(n.number);
-    preciseType preciseCorrectedResult = std::exp(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// exp2
-templated inline const Snum exp2(const Snum& n)
-{
-    numberType result = std::exp2(n.number);
-    preciseType preciseCorrectedResult = std::exp2(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// frexp
-templated inline const Snum frexp(const Snum& n, int* exp)
-{
-    numberType result = std::frexp(n.number, exp);
-    int dummyExp;
-    preciseType preciseCorrectedResult = std::frexp(n.corrected_number(), &dummyExp);
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// ldexp
-templated inline const Snum ldexp(const Snum& n, int exp)
-{
-    numberType result = std::ldexp(n.number, exp);
-    preciseType preciseCorrectedResult = std::ldexp(n.corrected_number(), exp);
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// erf
-templated inline const Snum erf(const Snum& n)
-{
-    numberType result = std::erf(n.number);
-    preciseType preciseCorrectedResult = std::erf(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// log
-templated inline const Snum log(const Snum& n)
-{
-    numberType result = std::log(n.number);
-    preciseType correctedNumber = n.corrected_number();
-
-    preciseType preciseCorrectedResult;
-    if (correctedNumber < 0)
-    {
-        preciseCorrectedResult = -INFINITY;
-    }
-    else
-    {
-        preciseCorrectedResult = std::log(correctedNumber);
-    }
-
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// log2
-templated inline const Snum log2(const Snum& n)
-{
-    numberType result = std::log2(n.number);
-    preciseType correctedNumber = n.corrected_number();
-
-    preciseType preciseCorrectedResult;
-    if (correctedNumber < 0)
-    {
-        preciseCorrectedResult = -INFINITY;
-    }
-    else
-    {
-        preciseCorrectedResult = std::log2(correctedNumber);
-    }
-
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// log10
-templated inline const Snum log10(const Snum& n)
-{
-    numberType result = std::log10(n.number);
-    preciseType correctedNumber = n.corrected_number();
-
-    preciseType preciseCorrectedResult;
-    if (correctedNumber < 0)
-    {
-        preciseCorrectedResult = -INFINITY;
-    }
-    else
-    {
-        preciseCorrectedResult = std::log10(correctedNumber);
-    }
-
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// sin
-templated inline const Snum sin(const Snum& n)
-{
-    numberType result = std::sin(n.number);
-    preciseType preciseCorrectedResult = std::sin(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// sinh
-templated inline const Snum sinh(const Snum& n)
-{
-    numberType result = std::sinh(n.number);
-    preciseType preciseCorrectedResult = std::sinh(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// asinh
-templated inline const Snum asinh(const Snum& n)
-{
-    numberType result = std::asinh(n.number);
-    preciseType preciseCorrectedResult = std::asinh(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// cos
-templated inline const Snum cos(const Snum& n)
-{
-    numberType result = std::cos(n.number);
-    preciseType preciseCorrectedResult = std::cos(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// cosh
-templated inline const Snum cosh(const Snum& n)
-{
-    numberType result = std::cosh(n.number);
-    preciseType preciseCorrectedResult = std::cosh(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// acosh
-templated inline const Snum acosh(const Snum& n)
-{
-    numberType result = std::acosh(n.number);
-    preciseType correctedNumber = n.corrected_number();
-
-    preciseType preciseCorrectedResult;
-    if (correctedNumber < 1.)
-    {
-        preciseCorrectedResult = 0.;
-    }
-    else
-    {
-        preciseCorrectedResult = std::acosh(correctedNumber);
-    }
-
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// acos
-templated inline const Snum acos(const Snum& n)
-{
-    numberType result = std::acos(n.number);
-    preciseType correctedNumber = n.corrected_number();
-
-    preciseType preciseCorrectedResult;
-    if (correctedNumber > 1)
-    {
-        preciseCorrectedResult = 0;
-    }
-    else if (correctedNumber < -1)
-    {
-        preciseCorrectedResult = M_PI;
-    }
-    else
-    {
-        preciseCorrectedResult = std::acos(correctedNumber);
-    }
-
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// asin
-templated inline const Snum asin(const Snum& n)
-{
-    numberType result = std::asin(n.number);
-    preciseType correctedNumber = n.corrected_number();
-
-    preciseType preciseCorrectedResult;
-    if (correctedNumber > 1)
-    {
-        preciseCorrectedResult = M_PI/2.;
-    }
-    else if (correctedNumber < -1)
-    {
-        preciseCorrectedResult = -M_PI/2;
-    }
-    else
-    {
-        preciseCorrectedResult = std::asin(correctedNumber);
-    }
-
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// atan
-templated inline const Snum atan(const Snum& n)
-{
-    numberType result = std::atan(n.number);
-    preciseType preciseCorrectedResult = std::atan(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// tan
-templated inline const Snum tan(const Snum& n)
-{
-    numberType result = std::tan(n.number);
-    preciseType preciseCorrectedResult = std::tan(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// tanh
-templated inline const Snum tanh(const Snum& n)
-{
-    numberType result = std::tanh(n.number);
-    preciseType preciseCorrectedResult = std::tanh(n.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// atanh
-templated inline const Snum atanh(const Snum& n)
-{
-    numberType result = std::atanh(n.number);
-    preciseType correctedNumber = n.corrected_number();
-
-    preciseType preciseCorrectedResult;
-    if(correctedNumber > 1. || correctedNumber < 1.)
-    {
-        preciseCorrectedResult = -INFINITY;
-    }
-    else
-    {
-        preciseCorrectedResult = std::atanh(correctedNumber);
-    }
-
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-
-// atan2
-templated inline const Snum atan2(const Snum& n1, const Snum& n2)
-{
-    numberType result = std::atan2(n1.number, n2.number);
-    preciseType preciseCorrectedResult = std::atan2(n1.corrected_number(), n2.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-set_Sfunction2_casts(atan2);
-
-// pow
-templated inline const Snum pow(const Snum& n1, const Snum& n2)
-{
-    numberType result = std::pow(n1.number, n2.number);
-    preciseType preciseCorrectedResult = std::pow(n1.corrected_number(), n2.corrected_number());
-    errorType newError = (errorType) (preciseCorrectedResult - result);
-
-    return Snum(result, newError);
-};
-set_Sfunction2_casts(pow);
 
 // min
 templated inline const Snum min(const Snum& n1, const Snum& n2)
@@ -562,7 +242,29 @@ templated inline const Snum max(const Snum& n1, const Snum& n2)
 };
 set_Sfunction2_casts(max);
 
-// fma
+//-----------------------------------------------------------------------------
+// LINEARISABLE FUNCTIONS
+
+// TODO sqrt
+templated inline const Snum sqrt(const Snum& n)
+{
+    numberType result = std::sqrt(n.number);
+
+    errorType newError;
+    if (result == 0)
+    {
+        newError = (errorType) std::sqrt((preciseType) std::abs(n.error));
+    }
+    else
+    {
+        numberType remainder = EFT::RemainderSqrt(n.number, result);
+        newError = (remainder + n.error) / (result + result);
+    }
+
+    return Snum(result, newError);
+};
+
+// TODO fma
 templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::fma(n1.number, n2.number, n3.number);
@@ -575,7 +277,220 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 };
 set_Sfunction3_casts(fma);
 
-// hypot
+//-----------------------------------------------------------------------------
+// CONSTRAINED FUNCTIONS
+
+// TODO log
+templated inline const Snum log(const Snum& n)
+{
+    numberType result = std::log(n.number);
+    preciseType correctedNumber = n.corrected_number();
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber < 0)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::log(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+
+// TODO log2
+templated inline const Snum log2(const Snum& n)
+{
+    numberType result = std::log2(n.number);
+    preciseType correctedNumber = n.corrected_number();
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber < 0)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::log2(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+
+// TODO log10
+templated inline const Snum log10(const Snum& n)
+{
+    numberType result = std::log10(n.number);
+    preciseType correctedNumber = n.corrected_number();
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber < 0)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::log10(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+
+// TODO acosh
+templated inline const Snum acosh(const Snum& n)
+{
+    numberType result = std::acosh(n.number);
+    preciseType correctedNumber = n.corrected_number();
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber < 1.)
+    {
+        preciseCorrectedResult = 0.;
+    }
+    else
+    {
+        preciseCorrectedResult = std::acosh(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+
+// TODO acos
+templated inline const Snum acos(const Snum& n)
+{
+    numberType result = std::acos(n.number);
+    preciseType correctedNumber = n.corrected_number();
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber > 1)
+    {
+        preciseCorrectedResult = 0;
+    }
+    else if (correctedNumber < -1)
+    {
+        preciseCorrectedResult = M_PI;
+    }
+    else
+    {
+        preciseCorrectedResult = std::acos(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+
+// TODO asin
+templated inline const Snum asin(const Snum& n)
+{
+    numberType result = std::asin(n.number);
+    preciseType correctedNumber = n.corrected_number();
+
+    preciseType preciseCorrectedResult;
+    if (correctedNumber > 1)
+    {
+        preciseCorrectedResult = M_PI/2.;
+    }
+    else if (correctedNumber < -1)
+    {
+        preciseCorrectedResult = -M_PI/2;
+    }
+    else
+    {
+        preciseCorrectedResult = std::asin(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+
+// TODO atanh
+templated inline const Snum atanh(const Snum& n)
+{
+    numberType result = std::atanh(n.number);
+    preciseType correctedNumber = n.corrected_number();
+
+    preciseType preciseCorrectedResult;
+    if(correctedNumber > 1. || correctedNumber < 1.)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::atanh(correctedNumber);
+    }
+
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+
+//-----------------------------------------------------------------------------
+// MULTIARGUMENTS FUNCTIONS
+
+// TODO frexp
+/*
+templated inline const Snum frexp(const Snum& n, int* exp)
+{
+    numberType result = std::frexp(n.number, exp);
+    int dummyExp;
+    preciseType preciseCorrectedResult = std::frexp(n.corrected_number(), &dummyExp);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+*/
+
+// TODO ldexp
+/*
+templated inline const Snum ldexp(const Snum& n, int exp)
+{
+    numberType result = std::ldexp(n.number, exp);
+    preciseType preciseCorrectedResult = std::ldexp(n.corrected_number(), exp);
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+*/
+
+// TODO atan2
+/*
+templated inline const Snum atan2(const Snum& n1, const Snum& n2)
+{
+    numberType result = std::atan2(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::atan2(n1.corrected_number(), n2.corrected_number());
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+set_Sfunction2_casts(atan2);
+*/
+
+// TODO pow
+/*
+templated inline const Snum pow(const Snum& n1, const Snum& n2)
+{
+    numberType result = std::pow(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::pow(n1.corrected_number(), n2.corrected_number());
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    return Snum(result, newError);
+};
+set_Sfunction2_casts(pow);
+*/
+
+// TODO hypot
+/*
 templated inline const Snum hypot(const Snum& n1, const Snum& n2)
 {
     numberType result = std::hypot(n1.number, n2.number);
@@ -585,8 +500,10 @@ templated inline const Snum hypot(const Snum& n1, const Snum& n2)
     return Snum(result, newError);
 };
 set_Sfunction2_casts(hypot);
+*/
 
-// hypot
+// TODO hypot
+/*
 templated inline const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::hypot(n1.number, n2.number);
@@ -596,6 +513,7 @@ templated inline const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3
     return Snum(result, newError);
 };
 set_Sfunction3_casts(hypot);
+*/
 
 //-----------------------------------------------------------------------------
 
