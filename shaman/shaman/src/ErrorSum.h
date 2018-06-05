@@ -64,12 +64,19 @@ public:
     {
         std::ostringstream output;
 
-        output << std::scientific << std::setprecision(2) << '[' << ' ';
-        for(auto kv : errors)
+        if(errors.empty())
         {
-            output << kv.first << ':' << kv.second << ' ';
+            output << "[no-error]";
         }
-        output << ']';
+        else
+        {
+            output << std::scientific << std::setprecision(2) << '[';
+            for(auto kv : errors)
+            {
+                output << kv.first << ':' << kv.second << ' ';
+            }
+            output << ']';
+        }
 
         return output.str();
     }
