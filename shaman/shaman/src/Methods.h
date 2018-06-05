@@ -91,7 +91,7 @@ templated inline bool Snum::non_significant() const
     #ifdef NUMERICAL_ZERO_FIELD_ENABLED
     return isNumericalZero;
     #else
-    return non_significativ(number, error);
+    return non_significant(number, error);
     #endif
 }
 
