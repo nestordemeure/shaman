@@ -129,7 +129,7 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 //-----------------------------------------------------------------------------
 // TEST BASED FUNCTIONS
 
-// isifnite
+// isfinite
 templated inline bool isfinite(const Snum& n)
 {
     return std::isfinite(n.number);
@@ -144,7 +144,8 @@ templated inline bool isnan(const Snum& n)
 // abs
 templated inline const Snum abs(const Snum& n)
 {
-    if (n >= 0.)
+    Snum::checkUnstableBranch(n, 0.);
+    if (n.number >= 0.)
     {
         return n;
     }
@@ -163,10 +164,7 @@ templated inline const Snum fabs(const Snum& n)
 // min
 templated inline const Snum min(const Snum& n1, const Snum& n2)
 {
-    #ifdef UNSTABLE_BRANCH_DEBUGGER
-    unstableBranchTest(n1, n2);
-    #endif
-
+    Snum::checkUnstableBranch(n1, n2);
     if (n1.number <= n2.number)
     {
         return n1;
@@ -181,10 +179,7 @@ set_Sfunction2_casts(min);
 // max
 templated inline const Snum max(const Snum& n1, const Snum& n2)
 {
-    #ifdef UNSTABLE_BRANCH_DEBUGGER
-    unstableBranchTest(n1, n2);
-    #endif
-
+    Snum::checkUnstableBranch(n1, n2);
     if (n1.number >= n2.number)
     {
         return n1;

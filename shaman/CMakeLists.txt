@@ -13,6 +13,7 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O1 -Wall -Wextra -Wno-u
 # files
 set(SOURCE_FILES main.cpp
         # shaman
+        shaman/src/GlobalVariables.h
         shaman/src/Tagger.h
         shaman/src/ErrorSum.h
         shaman/Shaman.h

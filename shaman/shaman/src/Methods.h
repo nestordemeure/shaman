@@ -66,7 +66,7 @@ templated inline numberType Snum::digits() const
 }
 
 //-----------------------------------------------------------------------------
-// UNSTABILITY DETECTION
+// SIGNIFICATIVITY TEST
 
 /*
  * returns true if the couple (number,error) has no significant digits in the base
@@ -91,11 +91,27 @@ templated inline bool Snum::non_significant() const
 }
 
 /*
- * detects unstable branchings
+ * function called at each unstability
+ * put a breakpoint here to break at each unstable tests
+ *
+ * TODO we could use the block name as a form of stack trace to locate the unstability
  */
-templated inline bool Snum::isUnstableBranchings(const Snum &n1, const Snum &n2)
+templated void Snum::unstability()
 {
-    return non_significant(n1.number - n2.number, n1.error - n2.error);
+    Shaman::unstableBranchCounter++;
+}
+
+/*
+ * check wether a branch is unstable
+ * in wihci case it triggers the unstability function
+ */
+templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
+{
+    bool isUnstable = non_significant(n1.number - n2.number, n1.error - n2.error);
+    if(isUnstable)
+    {
+        unstability();
+    }
 }
 
 //-----------------------------------------------------------------------------

@@ -10,17 +10,14 @@
 #include <numeric>
 #include <sstream>
 #include <iomanip>
-
-/*
- * TODO use a sparse vector as internal representation
- */
+#include "Tagger.h"
 
 template<typename errorType> class ErrorSum
 {
 public:
     // contains the error decomposed in composants (one per block encountered)
-    // TODO might use a more efficient representation
-    std::unordered_map<Tag,errorType> errors;
+    // TODO might use a more efficient representation : a sparse vector
+    std::unordered_map<Shaman::Tag,errorType> errors;
 
     //-------------------------------------------------------------------------
 
@@ -32,7 +29,7 @@ public:
     /*
      * returns an errorSum with a single element (singleton)
      */
-    ErrorSum(const Tag& name, errorType error)
+    ErrorSum(const Shaman::Tag& name, errorType error)
     {
         errors[name] = error;
     }
@@ -43,7 +40,7 @@ public:
      */
     explicit ErrorSum(errorType error)
     {
-        Tag name = Block::currentBlock();
+        Shaman::Tag name = Block::currentBlock();
         errors[name] = error;
     }
 
@@ -115,7 +112,7 @@ public:
      */
     inline void addError(errorType error)
     {
-        Tag name = Block::currentBlock();
+        Shaman::Tag name = Block::currentBlock();
         errors[name] += error;
     }
 
@@ -159,33 +156,13 @@ public:
      * TODO find a way to use std::transform
      */
     template<typename FUN>
-    inline static void transform(std::unordered_map<Tag,errorType>& dict, FUN f)
+    inline static void transform(std::unordered_map<Shaman::Tag,errorType>& dict, FUN f)
     {
         for(auto kv : dict)
         {
             dict[kv.first] = f(kv.second);
         }
     }
-
-    /*
-     * given f, x and y such that f(x) = y, updates the errorComposants
-     * the error is updated by being proportionality distributed amongst elements
-     *
-     * the proportionality is not a perfect system (unless f is linear) but it preserves the sum of errorComposants (which matters over all other properties)
-     */
-    /*
-    template<typename FUN>
-    void functionError(FUN f, numberType x, numberType y)
-    {
-        errorType previoustotalError = totalError();
-        errorType xPrecise = x + previoustotalError;
-        errorType yPrecise = f(xPrecise);
-        errorType newTotalError = yPrecise - y;
-        errorType scalingFactor = newTotalError / previoustotalError;
-        multByScalar(scalingFactor);
-    }
-    */
-
 };
 
 #endif //SHAMAN_ERRORSUM_H

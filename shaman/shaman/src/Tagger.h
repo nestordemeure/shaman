@@ -5,11 +5,9 @@
 #ifndef SHAMAN_TAGGER_H
 #define SHAMAN_TAGGER_H
 
-#include <stack>
 #include <stdexcept>
-
-using Tag = std::string; // TODO use a more efficient representation for block identifiers
-static std::stack<std::string> tagStack({"main"}); // TODO make threadsafe
+#include <stack>
+#include "GlobalVariables.h"
 
 /*
  * tracks the current section of the code
@@ -18,14 +16,14 @@ class Block
 {
 public:
     // tags associated with the current block
-    Tag blockName;
+    Shaman::Tag blockName;
 
     /*
      * declares that we are now in a given block
      */
-    Block(const Tag& name): blockName(name)
+    Block(const Shaman::Tag& name): blockName(name)
     {
-        tagStack.push(name);
+        Shaman::tagStack.push(name);
     }
 
     /*
@@ -33,15 +31,15 @@ public:
      */
     ~Block()
     {
-        tagStack.pop();
+        Shaman::tagStack.pop();
         /*
-        if(tagStack.top() == blockName)
+        if(Shaman::tagStack.top() == blockName)
         {
-            tagStack.pop();
+            Shaman::tagStack.pop();
         }
         else
         {
-            Tag currentBlock = tagStack.top();
+            Shaman::Tag currentBlock = Shaman::tagStack.top();
             std::string errorMessage = "Tried to leave block '" + blockName + "' while still in inner block '" + currentBlock + "'.";
             throw std::runtime_error(errorMessage);
         }
@@ -51,9 +49,9 @@ public:
     /*
      * returns the current block name
      */
-    inline static Tag currentBlock()
+    inline static Shaman::Tag currentBlock()
     {
-        return tagStack.top();
+        return Shaman::tagStack.top();
     }
 };
 
