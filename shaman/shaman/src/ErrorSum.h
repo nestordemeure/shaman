@@ -11,12 +11,13 @@
 #include <sstream>
 #include <iomanip>
 
-template<typename numberType, typename errorType, typename preciseType> class ErrorSum
+/*
+ * TODO use a sparse vector as internal representation
+ */
+
+template<typename errorType> class ErrorSum
 {
 public:
-    // contains the sum of the error so far
-    errorType totalError;
-
     // contains the error decomposed in composants (one per block encountered)
     // TODO might use a more efficient representation
     std::unordered_map<Tag,errorType> errors;
@@ -24,22 +25,23 @@ public:
     //-------------------------------------------------------------------------
 
     /*
-     * builds a new errorSum using the content of an existing errorSum
+     * empty constructor : currently no error
      */
-    ErrorSum(std::unordered_map<Tag,errorType> errorsArg, errorType totalErrorArg): totalError(totalErrorArg), errors(errorsArg) {}
+    ErrorSum() = default;
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    ErrorSum(const Tag& name, errorType error): totalError(error)
+    ErrorSum(const Tag& name, errorType error)
     {
         errors[name] = error;
     }
 
     /*
      * returns an errorSum with a single element (singleton)
+     * uses the current tag
      */
-    ErrorSum(errorType error): totalError(error)
+    explicit ErrorSum(errorType error)
     {
         Tag name = Block::currentBlock();
         errors[name] = error;
@@ -55,7 +57,7 @@ public:
      *
      * maybe keep at most the ten most important terms (and displays the number of terms ?)
      */
-    operator std::string() const
+    explicit operator std::string() const
     {
         std::ostringstream output;
 
@@ -73,14 +75,12 @@ public:
 
     /*
      * ~-
-     * TODO there might be a more efficient way to build the new unordered map
      */
     static inline ErrorSum unaryNeg(const ErrorSum& errorSum)
     {
-        std::unordered_map<Tag,errorType> newErrors(errorSum.errors);
-        transform(newErrors, [](errorType e){return -e;});
-        errorType newtotalError = -errorSum.totalError;
-        return ErrorSum(newErrors, newtotalError);
+        ErrorSum result(errorSum);
+        transform(result.errors, [](errorType e){return -e;});
+        return result;
     }
 
     /*
@@ -88,7 +88,6 @@ public:
      */
     inline void multByScalar(errorType scalar)
     {
-        totalError *= scalar;
         transform(errors, [scalar](errorType e){return e * scalar;});
     }
 
@@ -97,16 +96,14 @@ public:
      */
     inline void divByScalar(errorType scalar)
     {
-        totalError /= scalar;
         transform(errors, [scalar](errorType e){return e / scalar;});
     }
 
     /*
-     * += errors
+     * += errorComposants
      */
     inline void addErrors(const ErrorSum& errors2)
     {
-        totalError += errors2.totalError;
         for(auto kv : errors2.errors)
         {
             errors[kv.first] += kv.second;
@@ -123,11 +120,10 @@ public:
     }
 
     /*
-     * -= errors
+     * -= errorComposants
      */
     inline void subErrors(const ErrorSum& errors2)
     {
-        totalError -= errors2.totalError;
         for(auto kv : errors2.errors)
         {
             errors[kv.first] -= kv.second;
@@ -135,11 +131,10 @@ public:
     }
 
     /*
-     * += scalar * errors
+     * += scalar * errorComposants
      */
     inline void addErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
-        totalError += scalar * errors2.totalError;
         for(auto kv : errors2.errors)
         {
             errors[kv.first] += kv.second * scalar;
@@ -147,11 +142,10 @@ public:
     }
 
     /*
-     * -= scalar * errors
+     * -= scalar * errorComposants
      */
     inline void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
-        totalError -= scalar * errors2.totalError;
         for(auto kv : errors2.errors)
         {
             errors[kv.first] -= kv.second * scalar;
@@ -174,10 +168,10 @@ public:
     }
 
     /*
-     * given f, x and y such that f(x) = y, updates the errors
+     * given f, x and y such that f(x) = y, updates the errorComposants
      * the error is updated by being proportionality distributed amongst elements
      *
-     * the proportionality is not a perfect system (unless f is linear) but it preserves the sum of errors (which matters over all other properties)
+     * the proportionality is not a perfect system (unless f is linear) but it preserves the sum of errorComposants (which matters over all other properties)
      */
     /*
     template<typename FUN>

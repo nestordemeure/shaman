@@ -18,6 +18,7 @@ set(SOURCE_FILES main.cpp
         shaman/Shaman.h
         shaman/src/Methods.h
         shaman/src/Operators.h
+        shaman/src/Functions.h
         # tests
         #tests/test_eft.h
         #tests/test_loop.h
