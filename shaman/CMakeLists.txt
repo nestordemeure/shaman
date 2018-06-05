@@ -24,9 +24,9 @@ set(SOURCE_FILES main.cpp
         #tests/test_eft.h
         #tests/test_loop.h
         # examples
-        #examples/various.h
+        examples/various.h
         examples/schrodinger/schrodinger.cpp examples/schrodinger/schrodinger.h
-        #examples/legendre.h
+        examples/legendre.h
         examples/sqrtHeron.h)
 
 # linking

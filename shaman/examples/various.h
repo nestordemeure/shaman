@@ -24,7 +24,7 @@ inline void displayError(S<numberType,errorType,preciseType> result, double expe
     std::cout << "result=" << result << " (" << result.number << ')'
               << '\n'
               << " absolut_error=" << error
-              << " estimated_absolut_error=" << result.errors
+              << " estimated_absolut_error=" << result.error
               << '\n'
               << " significativ_digits=" << digits
               << " estimated_significativ_digits=" << estimatedDigits

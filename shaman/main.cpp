@@ -5,7 +5,7 @@
 //#include "tests/test_eft.h"
 //#include "tests/test_loop.h"
 // examples
-//#include "examples/various.h"
+#include "examples/various.h"
 #include "examples/legendre.h"
 #include "examples/schrodinger/schrodinger.h"
 #include "examples/sqrtHeron.h"
@@ -26,11 +26,11 @@ int main()
     sqrtHeron();
 
     // various examples
-    //rumpTest();
-    //polynomialTest();
-    //fixedPointTest();
-    //kahanIdentity();
-    //mullerTest();
+    rumpTest();
+    polynomialTest();
+    fixedPointTest();
+    kahanIdentity();
+    mullerTest();
 
     // legendre
     legendre20Test();
