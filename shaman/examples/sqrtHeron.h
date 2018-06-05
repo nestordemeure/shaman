@@ -9,11 +9,6 @@
 
 /*
  * computing sqrt(x) using Heron's algorithm
- *
- * iterations with unstable operations :
- * - cancelation in test : 4,5,6
- * - unstable abs and < in test : 6
- * (6 being the last iteration) 
  */
 void sqrtHeron()
 {
@@ -23,7 +18,7 @@ void sqrtHeron()
     while(1e-15 < abs(r*r - x))
     {
         r = (r + x/r) / 2;
-        printf("sqrt=%.15e errorComposants=%.15e\n", r.number, r.error);
+        printf("sqrt=%.15e error=%.15e\n", r.number, r.error);
     }
 }
 

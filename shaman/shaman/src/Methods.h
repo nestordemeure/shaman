@@ -96,7 +96,7 @@ templated inline bool Snum::non_significant() const
  *
  * TODO we could use the block name as a form of stack trace to locate the unstability
  */
-templated void Snum::unstability()
+void Shaman::unstability()
 {
     Shaman::unstableBranchCounter++;
 }
@@ -110,8 +110,17 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
     bool isUnstable = non_significant(n1.number - n2.number, n1.error - n2.error);
     if(isUnstable)
     {
-        unstability();
+        Shaman::unstability();
     }
+}
+
+/*
+ * displays the number of unstable branches
+ */
+inline void Shaman::displayUnstableBranches()
+{
+    std::cout << "#SHAMAN :" << ' '
+              << "We detected " << Shaman::unstableBranchCounter << " unstable tests." << std::endl;
 }
 
 //-----------------------------------------------------------------------------

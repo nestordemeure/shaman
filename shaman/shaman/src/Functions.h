@@ -213,7 +213,7 @@ templated inline const Snum sqrt(const Snum& n)
         newError = (remainder + n.error) / (result + result);
 
         newErrorComp = Serror(remainder);
-        newErrorComp.addError(n.errorComposants);
+        newErrorComp.addErrors(n.errorComposants);
         newErrorComp.divByScalar(result + result);
     }
 
@@ -232,7 +232,7 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
     Serror newErrorComp = Serror(remainder);
     newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
     newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
-    newErrorComp.addError(n3.errorComposants);
+    newErrorComp.addErrors(n3.errorComposants);
 
     return Snum(result, newError, newErrorComp);
 };

@@ -32,18 +32,6 @@ public:
     ~Block()
     {
         Shaman::tagStack.pop();
-        /*
-        if(Shaman::tagStack.top() == blockName)
-        {
-            Shaman::tagStack.pop();
-        }
-        else
-        {
-            Shaman::Tag currentBlock = Shaman::tagStack.top();
-            std::string errorMessage = "Tried to leave block '" + blockName + "' while still in inner block '" + currentBlock + "'.";
-            throw std::runtime_error(errorMessage);
-        }
-        */
     }
 
     /*

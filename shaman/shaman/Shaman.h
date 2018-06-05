@@ -75,8 +75,13 @@ public :
     static bool non_significant(numberType number, errorType error);
     bool non_significant() const;
     static void checkUnstableBranch(S n1, S n2);
-    static void unstability();
 };
+
+namespace Shaman
+{
+    static void unstability();
+    static void displayUnstableBranches();
+}
 
 //-------------------------------------------------------------------------------------------------
 // SHAMAN OPERATIONS
