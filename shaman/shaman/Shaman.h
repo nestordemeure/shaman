@@ -18,7 +18,7 @@ public :
     // true number ≈ number + errorComposants
     numberType number; // current computed number
     errorType error; // approximation of the current error
-    ErrorSum<errorType> errorComposants; // error decomposed per functions
+    ErrorSum<errorType> errorComposants; // error decomposed per functions TODO could be made optionnal with a flag
 
     // base constructors
     inline S(numberType numberArg, errorType errorArg, ErrorSum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {}; // TODO would a ref improve perfs here ?
