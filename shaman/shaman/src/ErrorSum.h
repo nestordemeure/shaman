@@ -24,12 +24,12 @@ public:
     /*
      * empty constructor : currently no error
      */
-    ErrorSum() = default;
+    explicit ErrorSum() = default;
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    ErrorSum(const Shaman::Tag& name, errorType error)
+    explicit ErrorSum(const Shaman::Tag& name, errorType error)
     {
         errors[name] = error;
     }
@@ -73,11 +73,9 @@ public:
     /*
      * ~-
      */
-    static inline ErrorSum unaryNeg(const ErrorSum& errorSum)
+    inline void unaryNeg()
     {
-        ErrorSum result(errorSum);
-        transform(result.errors, [](errorType e){return -e;});
-        return result;
+        transform(errors, [](errorType e){return -e;});
     }
 
     /*
@@ -97,6 +95,15 @@ public:
     }
 
     /*
+     * += error
+     */
+    inline void addError(errorType error)
+    {
+        Shaman::Tag name = Block::currentBlock();
+        errors[name] += error;
+    }
+
+    /*
      * += errorComposants
      */
     inline void addErrors(const ErrorSum& errors2)
@@ -105,15 +112,6 @@ public:
         {
             errors[kv.first] += kv.second;
         }
-    }
-
-    /*
-     * += error
-     */
-    inline void addError(errorType error)
-    {
-        Shaman::Tag name = Block::currentBlock();
-        errors[name] += error;
     }
 
     /*

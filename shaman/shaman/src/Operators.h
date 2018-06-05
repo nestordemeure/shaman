@@ -104,7 +104,9 @@ templated inline const Snum operator-(const Snum& n)
 {
     numberType newNumber = -n.number;
     errorType newError = -n.error;
-    Serror newErrors = Serror::unaryNeg(n.errorComposants);
+    Serror newErrors(n.errorComposants);
+    newErrors.unaryNeg();
+
     return Snum(newNumber, newError, newErrors);
 };
 
