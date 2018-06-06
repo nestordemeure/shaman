@@ -15,7 +15,7 @@ class Block
 {
 public:
     // tags associated with the current block
-    Shaman::Tag blockTag;
+    Shaman::Tag blockTag; // TODO currently useless
 
     /*
      * declares that we are now in a given block
@@ -53,15 +53,15 @@ public:
     /*
      * returns the name associated with a tag
      */
-    static std::string nameOfTag(Shaman::Tag t)
+    static std::string nameOfTag(Shaman::Tag tag)
     {
-        return Shaman::tagDecryptor[t];
+        return Shaman::tagDecryptor[tag];
     }
 
     /*
      * returns the tag associated with a name
      * note : this operation cost an hashtable lookup
-     * TODO it would be ideal to do this operation at compile time
+     * TODO can we do this operation at compile time
      * TODO maybe not needed if we use numeric types (function pointers) from the beginning
      */
     static Shaman::Tag tagOfName(const std::string& name)
@@ -76,7 +76,6 @@ public:
             Shaman::Tag tag = (unsigned short int) Shaman::tagDecryptor.size();
             Shaman::tagDecryptor.push_back(name);
             Shaman::nameEncryptor[name]=tag;
-            //std::cout << "#TAGGER: " << name << "->" << tag << std::endl;
             return tag;
         }
     }

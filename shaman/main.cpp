@@ -26,8 +26,8 @@ int main()
     //sqrtHeron();
 
     // various examples
+    //rumpTest();
     /*
-    rumpTest();
     polynomialTest();
     fixedPointTest();
     kahanIdentity();
