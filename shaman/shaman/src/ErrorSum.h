@@ -10,14 +10,15 @@
 #include <numeric>
 #include <sstream>
 #include <iomanip>
+#include <iostream>
 #include "Tagger.h"
 
 template<typename errorType> class ErrorSum
 {
 public:
     // contains the error decomposed in composants (one per block encountered)
-    // TODO might use a more efficient representation : a sparse vector
-    std::unordered_map<Shaman::Tag,errorType> errors;
+    using sparseVec = std::vector<std::pair<Shaman::Tag,errorType>>;
+    sparseVec errors;
 
     //-------------------------------------------------------------------------
 
@@ -29,11 +30,11 @@ public:
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(const Shaman::Tag& name, errorType error)
+    explicit ErrorSum(const Shaman::Tag& tag, errorType error)
     {
         if(error != 0)
         {
-            errors[name] = error;
+            errors.push_back(std::make_pair(tag,error));
         }
     }
 
@@ -45,8 +46,8 @@ public:
     {
         if(error != 0)
         {
-            Shaman::Tag name = Block::currentBlock();
-            errors[name] = error;
+            Shaman::Tag tag = Block::currentBlock();
+            errors.push_back(std::make_pair(tag,error));
         }
     }
 
@@ -66,22 +67,18 @@ public:
         }
         else
         {
-            // load the data in a vector
-            std::vector<std::pair<Shaman::Tag, errorType>> data;
-            for(auto kv : errors)
-            {
-                data.push_back(kv);
-            }
+            // copy the data
+            sparseVec data(errors);
 
             // sorts the vector by abs(error) descending
             auto compare = [](const std::pair<Shaman::Tag, errorType>& p1, const std::pair<Shaman::Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
             std::sort(data.begin(), data.end(), compare);
 
-            // add the first element
+            // displays the first element
             auto kv = data[0];
             output << Block::nameOfTag(kv.first) << ':' << kv.second;
 
-            // add each other element prefixed by a ", " separator
+            // displays each other element prefixed by a ", " separator
             for(int i = 1; i < data.size(); i++)
             {
                 kv = data[i];
@@ -124,8 +121,29 @@ public:
      */
     inline void addError(errorType error)
     {
-        Shaman::Tag name = Block::currentBlock();
-        errors[name] += error;
+        Shaman::Tag tag = Block::currentBlock();
+
+        // search in a sorted vector
+        for(int i = 0; i < errors.size(); i++)
+        {
+            Shaman::Tag currentTag = errors[i].first;
+            // the target tag is not inside the vector but should be here
+            if(currentTag > tag)
+            {
+                auto kv2 = std::make_pair(tag,error);
+                errors.insert(errors.begin()+i, kv2);
+                return;
+            }
+            // we found the target tag
+            else if (currentTag == tag)
+            {
+                errors[i].second += error;
+                return;
+            }
+        }
+
+        // the target was not in the vector
+        errors.push_back(std::make_pair(tag,error));
     }
 
     /*
@@ -133,10 +151,7 @@ public:
      */
     inline void addErrors(const ErrorSum& errors2)
     {
-        for(auto kv : errors2.errors)
-        {
-            errors[kv.first] += kv.second;
-        }
+        addMap(errors2.errors, [](errorType e){return e;});
     }
 
     /*
@@ -144,10 +159,7 @@ public:
      */
     inline void subErrors(const ErrorSum& errors2)
     {
-        for(auto kv : errors2.errors)
-        {
-            errors[kv.first] -= kv.second;
-        }
+        addMap(errors2.errors, [](errorType e){return -e;});
     }
 
     /*
@@ -155,10 +167,7 @@ public:
      */
     inline void addErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
-        for(auto kv : errors2.errors)
-        {
-            errors[kv.first] += kv.second * scalar;
-        }
+        addMap(errors2.errors, [scalar](errorType e){return e*scalar;});
     }
 
     /*
@@ -166,10 +175,7 @@ public:
      */
     inline void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
-        for(auto kv : errors2.errors)
-        {
-            errors[kv.first] -= kv.second * scalar;
-        }
+        addMap(errors2.errors, [scalar](errorType e){return -e*scalar;});
     }
 
     //-------------------------------------------------------------------------
@@ -177,13 +183,51 @@ public:
     /*
      * homemade implementation of std::transform since I was unable to use the original
      * TODO find a way to use std::transform
+     * TODO std::for_each(vec.begin(), vec.end(), [](std::pair<Shaman::Tag,errorType> p){p.second <- f(p.second);});
      */
     template<typename FUN>
-    inline static void transform(std::unordered_map<Shaman::Tag,errorType>& dict, FUN f)
+    inline static void transform(sparseVec& vec, FUN f)
     {
-        for(auto kv : dict)
+        for(auto& kv : vec)
         {
-            dict[kv.first] = f(kv.second);
+            kv.second = f(kv.second);
+        }
+    }
+
+    /*
+     * applies a function f to the elements of errors2 and add them to errors
+     */
+    template<typename FUN>
+    inline void addMap(const sparseVec& errors2, FUN f)
+    {
+        // iterate on it1 and it2 at the same time
+        int i1 = 0;
+        int i2 = 0;
+        while( (i1 < errors.size()) && (i2 < errors2.size()) )
+        {
+            auto& kv1 = errors[i1];
+            auto& kv2 = errors2[i2];
+            if(kv1.first == kv2.first)
+            {
+                kv1.second += f(kv2.second);
+                i2++;
+            }
+            else if (kv1.first > kv2.first)
+            {
+                auto kv = std::make_pair(kv2.first, f(kv2.second));
+                errors.insert(errors.begin()+i1, kv);
+                i2++;
+            }
+            i1++;
+        }
+
+        // we did not get to the end of it2
+        while(i2 < errors2.size())
+        {
+            auto& kv2 = errors2[i2];
+            auto kv = std::make_pair(kv2.first, f(kv2.second));
+            errors.push_back(kv);
+            i2++;
         }
     }
 };
