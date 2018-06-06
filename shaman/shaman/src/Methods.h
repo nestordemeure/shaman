@@ -119,8 +119,7 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
  */
 inline void Shaman::displayUnstableBranches()
 {
-    std::cout << "#SHAMAN :" << ' '
-              << "We detected " << Shaman::unstableBranchCounter << " unstable tests." << std::endl;
+    std::cout << "#SHAMAN: " << "We detected " << Shaman::unstableBranchCounter << " unstable tests." << std::endl;
 }
 
 //-----------------------------------------------------------------------------

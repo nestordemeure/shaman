@@ -79,13 +79,13 @@ public:
 
             // add the first element
             auto kv = data[0];
-            output << kv.first << ':' << kv.second;
+            output << Block::nameOfTag(kv.first) << ':' << kv.second;
 
             // add each other element prefixed by a ", " separator
             for(int i = 1; i < data.size(); i++)
             {
                 kv = data[i];
-                output << ", " << kv.first << ':' << kv.second;
+                output << ", " << Block::nameOfTag(kv.first) << ':' << kv.second;
             }
         }
 
