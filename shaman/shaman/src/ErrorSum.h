@@ -17,8 +17,8 @@ template<typename errorType> class ErrorSum
 {
 public:
     // contains the error decomposed in composants (one per block encountered)
-    using sparseVec = std::vector<std::pair<Shaman::Tag,errorType>>;
-    sparseVec errors;
+    using sparseVec = std::vector<std::pair<Shaman::Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
+    sparseVec errors; // sorted from bigger tag to smaller tag in the hope of speeding up search for single element insertion
 
     //-------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ public:
     /*
      * ~-
      */
-    inline void unaryNeg()
+    void unaryNeg()
     {
         transform(errors, [](errorType e){return -e;});
     }
@@ -102,7 +102,7 @@ public:
     /*
      * *= scalar
      */
-    inline void multByScalar(errorType scalar)
+    void multByScalar(errorType scalar)
     {
         transform(errors, [scalar](errorType e){return e * scalar;});
     }
@@ -110,15 +110,16 @@ public:
     /*
      * /= scalar
      */
-    inline void divByScalar(errorType scalar)
+    void divByScalar(errorType scalar)
     {
         transform(errors, [scalar](errorType e){return e / scalar;});
     }
 
     /*
      * += error
+     * TODO might use binary search to improve perfs
      */
-    inline void addError(errorType error)
+    void addError(errorType error)
     {
         Shaman::Tag tag = Block::currentBlock();
 
@@ -126,7 +127,7 @@ public:
         for(int i = 0; i < errors.size(); i++)
         {
             Shaman::Tag currentTag = errors[i].first;
-            if(currentTag > tag)
+            if(currentTag < tag)
             {
                 // the target tag is not inside the vector but should be here
                 auto kv2 = std::make_pair(tag,error);
@@ -148,7 +149,7 @@ public:
     /*
      * += errorComposants
      */
-    inline void addErrors(const ErrorSum& errors2)
+    void addErrors(const ErrorSum& errors2)
     {
         addMap(errors2.errors, [](errorType e){return e;});
     }
@@ -156,7 +157,7 @@ public:
     /*
      * -= errorComposants
      */
-    inline void subErrors(const ErrorSum& errors2)
+    void subErrors(const ErrorSum& errors2)
     {
         addMap(errors2.errors, [](errorType e){return -e;});
     }
@@ -164,7 +165,7 @@ public:
     /*
      * += scalar * errorComposants
      */
-    inline void addErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
+    void addErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
         addMap(errors2.errors, [scalar](errorType e){return e*scalar;});
     }
@@ -172,7 +173,7 @@ public:
     /*
      * -= scalar * errorComposants
      */
-    inline void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
+    void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
         addMap(errors2.errors, [scalar](errorType e){return -e*scalar;});
     }
@@ -211,7 +212,7 @@ public:
                 kv1.second += f(kv2.second);
                 i2++;
             }
-            else if (kv1.first > kv2.first)
+            else if (kv1.first < kv2.first)
             {
                 auto kv = std::make_pair(kv2.first, f(kv2.second));
                 errors.insert(errors.begin()+i1, kv);
