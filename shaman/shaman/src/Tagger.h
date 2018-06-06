@@ -6,7 +6,6 @@
 #define SHAMAN_TAGGER_H
 
 #include <stdexcept>
-#include <stack>
 #include "GlobalVariables.h"
 
 /*
@@ -16,14 +15,23 @@ class Block
 {
 public:
     // tags associated with the current block
-    Shaman::Tag blockName;
+    Shaman::Tag blockTag;
 
     /*
      * declares that we are now in a given block
      */
-    Block(const Shaman::Tag& name): blockName(name)
+    Block(const std::string& name)
     {
-        Shaman::tagStack.push(name);
+        blockTag = tagOfName(name);
+        Shaman::tagStack.push(blockTag);
+    }
+
+    /*
+     * declares that we are now in a given block
+     */
+    Block(Shaman::Tag tag): blockTag(tag)
+    {
+        Shaman::tagStack.push(tag);
     }
 
     /*
@@ -40,6 +48,37 @@ public:
     inline static Shaman::Tag currentBlock()
     {
         return Shaman::tagStack.top();
+    }
+
+    /*
+     * returns the name associated with a tag
+     */
+    static std::string nameOfTag(Shaman::Tag t)
+    {
+        return Shaman::tagDecryptor[t];
+    }
+
+    /*
+     * returns the tag associated with a name
+     * note : this operation cost an hashtable lookup
+     * TODO it would be ideal to do this operation at compile time
+     * TODO maybe not needed if we use numeric types (function pointers) from the beginning
+     */
+    static Shaman::Tag tagOfName(const std::string& name)
+    {
+        auto potentialTag = Shaman::nameEncryptor.find(name);
+        if(potentialTag != Shaman::nameEncryptor.end())
+        {
+            return potentialTag->second;
+        }
+        else
+        {
+            Shaman::Tag tag = (unsigned short int) Shaman::tagDecryptor.size();
+            Shaman::tagDecryptor.push_back(name);
+            Shaman::nameEncryptor[name]=tag;
+            //std::cout << "#TAGGER: " << name << "->" << tag << std::endl;
+            return tag;
+        }
     }
 };
 
