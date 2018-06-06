@@ -52,7 +52,7 @@ public:
 
     /*
      * produces a readable string representation of the error terms
-     * TODO maybe keep at most the ten most important terms (and displays the number of terms ?) or just display terms that have an impact on the number of digits
+     * TODO maybe keep at most the ten most important terms (and displays the number of terms ?) or just display terms that have an impact on the number of digits (ie >10-19)
      */
     explicit operator std::string() const
     {
