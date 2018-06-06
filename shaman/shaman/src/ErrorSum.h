@@ -30,7 +30,7 @@ public:
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(const Shaman::Tag& tag, errorType error)
+    explicit ErrorSum(Shaman::Tag tag, errorType error)
     {
         if(error != 0)
         {
@@ -58,8 +58,7 @@ public:
     explicit operator std::string() const
     {
         std::ostringstream output;
-        unsigned int defaultPrecision = 2;
-        output << std::scientific << std::setprecision(defaultPrecision) << '[';
+        output << std::scientific << std::setprecision(2) << '[';
 
         if(errors.empty())
         {
@@ -127,16 +126,16 @@ public:
         for(int i = 0; i < errors.size(); i++)
         {
             Shaman::Tag currentTag = errors[i].first;
-            // the target tag is not inside the vector but should be here
             if(currentTag > tag)
             {
+                // the target tag is not inside the vector but should be here
                 auto kv2 = std::make_pair(tag,error);
                 errors.insert(errors.begin()+i, kv2);
                 return;
             }
-            // we found the target tag
             else if (currentTag == tag)
             {
+                // we found the target tag
                 errors[i].second += error;
                 return;
             }
