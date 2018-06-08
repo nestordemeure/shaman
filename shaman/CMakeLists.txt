@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 11)
 #add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
 # to get readable perf output : -g -fno-omit-frame-pointer -fno-inline
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g -fno-omit-frame-pointer -fno-inline -fopenmp -mfma -O3 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O3 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")
 
 # files
 set(SOURCE_FILES main.cpp

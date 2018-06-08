@@ -182,8 +182,6 @@ public:
 
     /*
      * homemade implementation of std::transform since I was unable to use the original
-     * TODO find a way to use std::transform
-     * TODO std::for_each(vec.begin(), vec.end(), [](std::pair<Shaman::Tag,errorType> p){p.second <- f(p.second);});
      */
     template<typename FUN>
     inline static void transform(sparseVec& vec, FUN f)

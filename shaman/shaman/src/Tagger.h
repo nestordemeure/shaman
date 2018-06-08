@@ -61,7 +61,6 @@ public:
     /*
      * returns the tag associated with a name
      * note : this operation cost an hashtable lookup
-     * TODO make threadsafe
      * TODO can we do this operation at compile time
      * TODO maybe not needed if we use numeric types (function pointers) from the beginning
      */
@@ -74,6 +73,7 @@ public:
         }
         else
         {
+            std::lock_guard<std::mutex> guard(ShamanGlobals::mutexAddName); // TODO can it be insufficient to guard against problem when running find on an unordered_map
             Tag tag = (unsigned short int) ShamanGlobals::tagDecryptor.size();
             ShamanGlobals::tagDecryptor.push_back(name);
             ShamanGlobals::nameEncryptor[name]=tag;
