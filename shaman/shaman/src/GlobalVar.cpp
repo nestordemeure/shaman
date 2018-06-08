@@ -13,4 +13,4 @@ thread_local std::stack<Tag> ShamanGlobals::tagStack({ShamanGlobals::tagMain}); 
 std::mutex ShamanGlobals::mutexAddName;
 
 // counter for the number of unstable branches
-std::atomic_int ShamanGlobals::unstableBranchCounter;
+std::atomic_int ShamanGlobals::unstableBranchCounter(0);
