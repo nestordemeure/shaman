@@ -19,6 +19,7 @@ public :
     numberType number; // current computed number
     errorType error; // approximation of the current error
     ErrorSum<errorType> errorComposants; // error decomposed per functions TODO could be made optionnal with a flag
+    // TODO the variable size fo errorsum cause problems when using C arrays (no problem with vector) : a pointeur might solve the problem but we will need to allocate and free the memory with caution
 
     // base constructors
     inline S(numberType numberArg, errorType errorArg, ErrorSum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {}; // TODO would a ref improve perfs here ?

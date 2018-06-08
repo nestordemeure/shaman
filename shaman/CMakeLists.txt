@@ -12,8 +12,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O3 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")
 
 # files
-set(SOURCE_FILES main.cpp
-        # shaman
+set(SOURCE_SHAMAN
         shaman/src/GlobalVar.h
         shaman/src/GlobalVar.cpp
         shaman/src/Tagger.h
@@ -21,15 +20,14 @@ set(SOURCE_FILES main.cpp
         shaman/Shaman.h
         shaman/src/Methods.h
         shaman/src/Operators.h
-        shaman/src/Functions.h
-        # tests
-        #tests/test_eft.h
-        #tests/test_loop.h
-        # examples
+        shaman/src/Functions.h)
+set(SOURCE_EXAMPLES
         examples/various.h
         examples/schrodinger/schrodinger.cpp examples/schrodinger/schrodinger.h
         examples/legendre.h
         examples/sqrtHeron.h)
 
 # linking
-add_executable(shaman ${SOURCE_FILES})
+add_executable(shaman main.cpp ${SOURCE_SHAMAN} ${SOURCE_EXAMPLES})
+add_executable(lulesh examples/performances/lulesh.cpp ${SOURCE_SHAMAN})
+
