@@ -6,7 +6,7 @@
 #define SHAMAN_TAGGER_H
 
 #include <stdexcept>
-#include "GlobalVariables.h"
+#include "GlobalVar.h"
 
 /*
  * tracks the current section of the code
@@ -15,7 +15,7 @@ class Block
 {
 public:
     // tags associated with the current block
-    Shaman::Tag blockTag; // TODO currently useless
+    Tag blockTag; // TODO currently useless
 
     /*
      * declares that we are now in a given block
@@ -23,15 +23,15 @@ public:
     Block(const std::string& name)
     {
         blockTag = tagOfName(name);
-        Shaman::tagStack.push(blockTag);
+        ShamanGlobals::tagStack.push(blockTag);
     }
 
     /*
      * declares that we are now in a given block
      */
-    Block(Shaman::Tag tag): blockTag(tag)
+    Block(Tag tag): blockTag(tag)
     {
-        Shaman::tagStack.push(tag);
+        ShamanGlobals::tagStack.push(tag);
     }
 
     /*
@@ -39,43 +39,44 @@ public:
      */
     ~Block()
     {
-        Shaman::tagStack.pop();
+        ShamanGlobals::tagStack.pop();
     }
 
     /*
      * returns the current block name
      */
-    inline static Shaman::Tag currentBlock()
+    inline static Tag currentBlock()
     {
-        return Shaman::tagStack.top();
+        return ShamanGlobals::tagStack.top();
     }
 
     /*
      * returns the name associated with a tag
      */
-    static std::string nameOfTag(Shaman::Tag tag)
+    static std::string nameOfTag(Tag tag)
     {
-        return Shaman::tagDecryptor[tag];
+        return ShamanGlobals::tagDecryptor[tag];
     }
 
     /*
      * returns the tag associated with a name
      * note : this operation cost an hashtable lookup
+     * TODO make threadsafe
      * TODO can we do this operation at compile time
      * TODO maybe not needed if we use numeric types (function pointers) from the beginning
      */
-    static Shaman::Tag tagOfName(const std::string& name)
+    static Tag tagOfName(const std::string& name)
     {
-        auto potentialTag = Shaman::nameEncryptor.find(name);
-        if(potentialTag != Shaman::nameEncryptor.end())
+        auto potentialTag = ShamanGlobals::nameEncryptor.find(name);
+        if(potentialTag != ShamanGlobals::nameEncryptor.end())
         {
             return potentialTag->second;
         }
         else
         {
-            Shaman::Tag tag = (unsigned short int) Shaman::tagDecryptor.size();
-            Shaman::tagDecryptor.push_back(name);
-            Shaman::nameEncryptor[name]=tag;
+            Tag tag = (unsigned short int) ShamanGlobals::tagDecryptor.size();
+            ShamanGlobals::tagDecryptor.push_back(name);
+            ShamanGlobals::nameEncryptor[name]=tag;
             return tag;
         }
     }

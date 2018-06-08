@@ -10,6 +10,7 @@
 #include <sstream>
 #include <cmath>
 #include "../Shaman.h"
+#include "GlobalVar.h"
 
 //-----------------------------------------------------------------------------
 // HIGH PRECISION APPROXIMATION
@@ -98,7 +99,7 @@ templated inline bool Snum::non_significant() const
  */
 void Shaman::unstability()
 {
-    Shaman::unstableBranchCounter++;
+    ShamanGlobals::unstableBranchCounter++;
 }
 
 /*
@@ -119,7 +120,7 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
  */
 inline void Shaman::displayUnstableBranches()
 {
-    std::cout << "#SHAMAN: " << "We detected " << Shaman::unstableBranchCounter << " unstable tests." << std::endl;
+    std::cout << "#SHAMAN: " << "We detected " << ShamanGlobals::unstableBranchCounter << " unstable tests." << std::endl;
 }
 
 //-----------------------------------------------------------------------------

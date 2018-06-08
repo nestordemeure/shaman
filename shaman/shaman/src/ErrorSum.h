@@ -17,7 +17,7 @@ template<typename errorType> class ErrorSum
 {
 public:
     // contains the error decomposed in composants (one per block encountered)
-    using sparseVec = std::vector<std::pair<Shaman::Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
+    using sparseVec = std::vector<std::pair<Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
     sparseVec errors; // sorted from bigger tag to smaller tag in the hope of speeding up search for single element insertion
 
     //-------------------------------------------------------------------------
@@ -30,7 +30,7 @@ public:
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(Shaman::Tag tag, errorType error)
+    explicit ErrorSum(Tag tag, errorType error)
     {
         if(error != 0)
         {
@@ -46,7 +46,7 @@ public:
     {
         if(error != 0)
         {
-            Shaman::Tag tag = Block::currentBlock();
+            Tag tag = Block::currentBlock();
             errors.push_back(std::make_pair(tag,error));
         }
     }
@@ -70,7 +70,7 @@ public:
             sparseVec data(errors);
 
             // sorts the vector by abs(error) descending
-            auto compare = [](const std::pair<Shaman::Tag, errorType>& p1, const std::pair<Shaman::Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
+            auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
             std::sort(data.begin(), data.end(), compare);
 
             // displays the first element
@@ -121,12 +121,12 @@ public:
      */
     void addError(errorType error)
     {
-        Shaman::Tag tag = Block::currentBlock();
+        Tag tag = Block::currentBlock();
 
         // search in a sorted vector
         for(int i = 0; i < errors.size(); i++)
         {
-            Shaman::Tag currentTag = errors[i].first;
+            Tag currentTag = errors[i].first;
             if(currentTag < tag)
             {
                 // the target tag is not inside the vector but should be here
