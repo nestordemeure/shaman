@@ -18,7 +18,7 @@ template<typename errorType> class ErrorSum
 public:
     // contains the error decomposed in composants (one per block encountered)
     using sparseVec = std::vector<std::pair<Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
-    using sparseVec_ptr = std::shared_ptr<sparseVec>;
+    using sparseVec_ptr = std::shared_ptr<sparseVec>; // TODO a unique pointer might reduce the overhead while insuring that we do no illegal operations
     sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up search for single element insertion
 
     //-------------------------------------------------------------------------
@@ -68,20 +68,20 @@ public:
         else
         {
             // copy the data
-            sparseVec_ptr data(errors);
+            sparseVec data(*errors);
 
             // sorts the vector by abs(error) descending
             auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
-            std::sort(data->begin(), data->end(), compare);
+            std::sort(data.begin(), data.end(), compare);
 
             // displays the first element
-            auto kv = data->at(0);
+            auto kv = data[0];
             output << Block::nameOfTag(kv.first) << ':' << kv.second;
 
             // displays each other element prefixed by a ", " separator
-            for(int i = 1; i < data->size(); i++)
+            for(int i = 1; i < data.size(); i++)
             {
-                kv = data->at(i);
+                kv = data[i];
                 output << ", " << Block::nameOfTag(kv.first) << ':' << kv.second;
             }
         }
@@ -97,8 +97,7 @@ public:
      */
     void unaryNeg()
     {
-        transformErrors([](errorType e)
-                        { return -e; });
+        transformErrors([](errorType e){ return -e; });
     }
 
     /*
@@ -106,8 +105,7 @@ public:
      */
     void multByScalar(errorType scalar)
     {
-        transformErrors([scalar](errorType e)
-                        { return e * scalar; });
+        transformErrors([scalar](errorType e){ return e * scalar; });
     }
 
     /*
@@ -115,8 +113,7 @@ public:
      */
     void divByScalar(errorType scalar)
     {
-        transformErrors([scalar](errorType e)
-                        { return e / scalar; });
+        transformErrors([scalar](errorType e){ return e / scalar; });
     }
 
     /*
