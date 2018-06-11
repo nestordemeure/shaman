@@ -26,12 +26,12 @@ public:
     /*
      * empty constructor : currently no error
      */
-    explicit ErrorSum() = default;
+    explicit ErrorSum(): errors(std::make_shared<sparseVec>()) {}
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(Tag tag, errorType error)
+    explicit ErrorSum(Tag tag, errorType error): errors(std::make_shared<sparseVec>())
     {
         if(error != 0)
         {
@@ -43,7 +43,7 @@ public:
      * returns an errorSum with a single element (singleton)
      * uses the current tag
      */
-    explicit ErrorSum(errorType error)
+    explicit ErrorSum(errorType error): errors(std::make_shared<sparseVec>())
     {
         if(error != 0)
         {
@@ -177,7 +177,7 @@ public:
     /*
      * -= scalar * errorComposants
      */
-    void subErrorsTimeScalar(const ErrorSum&errors2, errorType scalar)
+    void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
         addMap(errors2.errors, [scalar](errorType e){return -e*scalar;});
     }
