@@ -4,6 +4,7 @@
 #include <string>
 #include <limits>
 #include <atomic>
+#include <memory>
 #include "src/ErrorSum.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -19,10 +20,9 @@ public :
     numberType number; // current computed number
     errorType error; // approximation of the current error
     ErrorSum<errorType> errorComposants; // error decomposed per functions TODO could be made optionnal with a flag
-    // TODO the variable size fo errorsum cause problems when using C arrays (no problem with vector) : a pointeur might solve the problem but we will need to allocate and free the memory with caution
 
     // base constructors
-    inline S(numberType numberArg, errorType errorArg, ErrorSum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {}; // TODO would a ref improve perfs here ?
+    inline S(numberType numberArg, errorType errorArg, ErrorSum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {};
     inline S(numberType numberArg): number(numberArg), error(0.), errorComposants() {}; // we accept implicit cast from T to S<T>
     inline S(): number(0.), error(0.), errorComposants() {};
 
@@ -47,7 +47,7 @@ public :
     #endif
     #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
     template<typename n, typename e, typename p>
-    inline EXPLICIT_CAST S(const S<n,e,p>& s): number(s.number), errorComposants(s.errorComposants) {};
+    inline EXPLICIT_CAST S(const S<n,e,p>& s): number(s.number), errorComposants(std::move(s.errorComposants)) {};
     inline EXPLICIT_CAST S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline EXPLICIT_CAST S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline EXPLICIT_CAST S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};

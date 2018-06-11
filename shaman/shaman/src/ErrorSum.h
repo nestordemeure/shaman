@@ -18,7 +18,8 @@ template<typename errorType> class ErrorSum
 public:
     // contains the error decomposed in composants (one per block encountered)
     using sparseVec = std::vector<std::pair<Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
-    sparseVec errors; // sorted from bigger tag to smaller tag in the hope of speeding up search for single element insertion
+    using sparseVec_ptr = std::shared_ptr<sparseVec>;
+    sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up search for single element insertion
 
     //-------------------------------------------------------------------------
 
@@ -34,7 +35,7 @@ public:
     {
         if(error != 0)
         {
-            errors.push_back(std::make_pair(tag,error));
+            errors->push_back(std::make_pair(tag,error));
         }
     }
 
@@ -47,7 +48,7 @@ public:
         if(error != 0)
         {
             Tag tag = Block::currentBlock();
-            errors.push_back(std::make_pair(tag,error));
+            errors->push_back(std::make_pair(tag,error));
         }
     }
 
@@ -60,27 +61,27 @@ public:
         std::ostringstream output;
         output << std::scientific << std::setprecision(2) << '[';
 
-        if(errors.empty())
+        if(errors->empty())
         {
             output << "no-error";
         }
         else
         {
             // copy the data
-            sparseVec data(errors);
+            sparseVec_ptr data(errors);
 
             // sorts the vector by abs(error) descending
             auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
-            std::sort(data.begin(), data.end(), compare);
+            std::sort(data->begin(), data->end(), compare);
 
             // displays the first element
-            auto kv = data[0];
+            auto kv = data->at(0);
             output << Block::nameOfTag(kv.first) << ':' << kv.second;
 
             // displays each other element prefixed by a ", " separator
-            for(int i = 1; i < data.size(); i++)
+            for(int i = 1; i < data->size(); i++)
             {
-                kv = data[i];
+                kv = data->at(i);
                 output << ", " << Block::nameOfTag(kv.first) << ':' << kv.second;
             }
         }
@@ -96,7 +97,8 @@ public:
      */
     void unaryNeg()
     {
-        transform(errors, [](errorType e){return -e;});
+        transformErrors([](errorType e)
+                        { return -e; });
     }
 
     /*
@@ -104,7 +106,8 @@ public:
      */
     void multByScalar(errorType scalar)
     {
-        transform(errors, [scalar](errorType e){return e * scalar;});
+        transformErrors([scalar](errorType e)
+                        { return e * scalar; });
     }
 
     /*
@@ -112,7 +115,8 @@ public:
      */
     void divByScalar(errorType scalar)
     {
-        transform(errors, [scalar](errorType e){return e / scalar;});
+        transformErrors([scalar](errorType e)
+                        { return e / scalar; });
     }
 
     /*
@@ -124,26 +128,26 @@ public:
         Tag tag = Block::currentBlock();
 
         // search in a sorted vector
-        for(int i = 0; i < errors.size(); i++)
+        for(int i = 0; i < errors->size(); i++)
         {
-            Tag currentTag = errors[i].first;
+            Tag currentTag = errors->at(i).first;
             if(currentTag < tag)
             {
                 // the target tag is not inside the vector but should be here
                 auto kv2 = std::make_pair(tag,error);
-                errors.insert(errors.begin()+i, kv2);
+                errors->insert(errors->begin()+i, kv2);
                 return;
             }
             else if (currentTag == tag)
             {
                 // we found the target tag
-                errors[i].second += error;
+                errors->at(i).second += error;
                 return;
             }
         }
 
         // the target was not in the vector
-        errors.push_back(std::make_pair(tag,error));
+        errors->push_back(std::make_pair(tag,error));
     }
 
     /*
@@ -173,7 +177,7 @@ public:
     /*
      * -= scalar * errorComposants
      */
-    void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
+    void subErrorsTimeScalar(const ErrorSum&errors2, errorType scalar)
     {
         addMap(errors2.errors, [scalar](errorType e){return -e*scalar;});
     }
@@ -184,10 +188,11 @@ public:
      * homemade implementation of std::transform since I was unable to use the original
      */
     template<typename FUN>
-    inline static void transform(sparseVec& vec, FUN f)
+    inline void transformErrors(FUN f)
     {
-        for(auto& kv : vec)
+        for(int i = 0; i < errors->size(); i++)
         {
+            auto& kv = errors->at(i);
             kv.second = f(kv.second);
         }
     }
@@ -196,15 +201,15 @@ public:
      * applies a function f to the elements of errors2 and add them to errors
      */
     template<typename FUN>
-    inline void addMap(const sparseVec& errors2, FUN f)
+    inline void addMap(const sparseVec_ptr& errors2, FUN f)
     {
         // iterate on it1 and it2 at the same time
         int i1 = 0;
         int i2 = 0;
-        while( (i1 < errors.size()) && (i2 < errors2.size()) )
+        while( (i1 < errors->size()) && (i2 < errors2->size()) )
         {
-            auto& kv1 = errors[i1];
-            auto& kv2 = errors2[i2];
+            auto& kv1 = errors->at(i1);
+            auto& kv2 = errors2->at(i2);
             if(kv1.first == kv2.first)
             {
                 kv1.second += f(kv2.second);
@@ -213,18 +218,18 @@ public:
             else if (kv1.first < kv2.first)
             {
                 auto kv = std::make_pair(kv2.first, f(kv2.second));
-                errors.insert(errors.begin()+i1, kv);
+                errors->insert(errors->begin()+i1, kv);
                 i2++;
             }
             i1++;
         }
 
         // we did not get to the end of it2
-        while(i2 < errors2.size())
+        while(i2 < errors2->size())
         {
-            auto& kv2 = errors2[i2];
+            auto& kv2 = errors2->at(i2);
             auto kv = std::make_pair(kv2.first, f(kv2.second));
-            errors.push_back(kv);
+            errors->push_back(kv);
             i2++;
         }
     }
