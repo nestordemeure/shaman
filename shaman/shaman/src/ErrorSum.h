@@ -18,20 +18,36 @@ template<typename errorType> class ErrorSum
 public:
     // contains the error decomposed in composants (one per block encountered)
     using sparseVec = std::vector<std::pair<Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
-    using sparseVec_ptr = std::shared_ptr<sparseVec>; // TODO a unique pointer might reduce the overhead while insuring that we do no illegal operations
-    sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up search for single element insertion
-
+    using sparseVec_ptr = std::unique_ptr<sparseVec>;
+    sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
+    
     //-------------------------------------------------------------------------
 
     /*
      * empty constructor : currently no error
      */
-    explicit ErrorSum(): errors(std::make_shared<sparseVec>()) {}
+    explicit ErrorSum(): errors(std::unique_ptr<sparseVec>( new std::vector<std::pair<Tag,errorType>>() )) {}
+
+    /*
+     * copy constructor
+     * WARNING this constructor needs to do a deep copy (which is not the default)
+     */
+    ErrorSum(const ErrorSum& errorSum2): errors(std::unique_ptr<sparseVec>( new std::vector<std::pair<Tag,errorType>>(*errorSum2.errors) )) {}
+
+    /*
+     * copy assignment
+     * WARNING this constructor needs to do a deep copy (which is not the default)
+     */
+    ErrorSum& operator=(const ErrorSum& errorSum2)
+    {
+        *errors = std::vector<std::pair<Tag,errorType>>(*errorSum2.errors);
+        return *this;
+    };
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(Tag tag, errorType error): errors(std::make_shared<sparseVec>())
+    explicit ErrorSum(Tag tag, errorType error): errors(std::unique_ptr<sparseVec>( new std::vector<std::pair<Tag,errorType>>() ))
     {
         if(error != 0)
         {
@@ -43,7 +59,7 @@ public:
      * returns an errorSum with a single element (singleton)
      * uses the current tag
      */
-    explicit ErrorSum(errorType error): errors(std::make_shared<sparseVec>())
+    explicit ErrorSum(errorType error): errors(std::unique_ptr<sparseVec>( new std::vector<std::pair<Tag,errorType>>() ))
     {
         if(error != 0)
         {
@@ -152,7 +168,21 @@ public:
      */
     void addErrors(const ErrorSum& errors2)
     {
+        /*
+        errorType before1 = sumErrors();
+        errorType before2 = errors2.sumErrors();
+        errorType before = before1 + before2;
+         */
+
         addMap(errors2.errors, [](errorType e){return e;});
+
+        /*
+        errorType after = sumErrors();
+        if (after > 10e20)
+        {
+            std::cout << "Problem : " << before1 << '+' << before2 << '=' << before << "!=" << after << std::endl;
+        }
+         */
     }
 
     /*
@@ -180,6 +210,20 @@ public:
     }
 
     //-------------------------------------------------------------------------
+
+    /*
+     * compute the sum of errors
+     * NOTE : useful for debug
+     */
+    inline errorType sumErrors() const
+    {
+        errorType result = 0.;
+        for(int i = 0; i < errors->size(); i++)
+        {
+            result += errors->at(i).second;
+        }
+        return result;
+    }
 
     /*
      * homemade implementation of std::transform since I was unable to use the original
