@@ -47,7 +47,7 @@ public :
     #endif
     #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
     template<typename n, typename e, typename p>
-    inline EXPLICIT_CAST S(const S<n,e,p>& s): number(s.number), errorComposants(std::move(s.errorComposants)) {};
+    inline EXPLICIT_CAST S(const S<n,e,p>& s): number(s.number), errorComposants(s.errorComposants) {};
     inline EXPLICIT_CAST S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline EXPLICIT_CAST S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline EXPLICIT_CAST S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
