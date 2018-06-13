@@ -237,7 +237,7 @@ templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error) + n3.error;
     errorType newError = std::fma(n2.number, n1.error, std::fma(n1.number, n2.error, remainder + n3.error));
 
-    Serror newErrorComp = Serror(remainder);
+    Serror newErrorComp(remainder);
     newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
     newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
     newErrorComp.addErrors(n3.errorComposants);

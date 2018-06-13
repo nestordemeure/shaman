@@ -20,7 +20,7 @@ public:
     using sparseVec = std::vector<std::pair<Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
     using sparseVec_ptr = std::unique_ptr<sparseVec>;
     sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
-    
+
     //-------------------------------------------------------------------------
 
     /*
