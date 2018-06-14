@@ -165,7 +165,7 @@ public:
         m_ql.resize(size) ;
         m_qq.resize(size) ;
 
-        m_v.resize(size, 1.0) ;
+        m_v.resize(size, Real_t(1.0)) ;
         m_volo.resize(size) ;
         m_delv.resize(size) ;
         m_vdov.resize(size) ;

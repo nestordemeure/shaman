@@ -4,6 +4,7 @@
 // tests
 //#include "tests/test_eft.h"
 //#include "tests/test_loop.h"
+#include "tests/test_carray.h"
 // examples
 #include "examples/various.h"
 #include "examples/legendre.h"
@@ -21,9 +22,10 @@ int main()
 
     //test_eft();
     //test_loop();
-
+    //test_cArray();
+    
     // EXAMPLES
-    sqrtHeron();
+    //sqrtHeron();
 
     // various examples
     //rumpTest();
@@ -38,8 +40,8 @@ int main()
     //legendre20Test();
 
     // Schrodinger equation
-    //Schrodinger numerov = Schrodinger();
-    //numerov.calculate();
+    Schrodinger numerov = Schrodinger();
+    numerov.calculate();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
