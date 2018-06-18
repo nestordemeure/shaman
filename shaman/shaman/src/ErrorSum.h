@@ -17,9 +17,12 @@ template<typename errorType> class ErrorSum
 {
 public:
     // contains the error decomposed in composants (one per block encountered)
-    using sparseVec = std::vector<std::pair<Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
+    using sparseVec = std::vector<std::pair<Tag,errorType>>;
     using sparseVec_ptr = std::unique_ptr<sparseVec>; // pointer to vector to keep type size constant
     sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
+
+    // TODO a true sparse vector implementation might have better performances
+    // TODO a pair of vectors (instead of a vector of pairs) might speed up most operations
 
     //-------------------------------------------------------------------------
 

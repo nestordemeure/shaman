@@ -22,10 +22,10 @@ int main()
 
     //test_eft();
     //test_loop();
-    test_cArray();
+    //test_cArray();
     
     // EXAMPLES
-    //sqrtHeron();
+    sqrtHeron();
 
     // various examples
     //rumpTest();
