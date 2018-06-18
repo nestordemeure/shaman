@@ -67,8 +67,9 @@ Additional BSD Notice
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include "../../shaman/lib/tinyformat.h"
 #include "../../shaman/Shaman.h"
+#include "../../shaman/lib/Shaman_malloc.h"
+#include "../../shaman/lib/tinyformat.h"
 
 //#define LULESH_SHOW_PROGRESS 1
 
@@ -439,14 +440,15 @@ private:
 template <typename T>
 T *Allocate(size_t size)
 {
-    return static_cast<T *>(malloc(sizeof(T)*size)) ;
+    return static_cast<T *>(Shaman_malloc<T>(sizeof(T)*size)) ;
 }
 
 template <typename T>
 void Release(T **ptr)
 {
-    if (*ptr != NULL) {
-        free(*ptr) ;
+    if (*ptr != NULL)
+    {
+        Shaman_free<T>(*ptr) ;
         *ptr = NULL ;
     }
 }

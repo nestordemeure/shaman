@@ -18,50 +18,21 @@ template<typename errorType> class ErrorSum
 public:
     // contains the error decomposed in composants (one per block encountered)
     using sparseVec = std::vector<std::pair<Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
-    using sparseVec_ptr = sparseVec*;
-    //using sparseVec_ptr =  std::unique_ptr<sparseVec>;
+    using sparseVec_ptr = std::unique_ptr<sparseVec>;
     sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
 
     //-------------------------------------------------------------------------
 
     /*
-     * destructor to free the pointer
-     */
-    ~ErrorSum ()
-    {
-        freeErrors();
-    }
-
-    /*
-     * frees the pointer
-     */
-    inline void freeErrors()
-    {
-        if (errors)
-        {
-            delete errors;
-            errors = nullptr;
-        }
-    }
-
-    /*
      * empty constructor : currently no error
      */
-    explicit ErrorSum()//: errors(std::unique_ptr<sparseVec>( new std::vector<std::pair<Tag,errorType>>() ))
-    {
-        auto data = new std::vector<std::pair<Tag,errorType>>();
-        errors = data;
-    }
+    explicit ErrorSum(): errors(new std::vector<std::pair<Tag,errorType>>()) {}
 
     /*
      * copy constructor
      * WARNING this constructor needs to do a deep copy (which is not the default)
      */
-    ErrorSum(const ErrorSum& errorSum2)//: errors(std::unique_ptr<sparseVec>( new std::vector<std::pair<Tag,errorType>>(*(errorSum2.errors)) ))
-    {
-        auto data = new std::vector<std::pair<Tag,errorType>>(*(errorSum2.errors));
-        errors = data;
-    }
+    ErrorSum(const ErrorSum& errorSum2): errors(new std::vector<std::pair<Tag,errorType>>(*(errorSum2.errors))) {}
 
     /*
      * copy assignment
@@ -69,28 +40,15 @@ public:
      */
     ErrorSum& operator=(const ErrorSum& errorSum2)
     {
-        //*errors = *(errorSum2.errors);
-
-        // TODO resets could be called after a malloc which did not initialise the unique_ptr hence error !
-        // but it deals properly with invalid pointers...
-        //errors.reset(new std::vector<std::pair<Tag,errorType>>(*(errorSum2.errors)));
-
-
-        auto data = new std::vector<std::pair<Tag,errorType>>(*(errorSum2.errors));
-        freeErrors();
-        errors = data; // TODO memory leak here
-
+        errors.reset(new std::vector<std::pair<Tag,errorType>>(*(errorSum2.errors)));
         return *this;
     };
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(Tag tag, errorType error)//: errors(std::unique_ptr<sparseVec>( new std::vector<std::pair<Tag,errorType>>() ))
+    explicit ErrorSum(Tag tag, errorType error): errors(new std::vector<std::pair<Tag,errorType>>())
     {
-        auto data = new std::vector<std::pair<Tag,errorType>>();
-        errors = data;
-
         if(error != 0)
         {
             errors->push_back(std::make_pair(tag,error));
@@ -101,11 +59,8 @@ public:
      * returns an errorSum with a single element (singleton)
      * uses the current tag
      */
-    explicit ErrorSum(errorType error)//: errors(std::unique_ptr<sparseVec>( new std::vector<std::pair<Tag,errorType>>() ))
+    explicit ErrorSum(errorType error): errors(new std::vector<std::pair<Tag,errorType>>())
     {
-        auto data = new std::vector<std::pair<Tag,errorType>>();
-        errors = data;
-
         if(error != 0)
         {
             Tag tag = Block::currentBlock();

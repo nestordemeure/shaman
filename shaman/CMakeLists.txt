@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 11)
 #add_definitions(-DNO_SHAMAN)
 # interprocedural optim -flto -Ofast
 # to get readable perf output : -g -fno-omit-frame-pointer -fno-inline
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O2 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O3 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")
 
 # files
 set(SOURCE_SHAMAN
@@ -21,7 +21,8 @@ set(SOURCE_SHAMAN
         shaman/Shaman.h
         shaman/src/Methods.h
         shaman/src/Operators.h
-        shaman/src/Functions.h)
+        shaman/src/Functions.h
+        shaman/lib/Shaman_malloc.h)
 set(SOURCE_EXAMPLES
         examples/various.h
         examples/schrodinger/schrodinger.cpp examples/schrodinger/schrodinger.h
