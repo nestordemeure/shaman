@@ -5,30 +5,31 @@
 #ifndef SHAMAN_TEST_CARRAY_H
 #define SHAMAN_TEST_CARRAY_H
 
+std::vector<Sdouble> vec;
+
 /*
  * trying to reproduce lulesh segfault
  * currently unable to reproduce the problem
  */
 void test_cArray()
 {
-    int size = 100;
-    Sdouble *tab = static_cast<Sdouble *>(malloc(sizeof(Sdouble)*size));
-    std::vector<Sdouble> vec;
+    int size = 10;
+
     vec.resize(size);
-    /*
-    for (int i = 0; i < size; i++)
+
+    for(int j = 0; j < size; j++)
     {
-        tab[i] = vec[i];
+        Sdouble *tab = static_cast<Sdouble *>(malloc(sizeof(Sdouble)*size));
+
+        std::cerr << "loop" << std::endl;
+
+        for (int i = 0; i < size; i++)
+        {
+            tab[i] = vec[i];
+        }
+
+        free(tab);
     }
-     */
-
-    tab[0] = Sdouble(11.);
-    std::cout << tab[0] << std::endl;
-
-    tab[0] += 1.;
-    std::cout << tab[0] << std::endl;
-
-    free(tab);
 }
 
 #endif //SHAMAN_TEST_CARRAY_H

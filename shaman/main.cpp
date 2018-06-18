@@ -22,7 +22,7 @@ int main()
 
     //test_eft();
     //test_loop();
-    //test_cArray();
+    test_cArray();
     
     // EXAMPLES
     //sqrtHeron();
@@ -40,8 +40,8 @@ int main()
     //legendre20Test();
 
     // Schrodinger equation
-    Schrodinger numerov = Schrodinger();
-    numerov.calculate();
+    //Schrodinger numerov = Schrodinger();
+    //numerov.calculate();
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
