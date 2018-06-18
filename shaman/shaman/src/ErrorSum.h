@@ -18,7 +18,7 @@ template<typename errorType> class ErrorSum
 public:
     // contains the error decomposed in composants (one per block encountered)
     using sparseVec = std::vector<std::pair<Tag,errorType>>; // TODO a true sparse vector implementation might have better performances
-    using sparseVec_ptr = std::unique_ptr<sparseVec>;
+    using sparseVec_ptr = std::unique_ptr<sparseVec>; // pointer to vector to keep type size constant
     sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
 
     //-------------------------------------------------------------------------
@@ -70,12 +70,14 @@ public:
 
     /*
      * produces a readable string representation of the error terms
-     * TODO maybe keep at most the ten most important terms (and displays the number of terms ?) or just display terms that have an impact on the number of digits (ie >10-19)
+     * the error terms are sorted from larger to smaller
+     * displays only the maxElementNumberDisplayed first elements with an amplitude big enough to matter given the type (10^-19 doesn't matter for a float
      */
     explicit operator std::string() const
     {
         std::ostringstream output;
         output << std::scientific << std::setprecision(2) << '[';
+        int maxElementNumberDisplayed = 5;
 
         if(errors->empty())
         {
@@ -90,15 +92,28 @@ public:
             auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
             std::sort(data.begin(), data.end(), compare);
 
+            // functions that returns only if the error is big enough to have an impact given the type
+            int nbDigitsMax = std::numeric_limits<errorType>::digits10;
+            auto significant = [nbDigitsMax](const std::pair<Tag, errorType>& p){return -std::log10(std::abs(p.second)) < nbDigitsMax;};
+
             // displays the first element
+            int i = 0;
             auto kv = data[0];
             output << Block::nameOfTag(kv.first) << ':' << kv.second;
+            i++;
 
             // displays each other element prefixed by a ", " separator
-            for(int i = 1; i < data.size(); i++)
+            while((i < maxElementNumberDisplayed) && (i < data.size()) && (significant(data[i])))
             {
                 kv = data[i];
                 output << ", " << Block::nameOfTag(kv.first) << ':' << kv.second;
+                i++;
+            }
+
+            // adds a reminder that we are not displaying all error terms
+            if(i < data.size())
+            {
+                output << "…";
             }
         }
 
@@ -168,21 +183,7 @@ public:
      */
     void addErrors(const ErrorSum& errors2)
     {
-        /*
-        errorType before1 = sumErrors();
-        errorType before2 = errors2.sumErrors();
-        errorType before = before1 + before2;
-         */
-
         addMap(errors2.errors, [](errorType e){return e;});
-
-        /*
-        errorType after = sumErrors();
-        if (after > 10e20)
-        {
-            std::cout << "Problem : " << before1 << '+' << before2 << '=' << before << "!=" << after << std::endl;
-        }
-         */
     }
 
     /*
@@ -218,9 +219,9 @@ public:
     inline errorType sumErrors() const
     {
         errorType result = 0.;
-        for(int i = 0; i < errors->size(); i++)
+        for(auto& kv : *errors)
         {
-            result += errors->at(i).second;
+            result += kv.second;
         }
         return result;
     }
@@ -231,9 +232,8 @@ public:
     template<typename FUN>
     inline void transformErrors(FUN f)
     {
-        for(int i = 0; i < errors->size(); i++)
+        for(auto& kv : *errors)
         {
-            auto& kv = errors->at(i);
             kv.second = f(kv.second);
         }
     }
