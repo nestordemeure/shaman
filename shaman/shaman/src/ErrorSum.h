@@ -93,7 +93,7 @@ public:
             std::sort(data.begin(), data.end(), compare);
 
             // functions that returns only if the error is big enough to have an impact given the type
-            int nbDigitsMax = std::numeric_limits<errorType>::digits10;
+            int nbDigitsMax = std::numeric_limits<errorType>::digits10 + 1;
             auto significant = [nbDigitsMax](const std::pair<Tag, errorType>& p){return -std::log10(std::abs(p.second)) < nbDigitsMax;};
 
             // displays the first element
