@@ -2,3 +2,5 @@
 *.idea
 *cmake-build-*
 *.nfs*
+*.out
+*.data*
