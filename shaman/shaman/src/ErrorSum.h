@@ -17,25 +17,25 @@ template<typename errorType> class ErrorSum
 {
 public:
     // contains the error decomposed in composants (one per block encountered)
-    using sparseVec = std::vector<std::pair<Tag,errorType>>;
-    using sparseVec_ptr = std::unique_ptr<sparseVec>; // pointer to vector to keep type size constant
-    sparseVec_ptr errors; // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
+    // uses a pointer to vector to keep type size constant TODO has this indirection any direct advantages ?
+    // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
+    std::unique_ptr<std::vector<errorType>> errors;
+    std::unique_ptr<std::vector<Tag>> tags;
 
     // TODO a true sparse vector implementation might have better performances
-    // TODO a pair of vectors (instead of a vector of pairs) might speed up most operations
 
     //-------------------------------------------------------------------------
 
     /*
      * empty constructor : currently no error
      */
-    explicit ErrorSum(): errors(new std::vector<std::pair<Tag,errorType>>()) {}
+    explicit ErrorSum(): errors(new std::vector<errorType>()), tags(new std::vector<Tag>()) {}
 
     /*
      * copy constructor
      * WARNING this constructor needs to do a deep copy (which is not the default)
      */
-    ErrorSum(const ErrorSum& errorSum2): errors(new std::vector<std::pair<Tag,errorType>>(*(errorSum2.errors))) {}
+    ErrorSum(const ErrorSum& errorSum2): errors(new std::vector<errorType>(*(errorSum2.errors))), tags(new std::vector<Tag>(*(errorSum2.tags))) {}
 
     /*
      * copy assignment
@@ -43,18 +43,20 @@ public:
      */
     ErrorSum& operator=(const ErrorSum& errorSum2)
     {
-        errors.reset(new std::vector<std::pair<Tag,errorType>>(*(errorSum2.errors)));
+        *errors = *(errorSum2.errors);
+        *tags = *(errorSum2.tags);
         return *this;
     };
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(Tag tag, errorType error): errors(new std::vector<std::pair<Tag,errorType>>())
+    explicit ErrorSum(Tag tag, errorType error): errors(new std::vector<errorType>()), tags(new std::vector<Tag>())
     {
         if(error != 0)
         {
-            errors->push_back(std::make_pair(tag,error));
+            errors->push_back(error);
+            tags->push_back(tag);
         }
     }
 
@@ -62,12 +64,13 @@ public:
      * returns an errorSum with a single element (singleton)
      * uses the current tag
      */
-    explicit ErrorSum(errorType error): errors(new std::vector<std::pair<Tag,errorType>>())
+    explicit ErrorSum(errorType error): errors(new std::vector<errorType>()), tags(new std::vector<Tag>())
     {
         if(error != 0)
         {
             Tag tag = Block::currentBlock();
-            errors->push_back(std::make_pair(tag,error));
+            errors->push_back(error);
+            tags->push_back(tag);
         }
     }
 
@@ -89,7 +92,11 @@ public:
         else
         {
             // copy the data
-            sparseVec data(*errors);
+            std::vector<std::pair<Tag, errorType>> data;
+            for(int i = 0; i < errors->size(); i++)
+            {
+                data.push_back(std::make_pair(tags->at(i), errors->at(i)));
+            }
 
             // sorts the vector by abs(error) descending
             auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
@@ -131,7 +138,10 @@ public:
      */
     void unaryNeg()
     {
-        transformErrors([](errorType e){ return -e; });
+        for(auto& error : *errors)
+        {
+            error = -error;
+        }
     }
 
     /*
@@ -139,7 +149,10 @@ public:
      */
     void multByScalar(errorType scalar)
     {
-        transformErrors([scalar](errorType e){ return e * scalar; });
+        for(auto& error : *errors)
+        {
+            error *= scalar;
+        }
     }
 
     /*
@@ -147,7 +160,10 @@ public:
      */
     void divByScalar(errorType scalar)
     {
-        transformErrors([scalar](errorType e){ return e / scalar; });
+        for(auto& error : *errors)
+        {
+            error /= scalar;
+        }
     }
 
     /*
@@ -161,24 +177,25 @@ public:
         // search in a sorted vector
         for(int i = 0; i < errors->size(); i++)
         {
-            Tag currentTag = errors->at(i).first;
+            Tag currentTag = tags->at(i);
             if(currentTag < tag)
             {
                 // the target tag is not inside the vector but should be here
-                auto kv2 = std::make_pair(tag,error);
-                errors->insert(errors->begin()+i, kv2);
+                errors->insert(errors->begin()+i, error);
+                tags->insert(tags->begin()+i, tag);
                 return;
             }
             else if (currentTag == tag)
             {
                 // we found the target tag
-                errors->at(i).second += error;
+                errors->at(i) += error;
                 return;
             }
         }
 
         // the target was not in the vector
-        errors->push_back(std::make_pair(tag,error));
+        errors->push_back(error);
+        tags->push_back(tag);
     }
 
     /*
@@ -186,7 +203,7 @@ public:
      */
     void addErrors(const ErrorSum& errors2)
     {
-        addMap(errors2.errors, [](errorType e){return e;});
+        addMap(errors2, [](errorType e){return e;});
     }
 
     /*
@@ -194,7 +211,7 @@ public:
      */
     void subErrors(const ErrorSum& errors2)
     {
-        addMap(errors2.errors, [](errorType e){return -e;});
+        addMap(errors2, [](errorType e){return -e;});
     }
 
     /*
@@ -202,7 +219,7 @@ public:
      */
     void addErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
-        addMap(errors2.errors, [scalar](errorType e){return e*scalar;});
+        addMap(errors2, [scalar](errorType e){return e*scalar;});
     }
 
     /*
@@ -210,59 +227,35 @@ public:
      */
     void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
     {
-        addMap(errors2.errors, [scalar](errorType e){return -e*scalar;});
+        addMap(errors2, [scalar](errorType e){return -e*scalar;});
     }
 
     //-------------------------------------------------------------------------
 
     /*
-     * compute the sum of errors
-     * NOTE : useful for debug
-     */
-    inline errorType sumErrors() const
-    {
-        errorType result = 0.;
-        for(auto& kv : *errors)
-        {
-            result += kv.second;
-        }
-        return result;
-    }
-
-    /*
-     * homemade implementation of std::transform since I was unable to use the original
-     */
-    template<typename FUN>
-    inline void transformErrors(FUN f)
-    {
-        for(auto& kv : *errors)
-        {
-            kv.second = f(kv.second);
-        }
-    }
-
-    /*
      * applies a function f to the elements of errors2 and add them to errors
+     * TODO we might use a std function to do several insertions at once
      */
     template<typename FUN>
-    inline void addMap(const sparseVec_ptr& errors2, FUN f)
+    inline void addMap(const ErrorSum& errorSum2, FUN f)
     {
+        auto& errors2 = errorSum2.errors;
+        auto& tags2 = errorSum2.tags;
+
         // iterate on it1 and it2 at the same time
         int i1 = 0;
         int i2 = 0;
         while( (i1 < errors->size()) && (i2 < errors2->size()) )
         {
-            auto& kv1 = errors->at(i1);
-            auto& kv2 = errors2->at(i2);
-            if(kv1.first == kv2.first)
+            if(tags->at(i1) == tags2->at(i2))
             {
-                kv1.second += f(kv2.second);
+                errors->at(i1) += f(errors2->at(i2));
                 i2++;
             }
-            else if (kv1.first < kv2.first)
+            else if (tags->at(i1) < tags2->at(i2))
             {
-                auto kv = std::make_pair(kv2.first, f(kv2.second));
-                errors->insert(errors->begin()+i1, kv);
+                errors->insert(errors->begin()+i1, f(errors2->at(i2)));
+                tags->insert(tags->begin()+i1, tags2->at(i2));
                 i2++;
             }
             i1++;
@@ -271,9 +264,8 @@ public:
         // we did not get to the end of it2
         while(i2 < errors2->size())
         {
-            auto& kv2 = errors2->at(i2);
-            auto kv = std::make_pair(kv2.first, f(kv2.second));
-            errors->push_back(kv);
+            errors->push_back(f(errors2->at(i2)));
+            tags->push_back(tags2->at(i2));
             i2++;
         }
     }
