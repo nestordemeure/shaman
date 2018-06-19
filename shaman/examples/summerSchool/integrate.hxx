@@ -1,4 +1,4 @@
-#include "../../../shaman/Shaman.h"
+#include "../../shaman/Shaman.h"
 typedef Sfloat RealType;
 
 /** Calcule l'intégrale d'une fonction entre deux bornes avec la méthode des

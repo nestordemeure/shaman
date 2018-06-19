@@ -1,7 +1,9 @@
 #!/usr/bin/gnuplot
 
-set terminal pdfcairo
-set output "cvPlot.pdf"
+#set terminal pdfcairo
+#set output "cvPlot.pdf"
+set terminal pngcairo
+set output "cvPlot.png"
 
 set xlabel "Nb rectangles"
 set format x "%.0e"
@@ -14,4 +16,4 @@ plot "cvPlot.dat" using 1:3 title "Evaluation native", \
      "cvPlot.dat" using 1:4 title "Estimation Shaman"
 
 unset output
-! evince cvPlot.pdf &
+#! evince cvPlot.pdf &

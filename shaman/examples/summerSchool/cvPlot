@@ -10,4 +10,4 @@ gnuplot cvPlot.gp
 #./unitTest_debug.exe 1.1
 
 # Fait tourner le code avec shaman_profiler
-../../../tools/shaman_profiler/shaman_prof.sh ./unitTest_debug.exe 1.1
+../../tools/shaman_profiler/shaman_prof.sh ./unitTest_debug.exe 1.1

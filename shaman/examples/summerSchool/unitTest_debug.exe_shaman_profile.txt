@@ -1,6 +1,6 @@
 *** SHAMAN PROFILE ***
 -----
-3942	integrate<testConvergence(const RealType&)::__lambda1> (file integrate.hxx)
+3942	integrate<testConvergence(const RealType&)::__lambda1>(const __lambda1 &, RealType, RealType, unsigned int) (file integrate.hxx)
 3942		operator< <float, float, double> (line 22)
 -----
 144	testConvergence (file unitTest.cxx)
