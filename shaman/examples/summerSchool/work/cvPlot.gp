@@ -11,7 +11,7 @@ set format y "%.0e"
 
 set logscale xy
 plot "cvPlot.dat" using 1:3 title "Evaluation native", \
-     "cvPlot.dat" using 1:4 title "Estimation shaman"
+     "cvPlot.dat" using 1:4 title "Estimation Shaman"
 
 unset output
 ! evince cvPlot.pdf &
