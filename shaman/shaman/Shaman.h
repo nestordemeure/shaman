@@ -54,24 +54,19 @@ public :
     inline explicit operator long double() const { return (long double) number; };
     explicit operator std::string() const;
     #ifdef EXPLICIT_CASTING
-        #define EXPLICIT_CAST explicit
-        template<typename T> S(T s) = delete;
-    #else
-        #define EXPLICIT_CAST
-    #endif
-    #define INTEGER_CAST_CONSTRUCTOR(n) S((numberType)n, (preciseType)n - (numberType)n)
+    // explicit constructor from other S types
     template<typename n, typename e, typename p>
-    inline EXPLICIT_CAST S(const S<n,e,p>& s): S(s.number, s.error) {};
-    inline EXPLICIT_CAST S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline EXPLICIT_CAST S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline EXPLICIT_CAST S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline EXPLICIT_CAST S(unsigned int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline EXPLICIT_CAST S(long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline EXPLICIT_CAST S(unsigned long int n):INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline EXPLICIT_CAST S(long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline EXPLICIT_CAST S(unsigned long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    #undef INTEGER_CAST_CONSTRUCTOR
-    #undef EXPLICIT_CAST
+    inline explicit S(const S<n,e,p>& s): S(s.number, s.error + ((preciseType)s.number - (numberType)s.number)) {};
+    // no direct constructor from other types
+    template<typename T> S(T s) = delete;
+    #else
+    // constructor for s types
+    template<typename n, typename e, typename p>
+    inline S(const S<n,e,p>& s): S(s.number, s.error + ((preciseType)s.number - (numberType)s.number)) {};
+    // general constructor (for numeric types that are not numbertype)
+    template <typename T, typename = typename std::enable_if<!std::is_same< numberType, T>::value >::type, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    inline S(T n): S((numberType)n, (preciseType)n - (numberType)n) {};
+    #endif
 
     // arithmetic operators
     S& operator++(int);
