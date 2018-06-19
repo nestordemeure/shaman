@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Réalise l'étude de convergence du calcul d'intégrale
+./unitTest 1.1 >cvPlot.dat
+
+# Produit une courbe représentant l'erreur en fonction du nombre de rectangles dans "cvPlot.pdf"
+gnuplot cvPlot.gp

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Arguments en ligne de commande:
+# - le répertoire où les résultats doivent être stockés
+OUTDIR=$1
+
+# Lancement du code avec Verrou, en stockant les résultats dans ${OUTDIR}
+valgrind --tool=verrou --demangle=no --rounding-mode=random --exclude=libm.ex ./unitTest >${OUTDIR}/res.dat
