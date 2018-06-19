@@ -19,8 +19,8 @@ public:
     // contains the error decomposed in composants (one per block encountered)
     // uses a pointer to vector to keep type size constant TODO has this indirection any direct advantages ?
     // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
-    std::unique_ptr<std::vector<errorType>> errors;
-    std::unique_ptr<std::vector<Tag>> tags;
+    std::vector<errorType> errors;
+    std::vector<Tag> tags;
     // TODO a true sparse vector implementation might have better performances
 
     //-------------------------------------------------------------------------
@@ -29,13 +29,13 @@ public:
     /*
      * empty constructor : currently no error
      */
-    explicit ErrorSum(): errors(new std::vector<errorType>()), tags(new std::vector<Tag>()) {}
+    explicit ErrorSum(): errors(), tags() {}
 
     /*
      * copy constructor
      * WARNING this constructor needs to do a deep copy (which is not the default)
      */
-    ErrorSum(const ErrorSum& errorSum2): errors(new std::vector<errorType>(*(errorSum2.errors))), tags(new std::vector<Tag>(*(errorSum2.tags))) {}
+    ErrorSum(const ErrorSum& errorSum2): errors(errorSum2.errors), tags(errorSum2.tags) {}
 
     /*
      * copy assignment
@@ -43,20 +43,20 @@ public:
      */
     ErrorSum& operator=(const ErrorSum& errorSum2)
     {
-        *errors = *(errorSum2.errors);
-        *tags = *(errorSum2.tags);
+        errors = errorSum2.errors;
+        tags = errorSum2.tags;
         return *this;
     };
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(Tag tag, errorType error): errors(new std::vector<errorType>()), tags(new std::vector<Tag>())
+    explicit ErrorSum(Tag tag, errorType error): errors(), tags()
     {
         if(error != 0)
         {
-            errors->push_back(error);
-            tags->push_back(tag);
+            errors.push_back(error);
+            tags.push_back(tag);
         }
     }
 
@@ -64,13 +64,13 @@ public:
      * returns an errorSum with a single element (singleton)
      * uses the current tag
      */
-    explicit ErrorSum(errorType error): errors(new std::vector<errorType>()), tags(new std::vector<Tag>())
+    explicit ErrorSum(errorType error): errors(), tags()
     {
         if(error != 0)
         {
             Tag tag = Block::currentBlock();
-            errors->push_back(error);
-            tags->push_back(tag);
+            errors.push_back(error);
+            tags.push_back(tag);
         }
     }
 
@@ -82,7 +82,7 @@ public:
      */
     void unaryNeg()
     {
-        for(auto& error : *errors)
+        for(auto& error : errors)
         {
             error = -error;
         }
@@ -93,7 +93,7 @@ public:
      */
     void multByScalar(errorType scalar)
     {
-        for(auto& error : *errors)
+        for(auto& error : errors)
         {
             error *= scalar;
         }
@@ -104,7 +104,7 @@ public:
      */
     void divByScalar(errorType scalar)
     {
-        for(auto& error : *errors)
+        for(auto& error : errors)
         {
             error /= scalar;
         }
@@ -119,28 +119,27 @@ public:
         Tag tag = Block::currentBlock();
 
         // search in a sorted vector
-        auto& tagsRef = *tags;
-        for(int i = 0; i < tagsRef.size(); i++)
+        for(int i = 0; i < tags.size(); i++)
         {
-            auto& currentTag = tagsRef[i];
+            auto& currentTag = tags[i];
             if(currentTag < tag)
             {
                 // the target tag is not inside the vector but should be here
-                errors->insert(errors->begin()+i, error);
-                tags->insert(tags->begin()+i, tag);
+                errors.insert(errors.begin()+i, error);
+                tags.insert(tags.begin()+i, tag);
                 return;
             }
             else if (currentTag == tag)
             {
                 // we found the target tag
-                errors->at(i) += error;
+                errors[i] += error;
                 return;
             }
         }
 
         // the target was not in the vector
-        errors->push_back(error);
-        tags->push_back(tag);
+        errors.push_back(error);
+        tags.push_back(tag);
     }
 
     /*
@@ -185,23 +184,23 @@ public:
     template<typename FUN>
     inline void addMap(const ErrorSum& errorSum2, FUN f)
     {
-        auto& errors2 = *(errorSum2.errors);
-        auto& tags2 = *(errorSum2.tags);
+        auto& errors2 = errorSum2.errors;
+        auto& tags2 = errorSum2.tags;
 
         // iterate on it1 and it2 at the same time
         int i1 = 0;
         int i2 = 0;
-        while( (i1 < errors->size()) && (i2 < errors2.size()) )
+        while( (i1 < errors.size()) && (i2 < errors2.size()) )
         {
-            if(tags2[i2] == (*tags)[i1])
+            if(tags2[i2] == (tags)[i1])
             {
-                (*errors)[i1] += f(errors2[i2]);
+                (errors)[i1] += f(errors2[i2]);
                 i2++;
             }
-            else if (tags2[i2] > (*tags)[i1])
+            else if (tags2[i2] > (tags)[i1])
             {
-                errors->insert(errors->begin()+i1, f(errors2[i2]));
-                tags->insert(tags->begin()+i1, tags2[i2]);
+                errors.insert(errors.begin()+i1, f(errors2[i2]));
+                tags.insert(tags.begin()+i1, tags2[i2]);
                 i2++;
             }
             i1++;
@@ -210,10 +209,10 @@ public:
         // we did not get to the end of it2
         if(i2 < errors2.size())
         {
-            auto errorsPreviousSize = errors->size();
-            tags->insert(tags->end(), tags2.begin()+i2, tags2.end());
-            errors->insert(errors->end(), errors2.begin()+i2, errors2.end());
-            partialTransform((*errors), errorsPreviousSize, errors->size(), f);
+            auto errorsPreviousSize = errors.size();
+            tags.insert(tags.end(), tags2.begin()+i2, tags2.end());
+            errors.insert(errors.end(), errors2.begin()+i2, errors2.end());
+            partialTransform((errors), errorsPreviousSize, errors.size(), f);
         }
         /*
         // TODO test wether this is faster
@@ -252,7 +251,7 @@ public:
         output << std::scientific << std::setprecision(2) << '[';
         int maxElementNumberDisplayed = 5;
 
-        if(errors->empty())
+        if(errors.empty())
         {
             output << "no-error";
         }
@@ -260,9 +259,9 @@ public:
         {
             // copy the data
             std::vector<std::pair<Tag, errorType>> data;
-            for(int i = 0; i < errors->size(); i++)
+            for(int i = 0; i < errors.size(); i++)
             {
-                data.push_back(std::make_pair(tags->at(i), errors->at(i)));
+                data.push_back(std::make_pair(tags[i], errors[i]));
             }
 
             // sorts the vector by abs(error) descending
