@@ -3,8 +3,11 @@
 # Réalise l'étude de convergence du calcul d'intégrale
 ./unitTest.exe 1.1 > cvPlot.dat
 
-# Fait tourner le cacul d'intégral avec les fonctions de débuggage
-./unitTest_debug.exe 1.1
-
 # Produit une courbe représentant l'erreur en fonction du nombre de rectangles dans "cvPlot.pdf"
 gnuplot cvPlot.gp
+
+# Fait tourner le cacul d'intégral avec les fonctions de débuggage
+#./unitTest_debug.exe 1.1
+
+# Fait tourner le code avec shaman_profiler
+../../../tools/shaman_profiler/shaman_prof.sh ./unitTest_debug.exe 1.1
