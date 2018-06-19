@@ -5,11 +5,6 @@
 #include <functional>
 #include <sstream>
 
-RealType my_cos(RealType x)
-{
-    return cos(x);
-}
-
 /** Teste la convergence du calcul d'intégrale avec le nombre de rectangles.
 
     On utilise comme cas-test le calcul de l'intégrale de cos entre 0 et pi/2,
@@ -25,14 +20,14 @@ void testConvergence (const RealType & step)
   for (unsigned int n = 1; n <= 100000; n = std::max((unsigned int)(step*n), n+1))
   {
     // Calcul approché
-    RealType res = integrate(/*(RealType(*)(RealType)) my_cos*/ cos<float,float,double>, 0, (float)M_PI_2, n);
+    RealType res = integrate([](RealType x){return cos(x);}, 0, M_PI_2, n);
 
     // Erreur (relative) par rapport à la valeur exacte
     RealType err = abs(1 - res);
 
-    // Affichage en sortie sur trois colonnes:
-    //   Nrectangles   Resultat   Erreur
-    std::cout << std::setw(10) << n << " " << res.number << " " << err.number << " " << std::abs(res.error) << std::endl;
+    // Affichage en sortie sur cinq colonnes:
+    // Nrectangles   Resultat   Erreur   Erreur_approchée   Resultat_(chiffres_significatifs_uniquement)
+    std::cout << std::scientific << std::setprecision(7) << n << " " << res.number << " " << err.number << " " << std::abs(res.error) << " " << res << std::endl;
   }
 }
 

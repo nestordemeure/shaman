@@ -54,13 +54,14 @@ public :
     inline explicit operator long double() const { return (long double) number; };
     explicit operator std::string() const;
     #ifdef EXPLICIT_CASTING
-    // explicit constructor from other S types
+    // explicit constructor from other S types (that computes the translation error)
     template<typename n, typename e, typename p>
     inline explicit S(const S<n,e,p>& s): S(s.number, s.error + ((preciseType)s.number - (numberType)s.number)) {};
     // no direct constructor from other types
     template<typename T> S(T s) = delete;
     #else
-    // constructor for s types
+    // TODO the conversion error could be computed only if the incoming type is less precise than the current type
+    // constructor for s types (that computes the translation error)
     template<typename n, typename e, typename p>
     inline S(const S<n,e,p>& s): S(s.number, s.error + ((preciseType)s.number - (numberType)s.number)) {};
     // general constructor (for numeric types that are not numbertype)
