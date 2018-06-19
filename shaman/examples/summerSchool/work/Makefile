@@ -3,8 +3,11 @@ SHAMAN_DEBUG_FLAGS=-DUNSTABLE_BRANCH_DEBUGGER -DCANCELATION_DEBUGGER -DUNSTABLE_
 
 all: cvPlot.pdf
 
-unitTest: unitTest.cxx integrate.hxx
-	g++ $(SHAMAN_FLAGS) -Wall -g -O3 -o $@ $<
+unitTest.exe: unitTest.cxx integrate.hxx
+	g++ $(SHAMAN_FLAGS) -Wall -g -O3 -o unitTest.exe $<
 
-cvPlot.pdf: unitTest cvPlot.gp
+unitTest_debug.exe: unitTest.cxx integrate.hxx
+	g++ $(SHAMAN_FLAGS) $(SHAMAN_DEBUG_FLAGS) -Wall -g -O3 -o unitTest_debug.exe $<
+
+cvPlot.pdf: unitTest.exe unitTest_debug.exe cvPlot.gp
 	./cvPlot
