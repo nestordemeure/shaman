@@ -44,7 +44,7 @@ def common_path(list):
     for function,path in list:
         if common is None: common = path
         else: common = common_substring(common, path)
-    return common
+    return None
 
 def program_name():
     """outputs the name of the current program"""
@@ -82,17 +82,17 @@ def export_call_tree(filepath):
         write("*** SHAMAN PROFILE ***")
         # gets the data in a clean format
         functions = group_by_function(call_tree.items())
-        functions.sort(reverse=True) # sort by call number
+        functions.sort(reverse=True)  # sort by call number
         # displays the result
-        root_length = len(common_path(file_of_function.items()))
+        #root_length = len(common_path(file_of_function.items()))
         for function_calls,function_name,lines in functions:
-            file_name = file_of_function[function_name][root_length:]
+            write("-----") #write('\n')
+            file_name = file_of_function[function_name]#[root_length:]
             write("{}\t{} (file {})".format(function_calls,function_name,file_name))
-            lines.sort(reverse=True) # sort by call number
-            for call_number,function_line,operation_name in lines:
+            lines.sort(reverse=True)  # sort by call number
+            for call_number, function_line, operation_name in lines:
                 abreviated_opname = remove_template_parameters(operation_name)
-                write("{}\t\t{} (line {})".format(call_number,abreviated_opname,function_line))
-            write('\n')
+                write("{}\t\t{} (line {})".format(call_number, abreviated_opname, function_line))
 
 #------------------------------------------------------------------------------
 # BREAKPOINT CLASS
@@ -103,6 +103,10 @@ def get_frame_seq():
     while frame is not None:
         yield frame
         frame = frame.older()
+
+def file_in_shaman(path):
+    """returns true if a file is in shaman"""
+    return path.endswith("shaman/src/Operators.h") or path.endswith("shaman/src/Functions.h")
 
 #-----
 
@@ -129,7 +133,7 @@ class ShamanDebugBreakpoint(gdb.Breakpoint):
 
         # avoids functions inside Shaman (such as +=)
         function_file = function_position.symtab.filename
-        while function_file.endswith("Shaman_Decl.h"):
+        while file_in_shaman(function_file):
             operation = function
             function = next(frames)
             function_position = function.find_sal()

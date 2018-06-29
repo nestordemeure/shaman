@@ -44,14 +44,10 @@ RealType integrate(const T &f, RealType a, RealType b, unsigned int n)
     RealType sum = 0.;
 
     // Boucle sur les rectangles d'intégration
-
-    // error accumulation
-    //*
     for (RealType x = a + 0.5 * dx; x < b; x += dx)
     {
         sum += dx * f(x);
     }
-    //*/
 
     // integer loop
     /*

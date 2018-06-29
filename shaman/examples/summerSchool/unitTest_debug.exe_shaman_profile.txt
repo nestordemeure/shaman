@@ -1,13 +1,8 @@
 *** SHAMAN PROFILE ***
 -----
-336039	fastTwoSum (file integrate.hxx)
-256098		operator-<float, float, double> (line 25)
-79903		operator-<float, float, double> (line 24)
-38		operator><float, float, double> (line 19)
+3942	integrate<testConvergence(const RealType&)::__lambda1>(const __lambda1 &, RealType, RealType, unsigned int) (file integrate.hxx)
+3942		operator< <float, float, double> (line 50)
 -----
-139	testConvergence (file unitTest.cxx)
-86		operator-<float, float, double, int, int> (line 26)
-53		abs<float, float, double> (line 26)
------
-112	integrate<testConvergence(const RealType&)::__lambda1>(const __lambda1 &, RealType, RealType, unsigned int) (file integrate.hxx)
-112		S<float, float, double>::operator+= (line 75)
+144	testConvergence (file unitTest.cxx)
+75		operator-<float, float, double, int, int> (line 26)
+69		abs<float, float, double> (line 26)
