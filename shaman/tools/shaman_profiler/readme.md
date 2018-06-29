@@ -8,7 +8,7 @@ The shaman profiler give you a numerical profile of your application with the nu
 
 To use the Shaman Profiler :
 - use the Shaman types in your application
-- add the `NUMERICAL_DEBUGGER` and `-g` flags at compilation
+- add the `NUMERICAL_DEBUGGER` and `-g` flags at compilation (you might also need to reduce optimisations)
 - run your program with `gdb -quiet --command shaman_profiler.py --args ./your_program args` (you can also use the `shaman_prof.sh` script as a shortcut)
 
 It will display a message every 100000 numerical unstability detected and output its results to the `executable_name_shaman_profile.txt` file once the program finishes running.
@@ -23,6 +23,8 @@ It means that if you debug with an old version of gdb you might not be able to p
 This bug appears to have been fixed somewhere before gdb-7.11.1.
 
 ## Potential improvements
+
+The debugging could stop early if the program is unable to set the breakpoint properly.
 
 The debugging process could be redone by calling the `libunwind` library directly from Shaman which would clean-up the code and drastically improve performances.
 

@@ -24,6 +24,9 @@ void sqrtHeron()
     {
         r = (r + x/r) / 2;
         printf("sqrt=%.15e error=%.15e\n", r.number, r.error);
+        std::cout << r << std::endl;
+        std::cout << r.number << ' '
+                  << r.error << std::endl;
     }
 }
 
