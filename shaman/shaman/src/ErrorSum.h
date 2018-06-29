@@ -70,6 +70,11 @@ public:
         }
     }
 
+    /*
+     * returns an errorSum off the given size
+     */
+    explicit ErrorSum(Tag tag, int size1, int size2): errors(std::max(tag+1,std::max(size1,size2))) {}
+
     //-------------------------------------------------------------------------
     // OPERATIONS
 
