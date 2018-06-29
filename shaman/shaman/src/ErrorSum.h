@@ -103,36 +103,37 @@ public:
     /*
      * += errorComposants
      */
-    void addErrors(const ErrorSum& errors2)
+    void addErrors(const ErrorSum& errorSum2)
     {
-        addMap(errors2, [](errorType e){return e;});
+        addMap(errorSum2, [](errorType e){return e;});
     }
 
     /*
      * -= errorComposants
      */
-    void subErrors(const ErrorSum& errors2)
+    void subErrors(const ErrorSum& errorSum2)
     {
-        addMap(errors2, [](errorType e){return -e;});
+        addMap(errorSum2, [](errorType e){return -e;});
     }
 
     /*
      * += scalar * errorComposants
      */
-    void addErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
+    void addErrorsTimeScalar(const ErrorSum& errorSum2, errorType scalar)
     {
-        addMap(errors2, [scalar](errorType e){return e*scalar;});
+        addMap(errorSum2, [scalar](errorType e){return e*scalar;});
     }
 
     /*
      * -= scalar * errorComposants
      */
-    void subErrorsTimeScalar(const ErrorSum& errors2, errorType scalar)
+    void subErrorsTimeScalar(const ErrorSum& errorSum2, errorType scalar)
     {
-        addMap(errors2, [scalar](errorType e){return -e*scalar;});
+        addMap(errorSum2, [scalar](errorType e){return -e*scalar;});
     }
 
     //-------------------------------------------------------------------------
+    // HIGH LEVEL FUNCTIONS
 
     /*
      * applies a function f to the elements of errors2 and add them to errors
@@ -169,23 +170,23 @@ public:
         output << std::scientific << std::setprecision(2) << '[';
         int maxElementNumberDisplayed = 5;
 
-        if(errors.empty())
+        // collect the relevant data
+        std::vector<std::pair<Tag, errorType>> data;
+        for(int tag = 0; tag < errors.size(); tag++)
+        {
+            errorType error = errors[tag];
+            if(error != 0.)
+            {
+                data.push_back(std::make_pair(tag, error));
+            }
+        }
+
+        if(data.empty())
         {
             output << "no-error";
         }
         else
         {
-            // collect the relevant data the data
-            std::vector<std::pair<Tag, errorType>> data;
-            for(int tag = 0; tag < errors.size(); tag++)
-            {
-                errorType error = errors[tag];
-                if(error != 0.)
-                {
-                    data.push_back(std::make_pair(tag, error));
-                }
-            }
-
             // sorts the vector by abs(error) descending
             auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
             std::sort(data.begin(), data.end(), compare);
