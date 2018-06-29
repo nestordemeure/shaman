@@ -17,11 +17,8 @@ template<typename errorType> class ErrorSum
 {
 public:
     // contains the error decomposed in composants (one per block encountered)
-    // uses a pointer to vector to keep type size constant TODO has this indirection any direct advantages ?
-    // sorted from bigger tag to smaller tag in the hope of speeding up map2 and insertion
+    // errors[tag] = error // if tag is out or range, error is 0
     std::vector<errorType> errors;
-    std::vector<Tag> tags;
-    // TODO a true sparse vector implementation might have better performances
 
     //-------------------------------------------------------------------------
     // CONSTRUCTORS
@@ -29,13 +26,13 @@ public:
     /*
      * empty constructor : currently no error
      */
-    explicit ErrorSum(): errors(), tags() {}
+    explicit ErrorSum(): errors() {}
 
     /*
      * copy constructor
      * WARNING this constructor needs to do a deep copy (which is not the default)
      */
-    ErrorSum(const ErrorSum& errorSum2): errors(errorSum2.errors), tags(errorSum2.tags) {}
+    ErrorSum(const ErrorSum& errorSum2): errors(errorSum2.errors) {}
 
     /*
      * copy assignment
@@ -44,19 +41,18 @@ public:
     ErrorSum& operator=(const ErrorSum& errorSum2)
     {
         errors = errorSum2.errors;
-        tags = errorSum2.tags;
         return *this;
     };
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(Tag tag, errorType error): errors(), tags()
+    explicit ErrorSum(Tag tag, errorType error): errors()
     {
         if(error != 0)
         {
-            errors.push_back(error);
-            tags.push_back(tag);
+            errors.resize(tag+1);
+            errors[tag] = error;
         }
     }
 
@@ -64,13 +60,13 @@ public:
      * returns an errorSum with a single element (singleton)
      * uses the current tag
      */
-    explicit ErrorSum(errorType error): errors(), tags()
+    explicit ErrorSum(errorType error): errors()
     {
         if(error != 0)
         {
             Tag tag = Block::currentBlock();
-            errors.push_back(error);
-            tags.push_back(tag);
+            errors.resize(tag+1);
+            errors[tag] = error;
         }
     }
 
@@ -112,34 +108,18 @@ public:
 
     /*
      * += error
-     * TODO might use binary search to improve perfs when vector is big
      */
     void addError(errorType error)
     {
         Tag tag = Block::currentBlock();
 
-        // search in a sorted vector
-        for(int i = 0; i < tags.size(); i++)
+        // insures that errors is big enough to store the results
+        if (tag >= errors.size())
         {
-            auto& currentTag = tags[i];
-            if(currentTag < tag)
-            {
-                // the target tag is not inside the vector but should be here
-                errors.insert(errors.begin()+i, error);
-                tags.insert(tags.begin()+i, tag);
-                return;
-            }
-            else if (currentTag == tag)
-            {
-                // we found the target tag
-                errors[i] += error;
-                return;
-            }
+            errors.resize(tag+1);
         }
 
-        // the target was not in the vector
-        errors.push_back(error);
-        tags.push_back(tag);
+        errors[tag] += error;
     }
 
     /*
@@ -178,62 +158,22 @@ public:
 
     /*
      * applies a function f to the elements of errors2 and add them to errors
-     * TODO we might use a std algorithm to do several insertions at once in o(n)
-     * TODO reducing indirections might improve perfs
      */
     template<typename FUN>
     inline void addMap(const ErrorSum& errorSum2, FUN f)
     {
         auto& errors2 = errorSum2.errors;
-        auto& tags2 = errorSum2.tags;
 
-        // iterate on it1 and it2 at the same time
-        int i1 = 0;
-        int i2 = 0;
-        while( (i1 < errors.size()) && (i2 < errors2.size()) )
+        // insures that errors is big enough to store the results
+        if (errors2.size() > errors.size())
         {
-            if(tags2[i2] == (tags)[i1])
-            {
-                (errors)[i1] += f(errors2[i2]);
-                i2++;
-            }
-            else if (tags2[i2] > (tags)[i1])
-            {
-                errors.insert(errors.begin()+i1, f(errors2[i2]));
-                tags.insert(tags.begin()+i1, tags2[i2]);
-                i2++;
-            }
-            i1++;
+            errors.resize(errors2.size());
         }
 
-        // we did not get to the end of it2
-        if(i2 < errors2.size())
+        // adds the values from errors2 to errors
+        for(int tag = 0; tag < errors2.size(); tag++)
         {
-            auto errorsPreviousSize = errors.size();
-            tags.insert(tags.end(), tags2.begin()+i2, tags2.end());
-            errors.insert(errors.end(), errors2.begin()+i2, errors2.end());
-            partialTransform((errors), errorsPreviousSize, errors.size(), f);
-        }
-        /*
-        // TODO test wether this is faster
-        while(i2 < errors2.size())
-        {
-            errors->push_back(f(errors2[i2]));
-            tags->push_back(tags2[i2]);
-            i2++;
-        }
-        */
-    }
-
-    /*
-     * applies a fucntion to a portion of an array
-     */
-    template<typename FUN>
-    inline void partialTransform(std::vector<errorType>& vect , unsigned long inf, unsigned long sup, FUN f)
-    {
-        for(unsigned long i = inf; i < sup; i++)
-        {
-            vect[i] = f(vect[i]);
+            errors[tag] += f(errors2[tag]);
         }
     }
 
@@ -257,11 +197,15 @@ public:
         }
         else
         {
-            // copy the data
+            // collect the relevant data the data
             std::vector<std::pair<Tag, errorType>> data;
-            for(int i = 0; i < errors.size(); i++)
+            for(int tag = 0; tag < errors.size(); tag++)
             {
-                data.push_back(std::make_pair(tags[i], errors[i]));
+                errorType error = errors[tag];
+                if(error != 0.)
+                {
+                    data.push_back(std::make_pair(tag, error));
+                }
             }
 
             // sorts the vector by abs(error) descending
