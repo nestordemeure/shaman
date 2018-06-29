@@ -14,22 +14,19 @@
 class Block
 {
 public:
-    // tags associated with the current block
-    Tag blockTag; // TODO currently useless
-
     /*
      * declares that we are now in a given block
      */
     Block(const std::string& name)
     {
-        blockTag = tagOfName(name);
+        Tag blockTag = tagOfName(name);
         ShamanGlobals::tagStack.push(blockTag);
     }
 
     /*
      * declares that we are now in a given block
      */
-    Block(Tag tag): blockTag(tag)
+    Block(Tag tag)
     {
         ShamanGlobals::tagStack.push(tag);
     }
