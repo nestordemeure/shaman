@@ -29,31 +29,12 @@ public:
     explicit ErrorSum(): errors() {}
 
     /*
-     * copy constructor
-     * WARNING this constructor needs to do a deep copy (which is not the default)
-     */
-    ErrorSum(const ErrorSum& errorSum2): errors(errorSum2.errors) {}
-
-    /*
-     * copy assignment
-     * WARNING this constructor needs to do a deep copy (which is not the default)
-     */
-    ErrorSum& operator=(const ErrorSum& errorSum2)
-    {
-        errors = errorSum2.errors;
-        return *this;
-    };
-
-    /*
      * returns an errorSum with a single element (singleton)
      */
     explicit ErrorSum(Tag tag, errorType error): errors()
     {
-        if(error != 0)
-        {
-            errors.resize(tag+1);
-            errors[tag] = error;
-        }
+        errors.resize(tag+1);
+        errors[tag] = error;
     }
 
     /*
@@ -62,18 +43,10 @@ public:
      */
     explicit ErrorSum(errorType error): errors()
     {
-        if(error != 0)
-        {
-            Tag tag = Block::currentBlock();
-            errors.resize(tag+1);
-            errors[tag] = error;
-        }
+        Tag tag = Block::currentBlock();
+        errors.resize(tag+1);
+        errors[tag] = error;
     }
-
-    /*
-     * returns an errorSum off the given size
-     */
-    explicit ErrorSum(Tag tag, int size1, int size2): errors(std::max(tag+1,std::max(size1,size2))) {}
 
     //-------------------------------------------------------------------------
     // OPERATIONS
