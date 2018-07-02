@@ -58,8 +58,8 @@ public:
     /*
      * returns the tag associated with a name
      * note : this operation cost an hashtable lookup
-     * TODO can we do this operation at compile time
-     * TODO maybe not needed if we use numeric types (function pointers) from the beginning
+     * TODO can we do this operation at compile time ? (it would make it MPI proof)
+     * TODO maybe not needed if we use numeric types (function pointers) from the beginning (but we lose the fact that tags are indexes which is bad)
      */
     static Tag tagOfName(const std::string& name)
     {
