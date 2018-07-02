@@ -682,7 +682,7 @@ void CalcElemNodeNormals(Real_t pfx[8],
                          const Real_t y[8],
                          const Real_t z[8])
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     for (Index_t i = 0 ; i < 8 ; ++i) {
         pfx[i] = Real_t(0.0);
@@ -843,7 +843,7 @@ void CollectDomainNodesToElemNodes(const Index_t* elemToNode,
                                    Real_t elemY[8],
                                    Real_t elemZ[8])
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     Index_t nd0i = elemToNode[0] ;
     Index_t nd1i = elemToNode[1] ;
@@ -923,7 +923,7 @@ void CalcElemVolumeDerivative(Real_t dvdx[8],
                               const Real_t y[8],
                               const Real_t z[8])
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     VoluDer(x[1], x[2], x[3], x[4], x[5], x[7],
             y[1], y[2], y[3], y[4], y[5], y[7],
@@ -1412,7 +1412,7 @@ void CalcHourglassControlForElems(Real_t determ[], Real_t hgcoef)
 static inline
 void CalcVolumeForceForElems()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     Index_t numElem = mesh.numElem() ;
     if (numElem != 0) {
@@ -1447,7 +1447,7 @@ void CalcVolumeForceForElems()
 
 static inline void CalcForceForNodes()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     Index_t numNode = mesh.numNode() ;
     for (Index_t i=0; i<numNode; ++i) {
@@ -1480,7 +1480,7 @@ void CalcAccelerationForNodes()
 static inline
 void ApplyAccelerationBoundaryConditionsForNodes()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     Index_t numNodeBC = (mesh.sizeX()+1)*(mesh.sizeX()+1) ;
     for(Index_t i=0 ; i<numNodeBC ; ++i)
@@ -1536,7 +1536,7 @@ void CalcPositionForNodes(const Real_t dt)
 static inline
 void LagrangeNodal()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     const Real_t delt = mesh.deltatime() ;
     Real_t u_cut = mesh.u_cut() ;
@@ -1646,7 +1646,7 @@ Real_t CalcElemVolume( const Real_t x0, const Real_t x1,
 static inline
 Real_t CalcElemVolume( const Real_t x[8], const Real_t y[8], const Real_t z[8] )
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     return CalcElemVolume( x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7],
                            y[0], y[1], y[2], y[3], y[4], y[5], y[6], y[7],
@@ -2191,7 +2191,7 @@ void CalcMonotonicQRegionForElems(// parameters
 static inline
 void CalcMonotonicQForElems()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     //
     // initialize parameters
@@ -2222,7 +2222,7 @@ void CalcMonotonicQForElems()
 static inline
 void CalcQForElems()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     Real_t qstop = mesh.qstop() ;
     Index_t numElem = mesh.numElem() ;
@@ -2554,7 +2554,7 @@ void EvalEOSForElems(Real_t *vnewc, Index_t length)
 static inline
 void ApplyMaterialPropertiesForElems()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     Index_t length = mesh.numElem() ;
 
@@ -2609,7 +2609,7 @@ void ApplyMaterialPropertiesForElems()
 static inline
 void UpdateVolumesForElems()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     Index_t numElem = mesh.numElem();
     if (numElem != 0) {
@@ -2631,7 +2631,7 @@ void UpdateVolumesForElems()
 static inline
 void LagrangeElements()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     const Real_t deltatime = mesh.deltatime() ;
 
@@ -2723,7 +2723,7 @@ void CalcHydroConstraintForElems()
 static inline
 void CalcTimeConstraintsForElems()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     /* evaluate time constraint */
     CalcCourantConstraintForElems() ;
@@ -2735,7 +2735,7 @@ void CalcTimeConstraintsForElems()
 static inline
 void LagrangeLeapFrog()
 {
-    FUNCTION_BLOCK;
+    //FUNCTION_BLOCK;
 
     /* calculate nodal forces, accelerations, velocities, positions, with
      * applied boundary conditions and slide surface considerations */
