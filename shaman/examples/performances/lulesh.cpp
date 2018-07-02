@@ -69,7 +69,6 @@ Additional BSD Notice
 #include <sys/time.h>
 #include "../../shaman/Shaman.h"
 #include "../../shaman/lib/Shaman_malloc.h"
-#include "../../shaman/lib/tinyformat.h"
 
 //#define LULESH_SHOW_PROGRESS 1
 
@@ -2989,7 +2988,7 @@ int main(int argc, char *argv[])
     printf("Run completed:  \n");
     printf("   Problem size        =  %i \n",    edgeElems);
     printf("   Iteration count     =  %i \n",    mesh.cycle());
-    tfm::printf("   Final Origin Energy = %12.6e \n", mesh.e(ElemId));
+    std::cout << "   Final Origin Energy = " << mesh.e(ElemId) << std::endl;
 
     Real_t   MaxAbsDiff = Real_t(0.0);
     Real_t TotalAbsDiff = Real_t(0.0);
@@ -3009,9 +3008,9 @@ int main(int argc, char *argv[])
     }
 
     printf("   Testing Plane 0 of Energy Array:\n");
-    tfm::printf("        MaxAbsDiff   = %12.6e\n",   MaxAbsDiff   );
-    tfm::printf("        TotalAbsDiff = %12.6e\n",   TotalAbsDiff );
-    tfm::printf("        MaxRelDiff   = %12.6e\n\n", MaxRelDiff   );
+    std::cout << "        MaxAbsDiff   = " << MaxAbsDiff << '\n'
+              << "        TotalAbsDiff = " << TotalAbsDiff << '\n'
+              << "        MaxRelDiff   = " << MaxRelDiff << std::endl;
 
 
     //   FILE *fp = fopen("x.asc","wb");
