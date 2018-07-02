@@ -14,8 +14,8 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g -fno-omit-frame-pointer -fno-inline 
 
 # files
 set(SOURCE_SHAMAN
-        shaman/src/GlobalVar.h
-        shaman/src/GlobalVar.cpp
+        shaman/src/GlobalVar.h   shaman/src/GlobalVar.cpp
+        shaman/src/memoryStore.h
         shaman/src/Tagger.h
         shaman/src/ErrorSum.h
         shaman/Shaman.h
