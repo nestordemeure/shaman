@@ -33,11 +33,11 @@ public:
 
     /*
      * leaves the block
+     * NOTE : we do not check that we do pop what we pushed
      */
     ~Block()
     {
         ShamanGlobals::tagStack.pop();
-
     }
 
     /*
