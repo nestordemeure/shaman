@@ -39,8 +39,8 @@ public:
      */
     static void releaseVector(std::vector<errorType>* memory)
     {
-        // clear memory
-        std::fill(memory->begin(), memory->end(), 0.);
+        // clear memory (while keeping capacity for later resizing)
+        memory->clear();
 
         // stores memory
         memoryStore.push(memory);
