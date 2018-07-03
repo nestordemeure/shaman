@@ -118,6 +118,7 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::TwoSum(n1.number, n2.number, result);
     errorType newError = remainder + n1.error + n2.error;
 
+
     Serror newErrorComp(n1.errorComposants);
     newErrorComp.addError(remainder);
     newErrorComp.addErrors(n2.errorComposants);
@@ -133,6 +134,7 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
 
     numberType remainder = EFT::TwoSum(n1.number, -n2.number, result);
     errorType newError = remainder + n1.error - n2.error;
+
 
     Serror newErrorComp(n1.errorComposants);
     newErrorComp.addError(remainder);
@@ -150,10 +152,9 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
 
     numberType remainder = EFT::FastTwoProd(n1.number, n2.number, result);
     errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
-
-    Serror newErrorComp(n2.errorComposants);
-    newErrorComp.multByScalar(n1.number);
-    newErrorComp.addError(remainder);
+    
+    Serror newErrorComp(remainder);
+    newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
     newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
 
     return Snum(result, newError, newErrorComp);
@@ -168,6 +169,7 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::RemainderDiv(n1.number, n2.number, result);
     errorType n2Precise = n2.number + n2.error;
     errorType newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error);
+
 
     Serror newErrorComp(n1.errorComposants);
     newErrorComp.addError(remainder);
