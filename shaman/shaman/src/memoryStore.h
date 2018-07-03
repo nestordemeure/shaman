@@ -12,7 +12,7 @@ template<typename errorType>
 class MemoryStore
 {
 public:
-    // used to store error terms
+    // used to store pointers to unused vectors
     thread_local static std::stack<std::vector<errorType>*> memoryStore;
 
     /*
@@ -27,7 +27,7 @@ public:
         }
         else
         {
-            // gets an existing (zero) vector
+            // gets an existing (empty) vector
             auto memory = memoryStore.top();
             memoryStore.pop();
             return memory;
@@ -39,7 +39,7 @@ public:
      */
     static void releaseVector(std::vector<errorType>* memory)
     {
-        // clear memory (while keeping capacity for later resizing)
+        // clear memory (while keeping capacity intact for later resizing)
         memory->clear();
 
         // stores memory

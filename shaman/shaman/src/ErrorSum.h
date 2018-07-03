@@ -181,6 +181,7 @@ public:
      * produces a readable string representation of the error terms
      * the error terms are sorted from larger to smaller
      * displays only the maxElementNumberDisplayed first elements with an amplitude big enough to matter given the type (10^-19 doesn't matter for a float
+     * TODO improve usability of display
      */
     explicit operator std::string() const
     {
