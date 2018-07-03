@@ -96,10 +96,7 @@ public:
      */
     void unaryNeg()
     {
-        for(auto& error : *errors)
-        {
-            error = -error;
-        }
+        std::transform(errors->begin(), errors->end(), errors->begin(), [](errorType x){return -x;});
     }
 
     /*
@@ -107,10 +104,7 @@ public:
      */
     void multByScalar(errorType scalar)
     {
-        for(auto& error : *errors)
-        {
-            error *= scalar;
-        }
+        std::transform(errors->begin(), errors->end(), errors->begin(), [scalar](errorType x){return x*scalar;});
     }
 
     /*
@@ -118,10 +112,7 @@ public:
      */
     void divByScalar(errorType scalar)
     {
-        for(auto& error : *errors)
-        {
-            error /= scalar;
-        }
+        std::transform(errors->begin(), errors->end(), errors->begin(), [scalar](errorType x){return x/scalar;});
     }
 
     /*
