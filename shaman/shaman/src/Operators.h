@@ -152,7 +152,7 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
 
     numberType remainder = EFT::FastTwoProd(n1.number, n2.number, result);
     errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
-    
+
     Serror newErrorComp(remainder);
     newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
     newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
