@@ -19,7 +19,6 @@ template<typename errorType> class ErrorSum
 public:
     // contains the error decomposed in composants (one per block encountered)
     // errors[tag] = error // if tag is out or range, error is 0
-    //std::shared_ptr<std::vector<errorType>> errors;
     std::vector<errorType>* errors;
 
     //-------------------------------------------------------------------------
