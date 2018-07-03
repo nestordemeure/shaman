@@ -34,7 +34,7 @@ public:
      * copy constructor
      * WARNING this constructor needs to do a deep copy (which is not the default)
      */
-    ErrorSum(const ErrorSum& errorSum2): errors(MemoryStore<errorType>::getVector()) //errors(new std::vector<errorType>(*(errorSum2.errors)))
+    ErrorSum(const ErrorSum& errorSum2): errors(MemoryStore<errorType>::getVector())
     {
         *errors = *(errorSum2.errors);
     }
@@ -54,7 +54,12 @@ public:
      */
     explicit ErrorSum(Tag tag, errorType error): errors(MemoryStore<errorType>::getVector())
     {
-        errors->resize(tag+1);
+        // insures that errors is big enough to store the results
+        if(tag >= errors->size())
+        {
+            errors->resize(tag+1);
+        }
+
         (*errors)[tag] = error;
     }
 
@@ -65,7 +70,13 @@ public:
     explicit ErrorSum(errorType error): errors(MemoryStore<errorType>::getVector())
     {
         Tag tag = Block::currentBlock();
-        errors->resize(tag+1);
+
+        // insures that errors is big enough to store the results
+        if(tag >= errors->size())
+        {
+            errors->resize(tag+1);
+        }
+
         (*errors)[tag] = error;
     }
 
@@ -122,7 +133,7 @@ public:
         Tag tag = Block::currentBlock();
 
         // insures that errors is big enough to store the results
-        if (tag >= errors->size())
+        if(tag >= errors->size())
         {
             errors->resize(tag+1);
         }
@@ -172,7 +183,7 @@ public:
     inline void addMap(const std::vector<errorType>& errors2, FUN f)
     {
         // insures that errors is big enough to store the results
-        if (errors2.size() > errors->size())
+        if(errors2.size() > errors->size())
         {
             errors->resize(errors2.size());
         }
