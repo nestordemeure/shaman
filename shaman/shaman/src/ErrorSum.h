@@ -35,7 +35,7 @@ public:
      */
     ErrorSum(const ErrorSum& errorSum2): errors(MemoryStore<errorType>::getVector())
     {
-        *errors = *(errorSum2.errors);
+        errors->assign(errorSum2.errors->begin(), errorSum2.errors->end()); // assign insures that we do not drop the capacity (undefined behaviour for = operator)
     }
 
     /*
@@ -44,7 +44,7 @@ public:
      */
     ErrorSum& operator=(const ErrorSum& errorSum2)
     {
-        *errors = *(errorSum2.errors);
+        *errors = *(errorSum2.errors); // cannot use 'assign' because errors might have existing values out of errorSum2.size()
         return *this;
     };
 
@@ -53,12 +53,7 @@ public:
      */
     explicit ErrorSum(Tag tag, errorType error): errors(MemoryStore<errorType>::getVector())
     {
-        // insures that errors is big enough to store the results
-        if(tag >= errors->size())
-        {
-            errors->resize(tag+1);
-        }
-
+        errors->resize(tag+1);
         (*errors)[tag] = error;
     }
 
@@ -69,13 +64,7 @@ public:
     explicit ErrorSum(errorType error): errors(MemoryStore<errorType>::getVector())
     {
         Tag tag = Block::currentBlock();
-
-        // insures that errors is big enough to store the results
-        if(tag >= errors->size())
-        {
-            errors->resize(tag+1);
-        }
-
+        errors->resize(tag+1);
         (*errors)[tag] = error;
     }
 
