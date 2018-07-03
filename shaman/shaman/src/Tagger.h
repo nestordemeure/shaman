@@ -37,6 +37,7 @@ public:
     ~Block()
     {
         ShamanGlobals::tagStack.pop();
+
     }
 
     /*
