@@ -129,19 +129,19 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 // MATHEMATICAL FUNCTIONS
 
 // isifnite
-templated inline bool isfinite(const Snum& n)
+templated inline bool Sstd::isfinite(const Snum& n)
 {
     return std::isfinite(n.number);
 };
 
 // isnan
-templated inline bool isnan(const Snum& n)
+templated inline bool Sstd::isnan(const Snum& n)
 {
     return std::isnan(n.number);
 };
 
 // abs
-templated inline const Snum abs(const Snum& n)
+templated inline const Snum Sstd::abs(const Snum& n)
 {
     if (n >= 0.)
     {
@@ -154,13 +154,13 @@ templated inline const Snum abs(const Snum& n)
 };
 
 // fabs
-templated inline const Snum fabs(const Snum& n)
+templated inline const Snum Sstd::fabs(const Snum& n)
 {
-    return abs(n);
+    return Sstd::abs(n);
 };
 
 // floor
-templated inline const Snum floor(const Snum& n)
+templated inline const Snum Sstd::floor(const Snum& n)
 {
     numberType result = std::floor(n.number);
     preciseType preciseCorrectedResult = std::floor(n.corrected_number());
@@ -190,7 +190,7 @@ templated inline const Snum floor(const Snum& n)
 };
 
 // ceil
-templated inline const Snum ceil(const Snum& n)
+templated inline const Snum Sstd::ceil(const Snum& n)
 {
     numberType result = std::ceil(n.number);
     preciseType preciseCorrectedResult = std::ceil(n.corrected_number());
@@ -220,7 +220,7 @@ templated inline const Snum ceil(const Snum& n)
 };
 
 // trunc
-templated inline const Snum trunc(const Snum& n)
+templated inline const Snum Sstd::trunc(const Snum& n)
 {
     numberType result = std::trunc(n.number);
     preciseType preciseCorrectedResult = std::trunc(n.corrected_number());
@@ -250,7 +250,7 @@ templated inline const Snum trunc(const Snum& n)
 };
 
 // sqrt
-templated inline const Snum sqrt(const Snum& n)
+templated inline const Snum Sstd::sqrt(const Snum& n)
 {
     numberType result = std::sqrt(n.number);
 
@@ -292,7 +292,7 @@ templated inline const Snum sqrt(const Snum& n)
 
 // cubic root
 // TODO might be improved using a formula similar to the one used for the square root
-templated inline const Snum cbrt(const Snum& n)
+templated inline const Snum Sstd::cbrt(const Snum& n)
 {
     numberType result = std::cbrt(n.number);
     preciseType preciseCorrectedResult = std::cbrt(n.corrected_number());
@@ -322,7 +322,7 @@ templated inline const Snum cbrt(const Snum& n)
 };
 
 // exp
-templated inline const Snum exp(const Snum& n)
+templated inline const Snum Sstd::exp(const Snum& n)
 {
     numberType result = std::exp(n.number);
     preciseType preciseCorrectedResult = std::exp(n.corrected_number());
@@ -352,7 +352,7 @@ templated inline const Snum exp(const Snum& n)
 };
 
 // exp2
-templated inline const Snum exp2(const Snum& n)
+templated inline const Snum Sstd::exp2(const Snum& n)
 {
     numberType result = std::exp2(n.number);
     preciseType preciseCorrectedResult = std::exp2(n.corrected_number());
@@ -382,7 +382,7 @@ templated inline const Snum exp2(const Snum& n)
 };
 
 // frexp
-templated inline const Snum frexp(const Snum& n, int* exp)
+templated inline const Snum Sstd::frexp(const Snum& n, int* exp)
 {
     numberType result = std::frexp(n.number, exp);
     int dummyExp;
@@ -413,7 +413,7 @@ templated inline const Snum frexp(const Snum& n, int* exp)
 };
 
 // ldexp
-templated inline const Snum ldexp(const Snum& n, int exp)
+templated inline const Snum Sstd::ldexp(const Snum& n, int exp)
 {
     numberType result = std::ldexp(n.number, exp);
     preciseType preciseCorrectedResult = std::ldexp(n.corrected_number(), exp);
@@ -443,7 +443,7 @@ templated inline const Snum ldexp(const Snum& n, int exp)
 };
 
 // erf
-templated inline const Snum erf(const Snum& n)
+templated inline const Snum Sstd::erf(const Snum& n)
 {
     numberType result = std::erf(n.number);
     preciseType preciseCorrectedResult = std::erf(n.corrected_number());
@@ -473,7 +473,7 @@ templated inline const Snum erf(const Snum& n)
 };
 
 // log
-templated inline const Snum log(const Snum& n)
+templated inline const Snum Sstd::log(const Snum& n)
 {
     numberType result = std::log(n.number);
     preciseType correctedNumber = n.corrected_number();
@@ -514,7 +514,7 @@ templated inline const Snum log(const Snum& n)
 };
 
 // log2
-templated inline const Snum log2(const Snum& n)
+templated inline const Snum Sstd::log2(const Snum& n)
 {
     numberType result = std::log2(n.number);
     preciseType correctedNumber = n.corrected_number();
@@ -555,7 +555,7 @@ templated inline const Snum log2(const Snum& n)
 };
 
 // log10
-templated inline const Snum log10(const Snum& n)
+templated inline const Snum Sstd::log10(const Snum& n)
 {
     numberType result = std::log10(n.number);
     preciseType correctedNumber = n.corrected_number();
@@ -596,7 +596,7 @@ templated inline const Snum log10(const Snum& n)
 };
 
 // sin
-templated inline const Snum sin(const Snum& n)
+templated inline const Snum Sstd::sin(const Snum& n)
 {
     numberType result = std::sin(n.number);
     preciseType preciseCorrectedResult = std::sin(n.corrected_number());
@@ -626,7 +626,7 @@ templated inline const Snum sin(const Snum& n)
 };
 
 // sinh
-templated inline const Snum sinh(const Snum& n)
+templated inline const Snum Sstd::sinh(const Snum& n)
 {
     numberType result = std::sinh(n.number);
     preciseType preciseCorrectedResult = std::sinh(n.corrected_number());
@@ -656,7 +656,7 @@ templated inline const Snum sinh(const Snum& n)
 };
 
 // asinh
-templated inline const Snum asinh(const Snum& n)
+templated inline const Snum Sstd::asinh(const Snum& n)
 {
     numberType result = std::asinh(n.number);
     preciseType preciseCorrectedResult = std::asinh(n.corrected_number());
@@ -686,7 +686,7 @@ templated inline const Snum asinh(const Snum& n)
 };
 
 // cos
-templated inline const Snum cos(const Snum& n)
+templated inline const Snum Sstd::cos(const Snum& n)
 {
     numberType result = std::cos(n.number);
     preciseType preciseCorrectedResult = std::cos(n.corrected_number());
@@ -716,7 +716,7 @@ templated inline const Snum cos(const Snum& n)
 };
 
 // cosh
-templated inline const Snum cosh(const Snum& n)
+templated inline const Snum Sstd::cosh(const Snum& n)
 {
     numberType result = std::cosh(n.number);
     preciseType preciseCorrectedResult = std::cosh(n.corrected_number());
@@ -746,7 +746,7 @@ templated inline const Snum cosh(const Snum& n)
 };
 
 // acosh
-templated inline const Snum acosh(const Snum& n)
+templated inline const Snum Sstd::acosh(const Snum& n)
 {
     numberType result = std::acosh(n.number);
     preciseType correctedNumber = n.corrected_number();
@@ -787,7 +787,7 @@ templated inline const Snum acosh(const Snum& n)
 };
 
 // acos
-templated inline const Snum acos(const Snum& n)
+templated inline const Snum Sstd::acos(const Snum& n)
 {
     numberType result = std::acos(n.number);
     preciseType correctedNumber = n.corrected_number();
@@ -832,7 +832,7 @@ templated inline const Snum acos(const Snum& n)
 };
 
 // asin
-templated inline const Snum asin(const Snum& n)
+templated inline const Snum Sstd::asin(const Snum& n)
 {
     numberType result = std::asin(n.number);
     preciseType correctedNumber = n.corrected_number();
@@ -877,7 +877,7 @@ templated inline const Snum asin(const Snum& n)
 };
 
 // atan
-templated inline const Snum atan(const Snum& n)
+templated inline const Snum Sstd::atan(const Snum& n)
 {
     numberType result = std::atan(n.number);
     preciseType preciseCorrectedResult = std::atan(n.corrected_number());
@@ -907,7 +907,7 @@ templated inline const Snum atan(const Snum& n)
 };
 
 // tan
-templated inline const Snum tan(const Snum& n)
+templated inline const Snum Sstd::tan(const Snum& n)
 {
     numberType result = std::tan(n.number);
     preciseType preciseCorrectedResult = std::tan(n.corrected_number());
@@ -937,7 +937,7 @@ templated inline const Snum tan(const Snum& n)
 };
 
 // tanh
-templated inline const Snum tanh(const Snum& n)
+templated inline const Snum Sstd::tanh(const Snum& n)
 {
     numberType result = std::tanh(n.number);
     preciseType preciseCorrectedResult = std::tanh(n.corrected_number());
@@ -967,7 +967,7 @@ templated inline const Snum tanh(const Snum& n)
 };
 
 // atanh
-templated inline const Snum atanh(const Snum& n)
+templated inline const Snum Sstd::atanh(const Snum& n)
 {
     numberType result = std::atanh(n.number);
     preciseType correctedNumber = n.corrected_number();
@@ -1008,7 +1008,7 @@ templated inline const Snum atanh(const Snum& n)
 };
 
 // atan2
-templated inline const Snum atan2(const Snum& n1, const Snum& n2)
+templated inline const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
 {
     numberType result = std::atan2(n1.number, n2.number);
     preciseType preciseCorrectedResult = std::atan2(n1.corrected_number(), n2.corrected_number());
@@ -1036,10 +1036,10 @@ templated inline const Snum atan2(const Snum& n1, const Snum& n2)
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
-set_Sfunction2_casts(atan2);
+set_Sfunction2_casts(Sstd::atan2);
 
 // pow
-templated inline const Snum pow(const Snum& n1, const Snum& n2)
+templated inline const Snum Sstd::pow(const Snum& n1, const Snum& n2)
 {
     numberType result = std::pow(n1.number, n2.number);
     preciseType preciseCorrectedResult = std::pow(n1.corrected_number(), n2.corrected_number());
@@ -1067,10 +1067,10 @@ templated inline const Snum pow(const Snum& n1, const Snum& n2)
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
-set_Sfunction2_casts(pow);
+set_Sfunction2_casts(Sstd::pow);
 
 // min
-templated inline const Snum min(const Snum& n1, const Snum& n2)
+templated inline const Snum Sstd::min(const Snum& n1, const Snum& n2)
 {
     #ifdef UNSTABLE_BRANCH_DEBUGGER
     unstableBranchTest(n1, n2);
@@ -1085,10 +1085,10 @@ templated inline const Snum min(const Snum& n1, const Snum& n2)
         return n2;
     }
 };
-set_Sfunction2_casts(min);
+set_Sfunction2_casts(Sstd::min);
 
 // max
-templated inline const Snum max(const Snum& n1, const Snum& n2)
+templated inline const Snum Sstd::max(const Snum& n1, const Snum& n2)
 {
     #ifdef UNSTABLE_BRANCH_DEBUGGER
     unstableBranchTest(n1, n2);
@@ -1103,10 +1103,10 @@ templated inline const Snum max(const Snum& n1, const Snum& n2)
         return n2;
     }
 };
-set_Sfunction2_casts(max);
+set_Sfunction2_casts(Sstd::max);
 
 // fma
-templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
+templated inline const Snum Sstd::fma(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::fma(n1.number, n2.number, n3.number);
 
@@ -1132,10 +1132,10 @@ templated inline const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
-set_Sfunction3_casts(fma);
+set_Sfunction3_casts(Sstd::fma);
 
 // hypot
-templated inline const Snum hypot(const Snum& n1, const Snum& n2)
+templated inline const Snum Sstd::hypot(const Snum& n1, const Snum& n2)
 {
     numberType result = std::hypot(n1.number, n2.number);
     preciseType preciseCorrectedResult = std::hypot(n1.corrected_number(), n2.corrected_number());
@@ -1163,10 +1163,10 @@ templated inline const Snum hypot(const Snum& n1, const Snum& n2)
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
-set_Sfunction2_casts(hypot);
+set_Sfunction2_casts(Sstd::hypot);
 
 // hypot
-templated inline const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3)
+templated inline const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
 {
     numberType result = std::hypot(n1.number, n2.number, n3.number);
     preciseType preciseCorrectedResult = std::hypot(n1.corrected_number(), n2.corrected_number(), n3.corrected_number());
@@ -1194,7 +1194,7 @@ templated inline const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3
 
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
-set_Sfunction3_casts(hypot);
+set_Sfunction3_casts(Sstd::hypot);
 
 //-----------------------------------------------------------------------------
 

@@ -62,7 +62,7 @@ void Schrodinger::calculate()
     unsigned int k = 0;
 
     // if abs(psi[200]) < maximum allowed psi, we have the answer, our guess for the energy is correct
-    while(fabs(psi[numberDivisions]) > maxPsi)
+    while(Sstd::fabs(psi[numberDivisions]) > maxPsi)
     {
         k++;
 

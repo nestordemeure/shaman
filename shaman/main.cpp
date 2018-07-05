@@ -24,14 +24,14 @@ int main()
 
     // EXAMPLES
 
-    sqrtHeron();
+    //sqrtHeron();
 
     // various examples
     //rumpTest();
     //polynomialTest();
     //fixedPointTest();
     //kahanIdentity();
-    //mullerTest();
+    mullerTest();
 
     // legendre
     //legendre20Test();
