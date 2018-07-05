@@ -183,12 +183,22 @@ from sys import argv
 
 def list_cpp_files(rootpath):
     """list the cpp files associated with the given path"""
-    if not os.path.isfile(rootpath):
-        return [file.path for file in os.scandir(rootpath) if file.is_file() and file.name.endswith(cpp_extensions)]
+    if os.path.isfile(rootpath):
+        if not rootpath.endswith(cpp_extensions) : print("WARNING : '", rootpath, "' does not end with a known C++ extension.")
+        yield rootpath
     else:
-        if not rootpath.endswith(cpp_extensions) :
-            print("WARNING : '", rootpath, "' does not end with a known C++ extension.")
-        return [rootpath]
+        for file in os.scandir(rootpath):
+           if file.is_file() and file.name.endswith(cpp_extensions):
+              yield file.path
+           elif file.is_dir():
+              yield from list_cpp_files(file.path)
+    # Older version that does not go in subdirectories
+    #if not os.path.isfile(rootpath):
+    #    return [file.path for file in os.scandir(rootpath) if file.is_file() and file.name.endswith(cpp_extensions)]
+    #else:
+    #    if not rootpath.endswith(cpp_extensions) :
+    #        print("WARNING : '", rootpath, "' does not end with a known C++ extension.")
+    #    return [rootpath]
 
 def shamanize_name(rootpath,filepath):
     """adds the shaman prefix to a path produce from a root"""
@@ -219,3 +229,4 @@ for rootpath in path_list:
     shamanizer(rootpath)
 
 # TODO might run on all single files when given a folder with a path that ends with '/'
+
