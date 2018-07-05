@@ -228,9 +228,16 @@ public:
         output << '[';
 
         // displays each other element prefixed by a ", " separator
-        for(auto& kv : data)
+        if(data.size() > 0)
         {
-            output << Block::nameOfTag(kv.first) << ':' << kv.second << "%, ";
+            auto kv = data[0];
+            output << Block::nameOfTag(kv.first) << ':' << kv.second << '%';
+
+            for(int i = 1; i < data.size(); i++)
+            {
+                kv = data[i];
+                output << ", " << Block::nameOfTag(kv.first) << ':' << kv.second << '%';
+            }
         }
 
         // adds '…' if we dropped some non significant terms
