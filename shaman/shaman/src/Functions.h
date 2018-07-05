@@ -472,6 +472,36 @@ templated inline const Snum Sstd::erf(const Snum& n)
     return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
 };
 
+// erfc
+templated inline const Snum Sstd::erfc(const Snum& n)
+{
+    numberType result = std::erfc(n.number);
+    preciseType preciseCorrectedResult = std::erfc(n.corrected_number());
+    errorType newError = (errorType) (preciseCorrectedResult - result);
+
+    #ifdef DOUBT_LEVEL_FIELD_ENABLED
+    int doubtLevel = n.doubtLevel;
+    if (n.non_significant())
+    {
+        #ifdef UNSTABLE_OP_DEBUGGER
+        NumericalDebugger::unstableFunctions++;
+        NumericalDebugger::unstability();
+        #endif
+        doubtLevel++;
+    }
+    #endif
+
+    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
+    bool isNumericalZero = Snum::non_significant(result, newError);
+    #endif
+
+    #ifdef NUMERICAL_ZERO_DEBUGGER
+    numericalZeroTest(isNumericalZero, n.non_significant());
+    #endif
+
+    return Snum(result, newError ISNUMERICALZERO DOUBTLEVEL);
+};
+
 // log
 templated inline const Snum Sstd::log(const Snum& n)
 {

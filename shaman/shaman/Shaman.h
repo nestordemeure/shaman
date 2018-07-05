@@ -146,6 +146,7 @@ namespace Sstd
     templated const Snum acosh(const Snum& n);
     templated const Snum atanh(const Snum& n);
     templated const Snum erf(const Snum& n);
+    templated const Snum erfc(const Snum& n);
     templated const Snum abs(const Snum& n);
     templated const Snum fabs(const Snum& n);
     templated const Snum floor(const Snum& n);
