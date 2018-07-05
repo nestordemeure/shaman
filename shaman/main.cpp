@@ -10,6 +10,7 @@
 #include "examples/legendre.h"
 #include "examples/schrodinger/schrodinger.h"
 #include "examples/sqrtHeron.h"
+#include "examples/sum.h"
 
 //---------------------------------------------------------------------------------------
 // MAIN
@@ -18,30 +19,30 @@ int main()
 {
     auto begin = std::chrono::steady_clock::now();
 
-    // TESTS
+    // ----- TESTS -----
 
     //test_eft();
     //test_loop();
     //test_cArray();
     
-    // EXAMPLES
-    //sqrtHeron();
+    // ----- EXAMPLES -----
 
-    // various examples
-    //rumpTest();
+    sqrtHeron();
+
     /*
+    rumpTest();
     polynomialTest();
     fixedPointTest();
     kahanIdentity();
     mullerTest();
+    legendre20Test();
     */
 
-    // legendre
-    //legendre20Test();
-
     // Schrodinger equation
+    /*
     Schrodinger numerov = Schrodinger();
     numerov.calculate();
+    */
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
