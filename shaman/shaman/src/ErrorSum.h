@@ -179,60 +179,64 @@ public:
 
     /*
      * produces a readable string representation of the error terms
-     * the error terms are sorted from larger to smaller
-     * displays only the maxElementNumberDisplayed first elements with an amplitude big enough to matter given the type (10^-19 doesn't matter for a float
-     * TODO improve usability of display
+     * the error terms are expressed in percents of the sum of absolute errors, sorted from larger to smaller
+     * the signs are preserved to better reflect compensations BUT the sum of percents is 100 only if you ignore signs
+     * we display only the terms larger than a given percent
      */
     explicit operator std::string() const
     {
-        std::ostringstream output;
-        output << std::scientific << std::setprecision(2) << '[';
-        int maxElementNumberDisplayed = 5;
+        int minErrorPercent = 5;
 
-        // collect the relevant data
-        std::vector<std::pair<Tag, errorType>> data;
+        // computes the sum of abs(error) and the sign of the sum of errors
+        errorType totalAbsoluteError = 0.;
+        errorType totalError = 0.;
+        for(auto error : *errors)
+        {
+            totalAbsoluteError += std::abs(error);
+            totalError += error;
+        }
+        // rectifies the sign of the sum of absolute errors to match the sign of the sum
+        if(totalError < 0)
+        {
+            totalAbsoluteError = -totalAbsoluteError;
+        }
+
+        // collects the relevant data expressed in percent of the total error
+        std::vector<std::pair<Tag, int>> data;
+        bool droppedNonSignificantTerms = false;
         for(int tag = 0; tag < errors->size(); tag++)
         {
             errorType error = (*errors)[tag];
-            if(error != 0.)
+            int percent = (error*100.) / totalAbsoluteError;
+
+            if(std::abs(percent) >= minErrorPercent)
             {
-                data.push_back(std::make_pair(tag, error));
+                data.push_back(std::make_pair(tag, percent));
+            }
+            else if (error != 0)
+            {
+                droppedNonSignificantTerms = true;
             }
         }
 
-        if(data.empty())
+        // sorts the vector by abs(error) descending
+        auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
+        std::sort(data.begin(), data.end(), compare);
+
+        // output stream
+        std::ostringstream output;
+        output << '[';
+
+        // displays each other element prefixed by a ", " separator
+        for(auto& kv : data)
         {
-            output << "no-error";
+            output << Block::nameOfTag(kv.first) << ':' << kv.second << "%, ";
         }
-        else
+
+        // adds '…' if we dropped some non significant terms
+        if(droppedNonSignificantTerms)
         {
-            // sorts the vector by abs(error) descending
-            auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
-            std::sort(data.begin(), data.end(), compare);
-
-            // functions that returns only if the error is big enough to have an impact given the type
-            int nbDigitsMax = std::numeric_limits<errorType>::digits10 + 1;
-            auto significant = [nbDigitsMax](const std::pair<Tag, errorType>& p){return -std::log10(std::abs(p.second)) < nbDigitsMax;};
-
-            // displays the first element
-            int i = 0;
-            auto kv = data[0];
-            output << Block::nameOfTag(kv.first) << ':' << kv.second;
-            i++;
-
-            // displays each other element prefixed by a ", " separator
-            while((i < maxElementNumberDisplayed) && (i < data.size()) && (significant(data[i])))
-            {
-                kv = data[i];
-                output << ", " << Block::nameOfTag(kv.first) << ':' << kv.second;
-                i++;
-            }
-
-            // adds a reminder that we are not displaying all error terms
-            if(i < data.size())
-            {
-                output << "…";
-            }
+            output << "…";
         }
 
         output << ']';
