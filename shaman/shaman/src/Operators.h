@@ -168,8 +168,7 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
 
     numberType remainder = EFT::RemainderDiv(n1.number, n2.number, result);
     errorType n2Precise = n2.number + n2.error;
-    errorType newError = ((remainder + n1.error) - result*n2.error) / (n2.number + n2.error);
-
+    errorType newError = ((remainder + n1.error) - result*n2.error) / n2Precise;
 
     Serror newErrorComp(n1.errorComposants);
     newErrorComp.addError(remainder);
