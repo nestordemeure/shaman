@@ -97,6 +97,10 @@ public :
 #define templated template<typename numberType, typename errorType, typename preciseType>
 #define Snum S<numberType,errorType,preciseType>
 
+// streaming operator
+templated std::ostream& operator<<(std::ostream& os, const Snum& n);
+templated std::istream& operator>>(std::istream& is, Snum& v);
+
 // arithmetic operators
 templated const Snum operator-(const Snum& n);
 templated const Snum operator+(const Snum& n1, const Snum& n2);
@@ -113,47 +117,50 @@ templated bool operator>(const Snum& n1, const Snum& n2);
 templated bool operator>=(const Snum& n1, const Snum& n2);
 
 // mathematical functions
-// TODO the ideal would be able to define std overload for our types
-templated const Snum sqrt(const Snum& n);
-templated const Snum cbrt(const Snum& n);
-templated const Snum pow(const Snum& n1, const Snum& n2);
-templated const Snum exp(const Snum& n);
-templated const Snum exp2(const Snum& n);
-templated const Snum frexp(const Snum& n, int* exp);
-templated const Snum ldexp(const Snum& n, int exp);
-templated const Snum log(const Snum& n);
-templated const Snum log2(const Snum& n);
-templated const Snum log10(const Snum& n);
-templated const Snum sin(const Snum& n);
-templated const Snum cos(const Snum& n);
-templated const Snum tan(const Snum& n);
-templated const Snum asin(const Snum& n);
-templated const Snum acos(const Snum& n);
-templated const Snum atan(const Snum& n);
-templated const Snum atan2(const Snum& n1, const Snum& n2);
-templated const Snum sinh(const Snum& n);
-templated const Snum cosh(const Snum& n);
-templated const Snum tanh(const Snum& n);
-templated const Snum asinh(const Snum& n);
-templated const Snum acosh(const Snum& n);
-templated const Snum atanh(const Snum& n);
-templated const Snum erf(const Snum& n);
-templated const Snum abs(const Snum& n);
-templated const Snum fabs(const Snum& n);
-templated const Snum floor(const Snum& n);
-templated const Snum ceil(const Snum& n);
-templated const Snum trunc(const Snum& n);
-templated const Snum min(const Snum& n1, const Snum& n2);
-templated const Snum max(const Snum& n1, const Snum& n2);
-templated const Snum hypot(const Snum& n1, const Snum& n2);
-templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3);
-templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3);
-templated bool isfinite(const Snum& n);
-templated bool isnan(const Snum& n);
-
-// streaming operator
-templated std::ostream& operator<<(std::ostream& os, const Snum& n);
-templated std::istream& operator>>(std::istream& is, Snum& v);
+#ifdef NO_SHAMAN
+namespace Sstd = std;
+#else
+namespace Sstd
+{
+    templated const Snum sqrt(const Snum& n);
+    templated const Snum cbrt(const Snum& n);
+    templated const Snum pow(const Snum& n1, const Snum& n2);
+    templated const Snum exp(const Snum& n);
+    templated const Snum exp2(const Snum& n);
+    templated const Snum frexp(const Snum& n, int* exp);
+    templated const Snum ldexp(const Snum& n, int exp);
+    templated const Snum log(const Snum& n);
+    templated const Snum log2(const Snum& n);
+    templated const Snum log10(const Snum& n);
+    templated const Snum sin(const Snum& n);
+    templated const Snum cos(const Snum& n);
+    templated const Snum tan(const Snum& n);
+    templated const Snum asin(const Snum& n);
+    templated const Snum acos(const Snum& n);
+    templated const Snum atan(const Snum& n);
+    templated const Snum atan2(const Snum& n1, const Snum& n2);
+    templated const Snum sinh(const Snum& n);
+    templated const Snum cosh(const Snum& n);
+    templated const Snum tanh(const Snum& n);
+    templated const Snum asinh(const Snum& n);
+    templated const Snum acosh(const Snum& n);
+    templated const Snum atanh(const Snum& n);
+    templated const Snum erf(const Snum& n);
+    templated const Snum abs(const Snum& n);
+    templated const Snum fabs(const Snum& n);
+    templated const Snum floor(const Snum& n);
+    templated const Snum ceil(const Snum& n);
+    templated const Snum trunc(const Snum& n);
+    templated const Snum min(const Snum& n1, const Snum& n2);
+    templated const Snum max(const Snum& n1, const Snum& n2);
+    templated const Snum hypot(const Snum& n1, const Snum& n2);
+    templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3);
+    templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3);
+    templated bool isfinite(const Snum& n);
+    templated bool isnan(const Snum& n);
+    using namespace std;
+}
+#endif
 
 //-------------------------------------------------------------------------------------------------
 // TYPES
