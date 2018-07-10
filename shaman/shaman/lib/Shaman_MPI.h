@@ -214,6 +214,8 @@ int MPI_Shaman_Finalize()
  * http://pages.tacc.utexas.edu/~eijkhout/pcse/html/mpi-data.html
  * http://mpitutorial.com/tutorials/mpi-reduce-and-allreduce/
  * TODO works as long as the Shaman types have the declared size
+ *
+ * see also MPI_Pack and MPI_Unpack
  */
 
 #endif //SHAMAN_SHAMAN_MPI_H
