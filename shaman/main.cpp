@@ -27,7 +27,7 @@ int main()
     
     // ----- EXAMPLES -----
 
-    sqrtHeron();
+    //sqrtHeron();
 
     /*
     rumpTest();
@@ -39,10 +39,10 @@ int main()
     */
 
     // Schrodinger equation
-    /*
+
     Schrodinger numerov = Schrodinger();
     numerov.calculate();
-    */
+
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
