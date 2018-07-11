@@ -16,36 +16,6 @@
  * while preserving implicit cast conventions
  */
 
-#ifdef EXPLICIT_CASTING
-
-// arithmetic operator (between n and S<n,e,p> only)
-#define set_Soperator_casts(OPERATOR) \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> operator OPERATOR (const n& n1, const S<n,e,p>& n2) \
-{ \
-    return S<n,e,p>(n1) OPERATOR n2; \
-} \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> operator OPERATOR (const S<n,e,p>& n1, const n& n2) \
-{ \
-    return n1 OPERATOR S<n,e,p>(n2); \
-} \
-
-// boolean operator (between n and S<n,e,p> only)
-#define set_Sbool_operator_casts(OPERATOR) \
-template<typename n, typename e, typename p> \
-inline bool operator OPERATOR (const n& n1, const S<n,e,p>& n2) \
-{ \
-    return S<n,e,p>(n1) OPERATOR n2; \
-} \
-template<typename n, typename e, typename p> \
-inline bool operator OPERATOR (const S<n,e,p>& n1, const n& n2) \
-{ \
-    return n1 OPERATOR S<n,e,p>(n2); \
-} \
-
-#else
-
 // takes a value and builds an Stype around its type
 inline Sfloat makeStype(float t) { return Sfloat(t); };
 inline Sdouble makeStype(double t) { return Sdouble(t); };
@@ -93,8 +63,6 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
 { \
     return SreturnType(n1.number,n2.number)(n1) OPERATOR SreturnType(n1.number,n2.number)(n2); \
 } \
-
-#endif
 
 //-----------------------------------------------------------------------------
 // ARITHMETIC OPERATORS

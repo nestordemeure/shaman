@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 11)
 #set(CMAKE_CXX_COMPILER g++)
 
 # flags
-#add_definitions(-DEXPLICIT_CASTING)
 #add_definitions(-DNO_SHAMAN)
 # interprocedural optim -flto -Ofast
 # to get readable perf output : -g -fno-omit-frame-pointer -fno-inline

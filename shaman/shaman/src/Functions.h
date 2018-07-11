@@ -16,55 +16,6 @@
  * while preserving implicit cast conventions
  */
 
-#ifdef EXPLICIT_CASTING
-// function (between n and S<n,e,p> only)
-#define set_Sfunction2_casts(FUN) \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> FUN (const n& n1, const S<n,e,p>& n2) \
-{ \
-    return FUN(S<n,e,p>(n1), n2); \
-} \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> FUN (const S<n,e,p>& n1, const n& n2) \
-{ \
-    return FUN(n1, S<n,e,p>(n2)); \
-} \
-
-// function with 3 arguments (between n and S<n,e,p> only)
-#define set_Sfunction3_casts(FUN) \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> FUN (const n& n1, const n& n2, const S<n,e,p>& n3) \
-{ \
-    return FUN(S<n,e,p>(n1), S<n,e,p>(n2), n3); \
-} \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> FUN (const n& n1, const S<n,e,p>& n2, const n& n3) \
-{ \
-    return FUN(S<n,e,p>(n1), n2, S<n,e,p>(n3)); \
-} \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> FUN (const S<n,e,p>& n1, const n& n2, const n& n3) \
-{ \
-    return FUN(n1, S<n,e,p>(n2), S<n,e,p>(n3)); \
-} \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> FUN (const n& n1, const S<n,e,p>& n2, const S<n,e,p>& n3) \
-{ \
-    return FUN(S<n,e,p>(n1), n2, n3); \
-} \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> FUN (const S<n,e,p>& n1, const S<n,e,p>& n2, const n& n3) \
-{ \
-    return FUN(n1, n2, S<n,e,p>(n3)); \
-} \
-template<typename n, typename e, typename p> \
-inline const S<n,e,p> FUN (const S<n,e,p>& n1, const n& n2, const S<n,e,p>& n3) \
-{ \
-    return FUN(n1, S<n,e,p>(n2), n3); \
-} \
-
-#else
-
 // takes three values and builds a S type around the type C++ would use as a return type for their fma
 #define SreturnType3(t1,t2,t3) decltype(makeStype(std::fma(t1, t2, t3)))
 
@@ -123,8 +74,6 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 { \
     return FUN(SreturnType3(n1,n2,n3.number)(n1), SreturnType3(n1,n2,n3.number)(n2), SreturnType3(n1,n2,n3.number)(n3)); \
 } \
-
-#endif
 
 //-----------------------------------------------------------------------------
 // TEST BASED FUNCTIONS
