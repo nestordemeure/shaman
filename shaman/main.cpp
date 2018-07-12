@@ -18,7 +18,7 @@ int main()
     auto begin = std::chrono::steady_clock::now();
 
     // TESTS
-
+    test_operator_sum();
     //test_eft();
     //test_loop();
 
@@ -31,7 +31,7 @@ int main()
     //polynomialTest();
     //fixedPointTest();
     //kahanIdentity();
-    mullerTest();
+    //mullerTest();
 
     // legendre
     //legendre20Test();
