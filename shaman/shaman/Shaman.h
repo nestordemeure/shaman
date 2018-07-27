@@ -107,6 +107,7 @@ namespace Sstd = std;
 #else
 namespace Sstd
 {
+    // TODO expanded cast macro are not defined in Sstd which introduces errors
     templated const Snum abs(const Snum &n);
     templated const Snum fabs(const Snum &n);
     templated const Snum sqrt(const Snum &n);
