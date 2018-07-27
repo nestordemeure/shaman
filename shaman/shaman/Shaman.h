@@ -144,6 +144,7 @@ namespace Sstd
     templated bool isfinite(const Snum &n);
     templated bool isnan(const Snum &n);
 }
+#endif
 
 // streaming operator
 templated std::ostream& operator<<(std::ostream& os, const Snum& n);
