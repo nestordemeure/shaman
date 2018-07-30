@@ -93,7 +93,7 @@ inline void polynomialTest()
 
     Sdouble delta = b*b - 4.0*a*c;
     //number r1 = (-b + sqrt(delta)) / (2*a);
-    Sdouble r2 = (-b - sqrt(delta)) / (2.0*a);
+    Sdouble r2 = (-b - Sstd::sqrt(delta)) / (2.0*a);
 
     //displayError(r1, 1.000000028975958); //aproximate root
     displayError(r2, 1); //exact root
@@ -141,7 +141,7 @@ inline Sdouble identity(Sdouble x)
     // sqrt(x) 128 times
     for(int i = 1; i <= 128; i++)
     {
-        x = sqrt(x);
+        x = Sstd::sqrt(x);
 
         //Sdouble xTarget = pow(xinit,1./pow(2,i));
         //std::cout << x << std::endl;
@@ -193,14 +193,14 @@ inline Sdouble E(Sdouble z)
     }
     else
     {
-        return (exp(z) - 1.0)/z;
+        return (Sstd::exp(z) - 1.0)/z;
     }
 }
 
 inline Sdouble Q(Sdouble x)
 {
-    Sdouble sq = sqrt(x*x + 1.0);
-    return fabs(x - sq) - 1.0/(x + sq);
+    Sdouble sq = Sstd::sqrt(x*x + 1.0);
+    return Sstd::fabs(x - sq) - 1.0/(x + sq);
 }
 
 inline Sdouble H(Sdouble x)
