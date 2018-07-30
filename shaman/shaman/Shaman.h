@@ -38,7 +38,6 @@ public :
     inline explicit operator float() const { return (float) number; };
     inline explicit operator double() const { return (double) number; };
     inline explicit operator long double() const { return (long double) number; };
-    explicit operator std::string() const;
     #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
     template<typename n, typename e, typename p>
     inline S(const S<n,e,p>& s): number(s.number), errorComposants(s.errorComposants) {};
@@ -65,6 +64,7 @@ public :
     static numberType digits(numberType number, errorType error);
     numberType digits() const;
     preciseType corrected_number() const;
+    std::string to_string() const;
 
     // unstability detection
     static bool non_significant(numberType number, errorType error);
@@ -144,6 +144,7 @@ namespace Sstd
     templated const Snum fma(const Snum &n1, const Snum &n2, const Snum &n3);
     templated bool isfinite(const Snum &n);
     templated bool isnan(const Snum &n);
+    templated std::string to_string(const Snum &n);
 }
 #endif
 
