@@ -182,11 +182,14 @@ templated std::string Snum::to_string() const
 
 /*
  * convert a Snum into a string
+ *
+ * NOTE : code duplicated from .to_string()
  */
 templated inline std::string Sstd::to_string(const Snum& n)
 {
-    return n.to_string();
-};
+    std::ostringstream stream;
+    stream << n;
+    return stream.str();};
 
 /*
  * extraction operator to cast a stream into an Snum
