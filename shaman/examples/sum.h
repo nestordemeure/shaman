@@ -44,7 +44,7 @@ void Compensatedsum(int size)
     // improved kahan sum
     Sdouble improvedSum = 0.0;
     Sdouble compensation2 = 0.0;
-    for(double x : data)
+    for(Sdouble x : data)
     {
         // usual sum
         sum += x;
@@ -57,7 +57,7 @@ void Compensatedsum(int size)
 
         // improved kahan
         Sdouble t2 = improvedSum + x;
-        if( fabs(improvedSum) >= fabs(x) )
+        if(Sstd::abs(improvedSum) >= Sstd::abs(x))
         {
             compensation2 += (improvedSum - t2) + x;
         }

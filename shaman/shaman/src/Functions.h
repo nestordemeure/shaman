@@ -21,58 +21,64 @@
 
 // defines overload for function taking two arguments
 #define set_Sfunction2_casts(FUN) \
-template<typename N, typename E, typename P, typename arithmeticTYPE(T)> \
-inline auto FUN (const S<N,E,P>& n1, const T& n2) -> SreturnType(n1.number,n2)\
+namespace Sstd \
 { \
-    return FUN(SreturnType(n1.number,n2)(n1), SreturnType(n1.number,n2)(n2)); \
-} \
-template<typename N, typename E, typename P, typename arithmeticTYPE(T)> \
-inline auto FUN (const T& n1, const S<N,E,P>& n2) -> SreturnType(n1, n2.number)\
-{ \
-    return FUN(SreturnType(n1,n2.number)(n1), SreturnType(n1,n2.number)(n2)); \
-} \
-template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2> \
-inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) -> SreturnType(n1.number, n2.number) \
-{ \
-    return FUN(SreturnType(n1.number,n2.number)(n1), SreturnType(n1.number,n2.number)(n2)); \
-} \
+    template<typename N, typename E, typename P, typename arithmeticTYPE(T)> \
+    inline auto FUN (const S<N,E,P>& n1, const T& n2) -> SreturnType(n1.number,n2)\
+    { \
+        return FUN(SreturnType(n1.number,n2)(n1), SreturnType(n1.number,n2)(n2)); \
+    } \
+    template<typename N, typename E, typename P, typename arithmeticTYPE(T)> \
+    inline auto FUN (const T& n1, const S<N,E,P>& n2) -> SreturnType(n1, n2.number)\
+    { \
+        return FUN(SreturnType(n1,n2.number)(n1), SreturnType(n1,n2.number)(n2)); \
+    } \
+    template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2> \
+    inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) -> SreturnType(n1.number, n2.number) \
+    { \
+        return FUN(SreturnType(n1.number,n2.number)(n1), SreturnType(n1.number,n2.number)(n2)); \
+    } \
+}\
 
 // defines overload for function taking three arguments
 #define set_Sfunction3_casts(FUN) \
-template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename N3, typename E3, typename P3> \
-inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, const S<N3,E3,P3>& n3) -> SreturnType3(n1.number,n2.number,n3.number) \
+namespace Sstd \
 { \
-    return FUN(SreturnType3(n1.number,n2.number,n3.number)(n1), SreturnType3(n1.number,n2.number,n3.number)(n2), SreturnType3(n1.number,n2.number,n3.number)(n3)); \
-} \
-template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename arithmeticTYPE(T)> \
-inline auto FUN (const T& n1, const S<N1,E1,P1>& n2, const S<N2,E2,P2>& n3) -> SreturnType3(n1,n2.number,n3.number) \
-{ \
-    return FUN(SreturnType3(n1,n2.number,n3.number)(n1), SreturnType3(n1,n2.number,n3.number)(n2), SreturnType3(n1,n2.number,n3.number)(n3)); \
-} \
-template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename arithmeticTYPE(T)> \
-inline auto FUN (const S<N1,E1,P1>& n1, const T& n2, const S<N2,E2,P2>& n3) -> SreturnType3(n1.number,n2,n3.number)\
-{ \
-    return FUN(SreturnType3(n1.number,n2,n3.number)(n1), SreturnType3(n1.number,n2,n3.number)(n2), SreturnType3(n1.number,n2,n3.number)(n3)); \
-} \
-template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename arithmeticTYPE(T)> \
-inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, const T& n3) -> SreturnType3(n1.number,n2.number,n3)\
-{ \
-    return FUN(SreturnType3(n1.number,n2.number,n3)(n1), SreturnType3(n1.number,n2.number,n3)(n2), SreturnType3(n1.number,n2.number,n3)(n3)); \
-} \
-template<typename N, typename E, typename P, typename arithmeticTYPE(T1), typename arithmeticTYPE(T2)> \
-inline auto FUN (const S<N,E,P>& n1, const T1& n2, const T2& n3) -> SreturnType3(n1.number,n2,n3)\
-{ \
-    return FUN(SreturnType3(n1.number,n2,n3)(n1), SreturnType3(n1.number,n2,n3)(n2), SreturnType3(n1.number,n2,n3)(n3)); \
-} \
-template<typename N, typename E, typename P, typename arithmeticTYPE(T1), typename arithmeticTYPE(T2)> \
-inline auto FUN (const T1& n1, const S<N,E,P>& n2, const T2& n3) -> SreturnType3(n1,n2.number,n3) \
-{ \
-    return FUN(SreturnType3(n1,n2.number,n3)(n1), SreturnType3(n1,n2.number,n3)(n2), SreturnType3(n1,n2.number,n3)(n3)); \
-} \
-template<typename N, typename E, typename P, typename arithmeticTYPE(T1), typename arithmeticTYPE(T2)> \
-inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3(n1,n2,n3.number)\
-{ \
-    return FUN(SreturnType3(n1,n2,n3.number)(n1), SreturnType3(n1,n2,n3.number)(n2), SreturnType3(n1,n2,n3.number)(n3)); \
+    template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename N3, typename E3, typename P3> \
+    inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, const S<N3,E3,P3>& n3) -> SreturnType3(n1.number,n2.number,n3.number) \
+    { \
+        return FUN(SreturnType3(n1.number,n2.number,n3.number)(n1), SreturnType3(n1.number,n2.number,n3.number)(n2), SreturnType3(n1.number,n2.number,n3.number)(n3)); \
+    } \
+    template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename arithmeticTYPE(T)> \
+    inline auto FUN (const T& n1, const S<N1,E1,P1>& n2, const S<N2,E2,P2>& n3) -> SreturnType3(n1,n2.number,n3.number) \
+    { \
+        return FUN(SreturnType3(n1,n2.number,n3.number)(n1), SreturnType3(n1,n2.number,n3.number)(n2), SreturnType3(n1,n2.number,n3.number)(n3)); \
+    } \
+    template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename arithmeticTYPE(T)> \
+    inline auto FUN (const S<N1,E1,P1>& n1, const T& n2, const S<N2,E2,P2>& n3) -> SreturnType3(n1.number,n2,n3.number)\
+    { \
+        return FUN(SreturnType3(n1.number,n2,n3.number)(n1), SreturnType3(n1.number,n2,n3.number)(n2), SreturnType3(n1.number,n2,n3.number)(n3)); \
+    } \
+    template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename arithmeticTYPE(T)> \
+    inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, const T& n3) -> SreturnType3(n1.number,n2.number,n3)\
+    { \
+        return FUN(SreturnType3(n1.number,n2.number,n3)(n1), SreturnType3(n1.number,n2.number,n3)(n2), SreturnType3(n1.number,n2.number,n3)(n3)); \
+    } \
+    template<typename N, typename E, typename P, typename arithmeticTYPE(T1), typename arithmeticTYPE(T2)> \
+    inline auto FUN (const S<N,E,P>& n1, const T1& n2, const T2& n3) -> SreturnType3(n1.number,n2,n3)\
+    { \
+        return FUN(SreturnType3(n1.number,n2,n3)(n1), SreturnType3(n1.number,n2,n3)(n2), SreturnType3(n1.number,n2,n3)(n3)); \
+    } \
+    template<typename N, typename E, typename P, typename arithmeticTYPE(T1), typename arithmeticTYPE(T2)> \
+    inline auto FUN (const T1& n1, const S<N,E,P>& n2, const T2& n3) -> SreturnType3(n1,n2.number,n3) \
+    { \
+        return FUN(SreturnType3(n1,n2.number,n3)(n1), SreturnType3(n1,n2.number,n3)(n2), SreturnType3(n1,n2.number,n3)(n3)); \
+    } \
+    template<typename N, typename E, typename P, typename arithmeticTYPE(T1), typename arithmeticTYPE(T2)> \
+    inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3(n1,n2,n3.number)\
+    { \
+        return FUN(SreturnType3(n1,n2,n3.number)(n1), SreturnType3(n1,n2,n3.number)(n2), SreturnType3(n1,n2,n3.number)(n3)); \
+    } \
 } \
 
 //-----------------------------------------------------------------------------
@@ -123,7 +129,7 @@ templated inline const Snum Sstd::min(const Snum& n1, const Snum& n2)
         return n2;
     }
 };
-set_Sfunction2_casts(Sstd::min);
+set_Sfunction2_casts(min);
 
 // max
 templated inline const Snum Sstd::max(const Snum& n1, const Snum& n2)
@@ -138,7 +144,7 @@ templated inline const Snum Sstd::max(const Snum& n1, const Snum& n2)
         return n2;
     }
 };
-set_Sfunction2_casts(Sstd::max);
+set_Sfunction2_casts(max);
 
 //-----------------------------------------------------------------------------
 // LINEARISABLE FUNCTIONS
@@ -193,7 +199,7 @@ templated const Snum Sstd::fma(const Snum& n1, const Snum& n2, const Snum& n3)
 
     return Snum(result, newError, newErrorComp);
 };
-set_Sfunction3_casts(Sstd::fma);
+set_Sfunction3_casts(fma);
 
 //-----------------------------------------------------------------------------
 // GENERAL FUNCTIONS
@@ -585,7 +591,7 @@ templated const Snum Sstd::pow(const Snum& n1, const Snum& n2)
 
     return Snum(result, totalError, newErrorComp);
 };
-set_Sfunction2_casts(Sstd::pow);
+set_Sfunction2_casts(pow);
 
 // atan2
 templated const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
@@ -629,7 +635,7 @@ templated const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
 
     return Snum(result, totalError, newErrorComp);
 };
-set_Sfunction2_casts(Sstd::atan2);
+set_Sfunction2_casts(atan2);
 
 // hypot
 templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2)
@@ -673,7 +679,7 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2)
 
     return Snum(result, totalError, newErrorComp);
 };
-set_Sfunction2_casts(Sstd::hypot);
+set_Sfunction2_casts(hypot);
 
 // hypot
 templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
@@ -760,7 +766,7 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
 
     return Snum(result, totalError, newErrorComp);
 };
-set_Sfunction3_casts(Sstd::hypot);
+set_Sfunction3_casts(hypot);
 
 //-----------------------------------------------------------------------------
 

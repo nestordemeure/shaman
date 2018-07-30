@@ -43,6 +43,7 @@ int main()
     Schrodinger numerov = Schrodinger();
     numerov.calculate();
 
+    Sdouble test = Sstd::min(1.,Sdouble(2.));
 
     // displays computation time
     auto end = std::chrono::steady_clock::now();
