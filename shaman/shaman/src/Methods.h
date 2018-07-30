@@ -173,12 +173,20 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
  * using the streaming operator
  * there is probably a more efficient implementation but it was the easiest way to benefit from std::scientific and std::setprecision
  */
-templated Snum::operator std::string() const
+templated std::string Snum::to_string() const
 {
     std::ostringstream stream;
     stream << this;
     return stream.str();
 }
+
+/*
+ * convert a Snum into a string
+ */
+templated inline std::string Sstd::to_string(const Snum& n)
+{
+    return n.to_string();
+};
 
 /*
  * extraction operator to cast a stream into an Snum
