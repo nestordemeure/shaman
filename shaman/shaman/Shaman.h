@@ -145,6 +145,7 @@ namespace Sstd
     templated bool isfinite(const Snum &n);
     templated bool isnan(const Snum &n);
     templated std::string to_string(const Snum &n);
+    template<typename T> const char* to_Cstring(const T &n);
 }
 #endif
 
