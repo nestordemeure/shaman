@@ -168,30 +168,6 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 }
 
 /*
- * convert a Snum into a string
- *
- * using the streaming operator
- * there is probably a more efficient implementation but it was the easiest way to benefit from std::scientific and std::setprecision
- */
-templated std::string Snum::to_string() const
-{
-    std::ostringstream stream;
-    stream << this;
-    return stream.str();
-}
-
-/*
- * convert a Snum into a string
- *
- * NOTE : code duplicated from .to_string()
- */
-templated inline std::string Sstd::to_string(const Snum& n)
-{
-    std::ostringstream stream;
-    stream << n;
-    return stream.str();};
-
-/*
  * extraction operator to cast a stream into an Snum
  */
 templated std::istream& operator>>(std::istream& is, Snum& n)
@@ -206,6 +182,40 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 
     return is;
 }
+
+/*
+ * method to convert a Snum into a string
+ *
+ * using the streaming operator
+ * there is probably a more efficient implementation but it was the easiest way to benefit from std::scientific and std::setprecision
+ */
+templated std::string Snum::to_string() const
+{
+    std::ostringstream stream;
+    stream << this;
+    return stream.str();
+}
+
+/*
+ * function to convert a Snum into a string
+ *
+ * NOTE : code duplicated from .to_string()
+ */
+templated inline std::string Sstd::to_string(const Snum& n)
+{
+    std::ostringstream stream;
+    stream << n;
+    return stream.str();
+};
+
+/*
+ * convert a value into a C string (const char *)
+ */
+template<typename T>
+inline const char* Sstd::to_Cstring(const T &n)
+{
+    return Sstd::to_string(n).c_str();
+};
 
 //-----------------------------------------------------------------------------
 #endif //SHAMAN_SIGNIFICATIVITY_H
