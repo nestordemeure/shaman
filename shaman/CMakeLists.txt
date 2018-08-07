@@ -9,19 +9,21 @@ set(CMAKE_CXX_STANDARD 11)
 #add_definitions(-DNO_SHAMAN)
 # interprocedural optim -flto -Ofast
 # to get readable perf output : -g -fno-omit-frame-pointer -fno-inline
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O3 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")
+#set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -mfma -O3 -Wall -Wextra -Wno-unused-parameter -Werror -D__STRICT_ANSI__ -Wno-unknown-pragmas")
+
+add_subdirectory(shaman)
 
 # files
-set(SOURCE_SHAMAN
-        shaman/src/GlobalVar.h   shaman/src/GlobalVar.cpp
-        shaman/src/memoryStore.h
-        shaman/src/Tagger.h
-        shaman/src/ErrorSum.h
-        shaman/Shaman.h
-        shaman/src/Methods.h
-        shaman/src/Operators.h
-        shaman/src/Functions.h
-        shaman/lib/Shaman_malloc.h)
+#set(SOURCE_SHAMAN
+#        shaman/src/GlobalVar.h   shaman/src/GlobalVar.cpp
+#        shaman/src/memoryStore.h
+#        shaman/src/Tagger.h
+#        shaman/src/ErrorSum.h
+#        shaman/Shaman.h
+#        shaman/src/Methods.h
+#        shaman/src/Operators.h
+#        shaman/src/Functions.h
+#        shaman/lib/Shaman_malloc.h)
 set(SOURCE_EXAMPLES
         examples/various.h
         examples/schrodinger/schrodinger.cpp examples/schrodinger/schrodinger.h
@@ -29,5 +31,8 @@ set(SOURCE_EXAMPLES
         examples/sqrtHeron.h)
 
 # linking
-add_executable(shaman main.cpp ${SOURCE_SHAMAN} ${SOURCE_EXAMPLES})
-add_executable(lulesh examples/performances/lulesh.cpp ${SOURCE_SHAMAN})
+#add_executable(shaman main.cpp ${SOURCE_SHAMAN} ${SOURCE_EXAMPLES})
+#add_executable(lulesh examples/performances/lulesh.cpp ${SOURCE_SHAMAN})
+
+add_executable(shaman_example main.cpp ${SOURCE_EXAMPLES})
+target_link_libraries(shaman_example shaman)
