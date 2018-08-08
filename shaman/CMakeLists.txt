@@ -13,26 +13,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_subdirectory(shaman)
 
-# files
-#set(SOURCE_SHAMAN
-#        shaman/src/GlobalVar.h   shaman/src/GlobalVar.cpp
-#        shaman/src/memoryStore.h
-#        shaman/src/Tagger.h
-#        shaman/src/ErrorSum.h
-#        shaman/Shaman.h
-#        shaman/src/Methods.h
-#        shaman/src/Operators.h
-#        shaman/src/Functions.h
-#        shaman/lib/Shaman_malloc.h)
-set(SOURCE_EXAMPLES
-        examples/various.h
-        examples/schrodinger/schrodinger.cpp examples/schrodinger/schrodinger.h
-        examples/legendre.h
-        examples/sqrtHeron.h)
-
 # linking
 #add_executable(shaman main.cpp ${SOURCE_SHAMAN} ${SOURCE_EXAMPLES})
 #add_executable(lulesh examples/performances/lulesh.cpp ${SOURCE_SHAMAN})
 
-add_executable(shaman_example main.cpp ${SOURCE_EXAMPLES})
-target_link_libraries(shaman_example shaman)
+add_subdirectory(examples)
