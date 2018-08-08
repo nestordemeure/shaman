@@ -2,8 +2,7 @@
 // Created by demeuren on 05/07/18.
 //
 
-#ifndef SHAMAN_SHAMAN_MPI_H
-#define SHAMAN_SHAMAN_MPI_H
+#pragma once
 
 #include <mpi.h>
 #include <cstddef>
@@ -218,4 +217,4 @@ int MPI_Shaman_Finalize()
  * see also MPI_Pack and MPI_Unpack
  */
 
-#endif //SHAMAN_SHAMAN_MPI_H
+

@@ -9,8 +9,8 @@
 #include <iomanip>
 #include <sstream>
 #include <cmath>
-#include "../Shaman.h"
-#include "GlobalVar.h"
+
+#include <shaman/tagged/GlobalVar.h>
 
 //-----------------------------------------------------------------------------
 // HIGH PRECISION APPROXIMATION
