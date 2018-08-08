@@ -70,6 +70,10 @@ Additional BSD Notice
 #include <Shaman.h>
 #include <shaman/helpers/Shaman_malloc.h>
 
+using Sstd::sqrt;
+using Sstd::cbrt;
+using Sstd::fabs;
+
 //#define LULESH_SHOW_PROGRESS 1
 
 enum { VolumeError = -1, QStopError = -2 } ;
