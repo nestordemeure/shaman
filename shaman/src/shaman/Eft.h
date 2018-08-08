@@ -9,7 +9,7 @@
  * gives us the exact error|remainder of an arithmetic operation using :
  * - twoSum for + (might be killed by aggressive compilation)
  * - std::fma for *, /, sqrt (reliable independent of the compilations flags)
- * - fastTwoSum for shaman::fma via errorFma (rarely|never useful, might be killed by aggressive compilation)
+ * - fastTwoSum for src::fma via errorFma (rarely|never useful, might be killed by aggressive compilation)
  *
  * NOTE :
  * see the handbook of floating point arithmetic for an exact analysis

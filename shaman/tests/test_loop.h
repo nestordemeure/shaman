@@ -11,7 +11,7 @@
  *    x <- correction(x)
  * return x
  *
- * shaman will take the initialisation and correction errors into account in the quality of the result
+ * src will take the initialisation and correction errors into account in the quality of the result
  * but they have no impact since we use an iterativ process that validates x
  * (we can even make those errors arbitrarly large)
  * such cases can be detected and manually corrected with tagged errors

@@ -12,8 +12,8 @@
  * - include Shaman_mpi.h
  * - replace 'MPI_Init' with 'MPI_Shaman_Init'
  * - replace 'MPI_Finalize' with 'MPI_Shaman_Finalize'
- * - use the shaman MPI types ('MPI_FLOAT' -> 'MPI_SFLOAT')
- * - use the shaman MPI operations ('MPI_SUM' -> 'MPI_SSUM')
+ * - use the src MPI types ('MPI_FLOAT' -> 'MPI_SFLOAT')
+ * - use the src MPI operations ('MPI_SUM' -> 'MPI_SSUM')
  */
 
 //-------------------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ MPI_Datatype MPI_SDOUBLE;
 MPI_Datatype MPI_SLONG_DOUBLE;
 
 /*
- * builds an MPI type around a shaman type
+ * builds an MPI type around a src type
  * TODO we could automatically deduce the required MPI_Datatypes
  *
  * simpler solution for a type being just two identical types :
@@ -140,7 +140,7 @@ void MPI_sprod( void *invec, void *inoutvec, int *len, MPI_Datatype *datatype)
 // INIT / FINALIZE
 
 /*
- * runs MPI_Init and defines shaman types
+ * runs MPI_Init and defines src types
  */
 int MPI_Shaman_Init(int argc, char **argv )
 {
@@ -182,7 +182,7 @@ int MPI_Shaman_Init(int argc, char **argv )
 }
 
 /*
- * frees shaman types and finalize MPI
+ * frees src types and finalize MPI
  */
 int MPI_Shaman_Finalize()
 {
