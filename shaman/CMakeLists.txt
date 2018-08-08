@@ -16,5 +16,7 @@ add_subdirectory(src)
 # linking
 #add_executable(src main.cpp ${SOURCE_SHAMAN} ${SOURCE_EXAMPLES})
 #add_executable(lulesh examples/performances/lulesh.cpp ${SOURCE_SHAMAN})
-
+enable_testing()
+SET(SHAMAN_EXAMPLES_TESTS ON)
+SET(SHAMAN_PERFORMANCE_TESTS ON)
 add_subdirectory(examples)
