@@ -97,7 +97,7 @@ templated inline bool Sstd::isnan(const Snum& n)
 // abs
 templated inline const Snum Sstd::abs(const Snum& n)
 {
-    Snum::checkUnstableBranch(n, 0.);
+    Snum::checkUnstableBranch(n, Snum(typename Snum::NumberType(0.)));
     if (n.number >= 0.)
     {
         return n;

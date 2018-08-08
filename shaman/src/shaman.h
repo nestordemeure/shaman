@@ -15,6 +15,9 @@
  */
 template<typename numberType, typename errorType, typename preciseType> class S
 {
+ public:
+  typedef numberType NumberType;
+
 public :
     // true number ≈ number + errorComposants
     numberType number; // current computed number
