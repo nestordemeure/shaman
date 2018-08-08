@@ -68,7 +68,7 @@ Additional BSD Notice
 #include <stdlib.h>
 #include <sys/time.h>
 #include <Shaman.h>
-#include <helpers/Shaman_malloc.h>
+#include <shaman/helpers/Shaman_malloc.h>
 
 //#define LULESH_SHOW_PROGRESS 1
 
@@ -2479,9 +2479,9 @@ void EvalEOSForElems(Real_t *vnewc, Index_t length)
 
     for (Index_t i = 0; i < length ; ++i) {
         Real_t vchalf ;
-        compression[i] = Real_t(1.) / vnewc[i] - Real_t(1.); // TODO 65% of final error according to shaman
+        compression[i] = Real_t(1.) / vnewc[i] - Real_t(1.); // TODO 65% of final error according to src
         vchalf = vnewc[i] - delvc[i] * Real_t(.5);
-        compHalfStep[i] = Real_t(1.) / vchalf - Real_t(1.); // TODO 17% of final error according to shaman
+        compHalfStep[i] = Real_t(1.) / vchalf - Real_t(1.); // TODO 17% of final error according to src
     }
 
     /* Check for v > eosvmax or v < eosvmin */

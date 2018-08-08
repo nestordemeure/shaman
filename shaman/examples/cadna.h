@@ -544,7 +544,7 @@ void alternatingCounter()
 /*
  * demonstration of error followed through a trigonometric function
  *
- * useful to showcase shaman's ability to follow error in transcendentalfunctions while others (Verrou, Cadna?, verificarlo?) just ignore them
+ * useful to showcase src's ability to follow error in transcendentalfunctions while others (Verrou, Cadna?, verificarlo?) just ignore them
  */
 inline void trigoTest()
 {
@@ -552,8 +552,8 @@ inline void trigoTest()
 
     /*
      * 2e20 : no significativ digits, everybody is correct
-     * 2e25 : there is one significative digit (pure luck),  shaman might detect it
-     * 2e30 : no significative digits, cadna is optimistic by 2 digits, shaman is correct
+     * 2e25 : there is one significative digit (pure luck),  src might detect it
+     * 2e30 : no significative digits, cadna is optimistic by 2 digits, src is correct
      */
     double bigNum = 2e30;
     double epsi = 10;
@@ -579,7 +579,7 @@ inline void trigoTest()
         std::cout << "CADNA  cos(x-y) = " << sum1 << " = " << sum2 << " (true result=" << result << ')' << std::endl;
     }
 
-    // shaman
+    // src
     {
         Sdouble x = bigNum;
         Sdouble y = x + epsi;

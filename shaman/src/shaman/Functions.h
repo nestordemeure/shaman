@@ -204,7 +204,7 @@ set_Sfunction3_casts(fma);
 //-----------------------------------------------------------------------------
 // GENERAL FUNCTIONS
 
-// macro that turns a function into a shaman function
+// macro that turns a function into a src function
 #define SHAMAN_FUNCTION(functionName) \
 templated const Snum Sstd::functionName (const Snum& n) \
 { \
