@@ -14,7 +14,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include <Shaman.h>
+#include <shaman.h>
 
 using namespace std;
 using Sstd::sqrt;

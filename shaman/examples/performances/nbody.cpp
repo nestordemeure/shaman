@@ -12,7 +12,7 @@
 #include <cmath>
 #include <iostream>
 
-#include <Shaman.h>
+#include <shaman.h>
 
 using Sstd::sqrt;
 

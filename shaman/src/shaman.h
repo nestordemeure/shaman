@@ -5,7 +5,7 @@
 #include <limits>
 #include <atomic>
 #include <memory>
-#include <shaman/tagged/ErrorSum.h>
+#include <shaman/tagged/error_sum.h>
 
 //-------------------------------------------------------------------------------------------------
 // SHAMAN CLASS
@@ -19,10 +19,10 @@ public :
     // true number ≈ number + errorComposants
     numberType number; // current computed number
     errorType error; // approximation of the current error
-    ErrorSum<errorType> errorComposants; // error decomposed per functions TODO could be made optionnal with a flag
+    error_sum<errorType> errorComposants; // error decomposed per functions TODO could be made optionnal with a flag
 
     // base constructors
-    inline S(numberType numberArg, errorType errorArg, ErrorSum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {};
+    inline S(numberType numberArg, errorType errorArg, error_sum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {};
     inline S(numberType numberArg): number(numberArg), error(0.), errorComposants() {}; // we accept implicit cast from T to S<T>
     inline S(): number(0.), error(0.), errorComposants() {};
 
@@ -84,7 +84,7 @@ namespace Shaman
 // some macro to shorten template notations
 #define templated template<typename numberType, typename errorType, typename preciseType>
 #define Snum S<numberType,errorType,preciseType>
-#define Serror ErrorSum<errorType>
+#define Serror error_sum<errorType>
 
 // arithmetic operators
 templated const Snum operator-(const Snum& n);
@@ -201,9 +201,9 @@ using Slong_double = S<long double, long double, long double>;
 //-------------------------------------------------------------------------------------------------
 // SOURCE
 
-#include <shaman/Methods.h>
-#include <shaman/Operators.h>
-#include <shaman/Functions.h>
+#include <shaman/methods.h>
+#include <shaman/operators.h>
+#include <shaman/functions.h>
 
 #undef templated
 #undef Snum

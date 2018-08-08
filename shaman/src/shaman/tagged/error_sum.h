@@ -1,9 +1,7 @@
 //
 // Created by demeuren on 04/06/18.
 //
-
-#ifndef SHAMAN_ERRORSUM_H
-#define SHAMAN_ERRORSUM_H
+#pragma once
 
 #include <unordered_map>
 #include <algorithm>
@@ -11,10 +9,10 @@
 #include <sstream>
 #include <iomanip>
 #include <iostream>
-#include "Tagger.h"
-#include "memoryStore.h"
+#include "tagger.h"
+#include "memory_store.h"
 
-template<typename errorType> class ErrorSum
+template<typename errorType> class error_sum
 {
 public:
     // contains the error decomposed in composants (one per block encountered)
@@ -27,13 +25,13 @@ public:
     /*
      * empty constructor : currently no error
      */
-    explicit ErrorSum(): errors(MemoryStore<errorType>::getVector()) {}
+    explicit error_sum(): errors(MemoryStore<errorType>::getVector()) {}
 
     /*
      * copy constructor
      * WARNING this constructor needs to do a deep copy (which is not the default)
      */
-    ErrorSum(const ErrorSum& errorSum2): errors(MemoryStore<errorType>::getVector())
+    error_sum(const error_sum& errorSum2): errors(MemoryStore<errorType>::getVector())
     {
         errors->assign(errorSum2.errors->begin(), errorSum2.errors->end()); // assign insures that we do not drop the capacity (undefined behaviour for = operator)
     }
@@ -42,7 +40,7 @@ public:
      * copy assignment
      * WARNING this constructor needs to do a deep copy (which is not the default)
      */
-    ErrorSum& operator=(const ErrorSum& errorSum2)
+    error_sum& operator=(const error_sum& errorSum2)
     {
         *errors = *(errorSum2.errors); // cannot use 'assign' because errors might have existing values out of errorSum2.size()
         return *this;
@@ -51,7 +49,7 @@ public:
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit ErrorSum(Tag tag, errorType error): errors(MemoryStore<errorType>::getVector())
+    explicit error_sum(Tag tag, errorType error): errors(MemoryStore<errorType>::getVector())
     {
         errors->resize(tag+1);
         (*errors)[tag] = error;
@@ -61,7 +59,7 @@ public:
      * returns an errorSum with a single element (singleton)
      * uses the current tag
      */
-    explicit ErrorSum(errorType error): errors(MemoryStore<errorType>::getVector())
+    explicit error_sum(errorType error): errors(MemoryStore<errorType>::getVector())
     {
         Tag tag = Block::currentBlock();
         errors->resize(tag+1);
@@ -71,7 +69,7 @@ public:
     /*
      * destructor
      */
-    ~ErrorSum()
+    ~error_sum()
     {
         MemoryStore<errorType>::releaseVector(errors);
         errors = nullptr;
@@ -123,7 +121,7 @@ public:
     /*
      * += errorComposants
      */
-    void addErrors(const ErrorSum& errorSum2)
+    void addErrors(const error_sum& errorSum2)
     {
         addMap(*errorSum2.errors, [](errorType e){return e;});
     }
@@ -131,7 +129,7 @@ public:
     /*
      * -= errorComposants
      */
-    void subErrors(const ErrorSum& errorSum2)
+    void subErrors(const error_sum& errorSum2)
     {
         addMap(*errorSum2.errors, [](errorType e){return -e;});
     }
@@ -139,7 +137,7 @@ public:
     /*
      * += scalar * errorComposants
      */
-    void addErrorsTimeScalar(const ErrorSum& errorSum2, errorType scalar)
+    void addErrorsTimeScalar(const error_sum& errorSum2, errorType scalar)
     {
         addMap(*errorSum2.errors, [scalar](errorType e){return e*scalar;});
     }
@@ -147,7 +145,7 @@ public:
     /*
      * -= scalar * errorComposants
      */
-    void subErrorsTimeScalar(const ErrorSum& errorSum2, errorType scalar)
+    void subErrorsTimeScalar(const error_sum& errorSum2, errorType scalar)
     {
         addMap(*errorSum2.errors, [scalar](errorType e){return -e*scalar;});
     }
@@ -251,4 +249,3 @@ public:
     }
 };
 
-#endif //SHAMAN_ERRORSUM_H

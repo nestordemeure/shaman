@@ -2,15 +2,14 @@
 // Created by demeuren on 02/05/18.
 //
 
-#ifndef SHAMAN_SIGNIFICATIVITY_H
-#define SHAMAN_SIGNIFICATIVITY_H
+#pragma once
 
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <cmath>
 
-#include <shaman/tagged/GlobalVar.h>
+#include <shaman/tagged/global_vars.h>
 
 //-----------------------------------------------------------------------------
 // HIGH PRECISION APPROXIMATION
@@ -217,5 +216,3 @@ inline const char* Sstd::to_Cstring(const T &n)
     return Sstd::to_string(n).c_str();
 };
 
-//-----------------------------------------------------------------------------
-#endif //SHAMAN_SIGNIFICATIVITY_H
