@@ -14,6 +14,8 @@
 
 #include <Shaman.h>
 
+using Sstd::sqrt;
+
 namespace
 {
 

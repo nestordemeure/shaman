@@ -17,6 +17,7 @@
 #include <Shaman.h>
 
 using namespace std;
+using Sstd::sqrt;
 
 Sdouble eval_A(int i, int j)
 {
