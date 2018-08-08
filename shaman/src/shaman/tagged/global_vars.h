@@ -1,9 +1,7 @@
 //
 // Created by demeuren on 08/06/18.
 //
-
-#ifndef SHAMAN_GLOBALVAR_H
-#define SHAMAN_GLOBALVAR_H
+#pragma once
 
 #include <stack>
 #include <string>
@@ -28,6 +26,3 @@ public:
     // counter for the number of unstable branches
     static std::atomic_int unstableBranchCounter;
 };
-
-
-#endif //SHAMAN_GLOBALVAR_H

@@ -2,11 +2,9 @@
 // Created by demeuren on 02/05/18.
 //
 
-#ifndef SHAMAN_OPERATORS_H
-#define SHAMAN_OPERATORS_H
+#pragma once
 
-#include "../Shaman.h"
-#include "Eft.h"
+#include "eft.h"
 
 //-----------------------------------------------------------------------------
 // CASTING MACROS
@@ -291,5 +289,3 @@ set_Sbool_operator_casts(>=);
 
 #undef set_Soperator_casts
 #undef set_Sbool_operator_casts
-
-#endif //SHAMAN_OPERATORS_H

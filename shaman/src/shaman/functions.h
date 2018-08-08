@@ -2,11 +2,9 @@
 // Created by demeuren on 02/05/18.
 //
 
-#ifndef SHAMAN_FUNCTIONS_H
-#define SHAMAN_FUNCTIONS_H
+#pragma once
 
-#include "../Shaman.h"
-#include "Eft.h"
+#include "eft.h"
 
 //-----------------------------------------------------------------------------
 // CASTING MACROS
@@ -773,4 +771,3 @@ set_Sfunction3_casts(hypot);
 #undef set_Sfunction2_casts
 #undef set_Sfunction3_casts
 
-#endif //SHAMAN_FUNCTIONS_H

@@ -31,7 +31,7 @@
 #include <cstdlib>
 #include <vector>
 
-#include <Shaman.h>
+#include <shaman.h>
 
 typedef unsigned char Byte;
 

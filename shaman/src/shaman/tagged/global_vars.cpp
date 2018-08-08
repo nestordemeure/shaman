@@ -2,7 +2,7 @@
 // Created by demeuren on 08/06/18.
 //
 
-#include "GlobalVar.h"
+#include "global_vars.h"
 
 // used to model the stacktrace
 const Tag ShamanGlobals::tagIntegerCast = 0;
