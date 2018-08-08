@@ -2,8 +2,7 @@
 // Created by demeuren on 18/06/18.
 //
 
-#ifndef SHAMAN_SHAMAN_MALLOC_H
-#define SHAMAN_SHAMAN_MALLOC_H
+#pragma  once
 
 #include <cstdlib>
 
@@ -30,4 +29,3 @@ void Shaman_free(void* ptr)
     delete [] (static_cast<T*>(ptr));
 }
 
-#endif //SHAMAN_SHAMAN_MALLOC_H

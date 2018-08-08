@@ -2,13 +2,10 @@
 // Created by demeuren on 06/03/18.
 //
 
-#ifndef SHAMAN_DEMO_SHAMAN_EIGEN_H
-#define SHAMAN_DEMO_SHAMAN_EIGEN_H
+#pragma  once
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
-//#include <thirdparty/eigen-3.3.2/unsupported/Eigen/MatrixFunctions>
-#include "../Shaman.h"
 
 namespace Eigen
 {
@@ -260,5 +257,3 @@ inline const Sfloat &conj(const Sfloat &x) { return x; }
 inline const Sfloat &real(const Sfloat &x) { return x; }
 inline Sfloat imag(const Sfloat &) { return 0.f; }
 inline Sfloat abs2(const Sfloat &x) { return x * x; }
-
-#endif //SHAMAN_DEMO_SHAMAN_EIGEN_H

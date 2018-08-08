@@ -6,7 +6,7 @@
 #define SHAMAN_TAGGER_H
 
 #include <stdexcept>
-#include "GlobalVar.h"
+#include <shaman/tagged/GlobalVar.h>
 
 /*
  * tracks the current section of the code

@@ -67,8 +67,8 @@ Additional BSD Notice
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include "../../shaman/Shaman.h"
-#include "../../shaman/lib/Shaman_malloc.h"
+#include <Shaman.h>
+#include <helpers/Shaman_malloc.h>
 
 //#define LULESH_SHOW_PROGRESS 1
 

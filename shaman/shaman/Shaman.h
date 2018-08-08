@@ -5,7 +5,7 @@
 #include <limits>
 #include <atomic>
 #include <memory>
-#include "src/ErrorSum.h"
+#include <shaman/tagged/ErrorSum.h>
 
 //-------------------------------------------------------------------------------------------------
 // SHAMAN CLASS
@@ -201,9 +201,9 @@ using Slong_double = S<long double, long double, long double>;
 //-------------------------------------------------------------------------------------------------
 // SOURCE
 
-#include "src/Methods.h"
-#include "src/Operators.h"
-#include "src/Functions.h"
+#include <shaman/Methods.h>
+#include <shaman/Operators.h>
+#include <shaman/Functions.h>
 
 #undef templated
 #undef Snum
