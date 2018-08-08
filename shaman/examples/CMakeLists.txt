@@ -1,1 +1,3 @@
 add_subdirectory(schrodinger)
+
+add_subdirectory(performances)
