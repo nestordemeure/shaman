@@ -1,7 +1,13 @@
 add_library(shaman shaman/tagged/global_vars.cpp)
 
 target_include_directories(shaman PUBLIC .)
-target_compile_features(shaman PUBLIC cxx_decltype)
+
+# TODO: list all C++ features shaman relies on.
+target_compile_features(shaman PUBLIC
+  cxx_decltype
+  cxx_auto_type
+  cxx_thread_local
+  )
 target_compile_options(shaman PUBLIC -mfma)
 
 if (SHAMAN_ENABLE_TESTS)
