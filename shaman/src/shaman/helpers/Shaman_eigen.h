@@ -24,7 +24,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 0,
+            RequireInitialization = 1,  // needed to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
@@ -46,7 +46,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 0,
+            RequireInitialization = 1,  // needed to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
@@ -68,7 +68,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 0,
+            RequireInitialization = 1,  // needed to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
@@ -153,7 +153,8 @@ namespace Eigen
     typedef Eigen::Matrix<Sfloat, Eigen::Dynamic, 1> SVectorXf;
 
     /*
-     * TODO adds global arrays typedefs
+     * adds global arrays typedefs
+     * TODO add missing typedefs
      * see : https://eigen.tuxfamily.org/dox/Array_8h_source.html
      */
     typedef Eigen::Array<Sfloat, Eigen::Dynamic, Eigen::Dynamic> SArrayXXf;
@@ -163,6 +164,7 @@ namespace Eigen
 
     /*
      * overload functions from the unsupported section of Eigen
+     * TODO define in a file dedicaced to eigen/unsupported ?
      */
     /*
     namespace internal
