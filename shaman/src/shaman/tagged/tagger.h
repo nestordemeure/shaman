@@ -11,13 +11,13 @@
 /*
  * tracks the current section of the code
  */
-class Block
+class CodeBlock
 {
 public:
     /*
      * declares that we are now in a given block
      */
-    Block(const std::string& name)
+    CodeBlock(const std::string& name)
     {
         Tag blockTag = tagOfName(name);
         ShamanGlobals::tagStack.push(blockTag);
@@ -26,7 +26,7 @@ public:
     /*
      * declares that we are now in a given block
      */
-    Block(Tag tag)
+    CodeBlock(Tag tag)
     {
         ShamanGlobals::tagStack.push(tag);
     }
@@ -35,7 +35,7 @@ public:
      * leaves the block
      * NOTE : we do not check that we do pop what we pushed
      */
-    ~Block()
+    ~CodeBlock()
     {
         ShamanGlobals::tagStack.pop();
     }
@@ -83,7 +83,7 @@ public:
 // macro to quickly define blocks
 #define STR_CONCAT_HELPER(a,b) a ## b
 #define STR_CONCAT(a,b) STR_CONCAT_HELPER(a,b)
-#define FUNCTION_BLOCK Block STR_CONCAT(shamanFunctionBlock,__FUNCTION__)(__FUNCTION__)
+#define FUNCTION_BLOCK CodeBlock STR_CONCAT(shamanFunctionBlock,__FUNCTION__)(__FUNCTION__)
 #define LOCAL_BLOCK(text) Block STR_CONCAT(shamanLocalBlock,__LINE__)(text)
 
 #endif //SHAMAN_TAGGER_H
