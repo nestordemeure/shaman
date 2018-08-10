@@ -241,7 +241,7 @@ namespace Eigen
  */
 inline const Slong_double &conj(const Slong_double &x) { return x; }
 inline const Slong_double &real(const Slong_double &x) { return x; }
-inline Slong_double imag(const Slong_double &) { return 0.; }
+inline Slong_double imag(const Slong_double &) { return 0.L; }
 inline Slong_double abs2(const Slong_double &x) { return x * x; }
 
 /*
