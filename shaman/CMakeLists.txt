@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(shaman)
+project(shaman VERSION 0.1)
 
 option(SHAMAN_ENABLE_TESTS "Whether or not Shaman tests are run" ON)
 option(SHAMAN_ENABLE_EXAMPLES "Whether or not Shaman examples are built" ON)
