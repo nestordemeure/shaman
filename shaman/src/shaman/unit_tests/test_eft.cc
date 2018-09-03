@@ -11,16 +11,11 @@ namespace
     /*
      * needed for hexadecimal number with negative exponent
      * should not be required from C++17 onward
-     * fails with std::strtod(hexstr, nullptr);
      */
     template<typename F>
     F numOfHex(const char hexstr[])
     {
-        uint32_t num;
-        F f;
-        sscanf(hexstr, "%x", &num);
-        f = *((F*)&num);
-        return f;
+        return std::strtod(hexstr, nullptr);;
     }
 
     /*
