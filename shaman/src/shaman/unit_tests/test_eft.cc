@@ -70,7 +70,7 @@ namespace
         EXPECT_FALSE(test_exactSub<double>(1.7, 4.7));
     }
 
-    // tests inspired by https://bugs.python.org/file46304/fma_reference.py
+    // tests inspired by https://bugs.python.org/file46304/fma_reference.py (which was redacted for double precision)
     TEST(EFT_FMA, float)
     {
         // zero result from nonzero inputs
