@@ -90,7 +90,7 @@ namespace
         a = numOfHex<float>("0x1p-50");
         EXPECT_EQ(std::fma(a - 1.0, a + 1.0, 1.0), a*a);
 
-        // random tests
+        // random tests (should be done in double precision)
         std::vector<std::string> test_values = {
             // a, b, c, expected
             "0x1.694adde428b44p-1", "0x1.371b0d64caed7p-1", "0x1.f347e7b8deab8p-4", "0x1.19f10da56c8adp-1",
@@ -112,11 +112,12 @@ namespace
         };
         for(int i = 0; i < test_values.size(); i+=4)
         {
-            float ra = numOfHex<float>(test_values[i].c_str());
-            float rb = numOfHex<float>(test_values[i+1].c_str());
-            float rc = numOfHex<float>(test_values[i+2].c_str());
-            float expected = numOfHex<float>(test_values[i+3].c_str());
+            double ra = numOfHex<double>(test_values[i].c_str());
+            double rb = numOfHex<double>(test_values[i+1].c_str());
+            double rc = numOfHex<double>(test_values[i+2].c_str());
+            double expected = numOfHex<double>(test_values[i+3].c_str());
             EXPECT_EQ(std::fma(ra, rb, rc), expected);
+            EXPECT_NEQ(ra*rb+rc, expected);
         }
     }
 }
