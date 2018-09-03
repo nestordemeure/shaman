@@ -60,7 +60,9 @@ namespace
         EXPECT_FALSE(test_exactSub<double>(1.7, 4.7));
     }
 
-    // should not be required from C++14 onward
+    // needed for hexadecimal number with negative exponent
+    // should not be required from C++17 onward
+    // fails with std::strtod(hexstr, nullptr);
     float floatOfHex(const char hexstr[])
     {
         uint32_t num;
@@ -80,11 +82,11 @@ namespace
         EXPECT_EQ(std::fma(-2.0, 2.0, 4.0), 0);
 
         // overflow from multiplication
-        float a = 0x1p64;
+        float a = floatOfHex("0x1p64");
         float b = a;
-        float c = 0x1p127;
+        float c = floatOfHex("0x1p127");
         EXPECT_EQ(std::fma(a, b, -c), c);
-        EXPECT_NEQ(a*b-c, c); // could pass if the compiler introduce an fma
+        EXPECT_NEQ(a*b-c, c); // could pass if the compiler introduces an fma
 
         // single rounding
         a = floatOfHex("0x1p-50");
