@@ -67,7 +67,7 @@ namespace
     {
         uint32_t num;
         float f;
-        sscanf(hexstr, "%x", &num);  // assuming you checked input
+        sscanf(hexstr, "%x", &num);
         f = *((float*)&num);
         return f;
     }
