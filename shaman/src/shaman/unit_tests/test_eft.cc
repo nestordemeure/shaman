@@ -38,7 +38,7 @@ namespace
         // cancellation
         EXPECT_TRUE(test_cancellation<float>(1e30, 1.1));
         EXPECT_FALSE(test_cancellation<float>(1.2, 1.2));
-        
+
         // exact subtraction
         EXPECT_TRUE(test_exactSub<float>(1.3, 0.7));
         EXPECT_TRUE(test_exactSub<float>(1.4, 2.1));
@@ -46,6 +46,7 @@ namespace
         EXPECT_FALSE(test_exactSub<float>(1.7, 4.7));
     }
 
+    // TODO we might search for an existing test suite for twosum
     TEST(EFT_SUM, double)
     {
         // cancellation
@@ -78,34 +79,14 @@ namespace
         EXPECT_EQ(std::fma(-2.0, -2.0, -4.0), 0);
         EXPECT_EQ(std::fma(-2.0, 2.0, 4.0), 0);
 
-        // zero where rounding the multiplication would give the wrong result
-        float x = floatOfHex("0x1p-500");
-        float y = floatOfHex("0x1p-550");
-        float z = floatOfHex("0x1p-1000");
-        EXPECT_EQ(std::fma(x-y, x+y, -z), 0);
-        EXPECT_EQ(std::fma(y-x, x+y, z), 0);
-        EXPECT_EQ(std::fma(y-x, -(x+y), -z), 0);
-        EXPECT_EQ(std::fma(x-y, -(x+y), z), 0);
-
         // overflow from multiplication
-        float a = floatOfHex("0x1p512");
+        float a = 0x1p64;
         float b = a;
-        float c = floatOfHex("0x1p1023");
+        float c = 0x1p127;
         EXPECT_EQ(std::fma(a, b, -c), c);
+        EXPECT_NEQ(a*b-c, c); // could pass if the compiler introduce an fma
 
-        // Extreme case: a * b is exactly at the overflow boundary, so the tiniest offset makes a difference between overflow and a finite result
-        a = floatOfHex("0x1.ffffffc000000p+511");
-        b = floatOfHex("0x1.0000002000000p+512");
-        c = floatOfHex("0x0.0000000000001p-1022");
-        EXPECT_EQ(std::fma(a, b, -c), floatOfHex("0x1.fffffffffffffp+1023"));
-
-        // Another extreme case: here a*b is about as large as possible subject to fma(a, b, c) being finite
-        a = floatOfHex("0x1.ae565943785f9p+512");
-        b = floatOfHex("0x1.3094665de9db8p+512");
-        c = floatOfHex("0x1.fffffffffffffp+1023");
-        EXPECT_EQ(std::fma(a, b, -c), c);
-
-        // single round
+        // single rounding
         a = floatOfHex("0x1p-50");
         EXPECT_EQ(std::fma(a - 1.0, a + 1.0, 1.0), a*a);
 
