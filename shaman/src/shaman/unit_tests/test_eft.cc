@@ -9,6 +9,21 @@
 namespace
 {
     /*
+     * needed for hexadecimal number with negative exponent
+     * should not be required from C++17 onward
+     * fails with std::strtod(hexstr, nullptr);
+     */
+    template<typename F>
+    F numOfHex(const char hexstr[])
+    {
+        uint32_t num;
+        F f;
+        sscanf(hexstr, "%x", &num);
+        f = *((F*)&num);
+        return f;
+    }
+
+    /*
      * test whether an EFT is computed accurately in case of cancellation
      * x is much larger than y
      */
@@ -46,7 +61,7 @@ namespace
         EXPECT_FALSE(test_exactSub<float>(1.7, 4.7));
     }
 
-    // TODO we might search for an existing test suite for twosum
+    // TODO we might search for binary values to complete the test suite
     TEST(EFT_SUM, double)
     {
         // cancellation
@@ -60,18 +75,6 @@ namespace
         EXPECT_FALSE(test_exactSub<double>(1.7, 4.7));
     }
 
-    // needed for hexadecimal number with negative exponent
-    // should not be required from C++17 onward
-    // fails with std::strtod(hexstr, nullptr);
-    float floatOfHex(const char hexstr[])
-    {
-        uint32_t num;
-        float f;
-        sscanf(hexstr, "%x", &num);
-        f = *((float*)&num);
-        return f;
-    }
-
     // tests inspired by https://bugs.python.org/file46304/fma_reference.py
     TEST(EFT_FMA, float)
     {
@@ -82,14 +85,14 @@ namespace
         EXPECT_EQ(std::fma(-2.0, 2.0, 4.0), 0);
 
         // overflow from multiplication
-        float a = floatOfHex("0x1p64");
+        float a = numOfHex<float>("0x1p64");
         float b = a;
-        float c = floatOfHex("0x1p127");
+        float c = numOfHex<float>("0x1p127");
         EXPECT_EQ(std::fma(a, b, -c), c);
         EXPECT_NEQ(a*b-c, c); // could pass if the compiler introduces an fma
 
         // single rounding
-        a = floatOfHex("0x1p-50");
+        a = numOfHex<float>("0x1p-50");
         EXPECT_EQ(std::fma(a - 1.0, a + 1.0, 1.0), a*a);
 
         // random tests
@@ -114,10 +117,10 @@ namespace
         };
         for(int i = 0; i < test_values.size(); i+=4)
         {
-            float ra = floatOfHex(test_values[i].c_str());
-            float rb = floatOfHex(test_values[i+1].c_str());
-            float rc = floatOfHex(test_values[i+2].c_str());
-            float expected = floatOfHex(test_values[i+3].c_str());
+            float ra = numOfHex<float>(test_values[i].c_str());
+            float rb = numOfHex<float>(test_values[i+1].c_str());
+            float rc = numOfHex<float>(test_values[i+2].c_str());
+            float expected = numOfHex<float>(test_values[i+3].c_str());
             EXPECT_EQ(std::fma(ra, rb, rc), expected);
         }
     }
