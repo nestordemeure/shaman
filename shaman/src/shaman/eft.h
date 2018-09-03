@@ -1,6 +1,7 @@
 #ifndef SHAMAN_EFT_H
 #define SHAMAN_EFT_H
 
+#include <utility> // for std::swap
 #include <cmath>
 
 /*
