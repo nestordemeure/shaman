@@ -15,7 +15,7 @@ namespace
     template<typename F>
     F numOfHex(const char hexstr[])
     {
-        return std::strtod(hexstr, nullptr);;
+        return std::strtod(hexstr, nullptr);
     }
 
     /*
@@ -70,8 +70,9 @@ namespace
         EXPECT_FALSE(test_exactSub<double>(1.7, 4.7));
     }
 
-    // tests inspired by https://bugs.python.org/file46304/fma_reference.py (which was redacted for double precision)
-    TEST(EFT_FMA, float)
+    // tests inspired by https://bugs.python.org/file46304/fma_reference.py
+    // exponent should go from to 64 and from to 127 for tests to be valid at float precision (but not all tests can be converted to float precision)
+    TEST(EFT_FMA, double)
     {
         // zero result from nonzero inputs
         EXPECT_EQ(std::fma(2.0, 2.0, -4.0), 0);
@@ -80,14 +81,14 @@ namespace
         EXPECT_EQ(std::fma(-2.0, 2.0, 4.0), 0);
 
         // overflow from multiplication
-        float a = numOfHex<float>("0x1p64");
-        float b = a;
-        float c = numOfHex<float>("0x1p127");
+        double a = numOfHex<double>("0x1p512");
+        double b = a;
+        double c = numOfHex<double>("0x1p1023");
         EXPECT_EQ(std::fma(a, b, -c), c);
         EXPECT_NEQ(a*b-c, c); // could pass if the compiler introduces an fma
 
         // single rounding
-        a = numOfHex<float>("0x1p-50");
+        a = numOfHex<double>("0x1p-50");
         EXPECT_EQ(std::fma(a - 1.0, a + 1.0, 1.0), a*a);
 
         // random tests (should be done in double precision)
@@ -117,7 +118,7 @@ namespace
             double rc = numOfHex<double>(test_values[i+2].c_str());
             double expected = numOfHex<double>(test_values[i+3].c_str());
             EXPECT_EQ(std::fma(ra, rb, rc), expected);
-            EXPECT_NEQ(ra*rb+rc, expected);
+            EXPECT_NEQ(ra*rb+rc, expected); // could pass if the compiler introduces an fma
         }
     }
 }
