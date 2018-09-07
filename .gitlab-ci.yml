@@ -12,7 +12,7 @@ Build:
   script:
     - mkdir buildir
     - cd buildir
-    - cmake ..
+    - cmake ../shaman
     - cmake --build .
 
 Unit:
