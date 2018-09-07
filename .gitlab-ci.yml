@@ -1,6 +1,6 @@
 image: alpine:edge
 before_script:
-   - apk add --no-cache gcc cmake
+   - apk add --no-cache build-base gcc cmake gtest
 
 stages:
   - build
