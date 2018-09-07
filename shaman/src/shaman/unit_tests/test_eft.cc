@@ -85,7 +85,7 @@ namespace
         double b = a;
         double c = numOfHex<double>("0x1p1023");
         EXPECT_EQ(std::fma(a, b, -c), c);
-        EXPECT_NEQ(a*b-c, c); // could pass if the compiler introduces an fma
+        EXPECT_NE(a*b-c, c); // could pass if the compiler introduces an fma
 
         // single rounding
         a = numOfHex<double>("0x1p-50");
@@ -118,7 +118,7 @@ namespace
             double rc = numOfHex<double>(test_values[i+2].c_str());
             double expected = numOfHex<double>(test_values[i+3].c_str());
             EXPECT_EQ(std::fma(ra, rb, rc), expected);
-            EXPECT_NEQ(ra*rb+rc, expected); // could pass if the compiler introduces an fma
+            EXPECT_NE(ra*rb+rc, expected); // could pass if the compiler introduces an fma
         }
     }
 }
