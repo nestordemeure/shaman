@@ -190,7 +190,7 @@ public:
         errorType totalError = 0.;
         for(auto error : *errors)
         {
-            totalAbsoluteError += std::abs(error);
+            totalAbsoluteError += std::fabs(error);
             totalError += error;
         }
         // rectifies the sign of the sum of absolute errors to match the sign of the sum
@@ -218,7 +218,7 @@ public:
         }
 
         // sorts the vector by abs(error) descending
-        auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::abs(p1.second) > std::abs(p2.second);};
+        auto compare = [](const std::pair<Tag, errorType>& p1, const std::pair<Tag, errorType>& p2){return std::fabs(p1.second) > std::fabs(p2.second);};
         std::sort(data.begin(), data.end(), compare);
 
         // output stream
