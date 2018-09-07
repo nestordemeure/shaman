@@ -7,6 +7,7 @@ target_compile_features(shaman PUBLIC
   cxx_decltype
   cxx_auto_type
   cxx_thread_local
+  cxx_std_11 # for std::fma
   )
 target_compile_options(shaman PUBLIC -mfma)
 
