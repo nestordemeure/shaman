@@ -14,6 +14,9 @@ Build:
     - cd buildir
     - cmake ../shaman
     - cmake --build .
+  artifacts:
+    paths:
+      - buildir/
 
 Unit:
   stage: unittests
