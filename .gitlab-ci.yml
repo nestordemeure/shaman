@@ -13,7 +13,7 @@ Build-gcc-release:
     - cd buildir
     - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ../shaman
     - cmake --build .
-    - ctest -R 'unit:.*'
+    - ctest -V -R 'unit:.*'
 
 Build-clang-release:
   stage: build
@@ -23,5 +23,5 @@ Build-clang-release:
     - cd buildir
     - cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=RelWithDebInfo ../shaman
     - cmake --build .
-    - ctest -R 'unit:.*'
+    - ctest -V -R 'unit:.*'
 
