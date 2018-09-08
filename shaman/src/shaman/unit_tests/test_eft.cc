@@ -53,7 +53,7 @@ namespace
         EXPECT_TRUE(test_exactSub<float>(1.3, 0.7));
         EXPECT_TRUE(test_exactSub<float>(1.4, 2.1));
         EXPECT_FALSE(test_exactSub<float>(1.5, 0.3));
-        EXPECT_FALSE(test_exactSub<float>(1.7, 4.7));
+        EXPECT_FALSE(test_exactSub<float>(1.1, 4.1));
     }
 
     // TODO we might search for binary values to complete the test suite
@@ -67,7 +67,7 @@ namespace
         EXPECT_TRUE(test_exactSub<double>(1.3, 0.7));
         EXPECT_TRUE(test_exactSub<double>(1.4, 2.1));
         EXPECT_FALSE(test_exactSub<double>(1.5, 0.3));
-        EXPECT_FALSE(test_exactSub<double>(1.7, 4.7));
+        EXPECT_FALSE(test_exactSub<double>(1.1, 4.1));
     }
 
     // tests inspired by https://bugs.python.org/file46304/fma_reference.py
