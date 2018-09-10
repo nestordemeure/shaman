@@ -142,6 +142,8 @@ namespace Sstd
     templated const Snum trunc(const Snum &n);
     templated const Snum min(const Snum &n1, const Snum &n2);
     templated const Snum max(const Snum &n1, const Snum &n2);
+    templated const Snum fmin(const Snum &n1, const Snum &n2);
+    templated const Snum fmax(const Snum &n1, const Snum &n2);
     templated const Snum hypot(const Snum &n1, const Snum &n2);
     templated const Snum hypot(const Snum &n1, const Snum &n2, const Snum &n3);
     templated const Snum fma(const Snum &n1, const Snum &n2, const Snum &n3);

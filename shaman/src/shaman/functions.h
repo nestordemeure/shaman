@@ -144,6 +144,20 @@ templated inline const Snum Sstd::max(const Snum& n1, const Snum& n2)
 };
 set_Sfunction2_casts(max);
 
+// fmin
+templated inline const Snum Sstd::fmin(const Snum& n1, const Snum& n2)
+{
+    return Sstd::min(n1, n2);
+};
+set_Sfunction2_casts(fmin);
+
+// fmax
+templated inline const Snum Sstd::fmax(const Snum& n1, const Snum& n2)
+{
+    return Sstd::max(n1, n2);
+};
+set_Sfunction2_casts(fmax);
+
 //-----------------------------------------------------------------------------
 // LINEARISABLE FUNCTIONS
 
