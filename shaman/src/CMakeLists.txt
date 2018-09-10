@@ -2,7 +2,7 @@ add_library(shaman shaman/tagged/global_vars.cpp)
 
 target_include_directories(shaman PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:${INSTALL_CMAKE_DIR}/include>)
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 # TODO: list all C++ features shaman relies on.
 target_compile_features(shaman PUBLIC
@@ -16,13 +16,6 @@ target_compile_options(shaman PUBLIC -mfma)
 if (SHAMAN_ENABLE_TESTS)
     add_subdirectory(shaman/unit_tests)
 endif(SHAMAN_ENABLE_TESTS)
-
-
-# Introduce variables:
-# * CMAKE_INSTALL_LIBDIR
-# * CMAKE_INSTALL_BINDIR
-# * CMAKE_INSTALL_INCLUDEDIR
-include(GNUInstallDirs)
 
 # Layout. This works for all platforms:
 #   * <prefix>/lib*/cmake/<PROJECT-NAME>

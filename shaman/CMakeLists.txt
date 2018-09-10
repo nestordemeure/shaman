@@ -4,6 +4,12 @@ project(shaman VERSION 0.1)
 option(SHAMAN_ENABLE_TESTS "Whether or not Shaman tests are run" ON)
 option(SHAMAN_ENABLE_EXAMPLES "Whether or not Shaman examples are built" ON)
 
+# Introduce variables:
+# * CMAKE_INSTALL_LIBDIR
+# * CMAKE_INSTALL_BINDIR
+# * CMAKE_INSTALL_INCLUDEDIR
+include(GNUInstallDirs)
+
 if (SHAMAN_ENABLE_TESTS)
     enable_testing()
     SET(SHAMAN_EXAMPLES_TESTS ON)
