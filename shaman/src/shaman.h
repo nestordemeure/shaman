@@ -30,14 +30,14 @@ public :
     inline S(): number(0.), error(0.), errorComposants() {};
 
     // casting
-    inline explicit operator short int() const { return (short int) number; };
-    inline explicit operator unsigned short int() const { return (unsigned short int) number; };
-    inline explicit operator int() const { return (int) number; };
-    inline explicit operator unsigned int() const { return (unsigned int) number; };
-    inline explicit operator long int() const { return (long int) number; };
-    inline explicit operator unsigned long int() const { return (unsigned long int) number; };
-    inline explicit operator long long int() const { return (long long int) number; };
-    inline explicit operator unsigned long long int() const { return (unsigned long long int) number; };
+    inline operator short int() const { return (short int) number; };
+    inline operator unsigned short int() const { return (unsigned short int) number; };
+    inline operator int() const { return (int) number; };
+    inline operator unsigned int() const { return (unsigned int) number; };
+    inline operator long int() const { return (long int) number; };
+    inline operator unsigned long int() const { return (unsigned long int) number; };
+    inline operator long long int() const { return (long long int) number; };
+    inline operator unsigned long long int() const { return (unsigned long long int) number; };
     inline explicit operator float() const { return (float) number; };
     inline explicit operator double() const { return (double) number; };
     inline explicit operator long double() const { return (long double) number; };
@@ -53,7 +53,6 @@ public :
     inline S(long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline S(unsigned long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     #undef INTEGER_CAST_CONSTRUCTOR
-    #undef EXPLICIT_CAST
 
     // arithmetic operators
     S& operator++(int);
