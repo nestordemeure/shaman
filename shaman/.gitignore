@@ -4,3 +4,6 @@
 *.nfs*
 *.out
 *.data*
+*.a
+*.cmake
+*CMakeFiles*

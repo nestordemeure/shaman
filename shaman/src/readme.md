@@ -4,6 +4,10 @@
 
 Shaman is a header-only library that can be used to evaluate the numerical accuracy of an application but also to locate and reduce numerical unstabilities.
 
+## How to install
+
+Run `cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/folder .` followed by `make install`.
+
 ## How to use Shaman ?
 
 Shaman is meant to be used with a test suite (usual recommendations such as having a good coverage apply), for all tests :
