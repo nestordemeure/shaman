@@ -4,9 +4,15 @@
 
 Shaman is a header-only library that can be used to evaluate the numerical accuracy of an application but also to locate and reduce numerical unstabilities.
 
-## How to install
+## How to install ?
 
 Run `cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/folder .` followed by `make install`.
+
+## How to link a project with shaman ?
+
+Add `find_package(shaman)` to the CMakeLists.txt file (and set the shaman_DIR variable with the path to shaman's cmake files).
+
+Add `PUBLIC shaman::shaman` the `target_link_libraries` line in your CMakeLists.txt.
 
 ## How to use Shaman ?
 
