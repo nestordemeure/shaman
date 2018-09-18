@@ -139,6 +139,7 @@ namespace Sstd
     templated const Snum floor(const Snum &n);
     templated const Snum ceil(const Snum &n);
     templated const Snum trunc(const Snum &n);
+    templated const Snum scalbn(const Snum &n, int power);
     templated const Snum min(const Snum &n1, const Snum &n2);
     templated const Snum max(const Snum &n1, const Snum &n2);
     templated const Snum fmin(const Snum &n1, const Snum &n2);
