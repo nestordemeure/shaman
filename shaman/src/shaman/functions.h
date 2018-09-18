@@ -1,7 +1,3 @@
-//
-// Created by demeuren on 02/05/18.
-//
-
 #pragma once
 
 #include "eft.h"
@@ -111,7 +107,7 @@ templated inline const Snum Sstd::abs(const Snum& n)
 // fabs
 templated inline const Snum Sstd::fabs(const Snum& n)
 {
-    return abs(n);
+    return Sstd::abs(n);
 };
 
 // min
@@ -511,6 +507,30 @@ templated const Snum Sstd::atanh(const Snum& n)
  * we redistribute the error in a way that is proportionnal to the impact of each argument
  * while keeping the sum of error correct
  */
+
+// scalbn
+templated const Snum Sstd::scalbn(const Snum &n, int power)
+{
+    numberType result = std::scalbn(n.number, power);
+    preciseType preciseCorrectedResult = std::scalbn(n.corrected_number(), power);
+
+    Serror newErrorComp;
+    preciseType totalError = preciseCorrectedResult - result;
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::scalbn((preciseType)n.number, power);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
+
+    return Snum(result, totalError, newErrorComp);
+};
 
 // frexp
 templated const Snum Sstd::frexp(const Snum& n, int* exp)
