@@ -96,6 +96,7 @@ templated bool operator<=(const Snum& n1, const Snum& n2);
 templated bool operator>(const Snum& n1, const Snum& n2);
 templated bool operator>=(const Snum& n1, const Snum& n2);
 
+// TODO we might want to better organize our namespaces
 // common functions
 namespace Shaman
 {
