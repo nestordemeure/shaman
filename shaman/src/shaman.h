@@ -15,10 +15,9 @@
  */
 template<typename numberType, typename errorType, typename preciseType> class S
 {
- public:
-  typedef numberType NumberType;
+public:
+    using NumberType = numberType;
 
-public :
     // true number ≈ number + errorComposants
     numberType number; // current computed number
     errorType error; // approximation of the current error
@@ -74,12 +73,6 @@ public :
     static void checkUnstableBranch(S n1, S n2);
 };
 
-namespace Shaman
-{
-    static void unstability();
-    static void displayUnstableBranches();
-}
-
 //-------------------------------------------------------------------------------------------------
 // SHAMAN OPERATIONS
 
@@ -103,13 +96,19 @@ templated bool operator<=(const Snum& n1, const Snum& n2);
 templated bool operator>(const Snum& n1, const Snum& n2);
 templated bool operator>=(const Snum& n1, const Snum& n2);
 
-// mathematical functions
-#ifdef NO_SHAMAN
-namespace Sstd = std;
-#else
-namespace Sstd
+// common functions
+namespace Shaman
 {
-    using namespace std;
+    static void unstability();
+    static void displayUnstableBranches();
+    //methods
+    templated std::string to_string(const Snum &n);
+    template<typename T> const char* to_Cstring(const T &n);
+}
+
+// mathematical functions
+namespace ShamanMaths
+{
     templated const Snum abs(const Snum &n);
     templated const Snum fabs(const Snum &n);
     templated const Snum sqrt(const Snum &n);
@@ -149,8 +148,18 @@ namespace Sstd
     templated const Snum fma(const Snum &n1, const Snum &n2, const Snum &n3);
     templated bool isfinite(const Snum &n);
     templated bool isnan(const Snum &n);
-    templated std::string to_string(const Snum &n);
-    template<typename T> const char* to_Cstring(const T &n);
+}
+using namespace ShamanMaths; // we need the mathematical functions in the open for some libraries such as std::complex
+
+// std + shaman (useful for instrumentation)
+#ifdef NO_SHAMAN
+namespace Sstd = std;
+#else
+namespace Sstd
+{
+    using namespace std;
+    using namespace Shaman;
+    using namespace ShamanMaths;
 }
 #endif
 
