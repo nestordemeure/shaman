@@ -200,7 +200,7 @@ templated std::string Snum::to_string() const
  *
  * NOTE : code duplicated from .to_string()
  */
-templated inline std::string Sstd::to_string(const Snum& n)
+templated inline std::string Shaman::to_string(const Snum& n)
 {
     std::ostringstream stream;
     stream << n;
@@ -211,8 +211,8 @@ templated inline std::string Sstd::to_string(const Snum& n)
  * convert a value into a C string (const char *)
  */
 template<typename T>
-inline const char* Sstd::to_Cstring(const T &n)
+inline const char* Shaman::to_Cstring(const T &n)
 {
-    return Sstd::to_string(n).c_str();
+    return Shaman::to_string(n).c_str();
 };
 
