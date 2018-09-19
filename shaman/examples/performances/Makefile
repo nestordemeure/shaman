@@ -51,7 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman
+CMAKE_BINARY_DIR = /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ install/local/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -E cmake_progress_start /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/performances/CMakeFiles/progress.marks
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles 0
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -E cmake_progress_start /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/performances/CMakeFiles/progress.marks
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/clean
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/preinstall
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/preinstall
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 examples/performances/CMakeFiles/example_lulesh.dir/rule:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/CMakeFiles/example_lulesh.dir/rule
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/CMakeFiles/example_lulesh.dir/rule
 .PHONY : examples/performances/CMakeFiles/example_lulesh.dir/rule
 
 # Convenience name for target.
@@ -179,12 +179,12 @@ example_lulesh: examples/performances/CMakeFiles/example_lulesh.dir/rule
 
 # fast build rule for target.
 example_lulesh/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_lulesh.dir/build.make examples/performances/CMakeFiles/example_lulesh.dir/build
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_lulesh.dir/build.make examples/performances/CMakeFiles/example_lulesh.dir/build
 .PHONY : example_lulesh/fast
 
 # Convenience name for target.
 examples/performances/CMakeFiles/example_mandelbrot.dir/rule:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/CMakeFiles/example_mandelbrot.dir/rule
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/CMakeFiles/example_mandelbrot.dir/rule
 .PHONY : examples/performances/CMakeFiles/example_mandelbrot.dir/rule
 
 # Convenience name for target.
@@ -194,12 +194,12 @@ example_mandelbrot: examples/performances/CMakeFiles/example_mandelbrot.dir/rule
 
 # fast build rule for target.
 example_mandelbrot/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_mandelbrot.dir/build.make examples/performances/CMakeFiles/example_mandelbrot.dir/build
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_mandelbrot.dir/build.make examples/performances/CMakeFiles/example_mandelbrot.dir/build
 .PHONY : example_mandelbrot/fast
 
 # Convenience name for target.
 examples/performances/CMakeFiles/example_nbody.dir/rule:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/CMakeFiles/example_nbody.dir/rule
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/CMakeFiles/example_nbody.dir/rule
 .PHONY : examples/performances/CMakeFiles/example_nbody.dir/rule
 
 # Convenience name for target.
@@ -209,12 +209,12 @@ example_nbody: examples/performances/CMakeFiles/example_nbody.dir/rule
 
 # fast build rule for target.
 example_nbody/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_nbody.dir/build.make examples/performances/CMakeFiles/example_nbody.dir/build
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_nbody.dir/build.make examples/performances/CMakeFiles/example_nbody.dir/build
 .PHONY : example_nbody/fast
 
 # Convenience name for target.
 examples/performances/CMakeFiles/example_spectralnorm.dir/rule:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/CMakeFiles/example_spectralnorm.dir/rule
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/performances/CMakeFiles/example_spectralnorm.dir/rule
 .PHONY : examples/performances/CMakeFiles/example_spectralnorm.dir/rule
 
 # Convenience name for target.
@@ -224,7 +224,7 @@ example_spectralnorm: examples/performances/CMakeFiles/example_spectralnorm.dir/
 
 # fast build rule for target.
 example_spectralnorm/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_spectralnorm.dir/build.make examples/performances/CMakeFiles/example_spectralnorm.dir/build
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_spectralnorm.dir/build.make examples/performances/CMakeFiles/example_spectralnorm.dir/build
 .PHONY : example_spectralnorm/fast
 
 lulesh.o: lulesh.cpp.o
@@ -233,7 +233,7 @@ lulesh.o: lulesh.cpp.o
 
 # target to build an object file
 lulesh.cpp.o:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_lulesh.dir/build.make examples/performances/CMakeFiles/example_lulesh.dir/lulesh.cpp.o
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_lulesh.dir/build.make examples/performances/CMakeFiles/example_lulesh.dir/lulesh.cpp.o
 .PHONY : lulesh.cpp.o
 
 lulesh.i: lulesh.cpp.i
@@ -242,7 +242,7 @@ lulesh.i: lulesh.cpp.i
 
 # target to preprocess a source file
 lulesh.cpp.i:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_lulesh.dir/build.make examples/performances/CMakeFiles/example_lulesh.dir/lulesh.cpp.i
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_lulesh.dir/build.make examples/performances/CMakeFiles/example_lulesh.dir/lulesh.cpp.i
 .PHONY : lulesh.cpp.i
 
 lulesh.s: lulesh.cpp.s
@@ -251,7 +251,7 @@ lulesh.s: lulesh.cpp.s
 
 # target to generate assembly for a file
 lulesh.cpp.s:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_lulesh.dir/build.make examples/performances/CMakeFiles/example_lulesh.dir/lulesh.cpp.s
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_lulesh.dir/build.make examples/performances/CMakeFiles/example_lulesh.dir/lulesh.cpp.s
 .PHONY : lulesh.cpp.s
 
 mandelbrot.o: mandelbrot.cpp.o
@@ -260,7 +260,7 @@ mandelbrot.o: mandelbrot.cpp.o
 
 # target to build an object file
 mandelbrot.cpp.o:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_mandelbrot.dir/build.make examples/performances/CMakeFiles/example_mandelbrot.dir/mandelbrot.cpp.o
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_mandelbrot.dir/build.make examples/performances/CMakeFiles/example_mandelbrot.dir/mandelbrot.cpp.o
 .PHONY : mandelbrot.cpp.o
 
 mandelbrot.i: mandelbrot.cpp.i
@@ -269,7 +269,7 @@ mandelbrot.i: mandelbrot.cpp.i
 
 # target to preprocess a source file
 mandelbrot.cpp.i:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_mandelbrot.dir/build.make examples/performances/CMakeFiles/example_mandelbrot.dir/mandelbrot.cpp.i
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_mandelbrot.dir/build.make examples/performances/CMakeFiles/example_mandelbrot.dir/mandelbrot.cpp.i
 .PHONY : mandelbrot.cpp.i
 
 mandelbrot.s: mandelbrot.cpp.s
@@ -278,7 +278,7 @@ mandelbrot.s: mandelbrot.cpp.s
 
 # target to generate assembly for a file
 mandelbrot.cpp.s:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_mandelbrot.dir/build.make examples/performances/CMakeFiles/example_mandelbrot.dir/mandelbrot.cpp.s
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_mandelbrot.dir/build.make examples/performances/CMakeFiles/example_mandelbrot.dir/mandelbrot.cpp.s
 .PHONY : mandelbrot.cpp.s
 
 nbody.o: nbody.cpp.o
@@ -287,7 +287,7 @@ nbody.o: nbody.cpp.o
 
 # target to build an object file
 nbody.cpp.o:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_nbody.dir/build.make examples/performances/CMakeFiles/example_nbody.dir/nbody.cpp.o
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_nbody.dir/build.make examples/performances/CMakeFiles/example_nbody.dir/nbody.cpp.o
 .PHONY : nbody.cpp.o
 
 nbody.i: nbody.cpp.i
@@ -296,7 +296,7 @@ nbody.i: nbody.cpp.i
 
 # target to preprocess a source file
 nbody.cpp.i:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_nbody.dir/build.make examples/performances/CMakeFiles/example_nbody.dir/nbody.cpp.i
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_nbody.dir/build.make examples/performances/CMakeFiles/example_nbody.dir/nbody.cpp.i
 .PHONY : nbody.cpp.i
 
 nbody.s: nbody.cpp.s
@@ -305,7 +305,7 @@ nbody.s: nbody.cpp.s
 
 # target to generate assembly for a file
 nbody.cpp.s:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_nbody.dir/build.make examples/performances/CMakeFiles/example_nbody.dir/nbody.cpp.s
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_nbody.dir/build.make examples/performances/CMakeFiles/example_nbody.dir/nbody.cpp.s
 .PHONY : nbody.cpp.s
 
 spectralnorm.o: spectralnorm.cpp.o
@@ -314,7 +314,7 @@ spectralnorm.o: spectralnorm.cpp.o
 
 # target to build an object file
 spectralnorm.cpp.o:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_spectralnorm.dir/build.make examples/performances/CMakeFiles/example_spectralnorm.dir/spectralnorm.cpp.o
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_spectralnorm.dir/build.make examples/performances/CMakeFiles/example_spectralnorm.dir/spectralnorm.cpp.o
 .PHONY : spectralnorm.cpp.o
 
 spectralnorm.i: spectralnorm.cpp.i
@@ -323,7 +323,7 @@ spectralnorm.i: spectralnorm.cpp.i
 
 # target to preprocess a source file
 spectralnorm.cpp.i:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_spectralnorm.dir/build.make examples/performances/CMakeFiles/example_spectralnorm.dir/spectralnorm.cpp.i
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_spectralnorm.dir/build.make examples/performances/CMakeFiles/example_spectralnorm.dir/spectralnorm.cpp.i
 .PHONY : spectralnorm.cpp.i
 
 spectralnorm.s: spectralnorm.cpp.s
@@ -332,7 +332,7 @@ spectralnorm.s: spectralnorm.cpp.s
 
 # target to generate assembly for a file
 spectralnorm.cpp.s:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_spectralnorm.dir/build.make examples/performances/CMakeFiles/example_spectralnorm.dir/spectralnorm.cpp.s
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/performances/CMakeFiles/example_spectralnorm.dir/build.make examples/performances/CMakeFiles/example_spectralnorm.dir/spectralnorm.cpp.s
 .PHONY : spectralnorm.cpp.s
 
 # Help Target
@@ -375,6 +375,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

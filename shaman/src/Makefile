@@ -51,7 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman
+CMAKE_BINARY_DIR = /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ list_install_components/fast: list_install_components
 
 # The main all target
 all: cmake_check_build_system
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -E cmake_progress_start /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/src/CMakeFiles/progress.marks
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles 0
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -E cmake_progress_start /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/src/CMakeFiles/progress.marks
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/shaman.dir/rule:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/shaman.dir/rule
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/shaman.dir/rule
 .PHONY : src/CMakeFiles/shaman.dir/rule
 
 # Convenience name for target.
@@ -179,7 +179,7 @@ shaman: src/CMakeFiles/shaman.dir/rule
 
 # fast build rule for target.
 shaman/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f src/CMakeFiles/shaman.dir/build.make src/CMakeFiles/shaman.dir/build
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f src/CMakeFiles/shaman.dir/build.make src/CMakeFiles/shaman.dir/build
 .PHONY : shaman/fast
 
 shaman/tagged/global_vars.o: shaman/tagged/global_vars.cpp.o
@@ -188,7 +188,7 @@ shaman/tagged/global_vars.o: shaman/tagged/global_vars.cpp.o
 
 # target to build an object file
 shaman/tagged/global_vars.cpp.o:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f src/CMakeFiles/shaman.dir/build.make src/CMakeFiles/shaman.dir/shaman/tagged/global_vars.cpp.o
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f src/CMakeFiles/shaman.dir/build.make src/CMakeFiles/shaman.dir/shaman/tagged/global_vars.cpp.o
 .PHONY : shaman/tagged/global_vars.cpp.o
 
 shaman/tagged/global_vars.i: shaman/tagged/global_vars.cpp.i
@@ -197,7 +197,7 @@ shaman/tagged/global_vars.i: shaman/tagged/global_vars.cpp.i
 
 # target to preprocess a source file
 shaman/tagged/global_vars.cpp.i:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f src/CMakeFiles/shaman.dir/build.make src/CMakeFiles/shaman.dir/shaman/tagged/global_vars.cpp.i
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f src/CMakeFiles/shaman.dir/build.make src/CMakeFiles/shaman.dir/shaman/tagged/global_vars.cpp.i
 .PHONY : shaman/tagged/global_vars.cpp.i
 
 shaman/tagged/global_vars.s: shaman/tagged/global_vars.cpp.s
@@ -206,7 +206,7 @@ shaman/tagged/global_vars.s: shaman/tagged/global_vars.cpp.s
 
 # target to generate assembly for a file
 shaman/tagged/global_vars.cpp.s:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f src/CMakeFiles/shaman.dir/build.make src/CMakeFiles/shaman.dir/shaman/tagged/global_vars.cpp.s
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f src/CMakeFiles/shaman.dir/build.make src/CMakeFiles/shaman.dir/shaman/tagged/global_vars.cpp.s
 .PHONY : shaman/tagged/global_vars.cpp.s
 
 # Help Target
@@ -237,6 +237,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

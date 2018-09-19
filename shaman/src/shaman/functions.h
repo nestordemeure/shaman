@@ -15,7 +15,7 @@
 
 // defines overload for function taking two arguments
 #define set_Sfunction2_casts(FUN) \
-namespace Shaman \
+namespace ShamanMaths \
 { \
     template<typename N, typename E, typename P, typename arithmeticTYPE(T)> \
     inline auto FUN (const S<N,E,P>& n1, const T& n2) -> SreturnType(n1.number,n2)\
@@ -36,7 +36,7 @@ namespace Shaman \
 
 // defines overload for function taking three arguments
 #define set_Sfunction3_casts(FUN) \
-namespace Shaman \
+namespace ShamanMaths \
 { \
     template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2, typename N3, typename E3, typename P3> \
     inline auto FUN (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, const S<N3,E3,P3>& n3) -> SreturnType3(n1.number,n2.number,n3.number) \

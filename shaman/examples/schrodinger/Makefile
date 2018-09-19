@@ -51,7 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman
+CMAKE_BINARY_DIR = /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -E cmake_progress_start /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/CMakeFiles/progress.marks
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles 0
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -E cmake_progress_start /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/CMakeFiles/progress.marks
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/clean
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/preinstall
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/preinstall
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/rule:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/CMakeFiles/example_schrodinger.dir/rule
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f CMakeFiles/Makefile2 examples/schrodinger/CMakeFiles/example_schrodinger.dir/rule
 .PHONY : examples/schrodinger/CMakeFiles/example_schrodinger.dir/rule
 
 # Convenience name for target.
@@ -179,7 +179,7 @@ example_schrodinger: examples/schrodinger/CMakeFiles/example_schrodinger.dir/rul
 
 # fast build rule for target.
 example_schrodinger/fast:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/build
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/build
 .PHONY : example_schrodinger/fast
 
 main.o: main.cpp.o
@@ -188,7 +188,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.o
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -197,7 +197,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.i
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -206,7 +206,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.s
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 schrodinger.o: schrodinger.cpp.o
@@ -215,7 +215,7 @@ schrodinger.o: schrodinger.cpp.o
 
 # target to build an object file
 schrodinger.cpp.o:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o
 .PHONY : schrodinger.cpp.o
 
 schrodinger.i: schrodinger.cpp.i
@@ -224,7 +224,7 @@ schrodinger.i: schrodinger.cpp.i
 
 # target to preprocess a source file
 schrodinger.cpp.i:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.i
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.i
 .PHONY : schrodinger.cpp.i
 
 schrodinger.s: schrodinger.cpp.s
@@ -233,7 +233,7 @@ schrodinger.s: schrodinger.cpp.s
 
 # target to generate assembly for a file
 schrodinger.cpp.s:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.s
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(MAKE) -f examples/schrodinger/CMakeFiles/example_schrodinger.dir/build.make examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.s
 .PHONY : schrodinger.cpp.s
 
 # Help Target
@@ -267,6 +267,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /ccc/dsku/nfs-server/user/cont001/ocre/demeuren/thesis/code/shaman/shaman && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
