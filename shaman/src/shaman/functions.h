@@ -33,6 +33,7 @@ namespace Sstd \
         return FUN(SreturnType(n1.number,n2.number)(n1), SreturnType(n1.number,n2.number)(n2)); \
     } \
 }\
+using Sstd::FUN; \
 
 // defines overload for function taking three arguments
 #define set_Sfunction3_casts(FUN) \
@@ -74,6 +75,7 @@ namespace Sstd \
         return FUN(SreturnType3(n1,n2,n3.number)(n1), SreturnType3(n1,n2,n3.number)(n2), SreturnType3(n1,n2,n3.number)(n3)); \
     } \
 } \
+using Sstd::FUN; \
 
 //-----------------------------------------------------------------------------
 // TEST BASED FUNCTIONS
@@ -143,7 +145,6 @@ templated inline const Snum Sstd::min(const Snum& n1, const Snum& n2)
     }
 };
 set_Sfunction2_casts(min);
-using Sstd::max;
 
 // max
 templated inline const Snum Sstd::max(const Snum& n1, const Snum& n2)
@@ -159,7 +160,6 @@ templated inline const Snum Sstd::max(const Snum& n1, const Snum& n2)
     }
 };
 set_Sfunction2_casts(max);
-using Sstd::max;
 
 // fmin
 templated inline const Snum Sstd::fmin(const Snum& n1, const Snum& n2)
@@ -167,7 +167,6 @@ templated inline const Snum Sstd::fmin(const Snum& n1, const Snum& n2)
     return Sstd::min(n1, n2);
 };
 set_Sfunction2_casts(fmin);
-using Sstd::fmin;
 
 // fmax
 templated inline const Snum Sstd::fmax(const Snum& n1, const Snum& n2)
@@ -175,7 +174,6 @@ templated inline const Snum Sstd::fmax(const Snum& n1, const Snum& n2)
     return Sstd::max(n1, n2);
 };
 set_Sfunction2_casts(fmax);
-using Sstd::fmax;
 
 // copysign
 templated inline const Snum Sstd::copysign(const Snum& n1, const Snum& n2)
@@ -193,7 +191,6 @@ templated inline const Snum Sstd::copysign(const Snum& n1, const Snum& n2)
     }
 };
 set_Sfunction2_casts(copysign);
-using Sstd::copysign;
 
 //-----------------------------------------------------------------------------
 // LINEARISABLE FUNCTIONS
@@ -250,7 +247,6 @@ templated const Snum Sstd::fma(const Snum& n1, const Snum& n2, const Snum& n3)
     return Snum(result, newError, newErrorComp);
 };
 set_Sfunction3_casts(fma);
-using Sstd::fma;
 
 //-----------------------------------------------------------------------------
 // GENERAL FUNCTIONS
@@ -713,7 +709,6 @@ templated const Snum Sstd::pow(const Snum& n1, const Snum& n2)
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(pow);
-using Sstd::pow;
 
 // atan2
 templated const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
@@ -758,7 +753,6 @@ templated const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(atan2);
-using Sstd::atan2;
 
 // hypot
 templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2)
@@ -803,7 +797,6 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2)
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(hypot);
-using Sstd::hypot;
 
 // hypot
 templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
@@ -891,7 +884,6 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction3_casts(hypot);
-using Sstd::hypot;
 
 //-----------------------------------------------------------------------------
 
