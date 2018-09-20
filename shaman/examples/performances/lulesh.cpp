@@ -72,7 +72,7 @@ Additional BSD Notice
 
 using Sstd::sqrt;
 using Sstd::cbrt;
-using Sstd::fabs;
+//using Sstd::fabs;
 
 //#define LULESH_SHOW_PROGRESS 1
 

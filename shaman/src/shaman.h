@@ -122,6 +122,7 @@ namespace ShamanMaths
     templated const Snum log(const Snum &n);
     templated const Snum log2(const Snum &n);
     templated const Snum log10(const Snum &n);
+    templated const Snum logb(const Snum &n);
     templated const Snum sin(const Snum &n);
     templated const Snum cos(const Snum &n);
     templated const Snum tan(const Snum &n);
@@ -144,13 +145,16 @@ namespace ShamanMaths
     templated const Snum max(const Snum &n1, const Snum &n2);
     templated const Snum fmin(const Snum &n1, const Snum &n2);
     templated const Snum fmax(const Snum &n1, const Snum &n2);
+    templated const Snum copysign(const Snum &n1, const Snum &n2);
     templated const Snum hypot(const Snum &n1, const Snum &n2);
     templated const Snum hypot(const Snum &n1, const Snum &n2, const Snum &n3);
     templated const Snum fma(const Snum &n1, const Snum &n2, const Snum &n3);
     templated bool isfinite(const Snum &n);
+    templated bool isinf(const Snum &n);
     templated bool isnan(const Snum &n);
+    templated bool signbit(const Snum &n);
 }
-using namespace ShamanMaths; // we need the mathematical functions in the open for some libraries such as std::complex
+//using namespace ShamanMaths; // we need the mathematical functions in the open for some libraries such as std::complex
 
 // std + shaman (useful for instrumentation)
 #ifdef NO_SHAMAN

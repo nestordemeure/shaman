@@ -83,12 +83,29 @@ templated inline bool ShamanMaths::isfinite(const Snum& n)
 {
     return std::isfinite(n.number);
 };
+using ShamanMaths::isfinite;
+
+// isinf
+templated inline bool ShamanMaths::isinf(const Snum& n)
+{
+    return std::isinf(n.number);
+};
+using ShamanMaths::isinf;
 
 // isnan
 templated inline bool ShamanMaths::isnan(const Snum& n)
 {
     return std::isnan(n.number);
 };
+using ShamanMaths::isnan;
+
+// signbit
+templated inline bool ShamanMaths::signbit(const Snum& n)
+{
+    Snum::checkUnstableBranch(n, Snum(typename Snum::NumberType(0.)));
+    return std::signbit(n.number);
+};
+using ShamanMaths::signbit;
 
 // abs
 templated inline const Snum ShamanMaths::abs(const Snum& n)
@@ -103,12 +120,14 @@ templated inline const Snum ShamanMaths::abs(const Snum& n)
         return -n;
     }
 };
+using ShamanMaths::abs;
 
 // fabs
 templated inline const Snum ShamanMaths::fabs(const Snum& n)
 {
     return ShamanMaths::abs(n);
 };
+using ShamanMaths::fabs;
 
 // min
 templated inline const Snum ShamanMaths::min(const Snum& n1, const Snum& n2)
@@ -124,6 +143,7 @@ templated inline const Snum ShamanMaths::min(const Snum& n1, const Snum& n2)
     }
 };
 set_Sfunction2_casts(min);
+using ShamanMaths::max;
 
 // max
 templated inline const Snum ShamanMaths::max(const Snum& n1, const Snum& n2)
@@ -139,6 +159,7 @@ templated inline const Snum ShamanMaths::max(const Snum& n1, const Snum& n2)
     }
 };
 set_Sfunction2_casts(max);
+using ShamanMaths::max;
 
 // fmin
 templated inline const Snum ShamanMaths::fmin(const Snum& n1, const Snum& n2)
@@ -146,6 +167,7 @@ templated inline const Snum ShamanMaths::fmin(const Snum& n1, const Snum& n2)
     return ShamanMaths::min(n1, n2);
 };
 set_Sfunction2_casts(fmin);
+using ShamanMaths::fmin;
 
 // fmax
 templated inline const Snum ShamanMaths::fmax(const Snum& n1, const Snum& n2)
@@ -153,6 +175,25 @@ templated inline const Snum ShamanMaths::fmax(const Snum& n1, const Snum& n2)
     return ShamanMaths::max(n1, n2);
 };
 set_Sfunction2_casts(fmax);
+using ShamanMaths::fmax;
+
+// copysign
+templated inline const Snum ShamanMaths::copysign(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n2, Snum(typename Snum::NumberType(0.)));
+
+    numberType newNumber = std::copysign(n1.number, n2.number);
+    if (newNumber == n1.number) // TODO does not deal properly with Nan
+    {
+        return n1;
+    }
+    else
+    {
+        return -n1;
+    }
+};
+set_Sfunction2_casts(copysign);
+using ShamanMaths::copysign;
 
 //-----------------------------------------------------------------------------
 // LINEARISABLE FUNCTIONS
@@ -190,6 +231,7 @@ templated const Snum ShamanMaths::sqrt(const Snum& n)
 
     return Snum(result, newError, newErrorComp);
 };
+using ShamanMaths::sqrt;
 
 // fma
 templated const Snum ShamanMaths::fma(const Snum& n1, const Snum& n2, const Snum& n3)
@@ -208,6 +250,7 @@ templated const Snum ShamanMaths::fma(const Snum& n1, const Snum& n2, const Snum
     return Snum(result, newError, newErrorComp);
 };
 set_Sfunction3_casts(fma);
+using ShamanMaths::fma;
 
 //-----------------------------------------------------------------------------
 // GENERAL FUNCTIONS
@@ -234,6 +277,7 @@ templated const Snum ShamanMaths::functionName (const Snum& n) \
     } \
     return Snum(result, totalError, newErrorComp); \
 } \
+using ShamanMaths::functionName; \
 
 SHAMAN_FUNCTION(floor);
 SHAMAN_FUNCTION(ceil);
@@ -287,6 +331,7 @@ templated const Snum ShamanMaths::log(const Snum& n)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::log;
 
 // log2
 templated const Snum ShamanMaths::log2(const Snum& n)
@@ -321,6 +366,7 @@ templated const Snum ShamanMaths::log2(const Snum& n)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::log2;
 
 // log10
 templated const Snum ShamanMaths::log10(const Snum& n)
@@ -355,6 +401,42 @@ templated const Snum ShamanMaths::log10(const Snum& n)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::log10;
+
+// logb
+templated const Snum ShamanMaths::logb(const Snum& n)
+{
+    numberType result = std::logb(n.number);
+
+    preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
+    if (correctedNumber == 0)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::logb(correctedNumber);
+    }
+
+    Serror newErrorComp;
+    preciseType totalError = preciseCorrectedResult - result;
+    if(n.error == 0)
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else
+    {
+        preciseType preciseResult = std::logb((preciseType)n.number);
+        preciseType functionError = preciseResult - result;
+        preciseType proportionalInputError = (totalError - functionError) / n.error;
+        newErrorComp = Serror(functionError);
+        newErrorComp.addErrorsTimeScalar(n.errorComposants, proportionalInputError);
+    }
+
+    return Snum(result, totalError, newErrorComp);
+};
+using ShamanMaths::logb;
 
 // acosh
 templated const Snum ShamanMaths::acosh(const Snum& n)
@@ -389,6 +471,7 @@ templated const Snum ShamanMaths::acosh(const Snum& n)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::acosh;
 
 // acos
 templated const Snum ShamanMaths::acos(const Snum& n)
@@ -427,6 +510,7 @@ templated const Snum ShamanMaths::acos(const Snum& n)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::acos;
 
 // asin
 templated const Snum ShamanMaths::asin(const Snum& n)
@@ -465,6 +549,7 @@ templated const Snum ShamanMaths::asin(const Snum& n)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::asin;
 
 // atanh
 templated const Snum ShamanMaths::atanh(const Snum& n)
@@ -499,6 +584,7 @@ templated const Snum ShamanMaths::atanh(const Snum& n)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::atanh;
 
 //-----------------------------------------------------------------------------
 // MULTIARGUMENTS FUNCTIONS
@@ -531,6 +617,7 @@ templated const Snum ShamanMaths::scalbn(const Snum &n, int power)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::scalbn;
 
 // frexp
 templated const Snum ShamanMaths::frexp(const Snum& n, int* exp)
@@ -556,6 +643,7 @@ templated const Snum ShamanMaths::frexp(const Snum& n, int* exp)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::frexp;
 
 // ldexp
 templated const Snum ShamanMaths::ldexp(const Snum& n, int exp)
@@ -580,6 +668,7 @@ templated const Snum ShamanMaths::ldexp(const Snum& n, int exp)
 
     return Snum(result, totalError, newErrorComp);
 };
+using ShamanMaths::ldexp;
 
 // pow
 templated const Snum ShamanMaths::pow(const Snum& n1, const Snum& n2)
@@ -624,6 +713,7 @@ templated const Snum ShamanMaths::pow(const Snum& n1, const Snum& n2)
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(pow);
+using ShamanMaths::pow;
 
 // atan2
 templated const Snum ShamanMaths::atan2(const Snum& n1, const Snum& n2)
@@ -668,6 +758,7 @@ templated const Snum ShamanMaths::atan2(const Snum& n1, const Snum& n2)
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(atan2);
+using ShamanMaths::atan2;
 
 // hypot
 templated const Snum ShamanMaths::hypot(const Snum& n1, const Snum& n2)
@@ -712,6 +803,7 @@ templated const Snum ShamanMaths::hypot(const Snum& n1, const Snum& n2)
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction2_casts(hypot);
+using ShamanMaths::hypot;
 
 // hypot
 templated const Snum ShamanMaths::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
@@ -799,6 +891,7 @@ templated const Snum ShamanMaths::hypot(const Snum& n1, const Snum& n2, const Sn
     return Snum(result, totalError, newErrorComp);
 };
 set_Sfunction3_casts(hypot);
+using ShamanMaths::hypot;
 
 //-----------------------------------------------------------------------------
 
