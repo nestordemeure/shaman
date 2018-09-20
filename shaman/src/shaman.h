@@ -96,20 +96,22 @@ templated bool operator<=(const Snum& n1, const Snum& n2);
 templated bool operator>(const Snum& n1, const Snum& n2);
 templated bool operator>=(const Snum& n1, const Snum& n2);
 
-// TODO we might want to better organize our namespaces
-// common functions
+// shaman specific functions
 namespace Shaman
 {
     static void unstability();
     static void displayUnstableBranches();
-    //methods
-    templated std::string to_string(const Snum &n);
-    template<typename T> const char* to_Cstring(const T &n);
 }
 
-// mathematical functions
-namespace ShamanMaths
+// std + shaman
+#ifdef NO_SHAMAN
+namespace Sstd = std;
+#else
+namespace Sstd
 {
+    using namespace std;
+    using namespace Shaman;
+    // mathematical functions
     templated const Snum abs(const Snum &n);
     templated const Snum fabs(const Snum &n);
     templated const Snum sqrt(const Snum &n);
@@ -153,18 +155,9 @@ namespace ShamanMaths
     templated bool isinf(const Snum &n);
     templated bool isnan(const Snum &n);
     templated bool signbit(const Snum &n);
-}
-//using namespace ShamanMaths; // we need the mathematical functions in the open for some libraries such as std::complex
-
-// std + shaman (useful for instrumentation)
-#ifdef NO_SHAMAN
-namespace Sstd = std;
-#else
-namespace Sstd
-{
-    using namespace std;
-    using namespace Shaman;
-    using namespace ShamanMaths;
+    //methods
+    templated std::string to_string(const Snum &n);
+    template<typename T> const char* to_Cstring(const T &n);
 }
 #endif
 
