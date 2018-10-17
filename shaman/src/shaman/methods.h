@@ -37,6 +37,11 @@ templated inline numberType Snum::digits(numberType number, errorType error)
         // no error -> theorically infinite precision
         return INFINITY;
     }
+    else if (std::isnan(error))
+    {
+        // if the error reached nan, we can trust no digit
+        return 0;
+    }
     else if (number == 0)
     {
         // we count the number of significant zeroes
@@ -137,6 +142,10 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     if (std::isnan(n.number)) // not a number
     {
         os << "nan";
+    }
+    else if (std::isnan(error))
+    {
+        os << "~nan~";
     }
     else if (fdigits <= 0) // no significant digits
     {
