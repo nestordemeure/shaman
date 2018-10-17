@@ -143,7 +143,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     {
         os << "nan";
     }
-    else if (std::isnan(error))
+    else if (std::isnan(n.error))
     {
         os << "~nan~";
     }
