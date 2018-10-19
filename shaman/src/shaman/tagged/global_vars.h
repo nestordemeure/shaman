@@ -18,7 +18,7 @@ public:
     // used to model the stacktrace
     static std::vector<std::string> tagDecryptor; // array that associate tags (indexes) with block-names
     static const Tag tagIntegerCast;
-    static const Tag tagMain;
+    static const Tag tagUntagged;
     static std::unordered_map<std::string, Tag> nameEncryptor; // hashtable that associate block-names with tags
     thread_local static std::stack<Tag> tagStack; // contains the current stack
     static std::mutex mutexAddName; // guards against concurent addition of names in the encryptor/decryptor

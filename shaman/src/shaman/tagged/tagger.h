@@ -84,6 +84,6 @@ public:
 #define STR_CONCAT_HELPER(a,b) a ## b
 #define STR_CONCAT(a,b) STR_CONCAT_HELPER(a,b)
 #define FUNCTION_BLOCK CodeBlock STR_CONCAT(shamanFunctionBlock,__FUNCTION__)(__FUNCTION__)
-#define LOCAL_BLOCK(text) Block STR_CONCAT(shamanLocalBlock,__LINE__)(text)
+#define LOCAL_BLOCK(text) CodeBlock STR_CONCAT(shamanLocalBlock,__LINE__)(text)
 
 #endif //SHAMAN_TAGGER_H
