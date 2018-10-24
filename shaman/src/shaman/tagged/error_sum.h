@@ -31,10 +31,20 @@ public:
     /*
      * copy constructor
      * WARNING this constructor needs to do a deep copy (which is not the default)
+     * DANGER removing this constructor (since the template constructor should be enough to cover even the base errorType) will result in a memory leak
      */
     error_sum(const error_sum& errorSum2): errors(MemoryStore<errorType>::getVector())
     {
         errors->assign(errorSum2.errors->begin(), errorSum2.errors->end()); // assign insures that we do not drop the capacity (undefined behaviour for = operator)
+    }
+
+    /*
+     * copy constructor that allows construction from another errorType
+     */
+    template<typename errorType2>
+    error_sum(const error_sum<errorType2>& errorSum2): errors(MemoryStore<errorType>::getVector())
+    {
+        errors->assign(errorSum2.errors->begin(), errorSum2.errors->end());
     }
 
     /*
