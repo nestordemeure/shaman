@@ -211,20 +211,28 @@ public:
         }
 
         // collects the relevant data expressed in percent of the total error
-        std::vector<std::pair<Tag, int>> data;
+        std::vector<std::pair<Tag, errorType>> data;
         bool droppedNonSignificantTerms = false;
         for(int tag = 0; tag < errors->size(); tag++)
         {
             errorType error = (*errors)[tag];
-            int percent = (error*100.) / totalAbsoluteError;
 
-            if(std::abs(percent) >= minErrorPercent)
+            if (std::isnan(error))
             {
-                data.push_back(std::make_pair(tag, percent));
+                data.push_back(std::make_pair(tag, error));
             }
-            else if (error != 0)
+            else
             {
-                droppedNonSignificantTerms = true;
+                int percent = (error*100.) / totalAbsoluteError;
+
+                if(std::abs(percent) >= minErrorPercent)
+                {
+                    data.push_back(std::make_pair(tag, percent));
+                }
+                else if (error != 0)
+                {
+                    droppedNonSignificantTerms = true;
+                }
             }
         }
 
