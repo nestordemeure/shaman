@@ -170,6 +170,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
 
+    // os << std::setprecision(0) << " (n:" << n.number << " e:" << n.error << ") " << (std::string) n.errorComposants;
     os << ' ' << (std::string) n.errorComposants;
 
     return os;
