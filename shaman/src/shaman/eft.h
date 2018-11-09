@@ -20,6 +20,8 @@
  *
  * However it was shown that these EFT stay accurate even with directed rounding (toward infinite)
  * (Numerical validation of compensated algorithms with stochastic arithmetic)
+ *
+ * TODO does adding 'volatile' to terms that are 0 in infinite precision avoid having EFTs optimized away by compiler ?
  */
 
 namespace EFT
