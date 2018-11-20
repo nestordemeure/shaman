@@ -128,7 +128,7 @@ inline auto FUN (const T1& n1, const T2& n2, const S<N,E,P>& n3) -> SreturnType3
 //-----------------------------------------------------------------------------
 // MATHEMATICAL FUNCTIONS
 
-// isifnite
+// isfinite
 templated inline bool Sstd::isfinite(const Snum& n)
 {
     return std::isfinite(n.number);
