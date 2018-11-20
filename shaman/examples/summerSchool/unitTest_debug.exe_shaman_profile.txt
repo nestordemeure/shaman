@@ -1,0 +1,8 @@
+*** SHAMAN PROFILE ***
+-----
+3942	integrate<testConvergence(const RealType&)::__lambda1>(const __lambda1 &, RealType, RealType, unsigned int) (file integrate.hxx)
+3942		operator< <float, float, double> (line 50)
+-----
+144	testConvergence (file unitTest.cxx)
+75		operator-<float, float, double, int, int> (line 26)
+69		abs<float, float, double> (line 26)

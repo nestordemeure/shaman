@@ -28,7 +28,7 @@ namespace EFT
 {
     // basic EFT for a sum
     // WARNING requires rounding to nearest (see Priest)
-    // WARNING it could be optimized away by a compiler using associativity rules
+    // != 0 WARNING it could be optimized away by a compiler using associativity rules
     template<typename T>
     inline const T TwoSum(const T n1, const T n2, const T result)
     {

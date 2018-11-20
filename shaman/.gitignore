@@ -2,9 +2,15 @@
 *.idea
 *cmake-build-*
 *.nfs*
+<<<<<<< HEAD
 *.out
 *.data*
 *.a
 *.cmake
 *CMakeFiles*
 *CMakeCache.txt*
+=======
+*.dat
+*.exe
+*.out
+>>>>>>> d99b237c32cd2234dd746d21fd48e6b01abb837f
