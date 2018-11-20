@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="shaman"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="clang"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="shaman">
+				<Option output="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/shaman" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add option="-DUNSTABLE_BRANCH_DEBUGGER"/>
+					<Add option="-DCANCELATION_DEBUGGER"/>
+					<Add option="-DUNSTABLE_OP_DEBUGGER"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 shaman"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="shaman/fast">
+				<Option output="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/shaman" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add option="-DUNSTABLE_BRANCH_DEBUGGER"/>
+					<Add option="-DCANCELATION_DEBUGGER"/>
+					<Add option="-DUNSTABLE_OP_DEBUGGER"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 shaman/fast"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/legendre.h">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.cpp">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.h">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/sqrtHeron.h">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/various.h">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/main.cpp">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/shaman/Shaman.h">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/tests/test_eft.h">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/tests/test_loop.h">
+			<Option target="shaman"/>
+		</Unit>
+		<Unit filename="/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
