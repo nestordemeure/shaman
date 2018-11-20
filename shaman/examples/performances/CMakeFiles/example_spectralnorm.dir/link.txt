@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/example_spectralnorm.dir/spectralnorm.cpp.o  -o example_spectralnorm ../../src/libshaman.a 

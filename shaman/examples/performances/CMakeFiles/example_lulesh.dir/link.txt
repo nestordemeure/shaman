@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/example_lulesh.dir/lulesh.cpp.o  -o example_lulesh ../../src/libshaman.a 

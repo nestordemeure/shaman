@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/src/shaman/tagged/global_vars.cpp
+global_vars.h
+/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/src/shaman/tagged/global_vars.h
+
+/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/src/shaman/tagged/global_vars.h
+stack
+-
+string
+-
+vector
+-
+unordered_map
+-
+atomic
+-
+mutex
+-
+

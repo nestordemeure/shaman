@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/example_mandelbrot.dir/mandelbrot.cpp.o  -o example_mandelbrot ../../src/libshaman.a 

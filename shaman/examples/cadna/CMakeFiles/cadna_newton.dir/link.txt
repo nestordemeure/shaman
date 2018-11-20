@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/cadna_newton.dir/newton.cpp.o  -o cadna_newton ../../src/libshaman.a 

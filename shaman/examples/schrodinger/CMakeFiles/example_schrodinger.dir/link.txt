@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/example_schrodinger.dir/main.cpp.o CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o  -o example_schrodinger ../../src/libshaman.a 

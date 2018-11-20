@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/example_nbody.dir/nbody.cpp.o  -o example_nbody ../../src/libshaman.a 

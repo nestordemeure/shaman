@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/cadna_gauss.dir/gauss.cpp.o  -o cadna_gauss ../../src/libshaman.a 
