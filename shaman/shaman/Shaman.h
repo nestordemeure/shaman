@@ -157,8 +157,8 @@ namespace Sstd
     templated const Snum hypot(const Snum& n1, const Snum& n2);
     templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3);
     templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3);
-    templated bool isfinite(const Snum& n);
-    templated bool isnan(const Snum& n);
+    //templated bool isfinite(const Snum& n); // could cause conflict with the C isfinite macro
+    //templated bool isnan(const Snum& n); // could cause conflict with the C isnan macro
     using namespace std;
 }
 #endif
@@ -197,14 +197,14 @@ using Slong_double = S<long double, long double, long double>;
 #pragma omp declare reduction(*:Slong_double: omp_out=omp_in*omp_out)	        initializer(omp_priv=Slong_double(1.L))
 
 // max
-#pragma omp declare reduction(max:Sfloat : omp_out=max(omp_in,omp_out))	        initializer(omp_priv=Sfloat(std::numeric_limits<float>::lowest()))
-#pragma omp declare reduction(max:Sdouble : omp_out=max(omp_in,omp_out))        initializer(omp_priv=Sdouble(std::numeric_limits<double>::lowest()))
-#pragma omp declare reduction(max:Slong_double : omp_out=max(omp_in,omp_out))   initializer(omp_priv=Slong_double(std::numeric_limits<long double>::lowest()))
+#pragma omp declare reduction(max:Sfloat : omp_out=Sstd::max(omp_in,omp_out))	        initializer(omp_priv=Sfloat(std::numeric_limits<float>::lowest()))
+#pragma omp declare reduction(max:Sdouble : omp_out=Sstd::max(omp_in,omp_out))        initializer(omp_priv=Sdouble(std::numeric_limits<double>::lowest()))
+#pragma omp declare reduction(max:Slong_double : omp_out=Sstd::max(omp_in,omp_out))   initializer(omp_priv=Slong_double(std::numeric_limits<long double>::lowest()))
 
 // min
-#pragma omp declare reduction(min:Sfloat : omp_out=min(omp_in,omp_out))	        initializer(omp_priv=Sfloat(std::numeric_limits<float>::max()))
-#pragma omp declare reduction(min:Sdouble : omp_out=min(omp_in,omp_out))        initializer(omp_priv=Sdouble(std::numeric_limits<double>::max()))
-#pragma omp declare reduction(min:Slong_double : omp_out=min(omp_in,omp_out))   initializer(omp_priv=Slong_double(std::numeric_limits<long double>::max()))
+#pragma omp declare reduction(min:Sfloat : omp_out=Sstd::min(omp_in,omp_out))	        initializer(omp_priv=Sfloat(std::numeric_limits<float>::max()))
+#pragma omp declare reduction(min:Sdouble : omp_out=Sstd::min(omp_in,omp_out))        initializer(omp_priv=Sdouble(std::numeric_limits<double>::max()))
+#pragma omp declare reduction(min:Slong_double : omp_out=Sstd::min(omp_in,omp_out))   initializer(omp_priv=Slong_double(std::numeric_limits<long double>::max()))
 
 #endif //_OPENMP
 
