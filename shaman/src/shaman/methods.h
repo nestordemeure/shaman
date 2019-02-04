@@ -92,15 +92,7 @@ templated inline bool Snum::non_significant(numberType number, errorType error)
  */
 templated inline bool Snum::non_significant() const
 {
-<<<<<<< HEAD:shaman/src/shaman/methods.h
     return non_significant(number, error);
-=======
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    return isNumericalZero;
-    #else
-    return non_significant(number, error);
-    #endif
->>>>>>> d99b237c32cd2234dd746d21fd48e6b01abb837f:shaman/shaman/src/Methods.h
 }
 
 /*
