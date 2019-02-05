@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/main.cpp" "/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.o"
   "/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.cpp" "/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "Clang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

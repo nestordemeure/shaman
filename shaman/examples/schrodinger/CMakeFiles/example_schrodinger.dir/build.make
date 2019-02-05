@@ -34,10 +34,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/cmake/installdir/bin/cmake
+CMAKE_COMMAND = /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/clion-2018.2.2/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/cmake/installdir/bin/cmake -E remove -f
+RM = /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/clion-2018.2.2/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -60,28 +60,28 @@ include examples/schrodinger/CMakeFiles/example_schrodinger.dir/flags.make
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.o: examples/schrodinger/CMakeFiles/example_schrodinger.dir/flags.make
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.o: examples/schrodinger/main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.o"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/example_schrodinger.dir/main.cpp.o -c /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/main.cpp
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/example_schrodinger.dir/main.cpp.o -c /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/main.cpp
 
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/example_schrodinger.dir/main.cpp.i"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/main.cpp > CMakeFiles/example_schrodinger.dir/main.cpp.i
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/main.cpp > CMakeFiles/example_schrodinger.dir/main.cpp.i
 
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/example_schrodinger.dir/main.cpp.s"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/main.cpp -o CMakeFiles/example_schrodinger.dir/main.cpp.s
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/main.cpp -o CMakeFiles/example_schrodinger.dir/main.cpp.s
 
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o: examples/schrodinger/CMakeFiles/example_schrodinger.dir/flags.make
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o: examples/schrodinger/schrodinger.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o -c /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.cpp
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/example_schrodinger.dir/schrodinger.cpp.o -c /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.cpp
 
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/example_schrodinger.dir/schrodinger.cpp.i"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.cpp > CMakeFiles/example_schrodinger.dir/schrodinger.cpp.i
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.cpp > CMakeFiles/example_schrodinger.dir/schrodinger.cpp.i
 
 examples/schrodinger/CMakeFiles/example_schrodinger.dir/schrodinger.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/example_schrodinger.dir/schrodinger.cpp.s"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.cpp -o CMakeFiles/example_schrodinger.dir/schrodinger.cpp.s
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/schrodinger/schrodinger.cpp -o CMakeFiles/example_schrodinger.dir/schrodinger.cpp.s
 
 # Object files for target example_schrodinger
 example_schrodinger_OBJECTS = \

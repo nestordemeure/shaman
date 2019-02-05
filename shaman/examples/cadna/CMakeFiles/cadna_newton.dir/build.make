@@ -34,10 +34,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/cmake/installdir/bin/cmake
+CMAKE_COMMAND = /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/clion-2018.2.2/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/cmake/installdir/bin/cmake -E remove -f
+RM = /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/clion-2018.2.2/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -60,15 +60,15 @@ include examples/cadna/CMakeFiles/cadna_newton.dir/flags.make
 examples/cadna/CMakeFiles/cadna_newton.dir/newton.cpp.o: examples/cadna/CMakeFiles/cadna_newton.dir/flags.make
 examples/cadna/CMakeFiles/cadna_newton.dir/newton.cpp.o: examples/cadna/newton.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object examples/cadna/CMakeFiles/cadna_newton.dir/newton.cpp.o"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cadna_newton.dir/newton.cpp.o -c /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna/newton.cpp
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cadna_newton.dir/newton.cpp.o -c /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna/newton.cpp
 
 examples/cadna/CMakeFiles/cadna_newton.dir/newton.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cadna_newton.dir/newton.cpp.i"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna/newton.cpp > CMakeFiles/cadna_newton.dir/newton.cpp.i
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna/newton.cpp > CMakeFiles/cadna_newton.dir/newton.cpp.i
 
 examples/cadna/CMakeFiles/cadna_newton.dir/newton.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cadna_newton.dir/newton.cpp.s"
-	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna/newton.cpp -o CMakeFiles/cadna_newton.dir/newton.cpp.s
+	cd /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna && /ccc/dsku/nfs-server/temp_user/cont001/ocre/demeuren/spack/opt/spack/linux-centos7-x86_64/gcc-7.3.0/llvm-7.0.0rc3-6rek55lmxxbb64s6iksq453xh5zbvyov/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna/newton.cpp -o CMakeFiles/cadna_newton.dir/newton.cpp.s
 
 # Object files for target cadna_newton
 cadna_newton_OBJECTS = \
