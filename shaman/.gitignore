@@ -1,6 +1,7 @@
 #
 *.dat
 *.data*
+*.nfs*
 
 # Created by https://www.gitignore.io/api/vim,c++,clion,cmake,emacs,eclipse
 # Edit at https://www.gitignore.io/?templates=vim,c++,clion,cmake,emacs,eclipse
