@@ -45,7 +45,7 @@ templated inline numberType Snum::digits(numberType number, errorType error)
     else if (number == 0)
     {
         // we count the number of significant zeroes
-        return std::max(errorType(0), -log10(std::abs(error)) - 1);
+        return std::max(errorType(0), -std::log10(std::abs(error)) - 1);
     }
     else
     {
