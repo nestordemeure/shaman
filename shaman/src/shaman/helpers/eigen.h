@@ -2,19 +2,16 @@
 // Created by demeuren on 06/03/18.
 //
 
-#ifndef SHAMAN_DEMO_SHAMAN_EIGEN_H
-#define SHAMAN_DEMO_SHAMAN_EIGEN_H
+#pragma  once
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
-//#include <thirdparty/eigen-3.3.2/unsupported/Eigen/MatrixFunctions>
-#include "../Shaman.h"
 
 namespace Eigen
 {
     /*
      * adds Slong_double to eigen
-     * TODO NumTraits<long double> should give us the epsilon, dummy_precision, lowest and highest functions
+     * NumTraits<long double> give us the epsilon, dummy_precision, lowest and highest functions
      */
     template<>
     struct NumTraits<Slong_double> : NumTraits<long double>
@@ -27,7 +24,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 0,
+            RequireInitialization = 1,  // needed to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
@@ -49,7 +46,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 0,
+            RequireInitialization = 1,  // needed to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
@@ -71,7 +68,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 0,
+            RequireInitialization = 1,  // needed to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
@@ -156,7 +153,8 @@ namespace Eigen
     typedef Eigen::Matrix<Sfloat, Eigen::Dynamic, 1> SVectorXf;
 
     /*
-     * TODO adds global arrays typedefs
+     * adds global arrays typedefs
+     * TODO add missing typedefs
      * see : https://eigen.tuxfamily.org/dox/Array_8h_source.html
      */
     typedef Eigen::Array<Sfloat, Eigen::Dynamic, Eigen::Dynamic> SArrayXXf;
@@ -166,6 +164,7 @@ namespace Eigen
 
     /*
      * overload functions from the unsupported section of Eigen
+     * TODO define in a file dedicaced to eigen/unsupported ?
      */
     /*
     namespace internal
@@ -242,7 +241,7 @@ namespace Eigen
  */
 inline const Slong_double &conj(const Slong_double &x) { return x; }
 inline const Slong_double &real(const Slong_double &x) { return x; }
-inline Slong_double imag(const Slong_double &) { return 0.; }
+inline Slong_double imag(const Slong_double &) { return 0.L; }
 inline Slong_double abs2(const Slong_double &x) { return x * x; }
 
 /*
@@ -260,5 +259,3 @@ inline const Sfloat &conj(const Sfloat &x) { return x; }
 inline const Sfloat &real(const Sfloat &x) { return x; }
 inline Sfloat imag(const Sfloat &) { return 0.f; }
 inline Sfloat abs2(const Sfloat &x) { return x * x; }
-
-#endif //SHAMAN_DEMO_SHAMAN_EIGEN_H

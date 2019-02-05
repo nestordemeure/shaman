@@ -68,7 +68,7 @@ Sdouble legendreNaive(Sdouble x)
     for (int i = 20; i >= 0; i--)
     {
         Sdouble coef = legendre20[i];
-        result += coef * pow(x,Sdouble(i));
+        result += coef * Sstd::pow(x,Sdouble(i));
     }
 
     return result;

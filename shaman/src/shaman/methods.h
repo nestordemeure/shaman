@@ -2,14 +2,14 @@
 // Created by demeuren on 02/05/18.
 //
 
-#ifndef SHAMAN_SIGNIFICATIVITY_H
-#define SHAMAN_SIGNIFICATIVITY_H
+#pragma once
 
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <cmath>
-#include "../Shaman.h"
+
+#include <shaman/tagged/global_vars.h>
 
 //-----------------------------------------------------------------------------
 // HIGH PRECISION APPROXIMATION
@@ -36,6 +36,11 @@ templated inline numberType Snum::digits(numberType number, errorType error)
     {
         // no error -> theorically infinite precision
         return INFINITY;
+    }
+    else if (std::isnan(error))
+    {
+        // if the error reached nan, we can trust no digit
+        return 0;
     }
     else if (number == 0)
     {
@@ -66,12 +71,12 @@ templated inline numberType Snum::digits() const
 }
 
 //-----------------------------------------------------------------------------
-// UNSTABILITY DETECTION
+// SIGNIFICATIVITY TEST
 
 /*
- * returns true if the couple (number,error) has no significative digits in the base
+ * returns true if the couple (number,error) has no significant digits in the base
  *
- * NOTE : 'error != 0' is facultative
+ * NOTE : 'error != 0' is optional
  * it slightly improves the performances on some test cases
  * since it is common to have numbers with 0 error
  * (any number that just been turned into a S)
@@ -79,8 +84,7 @@ templated inline numberType Snum::digits() const
 templated inline bool Snum::non_significant(numberType number, errorType error)
 {
     int base = 10;
-    return (error != 0) &&
-           (std::abs(number) < base * std::abs(error));
+    return (error != 0) && (std::abs(number) < base * std::abs(error));
 }
 
 /*
@@ -88,47 +92,39 @@ templated inline bool Snum::non_significant(numberType number, errorType error)
  */
 templated inline bool Snum::non_significant() const
 {
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    return isNumericalZero;
-    #else
     return non_significant(number, error);
-    #endif
 }
 
 /*
- * return the Snum with the lowest precision
+ * function called at each unstability
+ * put a breakpoint here to break at each unstable tests
+ *
+ * TODO we could use the block name as a form of stack trace to locate the unstability
  */
-templated inline Snum Snum::minPrecision(const Snum &n1, const Snum &n2)
+void Shaman::unstability()
 {
-    if (std::abs(n1.error * n2.number) > std::abs(n1.number * n2.error))
+    ShamanGlobals::unstableBranchCounter++;
+}
+
+/*
+ * check wether a branch is unstable
+ * in wihci case it triggers the unstability function
+ */
+templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
+{
+    bool isUnstable = non_significant(n1.number - n2.number, n1.error - n2.error);
+    if(isUnstable)
     {
-        return n1;
-    }
-    else
-    {
-        return n2;
+        Shaman::unstability();
     }
 }
 
 /*
- * detects cancelations
+ * displays the number of unstable branches
  */
-templated inline bool Snum::isCancelation(const Snum &n, numberType result, errorType resultingError)
+inline void Shaman::displayUnstableBranches()
 {
-    int cancel_level = 4;
-    int base = 10;
-
-    // have we lost more than cancel_level significative digits ?
-    return (n.error != 0) &&
-           (std::abs(resultingError * n.number) > pow(base, cancel_level) * std::abs(n.error * result));
-}
-
-/*
- * detects unstable branchings
- */
-templated inline bool Snum::isUnstableBranchings(const Snum &n1, const Snum &n2)
-{
-    return non_significant(n1.number - n2.number, n1.error - n2.error);
+    std::cout << "#SHAMAN: " << "We detected " << ShamanGlobals::unstableBranchCounter << " unstable tests." << std::endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -140,15 +136,16 @@ templated inline bool Snum::isUnstableBranchings(const Snum &n1, const Snum &n2)
  */
 templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 {
-    // raw information :
-    //os << n.number << " (error:" << n.error << " digits:" << Snum::digits(n) << ')';
-
     int nbDigitsMax = std::numeric_limits<numberType>::digits10 + 2; // since this is a maximum, we add two to avoid being too pessimistic (17 for double)
     numberType fdigits = std::floor(n.digits());
 
     if (std::isnan(n.number)) // not a number
     {
         os << "nan";
+    }
+    else if (std::isnan(n.error))
+    {
+        os << "~nan~";
     }
     else if (fdigits <= 0) // no significant digits
     {
@@ -158,7 +155,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         if ((std::abs(n.number) >= 1) || (digits <= 0))
         {
             // the number has no meaning
-            os << "~numerical-noise~"; // TODO is it better to use CADNA notation : "@.0" ?
+            os << "~numerical-noise~";
         }
         else
         {
@@ -173,27 +170,10 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
 
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    if (n.doubtLevel > 0)
-    {
-        os << " (#unstabilities=" << n.doubtLevel << ')';
-    }
-    #endif
+    // os << std::setprecision(0) << " (n:" << n.number << " e:" << n.error << ") " << (std::string) n.errorComposants;
+    os << ' ' << (std::string) n.errorComposants;
 
     return os;
-}
-
-/*
- * convert a Snum into a string
- *
- * using the streaming operator
- * there is probably a more efficient implementation but it was the easiest way to benefit from std::scientific and std::setprecision
- */
-templated Snum::operator std::string() const
-{
-    std::ostringstream stream;
-    stream << this;
-    return stream.str();
 }
 
 /*
@@ -207,10 +187,42 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 
     // modifies the Snum in place
     n.number = num;
-    n.error = 0;
+    n.errorComposants = Serror(0);
 
     return is;
 }
 
-//-----------------------------------------------------------------------------
-#endif //SHAMAN_SIGNIFICATIVITY_H
+/*
+ * method to convert a Snum into a string
+ *
+ * using the streaming operator
+ * there is probably a more efficient implementation but it was the easiest way to benefit from std::scientific and std::setprecision
+ */
+templated std::string Snum::to_string() const
+{
+    std::ostringstream stream;
+    stream << this;
+    return stream.str();
+}
+
+/*
+ * function to convert a Snum into a string
+ *
+ * NOTE : code duplicated from .to_string()
+ */
+templated inline std::string Sstd::to_string(const Snum& n)
+{
+    std::ostringstream stream;
+    stream << n;
+    return stream.str();
+};
+
+/*
+ * convert a value into a C string (const char *)
+ */
+template<typename T>
+inline const char* Sstd::to_Cstring(const T &n)
+{
+    return Sstd::to_string(n).c_str();
+};
+

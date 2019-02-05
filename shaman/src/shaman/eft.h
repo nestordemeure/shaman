@@ -1,6 +1,7 @@
 #ifndef SHAMAN_EFT_H
 #define SHAMAN_EFT_H
 
+#include <utility> // for std::swap
 #include <cmath>
 
 /*
@@ -9,7 +10,7 @@
  * gives us the exact error|remainder of an arithmetic operation using :
  * - twoSum for + (might be killed by aggressive compilation)
  * - std::fma for *, /, sqrt (reliable independent of the compilations flags)
- * - fastTwoSum for shaman::fma via errorFma (rarely|never useful, might be killed by aggressive compilation)
+ * - fastTwoSum for src::fma via errorFma (rarely|never useful, might be killed by aggressive compilation)
  *
  * NOTE :
  * see the handbook of floating point arithmetic for an exact analysis
@@ -19,12 +20,15 @@
  *
  * However it was shown that these EFT stay accurate even with directed rounding (toward infinite)
  * (Numerical validation of compensated algorithms with stochastic arithmetic)
+ *
+ * TODO does adding 'volatile' to terms that are 0 in infinite precision avoid having EFTs optimized away by compiler ?
  */
 
 namespace EFT
 {
     // basic EFT for a sum
     // WARNING requires rounding to nearest (see Priest)
+    // != 0 WARNING it could be optimized away by a compiler using associativity rules
     template<typename T>
     inline const T TwoSum(const T n1, const T n2, const T result)
     {

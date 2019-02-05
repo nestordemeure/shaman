@@ -15,7 +15,7 @@
  * inspired by :
  * https://github.com/wesleykendall/mpitutorial/blob/gh-pages/tutorials/mpi-reduce-and-allreduce/code/reduce_avg.c
  *
- * TODO we should send a shaman type, get it back and check wether it was modified by MPI
+ * TODO we should send a src type, get it back and check wether it was modified by MPI
  * compile with mpic++, run with mpirun
  */
 void mpiSum(int size)
@@ -61,14 +61,14 @@ void mpiSum(int size)
     {
         local_par_sum += x;
     }
-    std::cout << "local shaman sum\t:\t" << local_par_sum << "\tprocess:" << (world_rank+1)  << '/' << world_size << std::endl;
+    std::cout << "local src sum\t:\t" << local_par_sum << "\tprocess:" << (world_rank+1)  << '/' << world_size << std::endl;
 
     // Reduce all of the local sums into the global sum
     Sdouble global_par_sum;
     MPI_Reduce(&local_par_sum, &global_par_sum, 1, MPI_SDOUBLE, MPI_SSUM, 0, MPI_COMM_WORLD);
     if (world_rank == 0)
     {
-        std::cout << "global shaman sum\t:\t" << global_par_sum << std::endl;
+        std::cout << "global src sum\t:\t" << global_par_sum << std::endl;
     }
 
     MPI_Barrier(MPI_COMM_WORLD);

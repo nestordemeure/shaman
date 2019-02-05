@@ -35,6 +35,7 @@ void Compensatedsum(int size)
     std::vector<double> data(size);
     generate(begin(data), end(data), gen);
 
+    LOCAL_BLOCK("loop");
     // usual sum
     Sdouble sum = 0.0;
     // kahan sum
@@ -43,7 +44,7 @@ void Compensatedsum(int size)
     // improved kahan sum
     Sdouble improvedSum = 0.0;
     Sdouble compensation2 = 0.0;
-    for(double x : data)
+    for(Sdouble x : data)
     {
         // usual sum
         sum += x;
@@ -56,7 +57,7 @@ void Compensatedsum(int size)
 
         // improved kahan
         Sdouble t2 = improvedSum + x;
-        if( fabs(improvedSum) >= fabs(x) )
+        if(Sstd::abs(improvedSum) >= Sstd::abs(x))
         {
             compensation2 += (improvedSum - t2) + x;
         }
@@ -66,6 +67,8 @@ void Compensatedsum(int size)
         }
         improvedSum = t2;
     }
+
+    LOCAL_BLOCK("final_compensation");
     improvedSum += compensation2;
 
     std::cout << "sum: " << sum << std::endl;

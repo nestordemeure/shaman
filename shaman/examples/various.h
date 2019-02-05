@@ -11,43 +11,6 @@
 //---------------------------------------------------------------------------------------
 // FUNCTIONS
 
-/*
- * displays the absolute difference between a computed value and the expected value
- */
-template<typename numberType, typename errorType, typename preciseType>
-inline void displayError(S<numberType,errorType,preciseType> result, double expectedResult)
-{
-    double error = result.number - expectedResult;
-    double digits = -log10(std::abs(error / result.number));
-    double estimatedDigits = result.digits();
-
-    std::cout << "result=" << result << " (" << result.number << ')'
-              << '\n'
-              << " absolut_error=" << error
-              << " estimated_absolut_error=" << result.error
-              << '\n'
-              << " significativ_digits=" << digits
-              << " estimated_significativ_digits=" << estimatedDigits
-              << '\n' << std::endl;
-}
-
-/*
- * displays the absolute difference between a computed value and the expected value
- */
-template<typename T> inline void displayError(T result, double expectedResult)
-{
-    double fresult = result;
-    double error = fresult - expectedResult;
-    double digits = -log10(std::abs(error / fresult));
-
-    std::cout << "result=" << result
-              << std::endl
-              << " absolut_error=" << error
-              << std::endl
-              << " significativ_digits=" << digits
-              << '\n' << std::endl;
-}
-
 //---------------------------------------------------------------------------------------
 // TESTS
 
@@ -153,7 +116,7 @@ inline Sdouble identity(Sdouble x)
         x = x*x;
 
         //Sdouble xTarget = pow(xinit,1./pow(2,128-i));
-        //std::cout << x << " (number=" << x.number << " error=" << x.error << ")" << '\t' << xTarget << std::endl;
+        //std::cout << x << " (number=" << x.number << " errors=" << x.errors << ")" << '\t' << xTarget << std::endl;
         //std::cout << x << std::endl;
     }
 
@@ -170,7 +133,7 @@ inline Sdouble identity(Sdouble x)
  * MCA fail to detect problems around 0
  * (we might detect such comportment by analysing the sensitivity to perturbations in inputs)
  *
- * SHAMAN detects problems if we use the full form of the multiplication error : x1*e2 + x2*e1 + e1*e2
+ * SHAMAN detects problems if we use the full form of the multiplication errors : x1*e2 + x2*e1 + e1*e2
  * and not the abreviated form used by Rump (x1*e2 + x2*e1)
  */
 inline void kahanIdentity()
