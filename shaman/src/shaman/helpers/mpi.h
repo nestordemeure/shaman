@@ -1,3 +1,9 @@
+//
+// Created by demeuren on 05/07/18.
+//
+
+#pragma once
+
 #include <mpi.h>
 #include <cstddef>
 
@@ -6,8 +12,8 @@
  * - include Shaman_mpi.h
  * - replace 'MPI_Init' with 'MPI_Shaman_Init'
  * - replace 'MPI_Finalize' with 'MPI_Shaman_Finalize'
- * - use the shaman MPI types ('MPI_FLOAT' -> 'MPI_SFLOAT')
- * - use the shaman MPI operations ('MPI_SUM' -> 'MPI_SSUM')
+ * - use the src MPI types ('MPI_FLOAT' -> 'MPI_SFLOAT')
+ * - use the src MPI operations ('MPI_SUM' -> 'MPI_SSUM')
  */
 
 //-------------------------------------------------------------------------------------------------
@@ -22,7 +28,7 @@ MPI_Datatype MPI_SDOUBLE;
 MPI_Datatype MPI_SLONG_DOUBLE;
 
 /*
- * builds an MPI type around a shaman type
+ * builds an MPI type around a src type
  * TODO we could automatically deduce the required MPI_Datatypes
  *
  * simpler solution for a type being just two identical types :
@@ -31,13 +37,7 @@ MPI_Datatype MPI_SLONG_DOUBLE;
 template<typename ShamanType>
 int MPI_Type_shaman(MPI_Datatype numberType, MPI_Datatype errorType, MPI_Datatype* newType)
 {
-    int structlen = 2;
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    structlen++;
-    #endif
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    structlen++;
-    #endif
+    int structlen = 3;
     int blocklengths[structlen];
     MPI_Datatype types[structlen];
     MPI_Aint displacements[structlen];
@@ -55,21 +55,14 @@ int MPI_Type_shaman(MPI_Datatype numberType, MPI_Datatype errorType, MPI_Datatyp
     displacements[blockNum] = offsetof(ShamanType,error);
     blockNum++;
 
-    // isNumericalZero
-    #ifdef NUMERICAL_ZERO_FIELD_ENABLED
-    blocklengths[blockNum] = 1;
-    types[blockNum] = MPI_SBOOL;
-    displacements[blockNum] = offsetof(ShamanType,isNumericalZero);
-    blockNum++;
-    #endif
-
-    // doubtLevel
-    #ifdef DOUBT_LEVEL_FIELD_ENABLED
-    blocklengths[blockNum] = 1;
-    types[blockNum] = MPI_INT;
-    displacements[blockNum] = offsetof(ShamanType,doubtLevel);
-    blockNum++;
-    #endif
+    // error composants
+    // TODO how to send pointer to vector properly
+    // - send the vector
+    // - receive a vector and create a pointer ?
+    // - send the top n error terms by default and drop the others
+    //   takes 2*nspace but can be anticipated
+    // - create a pair of encrypt/decrypt functions to be used before sending data
+    //   they would flatten then data into [number;error;error_term0;error_term1;...] (this format requires knowing the number of error terms to be decrypted)
 
     return MPI_Type_create_struct(structlen, blocklengths, displacements, types, newType);
 }
@@ -97,7 +90,6 @@ MPI_Op MPI_SPROD;
 
 /*
  * test the type to apply the operation with the correct cast
- *
  * TODO could fallback to MPI operations on predefined types
  */
 #define shamanToMpiUserFunction(invec,inoutvec,len,datatype,operation)\
@@ -148,14 +140,14 @@ void MPI_sprod( void *invec, void *inoutvec, int *len, MPI_Datatype *datatype)
 // INIT / FINALIZE
 
 /*
- * runs MPI_Init and defines shaman types
+ * runs MPI_Init and defines src types
  */
 int MPI_Shaman_Init(int argc, char **argv )
 {
     // init MPI
     int errorValue = MPI_Init(&argc, &argv);
 
-    #ifdef NO_SHAMAN
+#ifdef NO_SHAMAN
     MPI_SFLOAT = MPI_FLOAT;
     MPI_SDOUBLE = MPI_DOUBLE;
     MPI_SLONG_DOUBLE = MPI_LONG_DOUBLE;
@@ -163,12 +155,9 @@ int MPI_Shaman_Init(int argc, char **argv )
     MPI_SMIN = MPI_MIN;
     MPI_SSUM = MPI_SUM;
     MPI_SPROD = MPI_PROD;
-    #else
+#else
     if (errorValue == MPI_SUCCESS)
     {
-        // bool
-        MPI_Type_contiguous(sizeof(bool), MPI_BYTE, &MPI_SBOOL);
-        MPI_Type_commit(&MPI_SBOOL);
         // Sfloat
         MPI_Type_shaman<Sfloat>(MPI_FLOAT, MPI_FLOAT, &MPI_SFLOAT);
         MPI_Type_commit(&MPI_SFLOAT);
@@ -187,18 +176,17 @@ int MPI_Shaman_Init(int argc, char **argv )
         MPI_Op_create(&MPI_sprod, isCommutative, &MPI_SPROD);
 
     }
-    #endif //NO_SHAMAN
+#endif //NO_SHAMAN
 
     return errorValue;
 }
 
 /*
- * frees shaman types and finalize MPI
+ * frees src types and finalize MPI
  */
 int MPI_Shaman_Finalize()
 {
-    #ifndef NO_SHAMAN
-
+#ifndef NO_SHAMAN
     // free types
     MPI_Type_free(&MPI_SBOOL);
     MPI_Type_free(&MPI_SFLOAT);
@@ -210,48 +198,7 @@ int MPI_Shaman_Finalize()
     MPI_Op_free(&MPI_SMIN);
     MPI_Op_free(&MPI_SSUM);
     MPI_Op_free(&MPI_SPROD);
-
-    #ifdef NUMERICAL_DEBUGGER_ENABLED
-    // gets the process number
-    int processNumber;
-    MPI_Comm_rank(MPI_COMM_WORLD, &processNumber);
-
-    // sum the unstability counts
-    int unstabilityCount_red;
-    int unstablePowerFunctions_red;
-    int unstableDivisions_red;
-    int unstableMultiplications_red;
-    int unstableFunctions_red;
-    int unstableBranchings_red;
-    int cancelations_red;
-    int restorations_red;
-    int numericalZeros_red;
-    MPI_Reduce(&NumericalDebugger::unstabilityCount, &unstabilityCount_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&NumericalDebugger::unstablePowerFunctions, &unstablePowerFunctions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&NumericalDebugger::unstableDivisions, &unstableDivisions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&NumericalDebugger::unstableMultiplications, &unstableMultiplications_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&NumericalDebugger::unstableFunctions, &unstableFunctions_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&NumericalDebugger::unstableBranchings, &unstableBranchings_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&NumericalDebugger::cancelations, &cancelations_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&NumericalDebugger::restorations, &restorations_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&NumericalDebugger::numericalZeros, &numericalZeros_red, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    NumericalDebugger::unstabilityCount = unstabilityCount_red;
-    NumericalDebugger::unstablePowerFunctions = unstablePowerFunctions_red;
-    NumericalDebugger::unstableDivisions = unstableDivisions_red;
-    NumericalDebugger::unstableMultiplications = unstableMultiplications_red;
-    NumericalDebugger::unstableFunctions = unstableFunctions_red;
-    NumericalDebugger::unstableBranchings = unstableBranchings_red;
-    NumericalDebugger::cancelations = cancelations_red;
-    NumericalDebugger::restorations = restorations_red;
-    NumericalDebugger::numericalZeros = numericalZeros_red;
-
-    // deactivate display on all process but the main one
-    if (processNumber != 0)
-    {
-        NumericalDebugger::shouldDisplay = false;
-    }
-    #endif //NUMERICAL_DEBUGGER_ENABLED
-    #endif //NO_SHAMAN
+#endif //NO_SHAMAN
 
     return MPI_Finalize();
 }
@@ -265,6 +212,9 @@ int MPI_Shaman_Finalize()
  * examples :
  * http://pages.tacc.utexas.edu/~eijkhout/pcse/html/mpi-data.html
  * http://mpitutorial.com/tutorials/mpi-reduce-and-allreduce/
- *
  * TODO works as long as the Shaman types have the declared size
+ *
+ * see also MPI_Pack and MPI_Unpack
  */
+
+

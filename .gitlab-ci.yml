@@ -1,0 +1,37 @@
+image: alpine:edge
+before_script:
+   - apk add --no-cache build-base cmake gtest gtest-dev
+
+stages:
+  - build
+  - build_opt
+
+Build-gcc-release:
+  stage: build
+  script:
+    - apk add --no-cache gcc
+    - mkdir -p buildir
+    - cd buildir
+    - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ../shaman
+    - cmake --build .
+    - ctest -V -R 'unit:.*'
+
+Build-clang-release:
+  stage: build
+  script:
+    - apk add --no-cache clang
+    - mkdir -p buildir
+    - cd buildir
+    - cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=RelWithDebInfo ../shaman
+    - cmake --build .
+    - ctest -V -R 'unit:.*'
+
+#Build_opt-gcc:
+#  stage: build_opt
+#  script:
+#    - apk add --no-cache gcc
+#    - mkdir -p buildir
+#    - cd buildir
+#    - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-O3 -ffast-math" ../shaman
+#    - cmake --build .
+#    - ctest -V -R 'unit:.*'

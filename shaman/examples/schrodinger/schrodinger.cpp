@@ -31,6 +31,7 @@ Schrodinger::Schrodinger()
  */
 Sdouble Schrodinger::calculateKSSquared(int n)
 {
+    FUNCTION_BLOCK;
     //number x = (hZero * n) + xMin;
     Sdouble x = (((double) n)*xMax + xMin*((double) numberDivisions-n)) / ((double) numberDivisions);
     return ((0.05 * ECurrent) - ((x*x) * 5.63e-3));
@@ -41,13 +42,14 @@ Sdouble Schrodinger::calculateKSSquared(int n)
  */
 Sdouble Schrodinger::calculateNextPsi(int n)
 {
+    FUNCTION_BLOCK;
     Sdouble KSqNMinusOne = calculateKSSquared(n - 1);
     Sdouble KSqN = calculateKSSquared(n);
     Sdouble KSqNPlusOne = calculateKSSquared(n + 1);
 
     Sdouble nextPsi = 2.0 * (1.0 - (5.0 * hZero * hZero * KSqN / 12.0)) * psi[n];
-    nextPsi = nextPsi - (1.0 + (hZero * hZero * KSqNMinusOne / 12.0)) * psi[n-1];
-    nextPsi = nextPsi / (1.0 + (hZero * hZero * KSqNPlusOne / 12.0));
+    nextPsi -= (1.0 + (hZero * hZero * KSqNMinusOne / 12.0)) * psi[n-1];
+    nextPsi /= (1.0 + (hZero * hZero * KSqNPlusOne / 12.0));
 
     return nextPsi;
 }
@@ -59,6 +61,7 @@ Sdouble Schrodinger::calculateNextPsi(int n)
  */
 void Schrodinger::calculate()
 {
+    FUNCTION_BLOCK;
     unsigned int k = 0;
 
     // if abs(psi[200]) < maximum allowed psi, we have the answer, our guess for the energy is correct
@@ -74,15 +77,18 @@ void Schrodinger::calculate()
         // if abs(psi[200]) > maximum allowed psi && psi[200] > 0, we need to subtract deltaE and try again
         if (psi[numberDivisions] > 0.0)
         {
-            ECurrent = ECurrent - EDelta;
+            ECurrent -= EDelta;
         }
         // if abs(psi[200]) > maximum allowed psi && psi[200] < 0, we need to add deltaE and try again
         else
         {
-            ECurrent = ECurrent + EDelta;
+            ECurrent += EDelta;
         }
 
-        //std::cout << k << " Psi200: " << psi[numberDivisions] << " E: " << ECurrent << '\n';
+        if(k % 500 == 0)
+        {
+            std::cout << k << " Psi200: " << psi[numberDivisions] << " E: " << ECurrent << '\n';
+        }
     }
 
     std::cout << "The ground state energy is " << ECurrent << " MeV (analytic solution : 1.5 MeV, psi : " << psi[numberDivisions] << ")." << std::endl;

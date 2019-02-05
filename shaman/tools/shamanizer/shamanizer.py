@@ -1,10 +1,10 @@
 
-# SHAMANIZER : a python3 program that makes any C++ code shaman compatible
+# SHAMANIZER : a python3 program that makes any C++ code src compatible
 #
 # work on a given file or on all the .c/.cpp/.h/.hpp in a given folder
 # for each source file if it contains float/double/long double
 #   replace the types
-#   load shaman.h at the begining of the file
+#   load src.h at the begining of the file
 #   if it contains a printf
 #       replace printf with tfm::printf
 #       load tinyformat.h at the begining of the file (https://github.com/c42f/tinyformat)
@@ -12,7 +12,7 @@
 #   deals with Eigen
 
 # SHAMAN
-shamanHeader = "#include <shaman/Shaman.h>"
+shamanHeader = "#include <src/Shaman.h>"
 numericTypes = [("float","Sfloat"), ("double","Sdouble"), ("long double","Slong_double")]
 cpp_extensions = (".h", ".c", ".cpp", ".hpp", ".cc", ".cxx", ".c++", ".hh", ".hxx", ".h++") # tuple required
 
@@ -27,13 +27,13 @@ stdFunctions = ['abs','labs','llabs','div','ldiv','lldiv','imaxabs','imaxdiv','f
                 'isfinite','isinf','isnan','isnormal','signbit','isgreater','isgreaterequal','isless','islessequal','islessgreater','isunordered']
 
 # MPI
-mpiHeader = "#include <shaman/Shaman_mpi.h>"
+mpiHeader = "#include <src/Shaman_mpi.h>"
 mpiTypes = [("MPI_FLOAT","MPI_SFLOAT"), ("MPI_DOUBLE","MPI_SDOUBLE"), ("MPI_LONG_DOUBLE","MPI_SLONG_DOUBLE")]
 mpiOperations = [("MPI_MAX","MPI_SMAX"), ("MPI_MIN","MPI_SMIN"), ("MPI_SUM","MPI_SSUM"), ("MPI_PROD","MPI_SPROD")]
 mpiFunctions = [("MPI_Init","MPI_Shaman_Init"), ("MPI_Finalize","MPI_Shaman_Finalize")]
 
 # EIGEN
-eigenHeader = "#include <shaman/Shaman_eigen.h>"
+eigenHeader = "#include <src/Shaman_eigen.h>"
 eigenMatrixTypes = [("Matrix2cd","SMatrix2cd"), ("Matrix2cf","SMatrix2cf"), ("Matrix2d","SMatrix2d"), ("Matrix2f","SMatrix2f"),("Matrix2Xcd","SMatrix2Xcd"),
               ("Matrix2Xcf","SMatrix2Xcf"), ("Matrix3cd","SMatrix3cd"), ("Matrix3cf","SMatrix3cf"), ("Matrix3d","SMatrix3d"), ("Matrix3f","SMatrix3f"),
               ("Matrix2Xd","SMatrix2Xd"), ("Matrix2Xf","SMatrix2Xf"), ("Matrix3Xcd","SMatrix3Xcd"), ("Matrix3Xcf","SMatrix3Xcf"), ("Matrix3Xd","SMatrix3Xd"),
@@ -109,7 +109,7 @@ def std_functions_warning(filepath, lines):
     """if contains stdFunction then warning with function name and file name"""
     for functionName in stdFunctions:
         if contains_string("std::" + functionName, lines):
-            print("WARNING : std::" + functionName + " found in '" + filepath + "', you might want to replace it with the equivalent shaman function.")
+            print("WARNING : std::" + functionName + " found in '" + filepath + "', you might want to replace it with the equivalent src function.")
 
 #-----------------------------------------------------------------------------
 # HEADER
@@ -201,7 +201,7 @@ def list_cpp_files(rootpath):
     #    return [rootpath]
 
 def shamanize_name(rootpath,filepath):
-    """adds the shaman prefix to a path produce from a root"""
+    """adds the src prefix to a path produce from a root"""
     prefixpath, targetname = os.path.split(rootpath)
     shamanpath = prefixpath + '/' +  "shaman_" + targetname
     return filepath.replace(rootpath,shamanpath)
