@@ -190,7 +190,7 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
     // modifies the Snum in place
     n.number = num;
     n.error = 0;
-    
+
     #ifdef TAGGED_ERROR
         n.errorComposants = Serror();
     #endif
