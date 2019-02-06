@@ -187,7 +187,8 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 
     // modifies the Snum in place
     n.number = num;
-    n.errorComposants = Serror(0);
+    /*n.error = 0;
+    n.errorComposants = Serror(0);*/
 
     return is;
 }

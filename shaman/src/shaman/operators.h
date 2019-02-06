@@ -84,7 +84,6 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::TwoSum(n1.number, n2.number, result);
     errorType newError = remainder + n1.error + n2.error;
 
-
     Serror newErrorComp(n1.errorComposants);
     newErrorComp.addError(remainder);
     newErrorComp.addErrors(n2.errorComposants);
@@ -100,7 +99,6 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
 
     numberType remainder = EFT::TwoSum(n1.number, -n2.number, result);
     errorType newError = remainder + n1.error - n2.error;
-
 
     Serror newErrorComp(n1.errorComposants);
     newErrorComp.addError(remainder);

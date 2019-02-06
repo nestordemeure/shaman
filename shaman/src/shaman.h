@@ -42,7 +42,7 @@ public:
     inline explicit operator long double() const { return (long double) number; };
     #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
     template<typename n, typename e, typename p>
-    inline S(const S<n,e,p>& s): number(s.number), errorComposants(s.errorComposants) {};
+    inline S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants) {};
     inline S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
