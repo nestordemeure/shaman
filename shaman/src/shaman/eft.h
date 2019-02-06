@@ -8,7 +8,7 @@
  * ERROR FREE TRANSFORM
  *
  * gives us the exact error|remainder of an arithmetic operation using :
- * - twoSum for + (might be killed by aggressive compilation)
+ * - twoSum for + (might be killed by aggressive compilation in the absence of volatile keyword)
  * - std::fma for *, /, sqrt (reliable independent of the compilations flags)
  * - fastTwoSum for src::fma via errorFma (rarely|never useful, might be killed by aggressive compilation)
  *
@@ -20,22 +20,19 @@
  *
  * However it was shown that these EFT stay accurate even with directed rounding (toward infinite)
  * (Numerical validation of compensated algorithms with stochastic arithmetic)
- *
- * TODO does adding 'volatile' to terms that are 0 in infinite precision avoid having EFTs optimized away by compiler ?
- */
-
+*/
 namespace EFT
 {
     // basic EFT for a sum
     // WARNING requires rounding to nearest (see Priest)
-    // != 0 WARNING it could be optimized away by a compiler using associativity rules
+    // NOTE the volatile keyword is there to avoid the operation being optimized away by a compiler using associativity rules
     template<typename T>
-    inline const T TwoSum(const T n1, const T n2, const T result)
+    inline const T TwoSum(const T n1, const T n2, const volatile T result)
     {
         T n22 = result - n1;
         T n11 = result - n22;
-        T epsilon2 = n2 - n22;
-        T epsilon1 = n1 - n11;
+        volatile T epsilon2 = n2 - n22;
+        volatile T epsilon1 = n1 - n11;
         T error = epsilon1 + epsilon2;
         return error;
     }
@@ -72,11 +69,12 @@ namespace EFT
     // fast EFT for a sum
     // NOTE requires hypothesis on the inputs (n1 > n2)
     // WARNING requires rounding to nearest (see Priest)
+    // NOTE the volatile keyword is there to avoid the operation being optimized away by a compiler using associativity rules
     template<typename T>
-    inline const T FastTwoSum(const T n1, const T n2, const T result)
+    inline const T FastTwoSum(const T n1, const T n2, const volatile T result)
     {
         T n22 = result - n1;
-        T error = n2 - n22;
+        volatile T error = n2 - n22;
         return error;
     }
 
