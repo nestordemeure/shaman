@@ -17,10 +17,12 @@ if (SHAMAN_ENABLE_TESTS)
     add_subdirectory(shaman/unit_tests)
 endif(SHAMAN_ENABLE_TESTS)
 
+# should be added to target_compile_options ?
 if (SHAMAN_ENABLE_TAGGED_ERROR)
     add_definitions(-DTAGGED_ERROR)
 endif(SHAMAN_ENABLE_TAGGED_ERROR)
 
+# should be added to target_compile_options ?
 if (SHAMAN_DISABLE)
     add_definitions(-DNO_SHAMAN)
 endif(SHAMAN_DISABLE)
