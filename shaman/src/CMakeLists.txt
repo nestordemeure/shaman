@@ -17,6 +17,10 @@ if (SHAMAN_ENABLE_TESTS)
     add_subdirectory(shaman/unit_tests)
 endif(SHAMAN_ENABLE_TESTS)
 
+if (SHAMAN_ENABLE_TAGGED_ERROR)
+    add_definitions(-DTAGGED_ERROR)
+endif(SHAMAN_ENABLE_TAGGED_ERROR)
+
 # Layout. This works for all platforms:
 #   * <prefix>/lib*/cmake/<PROJECT-NAME>
 #   * <prefix>/lib*/
