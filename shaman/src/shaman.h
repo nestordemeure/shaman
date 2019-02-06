@@ -10,6 +10,13 @@
 //-------------------------------------------------------------------------------------------------
 // SHAMAN CLASS
 
+// switch to enable code sections only if the TAGGED_ERROR flag was set
+#ifdef TAGGED_ERROR
+#define ERROR_SUM(x)  x
+#else
+#define ERROR_SUM(x)
+#endif
+
 /*
  * the base SHAMAN class, represents a number and its error
  */
@@ -21,12 +28,25 @@ public:
     // true number ≈ number + errorComposants
     numberType number; // current computed number
     errorType error; // approximation of the current error
-    error_sum<errorType> errorComposants; // error decomposed per functions TODO could be made optionnal with a flag
 
+    #ifdef TAGGED_ERROR
+    error_sum<errorType> errorComposants; // composants of the error
     // base constructors
     inline S(numberType numberArg, errorType errorArg, error_sum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {};
     inline S(numberType numberArg): number(numberArg), error(0.), errorComposants() {}; // we accept implicit cast from T to S<T>
     inline S(): number(0.), error(0.), errorComposants() {};
+    // casting
+    #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
+    template<typename n, typename e, typename p> inline S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants) {};
+    #else
+    // base constructors
+    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
+    inline S(numberType numberArg): number(numberArg), error(0.) {}; // we accept implicit cast from T to S<T>
+    inline S(): number(0.), error(0.) {};
+    // casting
+    #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n)
+    template<typename n, typename e, typename p> inline S(const S<n,e,p>& s): number(s.number), error(s.error) {};
+    #endif
 
     // casting
     inline operator short int() const { return (short int) number; };
@@ -40,9 +60,6 @@ public:
     inline explicit operator float() const { return (float) number; };
     inline explicit operator double() const { return (double) number; };
     inline explicit operator long double() const { return (long double) number; };
-    #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
-    template<typename n, typename e, typename p>
-    inline S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants) {};
     inline S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
     inline S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
