@@ -26,7 +26,6 @@ namespace EFT
     // basic EFT for a sum
     // WARNING requires rounding to nearest (see Priest)
     // NOTE the volatile keyword is there to avoid the operation being optimized away by a compiler using associativity rules
-    // TODO we might gain a bit of speed by removing intermediate variables
     template<typename T>
     inline const T TwoSum(const T n1, const T n2, const volatile T result)
     {
