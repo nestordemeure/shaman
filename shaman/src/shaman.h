@@ -5,16 +5,16 @@
 #include <limits>
 #include <atomic>
 #include <memory>
-#include <shaman/tagged/error_sum.h>
 
 //-------------------------------------------------------------------------------------------------
 // SHAMAN CLASS
 
 // switch to enable code sections only if the TAGGED_ERROR flag was set
 #ifdef TAGGED_ERROR
-#define ERROR_SUM(x)  x
+    #include <shaman/tagged/error_sum.h>
+    #define IF_TAGGED(x)  x
 #else
-#define ERROR_SUM(x)
+    #define IF_TAGGED(x)
 #endif
 
 /*
