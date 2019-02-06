@@ -3,7 +3,7 @@ project(shaman VERSION 0.1)
 
 option(SHAMAN_ENABLE_TESTS "Whether or not Shaman tests are run" OF)
 option(SHAMAN_ENABLE_EXAMPLES "Whether or not Shaman examples are built" OF)
-option(SHAMAN_ENABLE_TAGGED_ERROR "Whether or not Shaman uses tagged error to locate the sources of error" ON)
+option(SHAMAN_ENABLE_TAGGED_ERROR "Whether or not Shaman uses tagged error to locate the sources of error" OF)
 
 # Introduce variables:
 # * CMAKE_INSTALL_LIBDIR
