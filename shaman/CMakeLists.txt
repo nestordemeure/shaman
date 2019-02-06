@@ -9,12 +9,6 @@ option(SHAMAN_ENABLE_EXAMPLES "Whether or not Shaman examples are built" OF)
 # * CMAKE_INSTALL_BINDIR
 # * CMAKE_INSTALL_INCLUDEDIR
 include(GNUInstallDirs)
-#add_definitions(-DNUMERICAL_DEBUGGER)
-#add_definitions(-DUNSTABLE_BRANCH_DEBUGGER)
-#add_definitions(-DCANCELATION_DEBUGGER)
-#add_definitions(-DUNSTABLE_OP_DEBUGGER)
-#add_definitions(-DNUMERICAL_ZERO_DEBUGGER)
-#add_definitions(-DEXPLICIT_CASTING) # forbid implicit casts between types
 #add_definitions(-DNO_SHAMAN) # deactivate Shaman
 
 if (SHAMAN_ENABLE_TESTS)
