@@ -171,7 +171,9 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     }
 
     // os << std::setprecision(0) << " (n:" << n.number << " e:" << n.error << ") " << (std::string) n.errorComposants;
-    os << ' ' << (std::string) n.errorComposants;
+    #ifdef TAGGED_ERROR
+        os << ' ' << (std::string) n.errorComposants;
+    #endif
 
     return os;
 }
@@ -188,7 +190,10 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
     // modifies the Snum in place
     n.number = num;
     n.error = 0;
-    n.errorComposants = Serror();
+    
+    #ifdef TAGGED_ERROR
+        n.errorComposants = Serror();
+    #endif
 
     return is;
 }
