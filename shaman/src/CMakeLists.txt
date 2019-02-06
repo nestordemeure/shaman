@@ -21,6 +21,10 @@ if (SHAMAN_ENABLE_TAGGED_ERROR)
     add_definitions(-DTAGGED_ERROR)
 endif(SHAMAN_ENABLE_TAGGED_ERROR)
 
+if (SHAMAN_DISABLE)
+    add_definitions(-DNO_SHAMAN)
+endif(SHAMAN_DISABLE)
+
 # Layout. This works for all platforms:
 #   * <prefix>/lib*/cmake/<PROJECT-NAME>
 #   * <prefix>/lib*/
