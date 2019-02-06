@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <mpi.h>
+#include "Shaman_mpi.h"
 #include <cstddef>
 
 /*
