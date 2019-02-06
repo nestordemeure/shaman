@@ -8,7 +8,7 @@
  * ERROR FREE TRANSFORM
  *
  * gives us the exact error|remainder of an arithmetic operation using :
- * - twoSum for + (might be killed by aggressive compilation in the absence of volatile keyword)
+ * - twoSum for + (might be killed by aggressive compilation in the absence of protection)
  * - std::fma for *, /, sqrt (reliable independent of the compilations flags)
  * - fastTwoSum for src::fma via errorFma (rarely|never useful, might be killed by aggressive compilation)
  *
@@ -26,6 +26,7 @@ namespace EFT
     // basic EFT for a sum
     // WARNING requires rounding to nearest (see Priest)
     // NOTE the volatile keyword is there to avoid the operation being optimized away by a compiler using associativity rules
+    // TODO we might gain a bit of speed by removing intermediate variables
     template<typename T>
     inline const T TwoSum(const T n1, const T n2, const volatile T result)
     {
