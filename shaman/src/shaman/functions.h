@@ -437,7 +437,7 @@ templated const Snum Sstd::log10(const Snum& n)
         }
         return Snum(result, totalError, newErrorComp);
     #else
-        return Snum(result, totalError,);
+        return Snum(result, totalError);
     #endif
 };
 using Sstd::log10;
