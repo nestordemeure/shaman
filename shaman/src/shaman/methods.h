@@ -127,6 +127,9 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
 /*
  * displays the number of unstable branches
  */
+#ifndef SHAMAN_UNSTABLE_BRANCH
+[[deprecated("Please set the 'SHAMAN_UNSTABLE_BRANCH' flag in order to use the 'displayUnstableBranches' function.")]]
+#endif
 inline void Shaman::displayUnstableBranches()
 {
     #ifdef SHAMAN_UNSTABLE_BRANCH
