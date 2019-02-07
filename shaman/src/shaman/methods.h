@@ -101,10 +101,11 @@ templated inline bool Snum::non_significant() const
  */
 void Shaman::unstability()
 {
-    ShamanGlobals::unstableBranchCounter++;
     #ifdef SHAMAN_TAGGED_ERROR
         std::lock_guard<std::mutex> guard(ShamanGlobals::mutexAddUnstableBranch);
         ShamanGlobals::unstableBranchSummary[CodeBlock::currentBlock()]++;
+    #else
+        ShamanGlobals::unstableBranchCounter++;
     #endif
 }
 
@@ -129,17 +130,26 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
 inline void Shaman::displayUnstableBranches()
 {
     #ifdef SHAMAN_UNSTABLE_BRANCH
-        std::cout << "#SHAMAN: " << "We detected " << ShamanGlobals::unstableBranchCounter << " unstable tests." << std::endl;
         #ifdef SHAMAN_TAGGED_ERROR
-        for(auto& kv : ShamanGlobals::unstableBranchSummary)
+        if (ShamanGlobals::unstableBranchSummary.empty())
         {
-            std::string blockName = CodeBlock::nameOfTag(kv.first);
-            unsigned int unstableBranchNumber = kv.second;
-            std::cout << " -> " << unstableBranchNumber << " unstable branches found in section '" << blockName << "'." << std::endl;
+            std::cout << "#SHAMAN: No unstable test was detected. " << std::endl;
         }
+        else
+        {
+            std::cout << "#SHAMAN: Unstable tests detected :" << std::endl;
+            for(auto& kv : ShamanGlobals::unstableBranchSummary)
+            {
+                std::string blockName = CodeBlock::nameOfTag(kv.first);
+                unsigned int unstableBranchNumber = kv.second;
+                std::cout << " -> " << unstableBranchNumber << " unstable tests found in section '" << blockName << '\'' << std::endl;
+            }
+        }
+        #else
+        std::cout << "#SHAMAN: " << ShamanGlobals::unstableBranchCounter << " unstable tests detected." << std::endl;
         #endif
     #else
-        std::cout << "#SHAMAN: please set the 'SHAMAN_UNSTABLE_BRANCH' flag in order to detect and count unstable branches in the application." << std::endl;
+    std::cout << "#SHAMAN: please set the 'SHAMAN_UNSTABLE_BRANCH' flag in order to detect and count unstable branches in the application." << std::endl;
     #endif
 }
 
