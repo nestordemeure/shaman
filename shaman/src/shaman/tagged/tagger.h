@@ -81,9 +81,14 @@ public:
 };
 
 // macro to quickly define blocks
+#if defined(SHAMAN_TAGGED_ERROR) && ! defined(NO_SHAMAN)
 #define STR_CONCAT_HELPER(a,b) a ## b
 #define STR_CONCAT(a,b) STR_CONCAT_HELPER(a,b)
 #define FUNCTION_BLOCK CodeBlock STR_CONCAT(shamanFunctionBlock,__FUNCTION__)(__FUNCTION__)
 #define LOCAL_BLOCK(text) CodeBlock STR_CONCAT(shamanLocalBlock,__LINE__)(text)
+#else
+#define FUNCTION_BLOCK
+#define LOCAL_BLOCK(text)
+#endif
 
 #endif //SHAMAN_TAGGER_H
