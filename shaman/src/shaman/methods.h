@@ -98,33 +98,62 @@ templated inline bool Snum::non_significant() const
 /*
  * function called at each unstability
  * put a breakpoint here to break at each unstable tests
- *
- * TODO we could use the block name as a form of stack trace to locate the unstability
  */
 void Shaman::unstability()
 {
-    ShamanGlobals::unstableBranchCounter++;
+    #ifdef SHAMAN_TAGGED_ERROR
+        std::lock_guard<std::mutex> guard(ShamanGlobals::mutexAddUnstableBranch);
+        ShamanGlobals::unstableBranchSummary[CodeBlock::currentBlock()]++;
+    #else
+        ShamanGlobals::unstableBranchCounter++;
+    #endif
 }
 
 /*
  * check wether a branch is unstable
- * in wihci case it triggers the unstability function
+ * in wich case it triggers the unstability function
  */
 templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
 {
+    #ifdef SHAMAN_UNSTABLE_BRANCH
     bool isUnstable = non_significant(n1.number - n2.number, n1.error - n2.error);
     if(isUnstable)
     {
         Shaman::unstability();
     }
+    #endif
 }
 
 /*
  * displays the number of unstable branches
  */
+#ifndef SHAMAN_UNSTABLE_BRANCH
+[[deprecated("Please set the 'SHAMAN_UNSTABLE_BRANCH' flag in order to use the 'displayUnstableBranches' function.")]]
+#endif
 inline void Shaman::displayUnstableBranches()
 {
-    std::cout << "#SHAMAN: " << "We detected " << ShamanGlobals::unstableBranchCounter << " unstable tests." << std::endl;
+    #ifdef SHAMAN_UNSTABLE_BRANCH
+        #ifdef SHAMAN_TAGGED_ERROR
+        if (ShamanGlobals::unstableBranchSummary.empty())
+        {
+            std::cout << "#SHAMAN: No unstable test was detected. " << std::endl;
+        }
+        else
+        {
+            std::cout << "#SHAMAN: Unstable tests detected :" << std::endl;
+            for(auto& kv : ShamanGlobals::unstableBranchSummary)
+            {
+                std::string blockName = CodeBlock::nameOfTag(kv.first);
+                unsigned int unstableBranchNumber = kv.second;
+                std::cout << " -> " << unstableBranchNumber << " unstable tests found in section '" << blockName << '\'' << std::endl;
+            }
+        }
+        #else
+        std::cout << "#SHAMAN: " << ShamanGlobals::unstableBranchCounter << " unstable tests detected." << std::endl;
+        #endif
+    #else
+    std::cout << "#SHAMAN: please set the 'SHAMAN_UNSTABLE_BRANCH' flag in order to detect and count unstable branches in the application." << std::endl;
+    #endif
 }
 
 //-----------------------------------------------------------------------------
@@ -171,7 +200,9 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     }
 
     // os << std::setprecision(0) << " (n:" << n.number << " e:" << n.error << ") " << (std::string) n.errorComposants;
-    os << ' ' << (std::string) n.errorComposants;
+    #ifdef SHAMAN_TAGGED_ERROR
+        os << ' ' << (std::string) n.errorComposants;
+    #endif
 
     return os;
 }
@@ -187,7 +218,11 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
 
     // modifies the Snum in place
     n.number = num;
-    n.errorComposants = Serror(0);
+    n.error = 0;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+        n.errorComposants = Serror();
+    #endif
 
     return is;
 }
@@ -221,7 +256,7 @@ templated inline std::string Sstd::to_string(const Snum& n)
  * convert a value into a C string (const char *)
  */
 template<typename T>
-inline const char* Sstd::to_Cstring(const T &n)
+inline const char* Sstd::to_Cstring(const T& n)
 {
     return Sstd::to_string(n).c_str();
 };

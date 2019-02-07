@@ -1,2 +1,0 @@
-/usr/bin/ar qc libshaman.a  CMakeFiles/shaman.dir/shaman/tagged/global_vars.cpp.o
-/usr/bin/ranlib libshaman.a

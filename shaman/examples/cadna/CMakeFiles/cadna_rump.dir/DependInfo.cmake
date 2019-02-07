@@ -6,7 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna/rump_polynomial.cpp" "/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/examples/cadna/CMakeFiles/cadna_rump.dir/rump_polynomial.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "Clang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

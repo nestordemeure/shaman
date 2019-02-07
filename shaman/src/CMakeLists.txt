@@ -17,6 +17,18 @@ if (SHAMAN_ENABLE_TESTS)
     add_subdirectory(shaman/unit_tests)
 endif(SHAMAN_ENABLE_TESTS)
 
+if (SHAMAN_ENABLE_TAGGED_ERROR)
+    target_compile_options(shaman PUBLIC -DSHAMAN_TAGGED_ERROR)
+endif(SHAMAN_ENABLE_TAGGED_ERROR)
+
+if (SHAMAN_DISABLE)
+    target_compile_options(shaman PUBLIC -DNO_SHAMAN)
+endif(SHAMAN_DISABLE)
+
+if (SHAMAN_ENABLE_UNSTABLE_BRANCH)
+   target_compile_options(shaman PUBLIC -DSHAMAN_UNSTABLE_BRANCH)
+endif(SHAMAN_ENABLE_UNSTABLE_BRANCH)
+
 # Layout. This works for all platforms:
 #   * <prefix>/lib*/cmake/<PROJECT-NAME>
 #   * <prefix>/lib*/

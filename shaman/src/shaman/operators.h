@@ -68,12 +68,16 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
 // -
 templated inline const Snum operator-(const Snum& n)
 {
-    numberType newNumber = -n.number;
+    numberType result = -n.number;
     errorType newError = -n.error;
-    Serror newErrors(n.errorComposants);
-    newErrors.unaryNeg();
 
-    return Snum(newNumber, newError, newErrors);
+    #ifdef SHAMAN_TAGGED_ERROR
+        Serror newErrorComp(n.errorComposants);
+        newErrorComp.unaryNeg();
+        return Snum(result, newError, newErrorComp);
+    #else
+        return Snum(result, newError);
+    #endif
 };
 
 // +
@@ -84,12 +88,14 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::TwoSum(n1.number, n2.number, result);
     errorType newError = remainder + n1.error + n2.error;
 
-
-    Serror newErrorComp(n1.errorComposants);
-    newErrorComp.addError(remainder);
-    newErrorComp.addErrors(n2.errorComposants);
-
-    return Snum(result, newError, newErrorComp);
+    #ifdef SHAMAN_TAGGED_ERROR
+        Serror newErrorComp(n1.errorComposants);
+        newErrorComp.addError(remainder);
+        newErrorComp.addErrors(n2.errorComposants);
+        return Snum(result, newError, newErrorComp);
+    #else
+        return Snum(result, newError);
+    #endif
 };
 set_Soperator_casts(+);
 
@@ -101,12 +107,14 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::TwoSum(n1.number, -n2.number, result);
     errorType newError = remainder + n1.error - n2.error;
 
-
-    Serror newErrorComp(n1.errorComposants);
-    newErrorComp.addError(remainder);
-    newErrorComp.subErrors(n2.errorComposants);
-
-    return Snum(result, newError, newErrorComp);
+    #ifdef SHAMAN_TAGGED_ERROR
+        Serror newErrorComp(n1.errorComposants);
+        newErrorComp.addError(remainder);
+        newErrorComp.subErrors(n2.errorComposants);
+        return Snum(result, newError, newErrorComp);
+    #else
+        return Snum(result, newError);
+    #endif
 };
 set_Soperator_casts(-);
 
@@ -119,11 +127,14 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::FastTwoProd(n1.number, n2.number, result);
     errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
 
-    Serror newErrorComp(remainder);
-    newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
-    newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
-
-    return Snum(result, newError, newErrorComp);
+    #ifdef SHAMAN_TAGGED_ERROR
+        Serror newErrorComp(remainder);
+        newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
+        newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
+        return Snum(result, newError, newErrorComp);
+    #else
+        return Snum(result, newError);
+    #endif
 };
 set_Soperator_casts(*);
 
@@ -136,12 +147,15 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     errorType n2Precise = n2.number + n2.error;
     errorType newError = ((remainder + n1.error) - result*n2.error) / n2Precise;
 
-    Serror newErrorComp(n1.errorComposants);
-    newErrorComp.addError(remainder);
-    newErrorComp.subErrorsTimeScalar(n2.errorComposants, result);
-    newErrorComp.divByScalar(n2Precise);
-
-    return Snum(result, newError, newErrorComp);
+    #ifdef SHAMAN_TAGGED_ERROR
+        Serror newErrorComp(n1.errorComposants);
+        newErrorComp.addError(remainder);
+        newErrorComp.subErrorsTimeScalar(n2.errorComposants, result);
+        newErrorComp.divByScalar(n2Precise);
+        return Snum(result, newError, newErrorComp);
+    #else
+        return Snum(result, newError);
+    #endif
 };
 set_Soperator_casts(/);
 
@@ -154,9 +168,12 @@ templated inline Snum& Snum::operator++(int)
     numberType result = number + 1;
     numberType remainder = EFT::TwoSum(number, 1, result);
 
-    error += remainder;
-    errorComposants.addError(remainder);
     number = result;
+    error += remainder;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+        errorComposants.addError(remainder);
+    #endif
 
     return *this;
 }
@@ -167,9 +184,12 @@ templated inline Snum& Snum::operator--(int)
     numberType result = number - 1;
     numberType remainder = EFT::TwoSum(number, -1, result);
 
-    error += remainder;
-    errorComposants.addError(remainder);
     number = result;
+    error += remainder;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+        errorComposants.addError(remainder);
+    #endif
 
     return *this;
 }
@@ -180,10 +200,13 @@ templated inline Snum& Snum::operator+=(const Snum& n)
     numberType result = number + n.number;
     numberType remainder = EFT::TwoSum(number, n.number, result);
 
-    error += remainder + n.error;
-    errorComposants.addError(remainder);
-    errorComposants.addErrors(n.errorComposants);
     number = result;
+    error += remainder + n.error;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+        errorComposants.addError(remainder);
+        errorComposants.addErrors(n.errorComposants);
+    #endif
 
     return *this;
 }
@@ -194,10 +217,13 @@ templated inline Snum& Snum::operator-=(const Snum& n)
     numberType result = number - n.number;
     numberType remainder = EFT::TwoSum(number, -n.number, result);
 
-    error += remainder - n.error;
-    errorComposants.addError(remainder);
-    errorComposants.subErrors(n.errorComposants);
     number = result;
+    error += remainder - n.error;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+        errorComposants.addError(remainder);
+        errorComposants.subErrors(n.errorComposants);
+    #endif
 
     return *this;
 }
@@ -210,9 +236,11 @@ templated inline Snum& Snum::operator*=(const Snum& n)
     numberType remainder = EFT::FastTwoProd(number, n.number, result);
 
     error = n.number*error + remainder + number*n.error;
-    errorComposants.multByScalar(n.number);
-    errorComposants.addError(remainder);
-    errorComposants.addErrorsTimeScalar(n.errorComposants, number);
+    #ifdef SHAMAN_TAGGED_ERROR
+        errorComposants.multByScalar(n.number);
+        errorComposants.addError(remainder);
+        errorComposants.addErrorsTimeScalar(n.errorComposants, number);
+    #endif
     number = result;
 
     return *this;
@@ -225,11 +253,14 @@ templated inline Snum& Snum::operator/=(const Snum& n)
     numberType remainder = EFT::RemainderDiv(number, n.number, result);
     errorType n2Precise = n.number + n.error;
 
-    error = (error + remainder - result*n.error) / (n.number + n.error);
-    errorComposants.addError(remainder);
-    errorComposants.subErrorsTimeScalar(n.errorComposants, result);
-    errorComposants.divByScalar(n2Precise);
     number = result;
+    error = (error + remainder - result*n.error) / (n.number + n.error);
+
+    #ifdef SHAMAN_TAGGED_ERROR
+        errorComposants.addError(remainder);
+        errorComposants.subErrorsTimeScalar(n.errorComposants, result);
+        errorComposants.divByScalar(n2Precise);
+    #endif
 
     return *this;
 }

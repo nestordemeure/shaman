@@ -68,7 +68,7 @@ Additional BSD Notice
 #include <stdlib.h>
 #include <sys/time.h>
 #include <shaman.h>
-#include <shaman/helpers/malloc.h>
+#include <shaman/helpers/Shaman_malloc.h>
 
 using Sstd::sqrt;
 using Sstd::cbrt;
