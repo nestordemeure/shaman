@@ -25,4 +25,6 @@ public:
 
     // counter for the number of unstable branches
     static std::atomic_int unstableBranchCounter;
+    static std::unordered_map<Tag, uint> unstableBranchSummary; // hashtable that associate block-names with the number of untable branch detected within
+    static std::mutex mutexAddUnstableBranch; // guards against concurent addition of unstable branches in unstableBranchSummary
 };
