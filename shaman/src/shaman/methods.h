@@ -107,7 +107,6 @@ void Shaman::unstability()
 /*
  * check wether a branch is unstable
  * in wich case it triggers the unstability function
- * TODO we could store the current blockname in a Set in order to locate the unstabilities in the code when we display the unstable branches
  */
 templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
 {
@@ -116,6 +115,10 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
     if(isUnstable)
     {
         Shaman::unstability();
+        #ifdef SHAMAN_TAGGED_ERROR
+            std::lock_guard<std::mutex> guard(ShamanGlobals::mutexAddUnstableBranch);
+            ShamanGlobals::unstableBranchSummary[CodeBlock::currentBlock()] += 1;
+        #endif
     }
     #endif
 }
@@ -127,6 +130,14 @@ inline void Shaman::displayUnstableBranches()
 {
     #ifdef SHAMAN_UNSTABLE_BRANCH
         std::cout << "#SHAMAN: " << "We detected " << ShamanGlobals::unstableBranchCounter << " unstable tests." << std::endl;
+        #ifdef SHAMAN_TAGGED_ERROR
+        for(auto& kv : ShamanGlobals::unstableBranchSummary)
+        {
+            std::string blockName = CodeBlock::nameOfTag(kv.first);
+            uint unstableBranchNumber = kv.second;
+            std::cout << '\t' << unstableBranchNumber << " unstable branches found in section '" << blockName << "'." << std::endl;
+        }
+        #endif
     #else
         std::cout << "#SHAMAN: please set the 'SHAMAN_UNSTABLE_BRANCH' flag in order to detect and count unstable branches in the application." << std::endl;
     #endif
