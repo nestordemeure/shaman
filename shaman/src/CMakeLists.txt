@@ -27,6 +27,11 @@ if (SHAMAN_DISABLE)
     add_definitions(-DNO_SHAMAN)
 endif(SHAMAN_DISABLE)
 
+# should be added to target_compile_options ?
+if (SHAMAN_ENABLE_UNSTABLE_BRANCH)
+    add_definitions(-DSHAMAN_UNSTABLE_BRANCH)
+endif(SHAMAN_ENABLE_UNSTABLE_BRANCH)
+
 # Layout. This works for all platforms:
 #   * <prefix>/lib*/cmake/<PROJECT-NAME>
 #   * <prefix>/lib*/
