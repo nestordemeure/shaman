@@ -102,6 +102,10 @@ templated inline bool Snum::non_significant() const
 void Shaman::unstability()
 {
     ShamanGlobals::unstableBranchCounter++;
+    #ifdef SHAMAN_TAGGED_ERROR
+        std::lock_guard<std::mutex> guard(ShamanGlobals::mutexAddUnstableBranch);
+        ShamanGlobals::unstableBranchSummary[CodeBlock::currentBlock()]++;
+    #endif
 }
 
 /*
@@ -115,10 +119,6 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
     if(isUnstable)
     {
         Shaman::unstability();
-        #ifdef SHAMAN_TAGGED_ERROR
-            std::lock_guard<std::mutex> guard(ShamanGlobals::mutexAddUnstableBranch);
-            ShamanGlobals::unstableBranchSummary[CodeBlock::currentBlock()]++;
-        #endif
     }
     #endif
 }
@@ -135,7 +135,7 @@ inline void Shaman::displayUnstableBranches()
         {
             std::string blockName = CodeBlock::nameOfTag(kv.first);
             unsigned int unstableBranchNumber = kv.second;
-            std::cout << '\t' << unstableBranchNumber << " unstable branches found in section '" << blockName << "'." << std::endl;
+            std::cout << " -> " << unstableBranchNumber << " unstable branches found in section '" << blockName << "'." << std::endl;
         }
         #endif
     #else
