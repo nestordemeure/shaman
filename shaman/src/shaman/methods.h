@@ -117,7 +117,7 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
         Shaman::unstability();
         #ifdef SHAMAN_TAGGED_ERROR
             std::lock_guard<std::mutex> guard(ShamanGlobals::mutexAddUnstableBranch);
-            ShamanGlobals::unstableBranchSummary[CodeBlock::currentBlock()] += 1;
+            ShamanGlobals::unstableBranchSummary[CodeBlock::currentBlock()]++;
         #endif
     }
     #endif
@@ -134,7 +134,7 @@ inline void Shaman::displayUnstableBranches()
         for(auto& kv : ShamanGlobals::unstableBranchSummary)
         {
             std::string blockName = CodeBlock::nameOfTag(kv.first);
-            uint unstableBranchNumber = kv.second;
+            unsigned int unstableBranchNumber = kv.second;
             std::cout << '\t' << unstableBranchNumber << " unstable branches found in section '" << blockName << "'." << std::endl;
         }
         #endif

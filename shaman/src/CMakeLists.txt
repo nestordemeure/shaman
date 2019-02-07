@@ -19,17 +19,17 @@ endif(SHAMAN_ENABLE_TESTS)
 
 # should be added to target_compile_options ?
 if (SHAMAN_ENABLE_TAGGED_ERROR)
-    add_compile_options(-DSHAMAN_TAGGED_ERROR)
+    target_compile_options(shaman -DSHAMAN_TAGGED_ERROR)
 endif(SHAMAN_ENABLE_TAGGED_ERROR)
 
 # should be added to target_compile_options ?
 if (SHAMAN_DISABLE)
-    add_compile_options(-DNO_SHAMAN)
+    target_compile_options(shaman -DNO_SHAMAN)
 endif(SHAMAN_DISABLE)
 
 # should be added to target_compile_options ?
 if (SHAMAN_ENABLE_UNSTABLE_BRANCH)
-    add_compile_options(-DSHAMAN_UNSTABLE_BRANCH)
+   target_compile_options(shaman -DSHAMAN_UNSTABLE_BRANCH)
 endif(SHAMAN_ENABLE_UNSTABLE_BRANCH)
 
 # Layout. This works for all platforms:
