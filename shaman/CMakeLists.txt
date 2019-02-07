@@ -5,7 +5,7 @@ option(SHAMAN_ENABLE_TESTS "Whether or not Shaman tests are run" OF)
 option(SHAMAN_ENABLE_EXAMPLES "Whether or not Shaman examples are built" OF)
 # activate or deactivate Shaman's functionalities
 option(SHAMAN_ENABLE_TAGGED_ERROR "Whether or not Shaman uses tagged error to locate the sources of error" OF)
-option(SHAMAN_ENABLE_UNSTABLE_BRANCH "Whether or not Shaman counts the number of unstable branches" OF)
+option(SHAMAN_ENABLE_UNSTABLE_BRANCH "Whether or not Shaman detects and counts unstable branches" OF)
 option(SHAMAN_DISABLE "Use to disable shaman and use traditional types instead" OF)
 
 # Introduce variables:
