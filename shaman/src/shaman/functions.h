@@ -201,7 +201,7 @@ templated const Snum Sstd::sqrt(const Snum& n)
     numberType result = std::sqrt(n.number);
     errorType newError;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if (result == 0)
         {
@@ -258,7 +258,7 @@ templated const Snum Sstd::fma(const Snum& n1, const Snum& n2, const Snum& n3)
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error) + n3.error;
     errorType newError = std::fma(n2.number, n1.error, std::fma(n1.number, n2.error, remainder + n3.error));
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp(remainder);
         newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
         newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
@@ -274,7 +274,7 @@ set_Sfunction3_casts(fma);
 // GENERAL FUNCTIONS
 
 // TODO macro that turns a function into a src function
-#ifdef TAGGED_ERROR
+#ifdef SHAMAN_TAGGED_ERROR
     #define SHAMAN_FUNCTION(functionName) \
     templated const Snum Sstd::functionName (const Snum& n) \
     { \
@@ -345,7 +345,7 @@ templated const Snum Sstd::log(const Snum& n)
     }
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -383,7 +383,7 @@ templated const Snum Sstd::log2(const Snum& n)
     }
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -421,7 +421,7 @@ templated const Snum Sstd::log10(const Snum& n)
     }
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -459,7 +459,7 @@ templated const Snum Sstd::logb(const Snum& n)
     }
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -497,7 +497,7 @@ templated const Snum Sstd::acosh(const Snum& n)
     }
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -539,7 +539,7 @@ templated const Snum Sstd::acos(const Snum& n)
     }
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -581,7 +581,7 @@ templated const Snum Sstd::asin(const Snum& n)
     }
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -619,7 +619,7 @@ templated const Snum Sstd::atanh(const Snum& n)
     }
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -655,7 +655,7 @@ templated const Snum Sstd::scalbn(const Snum &n, int power)
     preciseType preciseCorrectedResult = std::scalbn(n.corrected_number(), power);
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -684,7 +684,7 @@ templated const Snum Sstd::frexp(const Snum& n, int* exp)
     preciseType preciseCorrectedResult = std::frexp(n.corrected_number(), &dummyExp);
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -712,7 +712,7 @@ templated const Snum Sstd::ldexp(const Snum& n, int exp)
     preciseType preciseCorrectedResult = std::ldexp(n.corrected_number(), exp);
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         if(n.error == 0)
         {
@@ -740,7 +740,7 @@ templated const Snum Sstd::pow(const Snum& n1, const Snum& n2)
     preciseType preciseCorrectedResult = std::pow(n1.corrected_number(), n2.corrected_number());
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         preciseType preciseResult = std::pow((preciseType)n1.number, (preciseType)n2.number);
         preciseType functionError = preciseResult - result;
@@ -787,7 +787,7 @@ templated const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
     preciseType preciseCorrectedResult = std::atan2(n1.corrected_number(), n2.corrected_number());
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         preciseType preciseResult = std::atan2((preciseType)n1.number, (preciseType)n2.number);
         preciseType functionError = preciseResult - result;
@@ -834,7 +834,7 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2)
     preciseType preciseCorrectedResult = std::hypot(n1.corrected_number(), n2.corrected_number());
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         preciseType preciseResult = std::hypot((preciseType)n1.number, (preciseType)n2.number);
         preciseType functionError = preciseResult - result;
@@ -881,7 +881,7 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
     preciseType preciseCorrectedResult = std::hypot(n1.corrected_number(), n2.corrected_number(), n3.corrected_number());
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
         preciseType preciseResult = std::hypot((preciseType)n1.number, (preciseType)n2.number, (preciseType)n3.number);
         preciseType preciseCorrectedBut1Result = std::hypot((preciseType)n1, n2.corrected_number(), n3.corrected_number());

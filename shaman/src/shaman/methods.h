@@ -109,7 +109,7 @@ void Shaman::unstability()
  * in wich case it triggers the unstability function
  * TODO we could store the current blockname in a Set in order to locate the unstabilities in the code when we display the unstable branches
  */
-templated inline void Snum::checkUnstableBranch(const Snum& n1, const Snum& n2)
+templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
 {
     #ifdef SHAMAN_UNSTABLE_BRANCH
     bool isUnstable = non_significant(n1.number - n2.number, n1.error - n2.error);
@@ -176,7 +176,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     }
 
     // os << std::setprecision(0) << " (n:" << n.number << " e:" << n.error << ") " << (std::string) n.errorComposants;
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         os << ' ' << (std::string) n.errorComposants;
     #endif
 
@@ -196,7 +196,7 @@ templated std::istream& operator>>(std::istream& is, Snum& n)
     n.number = num;
     n.error = 0;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         n.errorComposants = Serror();
     #endif
 
