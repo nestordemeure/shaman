@@ -14,5 +14,5 @@ std::mutex ShamanGlobals::mutexAddName;
 
 // counter for the number of unstable branches
 std::atomic_int ShamanGlobals::unstableBranchCounter(0);
-std::unordered_map<Tag, uint> ShamanGlobals::unstableBranchSummary;
+std::unordered_map<Tag, unsigned int> ShamanGlobals::unstableBranchSummary;
 std::mutex ShamanGlobals::mutexAddUnstableBranch;
