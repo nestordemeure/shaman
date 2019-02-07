@@ -98,8 +98,6 @@ templated inline bool Snum::non_significant() const
 /*
  * function called at each unstability
  * put a breakpoint here to break at each unstable tests
- *
- * TODO we could use the block name as a form of stack trace to locate the unstability
  */
 void Shaman::unstability()
 {
@@ -108,15 +106,18 @@ void Shaman::unstability()
 
 /*
  * check wether a branch is unstable
- * in wihci case it triggers the unstability function
+ * in wich case it triggers the unstability function
+ * TODO we could store the current blockname in a Set in order to locate the unstabilities in the code when we display the unstable branches
  */
-templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
+templated inline void Snum::checkUnstableBranch(const Snum& n1, const Snum& n2)
 {
+    #ifdef SHAMAN_UNSTABLE_BRANCH
     bool isUnstable = non_significant(n1.number - n2.number, n1.error - n2.error);
     if(isUnstable)
     {
         Shaman::unstability();
     }
+    #endif
 }
 
 /*
@@ -124,7 +125,11 @@ templated inline void Snum::checkUnstableBranch(Snum n1, Snum n2)
  */
 inline void Shaman::displayUnstableBranches()
 {
-    std::cout << "#SHAMAN: " << "We detected " << ShamanGlobals::unstableBranchCounter << " unstable tests." << std::endl;
+    #ifdef SHAMAN_UNSTABLE_BRANCH
+        std::cout << "#SHAMAN: " << "We detected " << ShamanGlobals::unstableBranchCounter << " unstable tests." << std::endl;
+    #else
+        std::cout << "#SHAMAN: please set the 'SHAMAN_UNSTABLE_BRANCH' flag in order to detect and count unstable branches in the application." << std::endl;
+    #endif
 }
 
 //-----------------------------------------------------------------------------
@@ -227,7 +232,7 @@ templated inline std::string Sstd::to_string(const Snum& n)
  * convert a value into a C string (const char *)
  */
 template<typename T>
-inline const char* Sstd::to_Cstring(const T &n)
+inline const char* Sstd::to_Cstring(const T& n)
 {
     return Sstd::to_string(n).c_str();
 };
