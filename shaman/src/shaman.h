@@ -22,7 +22,7 @@ public:
     numberType number; // current computed number
     errorType error; // approximation of the current error
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
     error_sum<errorType> errorComposants; // composants of the error
     // base constructors
     inline S(numberType numberArg, errorType errorArg, error_sum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {};

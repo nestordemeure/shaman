@@ -19,7 +19,7 @@ endif(SHAMAN_ENABLE_TESTS)
 
 # should be added to target_compile_options ?
 if (SHAMAN_ENABLE_TAGGED_ERROR)
-    add_definitions(-DTAGGED_ERROR)
+    add_definitions(-DSHAMAN_TAGGED_ERROR)
 endif(SHAMAN_ENABLE_TAGGED_ERROR)
 
 # should be added to target_compile_options ?

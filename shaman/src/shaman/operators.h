@@ -71,7 +71,7 @@ templated inline const Snum operator-(const Snum& n)
     numberType result = -n.number;
     errorType newError = -n.error;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp(n.errorComposants);
         newErrorComp.unaryNeg();
         return Snum(result, newError, newErrorComp);
@@ -88,7 +88,7 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::TwoSum(n1.number, n2.number, result);
     errorType newError = remainder + n1.error + n2.error;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp(n1.errorComposants);
         newErrorComp.addError(remainder);
         newErrorComp.addErrors(n2.errorComposants);
@@ -107,7 +107,7 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::TwoSum(n1.number, -n2.number, result);
     errorType newError = remainder + n1.error - n2.error;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp(n1.errorComposants);
         newErrorComp.addError(remainder);
         newErrorComp.subErrors(n2.errorComposants);
@@ -127,7 +127,7 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     numberType remainder = EFT::FastTwoProd(n1.number, n2.number, result);
     errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp(remainder);
         newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
         newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
@@ -147,7 +147,7 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     errorType n2Precise = n2.number + n2.error;
     errorType newError = ((remainder + n1.error) - result*n2.error) / n2Precise;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp(n1.errorComposants);
         newErrorComp.addError(remainder);
         newErrorComp.subErrorsTimeScalar(n2.errorComposants, result);
@@ -171,7 +171,7 @@ templated inline Snum& Snum::operator++(int)
     number = result;
     error += remainder;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         errorComposants.addError(remainder);
     #endif
 
@@ -187,7 +187,7 @@ templated inline Snum& Snum::operator--(int)
     number = result;
     error += remainder;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         errorComposants.addError(remainder);
     #endif
 
@@ -203,7 +203,7 @@ templated inline Snum& Snum::operator+=(const Snum& n)
     number = result;
     error += remainder + n.error;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         errorComposants.addError(remainder);
         errorComposants.addErrors(n.errorComposants);
     #endif
@@ -220,7 +220,7 @@ templated inline Snum& Snum::operator-=(const Snum& n)
     number = result;
     error += remainder - n.error;
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         errorComposants.addError(remainder);
         errorComposants.subErrors(n.errorComposants);
     #endif
@@ -236,7 +236,7 @@ templated inline Snum& Snum::operator*=(const Snum& n)
     numberType remainder = EFT::FastTwoProd(number, n.number, result);
 
     error = n.number*error + remainder + number*n.error;
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         errorComposants.multByScalar(n.number);
         errorComposants.addError(remainder);
         errorComposants.addErrorsTimeScalar(n.errorComposants, number);
@@ -256,7 +256,7 @@ templated inline Snum& Snum::operator/=(const Snum& n)
     number = result;
     error = (error + remainder - result*n.error) / (n.number + n.error);
 
-    #ifdef TAGGED_ERROR
+    #ifdef SHAMAN_TAGGED_ERROR
         errorComposants.addError(remainder);
         errorComposants.subErrorsTimeScalar(n.errorComposants, result);
         errorComposants.divByScalar(n2Precise);
