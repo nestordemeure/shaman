@@ -31,6 +31,7 @@ public:
     // casting
     #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
     template<typename n, typename e, typename p> inline S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants) {};
+    template<typename n, typename e, typename p> inline S(volatile S<n,e,p>& s): number(s.number), error(s.error), errorComposants(const_cast<error_sum<e>&>(s.errorComposants)) {};
     #else
     // base constructors
     inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
@@ -39,9 +40,11 @@ public:
     // casting
     #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n)
     template<typename n, typename e, typename p> inline S(const S<n,e,p>& s): number(s.number), error(s.error) {};
+    template<typename n, typename e, typename p> inline S(volatile S<n,e,p>& s): number(s.number), error(s.error) {};
     #endif
 
     // casting
+    inline operator bool() const { return (bool) number; };
     inline operator short int() const { return (short int) number; };
     inline operator unsigned short int() const { return (unsigned short int) number; };
     inline operator int() const { return (int) number; };

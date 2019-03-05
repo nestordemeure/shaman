@@ -1,0 +1,5 @@
+if(EXISTS "/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/src/shaman/unit_tests/shaman_unittests[1]_tests.cmake")
+  include("/ccc/home/cont001/ocre/demeuren/thesis/code/shaman/shaman/src/shaman/unit_tests/shaman_unittests[1]_tests.cmake")
+else()
+  add_test(shaman_unittests_NOT_BUILT shaman_unittests_NOT_BUILT)
+endif()

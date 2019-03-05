@@ -19,6 +19,8 @@ public:
     // contains the error decomposed in composants (one per block encountered)
     // errors[tag] = error // if tag is out or range, error is 0
     std::vector<errorType>* errors;
+    const static int CONSTRUCTOR_FLAG = 32771; // a number that is unlikely to appear at random in unalocated memory
+    int constructor_flag = CONSTRUCTOR_FLAG; // used to test wether an error_sum was constructed legally
 
     //-------------------------------------------------------------------------
     // CONSTRUCTORS
@@ -53,6 +55,12 @@ public:
      */
     error_sum& operator=(const error_sum& errorSum2)
     {
+        // if the memory comes from an uninitialized allocation
+        if (constructor_flag != CONSTRUCTOR_FLAG)
+        {
+            errors = MemoryStore<errorType>::getVector();
+            constructor_flag = CONSTRUCTOR_FLAG;
+        }
         *errors = *(errorSum2.errors); // cannot use 'assign' because errors might have existing values out of errorSum2.size()
         return *this;
     };
@@ -84,6 +92,7 @@ public:
     {
         MemoryStore<errorType>::releaseVector(errors);
         errors = nullptr;
+        constructor_flag = 0;
     }
 
     //-------------------------------------------------------------------------
@@ -267,4 +276,5 @@ public:
         return output.str();
     }
 };
+
 

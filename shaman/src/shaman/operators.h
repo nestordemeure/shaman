@@ -254,7 +254,7 @@ templated inline Snum& Snum::operator/=(const Snum& n)
     errorType n2Precise = n.number + n.error;
 
     number = result;
-    error = (error + remainder - result*n.error) / (n.number + n.error);
+    error = (error + remainder - result*n.error) / n2Precise;
 
     #ifdef SHAMAN_TAGGED_ERROR
         errorComposants.addError(remainder);
