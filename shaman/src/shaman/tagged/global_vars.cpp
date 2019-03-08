@@ -1,7 +1,3 @@
-//
-// Created by demeuren on 08/06/18.
-//
-
 #include "global_vars.h"
 
 // used to model the stacktrace

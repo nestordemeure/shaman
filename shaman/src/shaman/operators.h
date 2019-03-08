@@ -1,7 +1,3 @@
-//
-// Created by demeuren on 02/05/18.
-//
-
 #pragma once
 
 #include "eft.h"
@@ -72,8 +68,7 @@ templated inline const Snum operator-(const Snum& n)
     errorType newError = -n.error;
 
     #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp(n.errorComposants);
-        newErrorComp.unaryNeg();
+        Serror newErrorComp(n.errorComposants, [](errorType e){return -e;});
         return Snum(result, newError, newErrorComp);
     #else
         return Snum(result, newError);
@@ -89,9 +84,8 @@ templated inline const Snum operator+(const Snum& n1, const Snum& n2)
     errorType newError = remainder + n1.error + n2.error;
 
     #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp(n1.errorComposants);
+        Serror newErrorComp(n1.errorComposants, n2.errorComposants, std::plus<errorType>());
         newErrorComp.addError(remainder);
-        newErrorComp.addErrors(n2.errorComposants);
         return Snum(result, newError, newErrorComp);
     #else
         return Snum(result, newError);
@@ -108,9 +102,8 @@ templated inline const Snum operator-(const Snum& n1, const Snum& n2)
     errorType newError = remainder + n1.error - n2.error;
 
     #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp(n1.errorComposants);
+        Serror newErrorComp(n1.errorComposants, n2.errorComposants, std::minus<errorType>());
         newErrorComp.addError(remainder);
-        newErrorComp.subErrors(n2.errorComposants);
         return Snum(result, newError, newErrorComp);
     #else
         return Snum(result, newError);
@@ -128,9 +121,10 @@ templated inline const Snum operator*(const Snum& n1, const Snum& n2)
     errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error);
 
     #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp(remainder);
-        newErrorComp.addErrorsTimeScalar(n2.errorComposants, n1.number);
-        newErrorComp.addErrorsTimeScalar(n1.errorComposants, n2.number);
+        numberType number1 = n1.number;
+        numberType number2 = n2.number;
+        Serror newErrorComp(n1.errorComposants, n2.errorComposants, [number1, number2](errorType e1, errorType e2){return number2*e1 + number1*e2;});
+        newErrorComp.addError(remainder);
         return Snum(result, newError, newErrorComp);
     #else
         return Snum(result, newError);
@@ -148,9 +142,8 @@ templated inline const Snum operator/(const Snum& n1, const Snum& n2)
     errorType newError = ((remainder + n1.error) - result*n2.error) / n2Precise;
 
     #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp(n1.errorComposants);
+        Serror newErrorComp(n1.errorComposants, n2.errorComposants, [result](errorType e1, errorType e2){return e1 - result*e2;});
         newErrorComp.addError(remainder);
-        newErrorComp.subErrorsTimeScalar(n2.errorComposants, result);
         newErrorComp.divByScalar(n2Precise);
         return Snum(result, newError, newErrorComp);
     #else
@@ -258,7 +251,7 @@ templated inline Snum& Snum::operator/=(const Snum& n)
 
     #ifdef SHAMAN_TAGGED_ERROR
         errorComposants.addError(remainder);
-        errorComposants.subErrorsTimeScalar(n.errorComposants, result);
+        errorComposants.addErrorsTimeScalar(n.errorComposants, -result);
         errorComposants.divByScalar(n2Precise);
     #endif
 
@@ -320,3 +313,4 @@ set_Sbool_operator_casts(>=);
 
 #undef set_Soperator_casts
 #undef set_Sbool_operator_casts
+
