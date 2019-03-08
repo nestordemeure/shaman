@@ -4,7 +4,12 @@
 #include <sstream>
 #include <iomanip>
 #include <iostream>
+#include <exception>
 #include "tagger.h"
+
+#ifndef SHAMAN_TAGNUMBER
+#define SHAMAN_TAGNUMBER 25
+#endif
 
 /*
  * POD error_sum that has a maxComposantNumber in its definition
@@ -13,10 +18,9 @@
 template<typename errorType> class error_sum
 {
 private:
-    static const size_t MaxcomposantNumber = 34;
     // contains the error decomposed in composants (one per block encountered)
     // errors[tag] = error // if tag is out or range, error is 0
-    std::array<errorType, MaxcomposantNumber> errors;
+    std::array<errorType, SHAMAN_TAGNUMBER> errors;
 
 public:
 
@@ -36,7 +40,14 @@ public:
      */
     error_sum(Tag tag, errorType error): errors()
     {
-        errors.at(tag) = error; // uses at() to get exception thrown if tag become too large
+        if(tag < SHAMAN_TAGNUMBER)
+        {
+            errors[tag] = error;
+        }
+        else
+        {
+            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number.");
+        }
     }
 
     /*
@@ -46,7 +57,14 @@ public:
     explicit error_sum(errorType error): errors()
     {
         Tag tag = CodeBlock::currentBlock();
-        errors.at(tag) = error; // uses at() to get exception thrown if tag become too large
+        if(tag < SHAMAN_TAGNUMBER)
+        {
+            errors[tag] = error;
+        }
+        else
+        {
+            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number.");
+        }
     }
 
     /*
@@ -78,7 +96,14 @@ public:
     void addError(errorType error)
     {
         Tag tag = CodeBlock::currentBlock();
-        errors.at(tag) += error; // uses at() to get exeption thrown if tag become too large
+        if(tag < SHAMAN_TAGNUMBER)
+        {
+            errors[tag] += error;
+        }
+        else
+        {
+            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number.");
+        }
     }
 
     /*
