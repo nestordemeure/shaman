@@ -46,7 +46,7 @@ public:
         }
         else
         {
-            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number.");
+            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.");
         }
     }
 
@@ -63,7 +63,7 @@ public:
         }
         else
         {
-            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number.");
+            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.");
         }
     }
 
@@ -102,7 +102,7 @@ public:
         }
         else
         {
-            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number.");
+            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.");
         }
     }
 
