@@ -1,126 +1,76 @@
-//
-// Created by demeuren on 04/06/18.
-//
 #pragma once
 
-#include <unordered_map>
-#include <cmath>
 #include <algorithm>
-#include <numeric>
 #include <sstream>
 #include <iomanip>
 #include <iostream>
 #include "tagger.h"
-#include "memory_store.h"
 
+/*
+ * POD error_sum that has a maxComposantNumber in its definition
+ * NOTE: adding a capacity to avoid doing computation on zero terms decrease performances
+ */
 template<typename errorType> class error_sum
 {
-public:
+private:
+    static const size_t MaxcomposantNumber = 34;
     // contains the error decomposed in composants (one per block encountered)
     // errors[tag] = error // if tag is out or range, error is 0
-    std::vector<errorType>* errors;
-    const static int CONSTRUCTOR_FLAG = 32771; // a number that is unlikely to appear at random in unalocated memory
-    int constructor_flag = CONSTRUCTOR_FLAG; // used to test wether an error_sum was constructed legally
+    std::array<errorType, MaxcomposantNumber> errors;
 
-    //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+public:
 
     /*
      * empty constructor : currently no error
      */
-    explicit error_sum(): errors(MemoryStore<errorType>::getVector()) {}
+    explicit error_sum(): errors() {}
 
     /*
-     * copy constructor
-     * WARNING this constructor needs to do a deep copy (which is not the default)
-     * DANGER removing this constructor (since the template constructor should be enough to cover even the base errorType) will result in a memory leak
-     */
-    error_sum(const error_sum& errorSum2): errors(MemoryStore<errorType>::getVector())
-    {
-        errors->assign(errorSum2.errors->begin(), errorSum2.errors->end()); // assign insures that we do not drop the capacity (undefined behaviour for = operator)
-    }
-
-    /*
-     * copy constructor that allows construction from another errorType
+     * copy constructor that allows construction from another error_sum with the same number of composant number
      */
     template<typename errorType2>
-    error_sum(const error_sum<errorType2>& errorSum2): errors(MemoryStore<errorType>::getVector())
-    {
-        errors->assign(errorSum2.errors->begin(), errorSum2.errors->end());
-    }
-
-    /*
-     * copy assignment
-     * WARNING this constructor needs to do a deep copy (which is not the default)
-     */
-    error_sum& operator=(const error_sum& errorSum2)
-    {
-        // if the memory comes from an uninitialized allocation
-        if (constructor_flag != CONSTRUCTOR_FLAG)
-        {
-            errors = MemoryStore<errorType>::getVector();
-            constructor_flag = CONSTRUCTOR_FLAG;
-        }
-        *errors = *(errorSum2.errors); // cannot use 'assign' because errors might have existing values out of errorSum2.size()
-        return *this;
-    };
+    error_sum(const error_sum<errorType2>& errorSum2): errors(errorSum2.errors()) {}
 
     /*
      * returns an errorSum with a single element (singleton)
      */
-    explicit error_sum(Tag tag, errorType error): errors(MemoryStore<errorType>::getVector())
+    error_sum(Tag tag, errorType error): errors()
     {
-        errors->resize(tag+1);
-        (*errors)[tag] = error;
+        errors.at(tag) = error; // uses at() to get exception thrown if tag become too large
     }
 
     /*
      * returns an errorSum with a single element (singleton)
      * uses the current tag
      */
-    explicit error_sum(errorType error): errors(MemoryStore<errorType>::getVector())
+    explicit error_sum(errorType error): errors()
     {
         Tag tag = CodeBlock::currentBlock();
-        errors->resize(tag+1);
-        (*errors)[tag] = error;
+        errors.at(tag) = error; // uses at() to get exception thrown if tag become too large
     }
 
     /*
-     * destructor
+     * constructor that takes a function such that errors[i] = function(errorsum1[i])
+     * NOTE: we do not construct errors with errors() so it starts non 0 initialized
      */
-    ~error_sum()
+    template<typename FUN>
+    error_sum(const error_sum& errorSum, FUN function)
     {
-        MemoryStore<errorType>::releaseVector(errors);
-        errors = nullptr;
-        constructor_flag = 0;
+        std::transform(errorSum.errors.begin(), errorSum.errors.end(), errors.begin(), function);
+    }
+
+    /*
+     * constructor that takes a function such that errors[i] = function(errorsum1[i], errorsum2[i])
+     * NOTE: we do not construct errors with errors() so it starts non 0 initialized
+     */
+    template<typename FUN>
+    error_sum(const error_sum& errorSum1, const error_sum& errorSum2, FUN function)
+    {
+        std::transform(errorSum1.errors.begin(), errorSum1.errors.end(), errorSum2.errors.begin(), errors.begin(), function);
     }
 
     //-------------------------------------------------------------------------
     // OPERATIONS
-
-    /*
-     * ~-
-     */
-    void unaryNeg()
-    {
-        std::transform(errors->begin(), errors->end(), errors->begin(), [](errorType x){return -x;});
-    }
-
-    /*
-     * *= scalar
-     */
-    void multByScalar(errorType scalar)
-    {
-        std::transform(errors->begin(), errors->end(), errors->begin(), [scalar](errorType x){return x*scalar;});
-    }
-
-    /*
-     * /= scalar
-     */
-    void divByScalar(errorType scalar)
-    {
-        std::transform(errors->begin(), errors->end(), errors->begin(), [scalar](errorType x){return x/scalar;});
-    }
 
     /*
      * += error
@@ -128,14 +78,23 @@ public:
     void addError(errorType error)
     {
         Tag tag = CodeBlock::currentBlock();
+        errors.at(tag) += error; // uses at() to get exeption thrown if tag become too large
+    }
 
-        // insures that errors is big enough to store the results
-        if(tag >= errors->size())
-        {
-            errors->resize(tag+1);
-        }
+    /*
+     * *= scalar
+     */
+    void multByScalar(errorType scalar)
+    {
+        std::transform(errors.begin(), errors.end(), errors.begin(), [scalar](errorType x){return x*scalar;});
+    }
 
-        (*errors)[tag] += error;
+    /*
+     * /= scalar
+     */
+    void divByScalar(errorType scalar)
+    {
+        std::transform(errors.begin(), errors.end(), errors.begin(), [scalar](errorType x){return x/scalar;});
     }
 
     /*
@@ -143,7 +102,7 @@ public:
      */
     void addErrors(const error_sum& errorSum2)
     {
-        addMap(*errorSum2.errors, [](errorType e){return e;});
+        std::transform(errors.begin(), errors.end(), errorSum2.errors.begin(), errors.begin(), std::plus<errorType>());
     }
 
     /*
@@ -151,7 +110,7 @@ public:
      */
     void subErrors(const error_sum& errorSum2)
     {
-        addMap(*errorSum2.errors, [](errorType e){return -e;});
+        std::transform(errors.begin(), errors.end(), errorSum2.errors.begin(), errors.begin(), std::minus<errorType>());
     }
 
     /*
@@ -159,37 +118,7 @@ public:
      */
     void addErrorsTimeScalar(const error_sum& errorSum2, errorType scalar)
     {
-        addMap(*errorSum2.errors, [scalar](errorType e){return e*scalar;});
-    }
-
-    /*
-     * -= scalar * errorComposants
-     */
-    void subErrorsTimeScalar(const error_sum& errorSum2, errorType scalar)
-    {
-        addMap(*errorSum2.errors, [scalar](errorType e){return -e*scalar;});
-    }
-
-    //-------------------------------------------------------------------------
-    // HIGH LEVEL FUNCTIONS
-
-    /*
-     * applies a function f to the elements of errors2 and add them to errors
-     */
-    template<typename FUN>
-    inline void addMap(const std::vector<errorType>& errors2, FUN f)
-    {
-        // insures that errors is big enough to store the results
-        if(errors2.size() > errors->size())
-        {
-            errors->resize(errors2.size());
-        }
-
-        // adds the values from errors2 to errors
-        for(int tag = 0; tag < errors2.size(); tag++)
-        {
-            (*errors)[tag] += f(errors2[tag]);
-        }
+        std::transform(errors.begin(), errors.end(), errorSum2.errors.begin(), errors.begin(), [scalar](errorType e1, errorType e2){return e1 + e2*scalar;});
     }
 
     //-------------------------------------------------------------------------
@@ -208,25 +137,22 @@ public:
         // computes the sum of abs(error) and the sign of the sum of errors
         errorType totalAbsoluteError = 0.;
         errorType totalError = 0.;
-        for(auto error : *errors)
+        for(auto error : errors)
         {
             totalAbsoluteError += std::fabs(error);
             totalError += error;
         }
         // rectifies the sign of the sum of absolute errors to match the sign of the sum
-        if(totalError < 0)
-        {
-            totalAbsoluteError = -totalAbsoluteError;
-        }
+        totalAbsoluteError = std::copysign(totalAbsoluteError, totalError);
 
         // collects the relevant data expressed in percent of the total error
         std::vector<std::pair<Tag, errorType>> data;
         bool droppedNonSignificantTerms = false;
-        for(int tag = 0; tag < errors->size(); tag++)
+        for(int tag = 0; tag < errors.size(); tag++)
         {
-            errorType error = (*errors)[tag];
+            errorType error = errors[tag];
 
-            if (std::isnan(error))
+            if (std::isnan(error) || std::isinf(error))
             {
                 data.push_back(std::make_pair(tag, error));
             }
@@ -236,7 +162,9 @@ public:
 
                 if(std::abs(percent) >= minErrorPercent)
                 {
-                    data.push_back(std::make_pair(tag, percent));
+                    // TODO temporary full display that is not in %
+                    data.push_back(std::make_pair(tag, error));
+                    //data.push_back(std::make_pair(tag, percent));
                 }
                 else if (error != 0)
                 {
