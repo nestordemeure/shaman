@@ -24,7 +24,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 1,  // needed to call constructor
+            RequireInitialization = 0,  // 1 to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
@@ -46,7 +46,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 1,  // needed to call constructor
+            RequireInitialization = 0,  // 1 to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
@@ -68,7 +68,7 @@ namespace Eigen
             IsComplex = 0,
             IsInteger = 0,
             IsSigned = 1,
-            RequireInitialization = 1,  // needed to call constructor
+            RequireInitialization = 0,  // 1 to call constructor
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1
