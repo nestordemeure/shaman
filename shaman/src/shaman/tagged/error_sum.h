@@ -1,10 +1,12 @@
 #pragma once
 
+#include <cmath>
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
 #include <iostream>
 #include <exception>
+#include <type_traits>
 #include "tagger.h"
 
 #ifndef SHAMAN_TAGNUMBER
@@ -17,12 +19,11 @@
  */
 template<typename errorType> class error_sum
 {
-private:
+public:
     // contains the error decomposed in composants (one per block encountered)
     // errors[tag] = error // if tag is out or range, error is 0
-    std::array<errorType, SHAMAN_TAGNUMBER> errors;
-
-public:
+    static const size_t maxTagNumber = SHAMAN_TAGNUMBER;
+    std::array<errorType, maxTagNumber> errors;
 
     /*
      * empty constructor : currently no error
@@ -32,21 +33,37 @@ public:
     /*
      * copy constructor that allows construction from another error_sum with the same number of composant number
      */
+    template<typename errorType2, typename std::enable_if<std::is_same<errorType2, errorType>::value, int>::type = 0>
+    error_sum(const error_sum<errorType2>& errorSum2): errors(errorSum2.errors())
+    {}
+
+    /*
+     * copy constructor that allows construction from another error_sum with the same number of composant number but a different type
+     */
     template<typename errorType2>
-    error_sum(const error_sum<errorType2>& errorSum2): errors(errorSum2.errors()) {}
+    error_sum(const error_sum<errorType2>& errorSum2): errors()
+    {
+        // TODO why is std::copy refused by the compiler here ?
+        //std::copy(errorSum2.errors.begin(), errorSum2.errors.end(), errors);
+        for(unsigned int i = 0; i < maxTagNumber; i++)
+        {
+            errors[i] = errorSum2.errors[i];
+        }
+    }
 
     /*
      * returns an errorSum with a single element (singleton)
      */
     error_sum(Tag tag, errorType error): errors()
     {
-        if(tag < SHAMAN_TAGNUMBER)
+        if(tag < maxTagNumber)
         {
             errors[tag] = error;
         }
         else
         {
-            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.");
+            std::string errorMessage = "SHAMAN: You have been using more than " + std::to_string(maxTagNumber) + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.";
+            throw std::runtime_error(errorMessage);
         }
     }
 
@@ -57,13 +74,14 @@ public:
     explicit error_sum(errorType error): errors()
     {
         Tag tag = CodeBlock::currentBlock();
-        if(tag < SHAMAN_TAGNUMBER)
+        if(tag < maxTagNumber)
         {
             errors[tag] = error;
         }
         else
         {
-            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.");
+            std::string errorMessage = "SHAMAN: You have been using more than " + std::to_string(maxTagNumber) + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.";
+            throw std::runtime_error(errorMessage);
         }
     }
 
@@ -96,13 +114,14 @@ public:
     void addError(errorType error)
     {
         Tag tag = CodeBlock::currentBlock();
-        if(tag < SHAMAN_TAGNUMBER)
+        if(tag < maxTagNumber)
         {
             errors[tag] += error;
         }
         else
         {
-            throw std::exception("SHAMAN: You have been using more than " + SHAMAN_TAGNUMBER + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.");
+            std::string errorMessage = "SHAMAN: You have been using more than " + std::to_string(maxTagNumber) + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.";
+            throw std::runtime_error(errorMessage);
         }
     }
 
@@ -173,7 +192,7 @@ public:
         // collects the relevant data expressed in percent of the total error
         std::vector<std::pair<Tag, errorType>> data;
         bool droppedNonSignificantTerms = false;
-        for(int tag = 0; tag < errors.size(); tag++)
+        for(unsigned int tag = 0; tag < CodeBlock::tagNumber(); tag++)
         {
             errorType error = errors[tag];
 
@@ -187,9 +206,7 @@ public:
 
                 if(std::abs(percent) >= minErrorPercent)
                 {
-                    // TODO temporary full display that is not in %
-                    data.push_back(std::make_pair(tag, error));
-                    //data.push_back(std::make_pair(tag, percent));
+                    data.push_back(std::make_pair(tag, percent));
                 }
                 else if (error != 0)
                 {
@@ -229,5 +246,6 @@ public:
         return output.str();
     }
 };
+
 
 

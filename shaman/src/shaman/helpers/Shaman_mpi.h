@@ -1,10 +1,5 @@
-//
-// Created by demeuren on 05/07/18.
-//
-
 #pragma once
 
-#include "Shaman_mpi.h"
 #include <cstddef>
 
 /*

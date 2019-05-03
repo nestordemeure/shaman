@@ -78,6 +78,14 @@ public:
             return tag;
         }
     }
+    
+    /*
+     * returns the number of tags currently declared
+     */
+    static size_t tagNumber()
+    {
+        return ShamanGlobals::tagDecryptor.size();
+    }
 };
 
 // macro to quickly define blocks
