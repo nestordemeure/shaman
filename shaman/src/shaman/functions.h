@@ -321,17 +321,26 @@ templated const Snum Sstd::log(const Snum& n)
 {
     numberType result = std::log(n.number);
 
-    preciseType preciseCorrectedResult;
+    preciseType totalError;
     preciseType correctedNumber = n.corrected_number();
-    if (correctedNumber < 0)
+    if((correctedNumber <= 0.) && (n.number <= 0.))
     {
-        preciseCorrectedResult = -INFINITY;
+        // resolves the case inf-inf
+        totalError = 0.;
     }
     else
     {
-        preciseCorrectedResult = std::log(correctedNumber);
+        preciseType preciseCorrectedResult;
+        if (correctedNumber < 0)
+        {
+            preciseCorrectedResult = -INFINITY;
+        }
+        else
+        {
+            preciseCorrectedResult = std::log(correctedNumber);
+        }
+        totalError = preciseCorrectedResult - result;
     }
-    preciseType totalError = preciseCorrectedResult - result;
 
     #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
@@ -359,17 +368,26 @@ templated const Snum Sstd::log2(const Snum& n)
 {
     numberType result = std::log2(n.number);
 
-    preciseType preciseCorrectedResult;
+    preciseType totalError;
     preciseType correctedNumber = n.corrected_number();
-    if (correctedNumber < 0)
+    if((correctedNumber <= 0.) && (n.number <= 0.))
     {
-        preciseCorrectedResult = -INFINITY;
+        // resolves the case inf-inf
+        totalError = 0.;
     }
     else
     {
-        preciseCorrectedResult = std::log2(correctedNumber);
+        preciseType preciseCorrectedResult;
+        if (correctedNumber < 0)
+        {
+            preciseCorrectedResult = -INFINITY;
+        }
+        else
+        {
+            preciseCorrectedResult = std::log2(correctedNumber);
+        }
+        totalError = preciseCorrectedResult - result;
     }
-    preciseType totalError = preciseCorrectedResult - result;
 
     #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
@@ -397,17 +415,26 @@ templated const Snum Sstd::log10(const Snum& n)
 {
     numberType result = std::log10(n.number);
 
-    preciseType preciseCorrectedResult;
+    preciseType totalError;
     preciseType correctedNumber = n.corrected_number();
-    if (correctedNumber < 0)
+    if((correctedNumber <= 0.) && (n.number <= 0.))
     {
-        preciseCorrectedResult = -INFINITY;
+        // resolves the case inf-inf
+        totalError = 0.;
     }
     else
     {
-        preciseCorrectedResult = std::log10(correctedNumber);
+        preciseType preciseCorrectedResult;
+        if (correctedNumber < 0)
+        {
+            preciseCorrectedResult = -INFINITY;
+        }
+        else
+        {
+            preciseCorrectedResult = std::log10(correctedNumber);
+        }
+        totalError = preciseCorrectedResult - result;
     }
-    preciseType totalError = preciseCorrectedResult - result;
 
     #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
@@ -435,17 +462,26 @@ templated const Snum Sstd::logb(const Snum& n)
 {
     numberType result = std::logb(n.number);
 
-    preciseType preciseCorrectedResult;
+    preciseType totalError;
     preciseType correctedNumber = n.corrected_number();
-    if (correctedNumber == 0)
+    if((correctedNumber <= 0.) && (n.number <= 0.))
     {
-        preciseCorrectedResult = -INFINITY;
+        // resolves the case inf-inf
+        totalError = 0.;
     }
     else
     {
-        preciseCorrectedResult = std::logb(correctedNumber);
+        preciseType preciseCorrectedResult;
+        if (correctedNumber < 0)
+        {
+            preciseCorrectedResult = -INFINITY;
+        }
+        else
+        {
+            preciseCorrectedResult = std::logb(correctedNumber);
+        }
+        totalError = preciseCorrectedResult - result;
     }
-    preciseType totalError = preciseCorrectedResult - result;
 
     #ifdef SHAMAN_TAGGED_ERROR
         Serror newErrorComp;
