@@ -64,7 +64,7 @@ configure_package_config_file(
 )
 
 install(FILES shaman.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(FILES shaman/eft.h shaman/methods.h shaman/operators.h shaman/functions.h
+install(FILES shaman/eft.h shaman/methods.h shaman/operators.h shaman/functions.h shaman/traits.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/shaman)
 install(DIRECTORY shaman/helpers shaman/tagged
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/shaman)
