@@ -229,6 +229,7 @@ using Slong_double = S<long double, long double, long double>;
 #include <shaman/methods.h>
 #include <shaman/operators.h>
 #include <shaman/functions.h>
+#include <shaman/traits.h>
 
 #undef templated
 #undef Snum
