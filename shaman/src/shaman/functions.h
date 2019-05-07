@@ -109,17 +109,35 @@ templated inline bool Sstd::signbit(const Snum& n)
 };
 using Sstd::signbit;
 
+// copysign
+templated inline const Snum Sstd::copysign(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n2, Snum(typename Snum::NumberType(0.)));
+
+    numberType newNumber = std::copysign(n1.number, n2.number);
+    if (std::signbit(newNumber) == std::signbit(n1.number))
+    {
+        return n1;
+    }
+    else
+    {
+        return -n1;
+    }
+};
+set_Sfunction2_casts(copysign);
+
 // abs
 templated inline const Snum Sstd::abs(const Snum& n)
 {
     Snum::checkUnstableBranch(n, Snum(typename Snum::NumberType(0.)));
-    if (n.number >= 0.)
+
+    if (std::signbit(n.number)) // <=> n.number < 0 (but safe for nan)
     {
-        return n;
+        return -n;
     }
     else
     {
-        return -n;
+        return n;
     }
 };
 using Sstd::abs;
@@ -135,14 +153,7 @@ using Sstd::fabs;
 templated inline const Snum Sstd::min(const Snum& n1, const Snum& n2)
 {
     Snum::checkUnstableBranch(n1, n2);
-    if (n1.number <= n2.number)
-    {
-        return n1;
-    }
-    else
-    {
-        return n2;
-    }
+    return std::min(n1,n2);
 };
 set_Sfunction2_casts(min);
 
@@ -150,14 +161,7 @@ set_Sfunction2_casts(min);
 templated inline const Snum Sstd::max(const Snum& n1, const Snum& n2)
 {
     Snum::checkUnstableBranch(n1, n2);
-    if (n1.number >= n2.number)
-    {
-        return n1;
-    }
-    else
-    {
-        return n2;
-    }
+    return std::max(n1,n2);
 };
 set_Sfunction2_casts(max);
 
@@ -174,23 +178,6 @@ templated inline const Snum Sstd::fmax(const Snum& n1, const Snum& n2)
     return Sstd::max(n1, n2);
 };
 set_Sfunction2_casts(fmax);
-
-// copysign
-templated inline const Snum Sstd::copysign(const Snum& n1, const Snum& n2)
-{
-    Snum::checkUnstableBranch(n2, Snum(typename Snum::NumberType(0.)));
-
-    numberType newNumber = std::copysign(n1.number, n2.number);
-    if (newNumber == n1.number) // TODO does not deal properly with Nan
-    {
-        return n1;
-    }
-    else
-    {
-        return -n1;
-    }
-};
-set_Sfunction2_casts(copysign);
 
 //-----------------------------------------------------------------------------
 // LINEARISABLE FUNCTIONS
