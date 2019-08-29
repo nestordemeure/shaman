@@ -57,6 +57,7 @@ namespace
     }
 
     // TODO we might search for binary values to complete the test suite
+    // TODO a good test might be to confirm that the computation of the error on a large sum is within expected error bounds
     TEST(EFT_SUM, double)
     {
         // cancellation
