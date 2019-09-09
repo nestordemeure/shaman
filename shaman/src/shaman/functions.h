@@ -984,7 +984,51 @@ SHAMAN_FUNCTION(tgamma);
 SHAMAN_FUNCTION(lgamma);
 
 //-----------------------------------------------------------------------------
-// TEST BASED FUNCTIONS
+// ROUNDING AND REMAINDER FUNCTIONS
+
+SHAMAN_FUNCTION(ceil);
+SHAMAN_FUNCTION(floor);
+SHAMAN_FUNCTION(trunc);
+SHAMAN_FUNCTION(round);
+SHAMAN_FUNCTION(rint);
+SHAMAN_FUNCTION(nearbyint);
+
+// TODO fmod
+
+// lround
+templated inline const long int Sstd::lround(const Snum& n)
+{
+    return std::lround(n.number);
+}
+using Sstd::lround;
+
+// llround
+templated inline const long long int Sstd::llround(const Snum& n)
+{
+    return std::llround(n.number);
+}
+using Sstd::llround;
+
+// lrint
+templated inline const long int Sstd::lrint(const Snum& n)
+{
+    return std::lrint(n.number);
+}
+using Sstd::lrint;
+
+// llrint
+templated inline const long long int Sstd::llrint(const Snum& n)
+{
+    return std::llrint(n.number);
+}
+using Sstd::llrint;
+
+// TODO remainder
+
+// TODO remquo
+
+//-----------------------------------------------------------------------------
+// FLOATING POINT MANIPULATION FUNCTIONS
 
 // copysign
 templated inline const Snum Sstd::copysign(const Snum& n1, const Snum& n2)
@@ -1003,28 +1047,150 @@ templated inline const Snum Sstd::copysign(const Snum& n1, const Snum& n2)
 };
 set_Sfunction2_casts(copysign);
 
-// abs
-templated inline const Snum Sstd::abs(const Snum& n)
+// nan
+templated const Snum Sstd::nan(const char* tagp)
 {
-    Snum::checkUnstableBranch(n, Snum(typename Snum::NumberType(0.)));
+    return Snum(std::nan(tagp));
+};
+using Sstd::nan;
 
-    if (std::signbit(n.number)) // <=> n.number < 0 (but safe for nan)
+// nextafter
+templated inline const Snum Sstd::nextafter(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n1, n2);
+
+    numberType result = std::nextafter(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::nextafter(n1.corrected_number(), n2.corrected_number());
+    preciseType totalError = preciseCorrectedResult - result;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+    if((n1.error == 0.) && (n2.error == 0.))
     {
-        return -n;
+        newErrorComp = Serror(totalError);
+    }
+    else if (n2.error == 0.)
+    {
+        preciseType proportionalInput1Error = totalError / n1.error;
+        newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
+    }
+    else if (n1.error == 0.)
+    {
+        preciseType proportionalInput2Error = totalError / n2.error;
+        newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
     }
     else
     {
-        return n;
+        preciseType preciseCorrectedBut1Result = std::nextafter((preciseType)n1, n2.corrected_number());
+        preciseType preciseCorrectedBut2Result = std::nextafter(n1.corrected_number(), (preciseType)n2);
+        preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+        preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+        preciseType proportionality = totalError / (input1Error + input2Error);
+        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+        newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
     }
+    return Snum(result, totalError, newErrorComp);
+    #else
+    return Snum(result, totalError);
+    #endif
 };
-using Sstd::abs;
+set_Sfunction2_casts(nextafter);
+// TODO should we perform function casts when both inputs should have the same type according to the implementation ?
 
-// fabs
-templated inline const Snum Sstd::fabs(const Snum& n)
+// nexttoward
+templated inline const Snum Sstd::nexttoward(const Snum& n1, const Snum& n2)
 {
-    return Sstd::abs(n);
+    Snum::checkUnstableBranch(n1, n2);
+
+    numberType result = std::nexttoward(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::nexttoward(n1.corrected_number(), n2.corrected_number());
+    preciseType totalError = preciseCorrectedResult - result;
+
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+    if((n1.error == 0.) && (n2.error == 0.))
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else if (n2.error == 0.)
+    {
+        preciseType proportionalInput1Error = totalError / n1.error;
+        newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
+    }
+    else if (n1.error == 0.)
+    {
+        preciseType proportionalInput2Error = totalError / n2.error;
+        newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
+    }
+    else
+    {
+        preciseType preciseCorrectedBut1Result = std::nexttoward((preciseType)n1, n2.corrected_number());
+        preciseType preciseCorrectedBut2Result = std::nexttoward(n1.corrected_number(), (preciseType)n2);
+        preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+        preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+        preciseType proportionality = totalError / (input1Error + input2Error);
+        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+        newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+    }
+    return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
 };
-using Sstd::fabs;
+set_Sfunction2_casts(nexttoward);
+
+//-----------------------------------------------------------------------------
+// MINIMUM MAXIMUM DIFFERENCE FUNCTIONS
+
+// fdim
+templated inline const Snum Sstd::fdim(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n1, n2);
+
+    numberType result = std::fdim(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::fdim(n1.corrected_number(), n2.corrected_number());
+    preciseType totalError = preciseCorrectedResult - result;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+    preciseType preciseResult = std::fdim((preciseType)n1.number, (preciseType)n2.number);
+    preciseType functionError = preciseResult - result;
+    if((n1.error == 0.) && (n2.error == 0.))
+    {
+        newErrorComp = Serror(totalError);
+    }
+    else if (n2.error == 0.)
+    {
+        preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
+        newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
+        newErrorComp.addError(functionError);
+    }
+    else if (n1.error == 0.)
+    {
+        preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
+        newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
+        newErrorComp.addError(functionError);
+    }
+    else
+    {
+        preciseType preciseCorrectedBut1Result = std::fdim((preciseType)n1, n2.corrected_number());
+        preciseType preciseCorrectedBut2Result = std::fdim(n1.corrected_number(), (preciseType)n2);
+        preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+        preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+        preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
+        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+        newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+        newErrorComp.addError(functionError);
+    }
+    return Snum(result, totalError, newErrorComp);
+    #else
+    return Snum(result, totalError);
+    #endif
+};
+set_Sfunction2_casts(fdim);
 
 // min
 templated inline const Snum Sstd::min(const Snum& n1, const Snum& n2)
@@ -1057,9 +1223,30 @@ templated inline const Snum Sstd::fmax(const Snum& n1, const Snum& n2)
 set_Sfunction2_casts(fmax);
 
 //-----------------------------------------------------------------------------
-// LINEARISABLE FUNCTIONS
+// OTHER FUNCTIONS
 
+// abs
+templated inline const Snum Sstd::abs(const Snum& n)
+{
+    Snum::checkUnstableBranch(n, Snum(typename Snum::NumberType(0.)));
 
+    if (std::signbit(n.number)) // <=> n.number < 0 (but safe for nan)
+    {
+        return -n;
+    }
+    else
+    {
+        return n;
+    }
+};
+using Sstd::abs;
+
+// fabs
+templated inline const Snum Sstd::fabs(const Snum& n)
+{
+    return Sstd::abs(n);
+};
+using Sstd::fabs;
 
 // fma
 templated const Snum Sstd::fma(const Snum& n1, const Snum& n2, const Snum& n3)
@@ -1082,13 +1269,6 @@ templated const Snum Sstd::fma(const Snum& n1, const Snum& n2, const Snum& n3)
     #endif
 };
 set_Sfunction3_casts(fma);
-
-//-----------------------------------------------------------------------------
-// GENERAL FUNCTIONS
-
-SHAMAN_FUNCTION(floor);
-SHAMAN_FUNCTION(ceil);
-SHAMAN_FUNCTION(trunc);
 
 //-----------------------------------------------------------------------------
 // CLASSIFICATION FUNCTIONS
