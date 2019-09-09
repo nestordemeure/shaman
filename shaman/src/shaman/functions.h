@@ -78,7 +78,14 @@ namespace Sstd \
 using Sstd::FUN; \
 
 //-----------------------------------------------------------------------------
-// TEST BASED FUNCTIONS
+// CLASSIFICATION FUNCTIONS
+
+// fpclassify
+templated inline const int Sstd::fpclassify(const Snum& x)
+{
+    return std::fpclassify(x.number);
+};
+using Sstd::fpclassify;
 
 // isfinite
 templated inline bool Sstd::isfinite(const Snum& n)
@@ -101,6 +108,14 @@ templated inline bool Sstd::isnan(const Snum& n)
 };
 using Sstd::isnan;
 
+// isnormal
+templated inline bool Sstd::isnormal(const Snum& n)
+{
+    // does not include unstability test to check 0 and subnormal
+    return std::isnormal(n.number);
+};
+using Sstd::isnormal;
+
 // signbit
 templated inline bool Sstd::signbit(const Snum& n)
 {
@@ -108,6 +123,14 @@ templated inline bool Sstd::signbit(const Snum& n)
     return std::signbit(n.number);
 };
 using Sstd::signbit;
+
+//-----------------------------------------------------------------------------
+// COMPARISON FUNCTIONS
+
+
+
+//-----------------------------------------------------------------------------
+// TEST BASED FUNCTIONS
 
 // copysign
 templated inline const Snum Sstd::copysign(const Snum& n1, const Snum& n2)
