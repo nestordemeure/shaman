@@ -539,7 +539,7 @@ templated const Snum Sstd::modf(const Snum& n, Snum* intpart)
     return Snum(fractPartNumber, fractTotalError);
     #endif
 };
-// TODO non standard cast due to pointeur argument
+using Sstd::modf;
 
 // log1p
 templated const Snum Sstd::log1p(const Snum& n)
@@ -993,7 +993,51 @@ SHAMAN_FUNCTION(round);
 SHAMAN_FUNCTION(rint);
 SHAMAN_FUNCTION(nearbyint);
 
-// TODO fmod
+// fmod
+templated const Snum Sstd::fmod(const Snum& n1, const Snum& n2)
+{
+    numberType result = std::fmod(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::fmod(n1.corrected_number(), n2.corrected_number());
+    preciseType totalError = preciseCorrectedResult - result;
+
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+        preciseType preciseResult = std::fmod((preciseType)n1.number, (preciseType)n2.number);
+        preciseType functionError = preciseResult - result;
+        if((n1.error == 0.) && (n2.error == 0.))
+        {
+            newErrorComp = Serror(totalError);
+        }
+        else if (n2.error == 0.)
+        {
+            preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
+            newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
+            newErrorComp.addError(functionError);
+        }
+        else if (n1.error == 0.)
+        {
+            preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
+            newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
+        else
+        {
+            preciseType preciseCorrectedBut1Result = std::fmod((preciseType)n1, n2.corrected_number());
+            preciseType preciseCorrectedBut2Result = std::fmod(n1.corrected_number(), (preciseType)n2);
+            preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+            preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
+            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
+        return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
+};
+set_Sfunction2_casts(fmod);
 
 // lround
 templated inline const long int Sstd::lround(const Snum& n)
@@ -1023,9 +1067,98 @@ templated inline const long long int Sstd::llrint(const Snum& n)
 }
 using Sstd::llrint;
 
-// TODO remainder
+// remainder
+templated const Snum Sstd::remainder(const Snum& n1, const Snum& n2)
+{
+    numberType result = std::remainder(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::remainder(n1.corrected_number(), n2.corrected_number());
+    preciseType totalError = preciseCorrectedResult - result;
 
-// TODO remquo
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+        preciseType preciseResult = std::remainder((preciseType)n1.number, (preciseType)n2.number);
+        preciseType functionError = preciseResult - result;
+        if((n1.error == 0.) && (n2.error == 0.))
+        {
+            newErrorComp = Serror(totalError);
+        }
+        else if (n2.error == 0.)
+        {
+            preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
+            newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
+            newErrorComp.addError(functionError);
+        }
+        else if (n1.error == 0.)
+        {
+            preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
+            newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
+        else
+        {
+            preciseType preciseCorrectedBut1Result = std::remainder((preciseType)n1, n2.corrected_number());
+            preciseType preciseCorrectedBut2Result = std::remainder(n1.corrected_number(), (preciseType)n2);
+            preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+            preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
+            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
+        return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
+};
+set_Sfunction2_casts(remainder);
+
+// remquo
+templated const Snum Sstd::remquo(const Snum& n1, const Snum& n2, int* quot)
+{
+    int dummyquot;
+    numberType result = std::remquo(n1.number, n2.number, quot);
+    preciseType preciseCorrectedResult = std::remquo(n1.corrected_number(), n2.corrected_number(), &dummyquot);
+    preciseType totalError = preciseCorrectedResult - result;
+
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+        preciseType preciseResult = std::remquo((preciseType)n1.number, (preciseType)n2.number, &dummyquot);
+        preciseType functionError = preciseResult - result;
+        if((n1.error == 0.) && (n2.error == 0.))
+        {
+            newErrorComp = Serror(totalError);
+        }
+        else if (n2.error == 0.)
+        {
+            preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
+            newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
+            newErrorComp.addError(functionError);
+        }
+        else if (n1.error == 0.)
+        {
+            preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
+            newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
+        else
+        {
+            preciseType preciseCorrectedBut1Result = std::remquo((preciseType)n1, n2.corrected_number(), &dummyquot);
+            preciseType preciseCorrectedBut2Result = std::remquo(n1.corrected_number(), (preciseType)n2, &dummyquot);
+            preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+            preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
+            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
+        return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
+};
+// TODO add cast for all pairs of argument
 
 //-----------------------------------------------------------------------------
 // FLOATING POINT MANIPULATION FUNCTIONS
@@ -1096,7 +1229,6 @@ templated inline const Snum Sstd::nextafter(const Snum& n1, const Snum& n2)
     #endif
 };
 set_Sfunction2_casts(nextafter);
-// TODO should we perform function casts when both inputs should have the same type according to the implementation ?
 
 // nexttoward
 templated inline const Snum Sstd::nexttoward(const Snum& n1, const Snum& n2)
@@ -1321,51 +1453,51 @@ using Sstd::signbit;
 // COMPARISON FUNCTIONS
 
 // isgreater
-templated inline const Snum Sstd::isgreater(const Snum& n1, const Snum& n2)
+templated inline const bool Sstd::isgreater(const Snum& n1, const Snum& n2)
 {
     Snum::checkUnstableBranch(n1, n2);
     return std::isgreater(n1.number, n2.number);
 };
-set_Sfunction2_casts(isgreater);
+using Sstd::isgreater;
 
 // isgreaterequal
-templated inline const Snum Sstd::isgreaterequal(const Snum& n1, const Snum& n2)
+templated inline const bool Sstd::isgreaterequal(const Snum& n1, const Snum& n2)
 {
     Snum::checkUnstableBranch(n1, n2);
     return std::isgreaterequal(n1.number, n2.number);
 };
-set_Sfunction2_casts(isgreaterequal);
+using Sstd::isgreaterequal;
 
 // isless
-templated inline const Snum Sstd::isless(const Snum& n1, const Snum& n2)
+templated inline const bool Sstd::isless(const Snum& n1, const Snum& n2)
 {
     Snum::checkUnstableBranch(n1, n2);
     return std::isless(n1.number, n2.number);
 };
-set_Sfunction2_casts(isless);
+using Sstd::isless;
 
 // islessequal
-templated inline const Snum Sstd::islessequal(const Snum& n1, const Snum& n2)
+templated inline const bool Sstd::islessequal(const Snum& n1, const Snum& n2)
 {
     Snum::checkUnstableBranch(n1, n2);
     return std::islessequal(n1.number, n2.number);
 };
-set_Sfunction2_casts(islessequal);
+using Sstd::islessequal;
 
 // islessgreater
-templated inline const Snum Sstd::islessgreater(const Snum& n1, const Snum& n2)
+templated inline const bool Sstd::islessgreater(const Snum& n1, const Snum& n2)
 {
     Snum::checkUnstableBranch(n1, n2);
     return std::islessgreater(n1.number, n2.number);
 };
-set_Sfunction2_casts(islessgreater);
+using Sstd::islessgreater;
 
 // isunordered
-templated inline const Snum Sstd::isunordered(const Snum& n1, const Snum& n2)
+templated inline const bool Sstd::isunordered(const Snum& n1, const Snum& n2)
 {
     return std::isunordered(n1.number, n2.number);
 };
-set_Sfunction2_casts(isunordered);
+using Sstd::isunordered;
 
 //-----------------------------------------------------------------------------
 
