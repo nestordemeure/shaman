@@ -77,6 +77,264 @@ namespace Sstd \
 } \
 using Sstd::FUN; \
 
+// TODO macro that turns a function into a src function
+#ifdef SHAMAN_TAGGED_ERROR
+#define SHAMAN_FUNCTION(functionName) \
+    templated const Snum Sstd::functionName (const Snum& n) \
+    { \
+        numberType result = std::functionName(n.number); \
+        preciseType preciseCorrectedResult = std::functionName(n.corrected_number()); \
+        preciseType totalError = preciseCorrectedResult - result; \
+        Serror newErrorComp; \
+        if(n.error == 0.) \
+        { \
+            newErrorComp = Serror(totalError); \
+        } \
+        else \
+        { \
+            preciseType preciseResult = std::functionName((preciseType)n.number); \
+            preciseType functionError = preciseResult - result; \
+            preciseType proportionalInputError = (totalError - functionError) / n.error; \
+            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;}); \
+            newErrorComp.addError(functionError); \
+        } \
+        return Snum(result, totalError, newErrorComp); \
+    } \
+    using Sstd::functionName;
+#else
+    #define SHAMAN_FUNCTION(functionName) \
+    templated const Snum Sstd::functionName (const Snum& n) \
+    { \
+        numberType result = std::functionName(n.number); \
+        preciseType preciseCorrectedResult = std::functionName(n.corrected_number()); \
+        preciseType totalError = preciseCorrectedResult - result; \
+        return Snum(result, totalError); \
+    } \
+    using Sstd::functionName;
+#endif
+
+//-----------------------------------------------------------------------------
+// TRIGONOMETRIC FUNCTIONS
+
+SHAMAN_FUNCTION(cos);
+SHAMAN_FUNCTION(sin);
+SHAMAN_FUNCTION(tan);
+SHAMAN_FUNCTION(atan);
+
+// acos
+templated const Snum Sstd::acos(const Snum& n)
+{
+    numberType result = std::acos(n.number);
+
+    preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
+    if (correctedNumber > 1)
+    {
+        preciseCorrectedResult = 0;
+    }
+    else if (correctedNumber < -1)
+    {
+        preciseCorrectedResult = M_PI;
+    }
+    else
+    {
+        preciseCorrectedResult = std::acos(correctedNumber);
+    }
+    preciseType totalError = preciseCorrectedResult - result;
+
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+        if(n.error == 0)
+        {
+            newErrorComp = Serror(totalError);
+        }
+        else
+        {
+            preciseType preciseResult = std::acos((preciseType)n.number);
+            preciseType functionError = preciseResult - result;
+            preciseType proportionalInputError = (totalError - functionError) / n.error;
+            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;});
+            newErrorComp.addError(functionError);
+        }
+        return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
+};
+using Sstd::acos;
+
+// asin
+templated const Snum Sstd::asin(const Snum& n)
+{
+    numberType result = std::asin(n.number);
+
+    preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
+    if (correctedNumber > 1)
+    {
+        preciseCorrectedResult = M_PI/2.;
+    }
+    else if (correctedNumber < -1)
+    {
+        preciseCorrectedResult = -M_PI/2;
+    }
+    else
+    {
+        preciseCorrectedResult = std::asin(correctedNumber);
+    }
+    preciseType totalError = preciseCorrectedResult - result;
+
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+        if(n.error == 0)
+        {
+            newErrorComp = Serror(totalError);
+        }
+        else
+        {
+            preciseType preciseResult = std::asin((preciseType)n.number);
+            preciseType functionError = preciseResult - result;
+            preciseType proportionalInputError = (totalError - functionError) / n.error;
+            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;});
+            newErrorComp.addError(functionError);
+        }
+        return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
+};
+using Sstd::asin;
+
+// atan2
+templated const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
+{
+    numberType result = std::atan2(n1.number, n2.number);
+    preciseType preciseCorrectedResult = std::atan2(n1.corrected_number(), n2.corrected_number());
+    preciseType totalError = preciseCorrectedResult - result;
+
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+        preciseType preciseResult = std::atan2((preciseType)n1.number, (preciseType)n2.number);
+        preciseType functionError = preciseResult - result;
+        if((n1.error == 0.) && (n2.error == 0.))
+        {
+            newErrorComp = Serror(totalError);
+        }
+        else if (n2.error == 0.)
+        {
+            preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
+            newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
+            newErrorComp.addError(functionError);
+        }
+        else if (n1.error == 0.)
+        {
+            preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
+            newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
+        else
+        {
+            preciseType preciseCorrectedBut1Result = std::atan2((preciseType)n1, n2.corrected_number());
+            preciseType preciseCorrectedBut2Result = std::atan2(n1.corrected_number(), (preciseType)n2);
+            preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+            preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
+            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
+        return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
+};
+set_Sfunction2_casts(atan2);
+
+//-----------------------------------------------------------------------------
+// HYPERBOLIC FUNCTIONS
+
+SHAMAN_FUNCTION(cosh);
+SHAMAN_FUNCTION(sinh);
+SHAMAN_FUNCTION(tanh);
+SHAMAN_FUNCTION(asinh);
+
+// acosh
+templated const Snum Sstd::acosh(const Snum& n)
+{
+    numberType result = std::acosh(n.number);
+
+    preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
+    if (correctedNumber < 1.)
+    {
+        preciseCorrectedResult = 0.;
+    }
+    else
+    {
+        preciseCorrectedResult = std::acosh(correctedNumber);
+    }
+    preciseType totalError = preciseCorrectedResult - result;
+
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+        if(n.error == 0)
+        {
+            newErrorComp = Serror(totalError);
+        }
+        else
+        {
+            preciseType preciseResult = std::acosh((preciseType)n.number);
+            preciseType functionError = preciseResult - result;
+            preciseType proportionalInputError = (totalError - functionError) / n.error;
+            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;});
+            newErrorComp.addError(functionError);
+        }
+        return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
+};
+using Sstd::acosh;
+
+// atanh
+templated const Snum Sstd::atanh(const Snum& n)
+{
+    numberType result = std::atanh(n.number);
+
+    preciseType preciseCorrectedResult;
+    preciseType correctedNumber = n.corrected_number();
+    if(correctedNumber > 1. || correctedNumber < 1.)
+    {
+        preciseCorrectedResult = -INFINITY;
+    }
+    else
+    {
+        preciseCorrectedResult = std::atanh(correctedNumber);
+    }
+    preciseType totalError = preciseCorrectedResult - result;
+
+#ifdef SHAMAN_TAGGED_ERROR
+    Serror newErrorComp;
+        if(n.error == 0)
+        {
+            newErrorComp = Serror(totalError);
+        }
+        else
+        {
+            preciseType preciseResult = std::asin((preciseType)n.number);
+            preciseType functionError = preciseResult - result;
+            preciseType proportionalInputError = (totalError - functionError) / n.error;
+            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;});
+            newErrorComp.addError(functionError);
+        }
+        return Snum(result, totalError, newErrorComp);
+#else
+    return Snum(result, totalError);
+#endif
+};
+using Sstd::atanh;
+
 //-----------------------------------------------------------------------------
 // CLASSIFICATION FUNCTIONS
 
@@ -329,42 +587,6 @@ set_Sfunction3_casts(fma);
 //-----------------------------------------------------------------------------
 // GENERAL FUNCTIONS
 
-// TODO macro that turns a function into a src function
-#ifdef SHAMAN_TAGGED_ERROR
-    #define SHAMAN_FUNCTION(functionName) \
-    templated const Snum Sstd::functionName (const Snum& n) \
-    { \
-        numberType result = std::functionName(n.number); \
-        preciseType preciseCorrectedResult = std::functionName(n.corrected_number()); \
-        preciseType totalError = preciseCorrectedResult - result; \
-        Serror newErrorComp; \
-        if(n.error == 0.) \
-        { \
-            newErrorComp = Serror(totalError); \
-        } \
-        else \
-        { \
-            preciseType preciseResult = std::functionName((preciseType)n.number); \
-            preciseType functionError = preciseResult - result; \
-            preciseType proportionalInputError = (totalError - functionError) / n.error; \
-            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;}); \
-            newErrorComp.addError(functionError); \
-        } \
-        return Snum(result, totalError, newErrorComp); \
-    } \
-    using Sstd::functionName;
-#else
-    #define SHAMAN_FUNCTION(functionName) \
-    templated const Snum Sstd::functionName (const Snum& n) \
-    { \
-        numberType result = std::functionName(n.number); \
-        preciseType preciseCorrectedResult = std::functionName(n.corrected_number()); \
-        preciseType totalError = preciseCorrectedResult - result; \
-        return Snum(result, totalError); \
-    } \
-    using Sstd::functionName;
-#endif
-
 SHAMAN_FUNCTION(floor);
 SHAMAN_FUNCTION(ceil);
 SHAMAN_FUNCTION(trunc);
@@ -372,14 +594,6 @@ SHAMAN_FUNCTION(cbrt);
 SHAMAN_FUNCTION(exp);
 SHAMAN_FUNCTION(exp2);
 SHAMAN_FUNCTION(erf);
-SHAMAN_FUNCTION(sin);
-SHAMAN_FUNCTION(sinh);
-SHAMAN_FUNCTION(asinh);
-SHAMAN_FUNCTION(cos);
-SHAMAN_FUNCTION(cosh);
-SHAMAN_FUNCTION(atan);
-SHAMAN_FUNCTION(tan);
-SHAMAN_FUNCTION(tanh);
 
 //-----------------------------------------------------------------------------
 // CONSTRAINED FUNCTIONS
@@ -572,166 +786,6 @@ templated const Snum Sstd::logb(const Snum& n)
 };
 using Sstd::logb;
 
-// acosh
-templated const Snum Sstd::acosh(const Snum& n)
-{
-    numberType result = std::acosh(n.number);
-
-    preciseType preciseCorrectedResult;
-    preciseType correctedNumber = n.corrected_number();
-    if (correctedNumber < 1.)
-    {
-        preciseCorrectedResult = 0.;
-    }
-    else
-    {
-        preciseCorrectedResult = std::acosh(correctedNumber);
-    }
-    preciseType totalError = preciseCorrectedResult - result;
-
-    #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp;
-        if(n.error == 0)
-        {
-            newErrorComp = Serror(totalError);
-        }
-        else
-        {
-            preciseType preciseResult = std::acosh((preciseType)n.number);
-            preciseType functionError = preciseResult - result;
-            preciseType proportionalInputError = (totalError - functionError) / n.error;
-            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;});
-            newErrorComp.addError(functionError);
-        }
-        return Snum(result, totalError, newErrorComp);
-    #else
-        return Snum(result, totalError);
-    #endif
-};
-using Sstd::acosh;
-
-// acos
-templated const Snum Sstd::acos(const Snum& n)
-{
-    numberType result = std::acos(n.number);
-
-    preciseType preciseCorrectedResult;
-    preciseType correctedNumber = n.corrected_number();
-    if (correctedNumber > 1)
-    {
-        preciseCorrectedResult = 0;
-    }
-    else if (correctedNumber < -1)
-    {
-        preciseCorrectedResult = M_PI;
-    }
-    else
-    {
-        preciseCorrectedResult = std::acos(correctedNumber);
-    }
-    preciseType totalError = preciseCorrectedResult - result;
-
-    #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp;
-        if(n.error == 0)
-        {
-            newErrorComp = Serror(totalError);
-        }
-        else
-        {
-            preciseType preciseResult = std::acos((preciseType)n.number);
-            preciseType functionError = preciseResult - result;
-            preciseType proportionalInputError = (totalError - functionError) / n.error;
-            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;});
-            newErrorComp.addError(functionError);
-        }
-        return Snum(result, totalError, newErrorComp);
-    #else
-        return Snum(result, totalError);
-    #endif
-};
-using Sstd::acos;
-
-// asin
-templated const Snum Sstd::asin(const Snum& n)
-{
-    numberType result = std::asin(n.number);
-
-    preciseType preciseCorrectedResult;
-    preciseType correctedNumber = n.corrected_number();
-    if (correctedNumber > 1)
-    {
-        preciseCorrectedResult = M_PI/2.;
-    }
-    else if (correctedNumber < -1)
-    {
-        preciseCorrectedResult = -M_PI/2;
-    }
-    else
-    {
-        preciseCorrectedResult = std::asin(correctedNumber);
-    }
-    preciseType totalError = preciseCorrectedResult - result;
-
-    #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp;
-        if(n.error == 0)
-        {
-            newErrorComp = Serror(totalError);
-        }
-        else
-        {
-            preciseType preciseResult = std::asin((preciseType)n.number);
-            preciseType functionError = preciseResult - result;
-            preciseType proportionalInputError = (totalError - functionError) / n.error;
-            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;});
-            newErrorComp.addError(functionError);
-        }
-        return Snum(result, totalError, newErrorComp);
-    #else
-        return Snum(result, totalError);
-    #endif
-};
-using Sstd::asin;
-
-// atanh
-templated const Snum Sstd::atanh(const Snum& n)
-{
-    numberType result = std::atanh(n.number);
-
-    preciseType preciseCorrectedResult;
-    preciseType correctedNumber = n.corrected_number();
-    if(correctedNumber > 1. || correctedNumber < 1.)
-    {
-        preciseCorrectedResult = -INFINITY;
-    }
-    else
-    {
-        preciseCorrectedResult = std::atanh(correctedNumber);
-    }
-    preciseType totalError = preciseCorrectedResult - result;
-
-    #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp;
-        if(n.error == 0)
-        {
-            newErrorComp = Serror(totalError);
-        }
-        else
-        {
-            preciseType preciseResult = std::asin((preciseType)n.number);
-            preciseType functionError = preciseResult - result;
-            preciseType proportionalInputError = (totalError - functionError) / n.error;
-            newErrorComp = Serror(n.errorComposants, [proportionalInputError](errorType e){return e*proportionalInputError;});
-            newErrorComp.addError(functionError);
-        }
-        return Snum(result, totalError, newErrorComp);
-    #else
-        return Snum(result, totalError);
-    #endif
-};
-using Sstd::atanh;
-
 //-----------------------------------------------------------------------------
 // MULTIARGUMENTS FUNCTIONS
 
@@ -870,52 +924,6 @@ templated const Snum Sstd::pow(const Snum& n1, const Snum& n2)
     #endif
 };
 set_Sfunction2_casts(pow);
-
-// atan2
-templated const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
-{
-    numberType result = std::atan2(n1.number, n2.number);
-    preciseType preciseCorrectedResult = std::atan2(n1.corrected_number(), n2.corrected_number());
-    preciseType totalError = preciseCorrectedResult - result;
-
-    #ifdef SHAMAN_TAGGED_ERROR
-        Serror newErrorComp;
-        preciseType preciseResult = std::atan2((preciseType)n1.number, (preciseType)n2.number);
-        preciseType functionError = preciseResult - result;
-        if((n1.error == 0.) && (n2.error == 0.))
-        {
-            newErrorComp = Serror(totalError);
-        }
-        else if (n2.error == 0.)
-        {
-            preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
-            newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
-            newErrorComp.addError(functionError);
-        }
-        else if (n1.error == 0.)
-        {
-            preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
-            newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
-            newErrorComp.addError(functionError);
-        }
-        else
-        {
-            preciseType preciseCorrectedBut1Result = std::atan2((preciseType)n1, n2.corrected_number());
-            preciseType preciseCorrectedBut2Result = std::atan2(n1.corrected_number(), (preciseType)n2);
-            preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
-            preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
-            newErrorComp.addError(functionError);
-        }
-        return Snum(result, totalError, newErrorComp);
-    #else
-        return Snum(result, totalError);
-    #endif
-};
-set_Sfunction2_casts(atan2);
 
 // hypot
 templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2)
