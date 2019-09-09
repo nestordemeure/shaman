@@ -127,7 +127,52 @@ using Sstd::signbit;
 //-----------------------------------------------------------------------------
 // COMPARISON FUNCTIONS
 
+// isgreater
+templated inline const Snum Sstd::isgreater(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n1, n2);
+    return std::isgreater(n1.number, n2.number);
+};
+set_Sfunction2_casts(isgreater);
 
+// isgreaterequal
+templated inline const Snum Sstd::isgreaterequal(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n1, n2);
+    return std::isgreaterequal(n1.number, n2.number);
+};
+set_Sfunction2_casts(isgreaterequal);
+
+// isless
+templated inline const Snum Sstd::isless(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n1, n2);
+    return std::isless(n1.number, n2.number);
+};
+set_Sfunction2_casts(isless);
+
+// islessequal
+templated inline const Snum Sstd::islessequal(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n1, n2);
+    return std::islessequal(n1.number, n2.number);
+};
+set_Sfunction2_casts(islessequal);
+
+// islessgreater
+templated inline const Snum Sstd::islessgreater(const Snum& n1, const Snum& n2)
+{
+    Snum::checkUnstableBranch(n1, n2);
+    return std::islessgreater(n1.number, n2.number);
+};
+set_Sfunction2_casts(islessgreater);
+
+// isunordered
+templated inline const Snum Sstd::isunordered(const Snum& n1, const Snum& n2)
+{
+    return std::isunordered(n1.number, n2.number);
+};
+set_Sfunction2_casts(isunordered);
 
 //-----------------------------------------------------------------------------
 // TEST BASED FUNCTIONS
