@@ -1158,7 +1158,25 @@ templated const Snum Sstd::remquo(const Snum& n1, const Snum& n2, int* quot)
     return Snum(result, totalError);
 #endif
 };
-// TODO add cast for all pairs of argument
+namespace Sstd
+{
+    template<typename N, typename E, typename P, typename arithmeticTYPE(T)>
+    inline auto remquo(const S<N,E,P>& n1, const T& n2, int* quot) -> SreturnType(n1.number,n2)
+    {
+        return remquo(SreturnType(n1.number,n2)(n1), SreturnType(n1.number,n2)(n2), quot);
+    }
+    template<typename N, typename E, typename P, typename arithmeticTYPE(T)>
+    inline auto remquo(const T& n1, const S<N,E,P>& n2, int* quot) -> SreturnType(n1, n2.number)
+    {
+        return remquo(SreturnType(n1,n2.number)(n1), SreturnType(n1,n2.number)(n2), quot);
+    }
+    template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2>
+    inline auto remquo(const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, int* quot) -> SreturnType(n1.number, n2.number)
+    {
+        return remquo(SreturnType(n1.number,n2.number)(n1), SreturnType(n1.number,n2.number)(n2), quot);
+    }
+}
+using Sstd::remquo;
 
 //-----------------------------------------------------------------------------
 // FLOATING POINT MANIPULATION FUNCTIONS
