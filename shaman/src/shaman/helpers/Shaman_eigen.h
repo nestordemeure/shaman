@@ -19,6 +19,8 @@ namespace Eigen
         typedef Slong_double Real;
         typedef Slong_double NonInteger;
         typedef Slong_double Nested;
+        typedef Slong_double Literal;
+                
         enum
         {
             IsComplex = 0,
@@ -41,6 +43,8 @@ namespace Eigen
         typedef Sdouble Real;
         typedef Sdouble NonInteger;
         typedef Sdouble Nested;
+        typedef Sdouble Literal;
+                
         enum
         {
             IsComplex = 0,
@@ -63,6 +67,8 @@ namespace Eigen
         typedef Sfloat Real;
         typedef Sfloat NonInteger;
         typedef Sfloat Nested;
+        typedef Sfloat Literal;
+
         enum
         {
             IsComplex = 0,
