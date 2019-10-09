@@ -1,7 +1,3 @@
-//
-// Created by demeuren on 06/03/18.
-//
-
 #pragma  once
 
 #include <Eigen/Core>
