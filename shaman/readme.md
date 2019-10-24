@@ -2,7 +2,7 @@
 
 ## What is Shaman ?
 
-Shaman is a header-only library that can be used to evaluate the numerical accuracy of an application but also to locate and reduce numerical unstabilities.
+Shaman is a library that can be used to evaluate the numerical accuracy of an application but also to locate and reduce numerical unstabilities.
 
 ## How to use Shaman ?
 
