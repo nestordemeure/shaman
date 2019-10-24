@@ -22,7 +22,7 @@ We provide drop-in replacements for the majority of mathematical functions from 
 
 ### Printf
 
-If you use `printf` you can either switch to the C++ streaming operator, explicitly cast shaman types into strings or use the `tinyformat` implementation of printf (provided in the `lib` folder).
+If you use `printf` you can either switch to the C++ streaming operator, explicitly cast shaman types into strings or use the `tinyformat` implementation of printf.
 
 ### OpenMP
 
@@ -40,9 +40,3 @@ To use :
 
 You can also use `Shamanizer.py` to do your conversion automatically.
 
-### Malloc
-
-Using `malloc` and `free` could lead to segfaults and memory leaks since shaman's type is not a POCO type.
-
-since C++ provides the `new []` and `delete []` operations, these functions should be rare.
-However, if the original code relies on `malloc` and to stay as close as possible to the original implementation, we provide safe equivalents in the `lib/Shaman_malloc.h` file.
