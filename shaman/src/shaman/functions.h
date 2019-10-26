@@ -529,13 +529,13 @@ templated const Snum Sstd::modf(const Snum& n, Snum* intpart)
         fractErrorComp = Serror(n.errorComposants, [fractProportionalInputError](errorType e){return e*fractProportionalInputError;});
         fractErrorComp.addError(fractFunctionError);
     }
-    *intpart.number = intpartNumber;
-    *intpart.error = intTotalError;
-    *intpart.errorComposants = intErrorComp;
+    (*intpart).number = intpartNumber;
+    (*intpart).error = intTotalError;
+    (*intpart).errorComposants = intErrorComp;
     return Snum(fractPartNumber, fractTotalError, fractErrorComp);
     #else
-    *intpart.number = intpartNumber;
-    *intpart.error = intTotalError;
+    (*intpart).number = intpartNumber;
+    (*intpart).error = intTotalError;
     return Snum(fractPartNumber, fractTotalError);
     #endif
 };
