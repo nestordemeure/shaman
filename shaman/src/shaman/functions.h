@@ -1203,7 +1203,6 @@ templated const Snum Sstd::nan(const char* tagp)
 {
     return Snum(std::nan(tagp));
 };
-using Sstd::nan;
 
 // nextafter
 templated inline const Snum Sstd::nextafter(const Snum& n1, const Snum& n2)
