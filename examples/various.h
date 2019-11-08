@@ -1,15 +1,8 @@
-//
-// Created by demeuren on 26/01/18.
-//
-
 #ifndef COMPENSATIONS_TESTS_H
 #define COMPENSATIONS_TESTS_H
 
 #include <iostream>
 #include "../shaman/Shaman.h"
-
-//---------------------------------------------------------------------------------------
-// FUNCTIONS
 
 //---------------------------------------------------------------------------------------
 // TESTS
