@@ -1,5 +1,7 @@
 # SHAMANIZER
 
+**WARNING: This is an obsolete python version. We now have a much more efficient tool based on the [Clang](https://en.wikipedia.org/wiki/Clang) compiler.**
+
 ## What is Shamanizer ?
 
 The shamanizer.py python3 script can be used to automatically instruments a file or folder of C++ files with Shaman.
@@ -19,7 +21,6 @@ A similar warning is thrown if MPI is detected in the code.
 
 ## Potential improvements
 
-Shamanizer converts the types but it will not deal with numbers inside computations (i.e. in `2. + x` 2. will not be switched by `Sdouble(2.)`).
+Shamanizer converts the types but it will not deal with numbers in intermediate computations (i.e. in `2. + x` 2. will not be switched by `Sdouble(2.)`).
 since those are actually the source of most compilation crash on a program instrumented with Shamanizer, it might be interesting to convert them.
 
-It is probable that Shaman will be reimplemented using clang to avoid manual instrumentation, that would make Shamanizer obsolete.

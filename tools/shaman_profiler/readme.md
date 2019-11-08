@@ -7,8 +7,8 @@ The shaman profiler give you a numerical profile of your application with the nu
 ## How to use the Shaman profiler ?
 
 To use the Shaman Profiler :
-- use the Shaman types in your application
-- add the `NUMERICAL_DEBUGGER` and `-g` flags at compilation (you might also need to reduce optimisations)
+- use Shaman's types in your application
+- add the `NUMERICAL_DEBUGGER` and `-g` flags at compilation (you might also need to reduce the optimisation level)
 - run your program with `gdb -quiet --command shaman_profiler.py --args ./your_program args` (you can also use the `shaman_prof.sh` script as a shortcut)
 
 It will display a message every 100000 numerical unstability detected and output its results to the `executable_name_shaman_profile.txt` file once the program finishes running.
@@ -26,6 +26,8 @@ This bug appears to have been fixed somewhere before gdb-7.11.1.
 
 The debugging could stop early if the program is unable to set the breakpoint properly.
 
-The debugging process could be redone by calling the `libunwind` library directly from Shaman which would clean-up the code and drastically improve performances.
+The debugging process could be redone by calling the [libunwind](https://eli.thegreenplace.net/2015/programmatic-access-to-the-call-stack-in-c/) library directly from Shaman which would clean-up the code and drastically improve performances.
 
-The concept of tagged error (which will hopefully be introduced in later versions of shaman) provides a much more powerful solution to the problem that this tool tries to solve : locating the sources of numerical errors in an application.
+The numerical profiler focusses on the concept of a numerical *bug* (cancelation and such) but most precision is lost gradualy and not in a single easily targeted cancelation.
+The concept of tagged error (which has now been introduced in Shaman) provides a much more powerful solution to the problem that this tool tries to solve : locating the true sources of numerical errors in an application.
+
