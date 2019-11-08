@@ -10,7 +10,7 @@ You can add flags to print the number of unstabilities and cancelations when the
 - `UNSTABLE_OP_DEBUGGER` detects unstable operations
 - `DOUBT_LEVEL_FIELD_ENABLED` to count and print the number of unstable operations leading to a number
 
-Put a breakpoint on the `unstability` function in the `Debugger.h` file to beaks on single operations.
+Put a breakpoint on the `unstability` function in the `methods.h` file to beaks on single operations.
 
 As an example, you can compile with the `UNSTABLE_BRANCH_DEBUGGER` flag and put a breakpoint on the `unstability` function with gdb to break on all unstable branches.
 
