@@ -4,6 +4,7 @@
 
 namespace std
 {
+    // numeric limits
     templated class numeric_limits<Snum>
     {
     public:
@@ -43,5 +44,10 @@ namespace std
         static Snum signaling_NaN() {return Snum(std::numeric_limits<numberType>::signaling_NaN());};
         static Snum denorm_min() {return Snum(std::numeric_limits<numberType>::denorm_min());};
     };
+
+    // type traits
+    templated struct is_floating_point<Snum> : std::is_floating_point<numberType> {};
+    templated struct is_arithmetic<Snum> : std::is_arithmetic<numberType> {};
+    templated struct is_signed<Snum> : std::is_signed<numberType> {};
 }
 
