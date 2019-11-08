@@ -16,7 +16,7 @@ Once your branches are stable and your error is low enough, your code is verifie
 
 ## Give me an example !
 
-One day I hope to put interactive examples here, in the meantime see the `examples` folder.
+See the `examples` folder.
 
 ## How to install Shaman ?
 
@@ -27,13 +27,6 @@ Run `cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/folder .` followed by `ma
 Add `find_package(shaman)` to the CMakeLists.txt file (and set the shaman_DIR variable with the path to shaman's cmake files).
 
 Add `PUBLIC shaman::shaman` the `target_link_libraries` line in your CMakeLists.txt.
-
-## What will you find in this repository ?
-
- - the Shaman library (and a well documented readme)
- - examples of usage on simple computations
- - tests
- - tools to help with the collection of results and instrumentation of a code
 
 ## How does Shaman works ?
 
