@@ -1,7 +1,3 @@
-//
-// Created by demeuren on 20/02/18.
-//
-
 #ifndef SHAMAN_DEMO_EIGEN_H
 #define SHAMAN_DEMO_EIGEN_H
 

@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Réalise l'étude de convergence du calcul d'intégrale
+# Computes integral and stores error data
 ./unitTest.exe 1.1 > cvPlot.dat
 
-# Produit une courbe représentant l'erreur en fonction du nombre de rectangles dans "cvPlot.pdf"
+# Plots the error as a fucntion of the number of rectangles and outputs the plot to `cvPlot.pdf`
 gnuplot cvPlot.gp
 
-# Fait tourner le cacul d'intégral avec les fonctions de débuggage
+# Computes integral with debug functions
 #./unitTest_debug.exe 1.1
 
-# Fait tourner le code avec shaman_profiler
+# runs code with shaman_profiler
 ../../tools/shaman_profiler/shaman_prof.sh ./unitTest_debug.exe 1.1
