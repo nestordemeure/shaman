@@ -1,6 +1,3 @@
-//
-// Created by demeuren on 08/06/18.
-//
 #pragma once
 
 #include <stack>
@@ -10,7 +7,8 @@
 #include <atomic>
 #include <mutex>
 
-using Tag = unsigned short int; // represents a block
+// represents a block
+using Tag = unsigned short int;
 
 class ShamanGlobals
 {

@@ -8,7 +8,6 @@
 #include <iomanip>
 #include <sstream>
 #include <cmath>
-
 #include <shaman/tagged/global_vars.h>
 
 //-----------------------------------------------------------------------------

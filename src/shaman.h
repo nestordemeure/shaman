@@ -3,11 +3,15 @@
 
 // to get M_PI on windows compiler
 #define _USE_MATH_DEFINES
+
 #include <string>
 #include <limits>
 #include <atomic>
 #include <memory>
+
+#ifdef SHAMAN_TAGGED_ERROR
 #include <shaman/tagged/error_sum.h>
+#endif
 
 //-------------------------------------------------------------------------------------------------
 // SHAMAN CLASS
@@ -88,13 +92,13 @@ public:
     static void checkUnstableBranch(S n1, S n2);
 };
 
-//-------------------------------------------------------------------------------------------------
-// SHAMAN OPERATIONS
-
 // some macro to shorten template notations
 #define templated template<typename numberType, typename errorType, typename preciseType>
 #define Snum S<numberType,errorType,preciseType>
 #define Serror error_sum<errorType>
+
+//-------------------------------------------------------------------------------------------------
+// SHAMAN OPERATIONS
 
 // arithmetic operators
 templated const Snum operator-(const Snum& n);
