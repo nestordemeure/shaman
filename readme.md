@@ -2,7 +2,7 @@
 
 Shaman is a C++11 library that use operator overloading and a novel method to evaluate the numerical accuracy of an application.
 
-Shaman has been designed to target high-performance simulations and, thus, we insured that it is not only accurate but also:
+It has been designed to target high-performance simulations and, thus, we insured that it is not only accurate but also:
 - fast enough to be tested on very large simulations[^1]
 - compatible with all of C++ mathematical functions
 - threadsafe and compatible with both OpenMP and MPI
@@ -18,15 +18,22 @@ To use Shaman, you just need to `#include <shaman.h>` and replace your floating 
 
 Sdouble largeNum = 1e30;
 Sdouble smallNum = 1;
-Sdouble sum = (largeNum + smallNum) - largeNum;
+Sdouble sum = (largeNum + smallNum) - largeNum; // should be 1
 
-std::cout << "result as displayed by shaman: " << sum << '\n'
-          << "result that would have been obtained without Shaman: " << sum.number << '\n'
+std::cout << "result as displayed by shaman: " << sum << '\n' // notice that Shaman displays only significant digits
+          << "result that would have been obtained without Shaman: " << sum.number << " == " << static_cast<double>(sum) << '\n'
           << "approximation of the numerical error: " << sum.error << '\n'
           << "approximation of the number of significant digits: " << sum.digits() << std::endl;
 ```
 
 Mathematical functions are defined in the `Sstd` namespace, additional traits and definitions can be included from the headers in the `shaman/helpers` folder to help when using MPI, Eigen or Trilinos.
+
+## Mixed precision operations
+
+Shaman insures that implicit cast are done as they would have been done by their underlying types.
+
+However, similarly to `std::complex`, some mixed precision operation that are legal with the original types might be rejetted by their intrumented equivalent in the absence of an explicit cast (such as `Sfloat(1.5f) + double(1.5)`).
+To solve the problem, one just need to add an explicit cast.
 
 ## Try it online
 
