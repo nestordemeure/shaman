@@ -28,7 +28,7 @@ std::cout << "result as displayed by shaman: " << sum << '\n' // notice that Sha
 
 Mathematical functions are defined in the `Sstd` namespace, additional traits and definitions can be included from the headers in the `shaman/helpers` folder to help when using MPI, Eigen or Trilinos.
 
-## Mixed precision operations
+### Mixed precision operations
 
 Shaman insures that implicit cast are done as they would have been done by their underlying types.
 
