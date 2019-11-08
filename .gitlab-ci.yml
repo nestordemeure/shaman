@@ -12,7 +12,7 @@ Build-gcc-release:
     - apk add --no-cache gcc
     - mkdir -p buildir
     - cd buildir
-    - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ../shaman
+    - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
     - cmake --build .
     - ctest -V -R 'unit:.*'
 
@@ -22,7 +22,7 @@ Build-clang-release:
     - apk add --no-cache clang
     - mkdir -p buildir
     - cd buildir
-    - cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=RelWithDebInfo ../shaman
+    - cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
     - cmake --build .
     - ctest -V -R 'unit:.*'
 
@@ -32,6 +32,6 @@ Build-clang-release:
 #    - apk add --no-cache gcc
 #    - mkdir -p buildir
 #    - cd buildir
-#    - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-O3 -ffast-math" ../shaman
+#    - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-O3 -ffast-math" ..
 #    - cmake --build .
 #    - ctest -V -R 'unit:.*'
