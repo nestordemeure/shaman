@@ -48,7 +48,7 @@ make install
 
 Where `PREFIX` is the path to your desired instalation folder.
 
-You can add the `SHAMAN_TAGGED_ERROR` compilation flag to enable tagged error.
+You can add the `SHAMAN_ENABLE_TAGGED_ERROR` flag to enable tagged error (or the `SHAMAN_TAGGED_ERROR` compilation flag if you use make).
 
 ### Linking Shaman with Cmake
 
@@ -62,8 +62,6 @@ Don't forget to enable Fused-Multiply-Add at compilation (`-mfma`), otherwise so
 
 Use the `SHAMAN_UNSTABLE_BRANCH` flag to enable the count and detection of unstable branches.
 The `Shaman::displayUnstableBranches` function can then be used to print the number of unstable tests performed by the application (and additional localisation informations if tagged error is activated).
-
-The `NO_SHAMAN` flag let you deactivate Shaman to run your computation as if you used the base floating point arithmetic.
 
 ## Try it online
 
