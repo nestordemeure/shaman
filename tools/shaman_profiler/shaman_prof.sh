@@ -1,1 +1,0 @@
-gdb -quiet --command $(dirname "$0")/shaman_profiler.py --args "$@"
