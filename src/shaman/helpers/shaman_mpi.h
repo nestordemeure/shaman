@@ -7,8 +7,10 @@
  * - include Shaman_mpi.h
  * - replace 'MPI_Init' with 'MPI_Shaman_Init'
  * - replace 'MPI_Finalize' with 'MPI_Shaman_Finalize'
- * - use the src MPI types ('MPI_FLOAT' -> 'MPI_SFLOAT')
- * - use the src MPI operations ('MPI_SUM' -> 'MPI_SSUM')
+ * - use the shaman MPI types ('MPI_FLOAT' -> 'MPI_SFLOAT')
+ * - use the shaman MPI operations ('MPI_SUM' -> 'MPI_SSUM')
+ *
+ * Note that you currently cannot use both MPI and Shaman's tagged error (which is used to trace the sources of numerical error).
  */
 
 //-------------------------------------------------------------------------------------------------
