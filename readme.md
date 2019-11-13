@@ -84,6 +84,8 @@ This means that, while Shaman can signal that higher precision code would have t
 This can lead Shaman to underestimate the numerical stability of codes that have been designed to be resilient to numerical error in intermediate steps.
 Hence, when Shaman indicates that a result has few/no significant digits, you should always check wether it has detected unstable branches to confirm the result.
 
+[Numerical error for an integral computed using the rectangle method with floats](pictures/rectangles.svg)
+
 ## References
 
 The inner workings of shaman will be detailed in an [upcoming paper]().
