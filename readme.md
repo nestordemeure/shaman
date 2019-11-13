@@ -35,6 +35,14 @@ Shaman insures that implicit cast are done as they would have been done by their
 However, similarly to `std::complex`, some mixed precision operation that are legal with the original types might be rejetted by their intrumented equivalent in the absence of an explicit cast (such as `Sfloat(1.5f) + double(1.5)`).
 To solve the problem, one just need to add an explicit cast.
 
+## Try it online
+
+Click below to try Shaman online:
+
+[![try it online](pictures/tryItOnline.png)](https://repl.it/@nestordemeure/ShamanDemo?lite=true)
+
+See our `examples` folder for further illustrations of typical use cases.
+
 ## Installation
 
 ### Compiling Shaman
@@ -62,14 +70,6 @@ Don't forget to enable Fused-Multiply-Add at compilation (`-mfma`), otherwise so
 
 Use the `SHAMAN_UNSTABLE_BRANCH` flag to enable the count and detection of unstable branches.
 The `Shaman::displayUnstableBranches` function can then be used to print the number of unstable tests performed by the application (and additional localisation informations if tagged error is activated).
-
-## Try it online
-
-Click below to try Shaman online:
-
-[![try it online](pictures/tryItOnline.png)](https://repl.it/@nestordemeure/ShamanDemo?lite=true)
-
-See our `examples` folder for further illustrations of typical use cases.
 
 ## How does Shaman works ?
 
