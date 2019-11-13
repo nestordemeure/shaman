@@ -67,7 +67,7 @@ The `Shaman::displayUnstableBranches` function can then be used to print the num
 
 Click below to try Shaman online:
 
-[![try it online](https://raw.githubusercontent.com/nestordemeure/Shaman/master/tryItOnline.png)](https://repl.it/@nestordemeure/ShamanDemo?lite=true)
+[![try it online](https://gitlab.com/numerical_shaman/shaman/blob/master/pictures/tryItOnline.png)](https://repl.it/@nestordemeure/ShamanDemo?lite=true)
 
 See our `examples` folder for further illustrations of typical use cases.
 
