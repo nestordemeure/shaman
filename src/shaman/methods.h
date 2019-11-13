@@ -164,6 +164,10 @@ inline void Shaman::displayUnstableBranches()
  */
 templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
 {
+    // stores the current format to avoid side effects
+    std::ios cout_state(nullptr);
+    cout_state.copyfmt(os);
+
     int nbDigitsMax = std::numeric_limits<numberType>::digits10 + 2; // since this is a maximum, we add two to avoid being too pessimistic (17 for double)
     numberType fdigits = std::floor(n.digits());
 
@@ -203,6 +207,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
         os << ' ' << (std::string) n.errorComposants;
     #endif
 
+    os.copyfmt(cout_state);
     return os;
 }
 
