@@ -5,6 +5,10 @@
 #include <iostream>
 #include "schrodinger.h"
 
+#ifndef SHAMAN_TAGGED_ERROR
+#  define FUNCTION_BLOCK
+#endif // SHAMAN_TAGGED_ERROR
+
 //-------------------------------------------------------------------------------------------------
 // INITIALIZATION
 
