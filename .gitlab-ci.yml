@@ -27,8 +27,8 @@ stages:
 build-gcc-release:
   extends: .build
   variables:
-    - CMAKE_CXX_COMPILER: g++
-    - COMPILER_PACKAGE: gcc
+    CMAKE_CXX_COMPILER: g++
+    COMPILER_PACKAGE: gcc
 
 test-gcc-release:
   extends: .unit_tests
@@ -39,8 +39,8 @@ test-gcc-release:
 build-clang-release:
   extends: .build
   variables:
-    - CMAKE_CXX_COMPILER: clang++
-    - COMPILER_PACKAGE: clang
+    CMAKE_CXX_COMPILER: clang++
+    COMPILER_PACKAGE: clang
 
 test-clang-release:
   extends: .unit_tests
