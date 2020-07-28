@@ -1,6 +1,4 @@
 image: alpine:edge
-before_script:
-   - apk add --no-cache build-base cmake gtest gtest-dev
 
 stages:
   - build
@@ -9,7 +7,7 @@ stages:
 .build:
   stage: build
   before_script:
-    - apk add --no-cache ${COMPILER_PACKAGE}
+    - apk add --no-cache build-base cmake gtest gtest-dev ${COMPILER_PACKAGE}
     - mkdir -p buildir && cd buildir
   script:
     - cmake -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
