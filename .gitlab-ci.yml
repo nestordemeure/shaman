@@ -18,6 +18,9 @@ stages:
 
 .unit_tests:
   stage: test
+  before_script:
+    # We need gtest and ctest.
+    - apk add --no-cache cmake gtest
   script:
     - cd buildir
     - ctest -V -R 'unit:.*'
