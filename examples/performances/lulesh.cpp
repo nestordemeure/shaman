@@ -68,7 +68,10 @@ Additional BSD Notice
 #include <stdlib.h>
 #include <sys/time.h>
 #include <shaman.h>
-#include <shaman/helpers/Shaman_malloc.h>
+
+#ifndef SHAMAN_TAGGED_ERROR
+#  define FUNCTION_BLOCK
+#endif // SHAMAN_TAGGED_ERROR
 
 using Sstd::sqrt;
 using Sstd::cbrt;
@@ -443,7 +446,7 @@ private:
 template <typename T>
 T *Allocate(size_t size)
 {
-    return static_cast<T *>(Shaman_malloc<T>(sizeof(T)*size)) ;
+    return static_cast<T *>(malloc(sizeof(T)*size)) ;
 }
 
 template <typename T>
@@ -451,7 +454,7 @@ void Release(T **ptr)
 {
     if (*ptr != NULL)
     {
-        Shaman_free<T>(*ptr) ;
+        free(*ptr) ;
         *ptr = NULL ;
     }
 }
