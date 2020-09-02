@@ -11,7 +11,6 @@ int main()
 {
     auto begin = std::chrono::steady_clock::now();
 
-
     // Schrodinger equation
     Schrodinger numerov = Schrodinger();
     numerov.calculate();

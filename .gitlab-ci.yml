@@ -1,37 +1,50 @@
 image: alpine:edge
-before_script:
-   - apk add --no-cache build-base cmake gtest gtest-dev
 
 stages:
   - build
-  - build_opt
+  - test
 
-Build-gcc-release:
+.build:
   stage: build
+  before_script:
+    - apk add --no-cache build-base cmake gtest gtest-dev ${COMPILER_PACKAGE}
+    - mkdir -p buildir && cd buildir
   script:
-    - apk add --no-cache gcc
-    - mkdir -p buildir
-    - cd buildir
-    - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+    - cmake -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
     - cmake --build .
+  artifacts:
+    paths:
+      - buildir
+
+.unit_tests:
+  stage: test
+  before_script:
+    # We need gtest and ctest.
+    - apk add --no-cache cmake gtest
+  script:
+    - cd buildir
     - ctest -V -R 'unit:.*'
 
-Build-clang-release:
-  stage: build
-  script:
-    - apk add --no-cache clang
-    - mkdir -p buildir
-    - cd buildir
-    - cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
-    - cmake --build .
-    - ctest -V -R 'unit:.*'
+build-gcc-release:
+  extends: .build
+  variables:
+    CMAKE_CXX_COMPILER: g++
+    COMPILER_PACKAGE: gcc
 
-#Build_opt-gcc:
-#  stage: build_opt
-#  script:
-#    - apk add --no-cache gcc
-#    - mkdir -p buildir
-#    - cd buildir
-#    - cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-O3 -ffast-math" ..
-#    - cmake --build .
-#    - ctest -V -R 'unit:.*'
+test-gcc-release:
+  extends: .unit_tests
+  needs:
+    - job: build-gcc-release
+      artifacts: true
+
+build-clang-release:
+  extends: .build
+  variables:
+    CMAKE_CXX_COMPILER: clang++
+    COMPILER_PACKAGE: clang
+
+test-clang-release:
+  extends: .unit_tests
+  needs:
+    - job: build-clang-release
+      artifacts: true
