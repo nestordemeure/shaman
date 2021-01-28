@@ -88,5 +88,5 @@ Hence, when Shaman indicates that a result has few/no significant digits, you sh
 
 ## References
 
-The inner workings of shaman will be detailed in an [upcoming paper]().
+The inner workings of Shaman are detailed in [Nestor Demeure's PhD](https://tel.archives-ouvertes.fr/tel-03116750).
 
