@@ -11,6 +11,9 @@
 
 #ifdef SHAMAN_TAGGED_ERROR
 #include <shaman/tagged/error_sum.h>
+#else
+#define FUNCTION_BLOCK
+#define LOCAL_BLOCK(text)
 #endif
 
 //-------------------------------------------------------------------------------------------------
