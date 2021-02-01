@@ -158,8 +158,8 @@ set_Soperator_casts(/);
 // ++
 templated inline Snum& Snum::operator++(int)
 {
-    numberType result = number + 1;
-    numberType remainder = EFT::TwoSum(number, 1, result);
+    numberType result = number + numberType(1);
+    numberType remainder = EFT::TwoSum(number, numberType(1), result);
 
     number = result;
     error += remainder;
@@ -174,8 +174,8 @@ templated inline Snum& Snum::operator++(int)
 // --
 templated inline Snum& Snum::operator--(int)
 {
-    numberType result = number - 1;
-    numberType remainder = EFT::TwoSum(number, -1, result);
+    numberType result = number - numberType(1);
+    numberType remainder = EFT::TwoSum(number, numberType(-1), result);
 
     number = result;
     error += remainder;
