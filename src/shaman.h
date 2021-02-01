@@ -161,6 +161,8 @@ namespace Sstd
     templated const Snum acosh(const Snum &n);
     templated const Snum atanh(const Snum &n);
     templated const Snum erf(const Snum &n);
+    templated const Snum erff(const Snum &n);
+    templated const Snum erfl(const Snum &n);
     templated const Snum floor(const Snum &n);
     templated const Snum ceil(const Snum &n);
     templated const Snum trunc(const Snum &n);
@@ -183,6 +185,8 @@ namespace Sstd
 	templated const Snum log1p(const Snum& n);
 	templated const Snum scalbln(const Snum &n, long int power);
 	templated const Snum erfc(const Snum& n);
+    templated const Snum erfcf(const Snum& n);
+    templated const Snum erfcl(const Snum& n);
 	templated const Snum tgamma(const Snum& n);
 	templated const Snum lgamma(const Snum& n);
 	templated const Snum round(const Snum& n);
