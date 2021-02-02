@@ -8,6 +8,7 @@
 #include <limits>
 #include <atomic>
 #include <memory>
+#include <type_traits>
 
 #ifdef SHAMAN_TAGGED_ERROR
 #include <shaman/tagged/error_sum.h>
@@ -34,22 +35,66 @@ public:
     #ifdef SHAMAN_TAGGED_ERROR
     error_sum<errorType> errorComposants; // composants of the error
     // base constructors
+    inline S(): number(), error(), errorComposants() {};
+    inline S(numberType numberArg): number(numberArg), error(), errorComposants() {}; // we accept implicit cast from T to S<T>
     inline S(numberType numberArg, errorType errorArg, error_sum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {};
-    inline S(numberType numberArg): number(numberArg), error(0.), errorComposants() {}; // we accept implicit cast from T to S<T>
-    inline S(): number(0.), error(0.), errorComposants() {};
-    // casting
-    #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
-    template<typename n, typename e, typename p> inline S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants) {};
-    template<typename n, typename e, typename p> inline S(volatile S<n,e,p>& s): number(s.number), error(s.error), errorComposants(const_cast<error_sum<e>&>(s.errorComposants)) {};
+    // from floating point
+    template<typename T,
+            typename = typename std::enable_if<std::is_floating_point<T>::value, T>::type,
+            typename = typename std::enable_if<not std::is_same<T,numberType>::value, T>::type >
+    inline explicit S(T x): number(x), error(), errorComposants()
+    {
+        const errorType castError = errorType(x - number);
+        error = castError;
+        errorComposants.addError(castError);
+    };
+    // from integer
+    template<typename T, typename = typename std::enable_if<std::is_integral<T>::value, T>::type>
+    inline S(T x): number(x), error(), errorComposants()
+    {
+        const errorType castError = errorType(preciseType(x) - number);
+        error = castError;
+        errorComposants.addError(castError);
+    };
+    // from other S type
+    template<typename n, typename e, typename p,
+             typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type >
+    inline S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants)
+    {
+        const errorType castError = errorType(s.number - number);
+        error += castError;
+        errorComposants.addError(castError);
+    };
+    // from other volatile S type
+    template<typename n, typename e, typename p,
+             typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type >
+    inline S(const volatile S<n,e,p>& s): number(s.number), error(s.error), errorComposants(const_cast<error_sum<e>&>(s.errorComposants))
+    {
+        const errorType castError = errorType(s.number - number);
+        error += castError;
+        errorComposants.addError(castError);
+    };
     #else
     // base constructors
+    inline S(): number(), error() {};
+    inline S(numberType numberArg): number(numberArg), error() {}; // we accept implicit cast from T to S<T>
     inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
-    inline S(numberType numberArg): number(numberArg), error(0.) {}; // we accept implicit cast from T to S<T>
-    inline S(): number(0.), error(0.) {};
-    // casting
-    #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n)
-    template<typename n, typename e, typename p> inline S(const S<n,e,p>& s): number(s.number), error(s.error) {};
-    template<typename n, typename e, typename p> inline S(volatile S<n,e,p>& s): number(s.number), error(s.error) {};
+    // from floating point
+    template<typename T,
+             typename = typename std::enable_if<std::is_floating_point<T>::value, T>::type,
+             typename = typename std::enable_if<not std::is_same<T,numberType>::value, T>::type >
+    inline explicit S(T x): number(x), error(x - numberType(x)) {};
+    // from integer
+    template<typename T, typename = typename std::enable_if<std::is_integral<T>::value, T>::type>
+    inline S(T x): number(x), error(preciseType(x) - numberType(x)) {};
+    // from other S type
+    template<typename n, typename e, typename p,
+             typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type>
+    inline S(const S<n,e,p>& s): number(s.number), error(s.error + errorType(s.number - numberType(s.number))) {};
+    // from other volatile S type
+    template<typename n, typename e, typename p,
+             typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type>
+    inline S(const volatile S<n,e,p>& s): number(s.number), error(s.error + errorType(s.number - numberType(s.number))) {};
     #endif
 
     // casting
@@ -65,17 +110,10 @@ public:
     inline explicit operator float() const { return (float) number; };
     inline explicit operator double() const { return (double) number; };
     inline explicit operator long double() const { return (long double) number; };
-    inline S(short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(unsigned short int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(unsigned int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(unsigned long int n):INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    inline S(unsigned long long int n): INTEGER_CAST_CONSTRUCTOR(n) {};
-    #undef INTEGER_CAST_CONSTRUCTOR
 
     // arithmetic operators
+    S& operator++();
+    S& operator--();
     S& operator++(int);
     S& operator--(int);
     S& operator+=(const S& n);
@@ -104,6 +142,7 @@ public:
 // SHAMAN OPERATIONS
 
 // arithmetic operators
+templated const Snum operator+(const Snum& n);
 templated const Snum operator-(const Snum& n);
 templated const Snum operator+(const Snum& n1, const Snum& n2);
 templated const Snum operator-(const Snum& n1, const Snum& n2);
@@ -248,3 +287,4 @@ using Slong_double = S<long double, long double, long double>;
 #undef templated
 #undef Snum
 #endif //SHAMAN_H
+
