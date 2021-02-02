@@ -104,6 +104,7 @@ public:
 // SHAMAN OPERATIONS
 
 // arithmetic operators
+templated const Snum operator+(const Snum& n);
 templated const Snum operator-(const Snum& n);
 templated const Snum operator+(const Snum& n1, const Snum& n2);
 templated const Snum operator-(const Snum& n1, const Snum& n2);

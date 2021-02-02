@@ -61,7 +61,18 @@ inline bool operator OPERATOR (const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2) \
 //-----------------------------------------------------------------------------
 // ARITHMETIC OPERATORS
 
-// -
+// unary +
+templated inline const Snum operator+(const Snum& n)
+{
+    #ifdef SHAMAN_TAGGED_ERROR
+        Serror newErrorComp(n.errorComposants);
+        return Snum(n.number, n.error, newErrorComp);
+    #else
+        return Snum(n.number, n.error);
+    #endif
+};
+
+// unary -
 templated inline const Snum operator-(const Snum& n)
 {
     numberType result = -n.number;
