@@ -76,6 +76,8 @@ public:
     #undef INTEGER_CAST_CONSTRUCTOR
 
     // arithmetic operators
+    S& operator++();
+    S& operator--();
     S& operator++(int);
     S& operator--(int);
     S& operator+=(const S& n);

@@ -166,7 +166,39 @@ set_Soperator_casts(/);
 //-----------------------------------------------------------------------------
 // CLASS OPERATORS
 
-// ++
+// prefix ++
+templated inline Snum& Snum::operator++()
+{
+    numberType result = number + numberType(1);
+    numberType remainder = EFT::TwoSum(number, numberType(1), result);
+
+    number = result;
+    error += remainder;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+        errorComposants.addError(remainder);
+    #endif
+
+    return *this;
+}
+
+// prefix --
+templated inline Snum& Snum::operator--()
+{
+    numberType result = number - numberType(1);
+    numberType remainder = EFT::TwoSum(number, numberType(-1), result);
+
+    number = result;
+    error += remainder;
+
+    #ifdef SHAMAN_TAGGED_ERROR
+        errorComposants.addError(remainder);
+    #endif
+
+    return *this;
+}
+
+// postfix ++
 templated inline Snum& Snum::operator++(int)
 {
     numberType result = number + numberType(1);
@@ -182,7 +214,7 @@ templated inline Snum& Snum::operator++(int)
     return *this;
 }
 
-// --
+// postfix --
 templated inline Snum& Snum::operator--(int)
 {
     numberType result = number - numberType(1);
