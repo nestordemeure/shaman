@@ -44,7 +44,7 @@ public:
             typename = typename std::enable_if<not std::is_same<T,numberType>::value, T>::type >
     inline explicit S(T x): number(x), error(), errorComposants()
     {
-        const errorType castError = errorType(x - numberType(x));
+        const errorType castError = errorType(x - number);
         error = castError;
         errorComposants.addError(castError);
     };
@@ -52,7 +52,7 @@ public:
     template<typename T, typename = typename std::enable_if<std::is_integral<T>::value, T>::type>
     inline S(T x): number(x), error(), errorComposants()
     {
-        const errorType castError = errorType(preciseType(x) - numberType(x));
+        const errorType castError = errorType(preciseType(x) - number);
         error = castError;
         errorComposants.addError(castError);
     };
@@ -61,7 +61,7 @@ public:
              typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type >
     inline S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants)
     {
-        const errorType castError = errorType(s.number - numberType(s.number));
+        const errorType castError = errorType(s.number - number);
         error += castError;
         errorComposants.addError(castError);
     };
@@ -70,7 +70,7 @@ public:
              typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type >
     inline S(const volatile S<n,e,p>& s): number(s.number), error(s.error), errorComposants(const_cast<error_sum<e>&>(s.errorComposants))
     {
-        const errorType castError = errorType(s.number - numberType(s.number));
+        const errorType castError = errorType(s.number - number);
         error += castError;
         errorComposants.addError(castError);
     };
@@ -89,10 +89,10 @@ public:
     inline S(T x): number(x), error(preciseType(x) - numberType(x)) {};
     // from other S type
     template<typename n, typename e, typename p,
-             typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type> 
+             typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type>
     inline S(const S<n,e,p>& s): number(s.number), error(s.error + errorType(s.number - numberType(s.number))) {};
     // from other volatile S type
-    template<typename n, typename e, typename p, 
+    template<typename n, typename e, typename p,
              typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type>
     inline S(const volatile S<n,e,p>& s): number(s.number), error(s.error + errorType(s.number - numberType(s.number))) {};
     #endif
