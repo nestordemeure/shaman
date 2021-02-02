@@ -41,13 +41,13 @@ public:
     #define INTEGER_CAST_CONSTRUCTOR(n) number((numberType)n), error((preciseType)n - (numberType)n), errorComposants(ShamanGlobals::tagIntegerCast, (preciseType)n - (numberType)n)
     template<typename n, typename e, typename p> inline S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants)
     {
-        errorType castError = errorType(s.number - numberType(s.number));
+        const errorType castError = errorType(s.number - numberType(s.number));
         error += castError;
         errorComposants.addError(castError);
     };
     template<typename n, typename e, typename p> inline S(const volatile S<n,e,p>& s): number(s.number), error(s.error), errorComposants(const_cast<error_sum<e>&>(s.errorComposants))
     {
-        errorType castError = errorType(s.number - numberType(s.number));
+        const errorType castError = errorType(s.number - numberType(s.number));
         error += castError;
         errorComposants.addError(castError);
     };
