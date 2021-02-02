@@ -89,4 +89,16 @@ Hence, when Shaman indicates that a result has few/no significant digits, you sh
 ## References
 
 The inner workings of Shaman are detailed in [Nestor Demeure's PhD](https://tel.archives-ouvertes.fr/tel-03116750).
+You can reference it with:
 
+```
+@phdthesis{demeure_phd,
+  TITLE = {{Compromise between precision and performance in high performance computing.}},
+  AUTHOR = {Demeure, Nestor},
+  URL = {https://tel.archives-ouvertes.fr/tel-03116750},
+  SCHOOL = {{{\'E}cole Normale sup{\'e}rieure Paris-Saclay}},
+  YEAR = {2021},
+  MONTH = Jan,
+  TYPE = {Theses}
+}
+```
