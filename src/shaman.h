@@ -98,10 +98,13 @@ public:
     #endif
 
     // casting
+    // we allow implicit conversion to integer types as it is commonly used in C++
+    // int is the only exception as implicit casts to int interfere with
+    // ternary operation of the form `cond ? n : x` where n is an integer and x a Snum
     inline operator bool() const { return (bool) number; };
     inline operator short int() const { return (short int) number; };
     inline operator unsigned short int() const { return (unsigned short int) number; };
-    inline operator int() const { return (int) number; };
+    inline explicit operator int() const { return (int) number; };
     inline operator unsigned int() const { return (unsigned int) number; };
     inline operator long int() const { return (long int) number; };
     inline operator unsigned long int() const { return (unsigned long int) number; };
@@ -286,5 +289,6 @@ using Slong_double = S<long double, long double, long double>;
 
 #undef templated
 #undef Snum
-#endif //SHAMAN_H
+#undef Serror
 
+#endif //SHAMAN_H
