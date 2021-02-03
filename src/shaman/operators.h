@@ -17,6 +17,7 @@ inline Slong_double makeStype(long double t) { return Slong_double(t); };
 templated inline Snum makeStype(Snum s) { return s; };
 
 // takes two values and builds an Stype around the type C++ would use as a return type for their sum
+// TODO this might be replaceable with std::common_type
 #define SreturnType(t1,t2) decltype(makeStype(t1 + t2))
 
 // makes sure that a template type is an arithmetic type
