@@ -32,7 +32,7 @@ public:
     numberType number; // current computed number
     errorType error; // approximation of the current error
 
-    #ifdef SHAMAN_TAGGED_ERROR
+#ifdef SHAMAN_TAGGED_ERROR
     error_sum<errorType> errorComposants; // composants of the error
     // base constructors
     inline S(): number(), error(), errorComposants() {};
@@ -74,39 +74,39 @@ public:
         error += castError;
         errorComposants.addError(castError);
     };
-    #else
+#else
     // base constructors
     inline S(): number(), error() {};
     inline S(numberType numberArg): number(numberArg), error() {}; // we accept implicit cast from T to S<T>
     inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
     // from floating point
     template<typename T,
-             typename = typename std::enable_if<std::is_floating_point<T>::value, T>::type,
-             typename = typename std::enable_if<not std::is_same<T,numberType>::value, T>::type >
+            typename = typename std::enable_if<std::is_floating_point<T>::value, T>::type,
+            typename = typename std::enable_if<not std::is_same<T,numberType>::value, T>::type >
     inline explicit S(T x): number(x), error(x - numberType(x)) {};
     // from integer
     template<typename T, typename = typename std::enable_if<std::is_integral<T>::value, T>::type>
     inline S(T x): number(x), error(preciseType(x) - numberType(x)) {};
     // from other S type
     template<typename n, typename e, typename p,
-             typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type>
+            typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type>
     inline S(const S<n,e,p>& s): number(s.number), error(s.error + errorType(s.number - numberType(s.number))) {};
     // from other volatile S type
     template<typename n, typename e, typename p,
-             typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type>
+            typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type>
     inline S(const volatile S<n,e,p>& s): number(s.number), error(s.error + errorType(s.number - numberType(s.number))) {};
-    #endif
+#endif
 
     // casting
-    inline operator bool() const { return (bool) number; };
-    inline operator short int() const { return (short int) number; };
-    inline operator unsigned short int() const { return (unsigned short int) number; };
-    inline operator int() const { return (int) number; };
-    inline operator unsigned int() const { return (unsigned int) number; };
-    inline operator long int() const { return (long int) number; };
-    inline operator unsigned long int() const { return (unsigned long int) number; };
-    inline operator long long int() const { return (long long int) number; };
-    inline operator unsigned long long int() const { return (unsigned long long int) number; };
+    inline explicit operator bool() const { return (bool) number; };
+    inline explicit operator short int() const { return (short int) number; };
+    inline explicit operator unsigned short int() const { return (unsigned short int) number; };
+    inline explicit operator int() const { return (int) number; };
+    inline explicit operator unsigned int() const { return (unsigned int) number; };
+    inline explicit operator long int() const { return (long int) number; };
+    inline explicit operator unsigned long int() const { return (unsigned long int) number; };
+    inline explicit operator long long int() const { return (long long int) number; };
+    inline explicit operator unsigned long long int() const { return (unsigned long long int) number; };
     inline explicit operator float() const { return (float) number; };
     inline explicit operator double() const { return (double) number; };
     inline explicit operator long double() const { return (long double) number; };
@@ -218,38 +218,38 @@ namespace Sstd
     templated bool isinf(const Snum &n);
     templated bool isnan(const Snum &n);
     templated bool signbit(const Snum &n);
-	templated const Snum expm1(const Snum& n);
-	templated const Snum ilogb(const Snum& n);
-	templated const Snum modf(const Snum& n, Snum* intpart);
-	templated const Snum log1p(const Snum& n);
-	templated const Snum scalbln(const Snum &n, long int power);
-	templated const Snum erfc(const Snum& n);
+    templated const Snum expm1(const Snum& n);
+    templated const Snum ilogb(const Snum& n);
+    templated const Snum modf(const Snum& n, Snum* intpart);
+    templated const Snum log1p(const Snum& n);
+    templated const Snum scalbln(const Snum &n, long int power);
+    templated const Snum erfc(const Snum& n);
     templated const Snum erfcf(const Snum& n);
     templated const Snum erfcl(const Snum& n);
-	templated const Snum tgamma(const Snum& n);
-	templated const Snum lgamma(const Snum& n);
-	templated const Snum round(const Snum& n);
-	templated const Snum rint(const Snum& n);
-	templated const Snum nearbyint(const Snum& n);
-	templated const Snum fmod(const Snum& n1, const Snum& n2);
-	templated const long int lround(const Snum& n);
-	templated const long long int llround(const Snum& n);
-	templated const long int lrint(const Snum& n);
-	templated const long long int llrint(const Snum& n);
-	templated const Snum remainder(const Snum& n1, const Snum& n2);
-	templated const Snum remquo(const Snum& n1, const Snum& n2, int* quot);
-	templated const Snum nan(const char* tagp);
-	templated const Snum nextafter(const Snum& n1, const Snum& n2);
-	templated const Snum nexttoward(const Snum& n1, const Snum& n2);
-	templated const Snum fdim(const Snum& n1, const Snum& n2);
-	templated const int fpclassify(const Snum& x);
-	templated bool isnormal(const Snum& n);
-	templated const bool isgreater(const Snum& n1, const Snum& n2);
-	templated const bool isgreaterequal(const Snum& n1, const Snum& n2);
-	templated const bool isless(const Snum& n1, const Snum& n2);
-	templated const bool islessequal(const Snum& n1, const Snum& n2);
-	templated const bool islessgreater(const Snum& n1, const Snum& n2);
-	templated const bool isunordered(const Snum& n1, const Snum& n2);
+    templated const Snum tgamma(const Snum& n);
+    templated const Snum lgamma(const Snum& n);
+    templated const Snum round(const Snum& n);
+    templated const Snum rint(const Snum& n);
+    templated const Snum nearbyint(const Snum& n);
+    templated const Snum fmod(const Snum& n1, const Snum& n2);
+    templated const long int lround(const Snum& n);
+    templated const long long int llround(const Snum& n);
+    templated const long int lrint(const Snum& n);
+    templated const long long int llrint(const Snum& n);
+    templated const Snum remainder(const Snum& n1, const Snum& n2);
+    templated const Snum remquo(const Snum& n1, const Snum& n2, int* quot);
+    templated const Snum nan(const char* tagp);
+    templated const Snum nextafter(const Snum& n1, const Snum& n2);
+    templated const Snum nexttoward(const Snum& n1, const Snum& n2);
+    templated const Snum fdim(const Snum& n1, const Snum& n2);
+    templated const int fpclassify(const Snum& x);
+    templated bool isnormal(const Snum& n);
+    templated const bool isgreater(const Snum& n1, const Snum& n2);
+    templated const bool isgreaterequal(const Snum& n1, const Snum& n2);
+    templated const bool isless(const Snum& n1, const Snum& n2);
+    templated const bool islessequal(const Snum& n1, const Snum& n2);
+    templated const bool islessgreater(const Snum& n1, const Snum& n2);
+    templated const bool isunordered(const Snum& n1, const Snum& n2);
     //methods
     templated std::string to_string(const Snum &n);
     template<typename T> const char* to_Cstring(const T &n);
@@ -286,5 +286,6 @@ using Slong_double = S<long double, long double, long double>;
 
 #undef templated
 #undef Snum
-#endif //SHAMAN_H
+#undef Serror
 
+#endif //SHAMAN_H
