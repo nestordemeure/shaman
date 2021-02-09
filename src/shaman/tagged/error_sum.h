@@ -22,7 +22,7 @@ template<typename errorType> class error_sum
 public:
     // contains the error decomposed in composants (one per block encountered)
     // errors[tag] = error // if tag is out or range, error is 0
-    static const size_t maxTagNumber = SHAMAN_TAGNUMBER;
+    static const size_t maxTagNumber = 1 + SHAMAN_TAGNUMBER;
     std::array<errorType, maxTagNumber> errors;
 
     /*
@@ -188,6 +188,12 @@ public:
         }
         // rectifies the sign of the sum of absolute errors to match the sign of the sum
         totalAbsoluteError = std::copysign(totalAbsoluteError, totalError);
+
+        // avoid divide-by-zero by returning early if all terms are 0
+        if (totalAbsoluteError == 0.)
+        {
+            return "[]";
+        }
 
         // collects the relevant data expressed in percent of the total error
         std::vector<std::pair<Tag, errorType>> data;
