@@ -514,7 +514,7 @@ templated const Snum Sstd::modf(const Snum& n, Snum* intpart)
     preciseType fractTotalError = fractPartPrecise - fractPartNumber;
     preciseType intTotalError = intpartPrecise - intpartNumber;
 
-    #ifdef SHAMAN_TAGGED_ERROR
+#ifdef SHAMAN_TAGGED_ERROR
     Serror fractErrorComp;
     Serror intErrorComp;
     if(n.error == 0)
@@ -542,11 +542,11 @@ templated const Snum Sstd::modf(const Snum& n, Snum* intpart)
     (*intpart).error = intTotalError;
     (*intpart).errorComposants = intErrorComp;
     return Snum(fractPartNumber, fractTotalError, fractErrorComp);
-    #else
+#else
     (*intpart).number = intpartNumber;
     (*intpart).error = intTotalError;
     return Snum(fractPartNumber, fractTotalError);
-    #endif
+#endif
 };
 using Sstd::modf;
 
@@ -971,7 +971,7 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
             newErrorComp = Serror(n1.errorComposants, n3.errorComposants, [proportionalInput1Error, proportionalInput3Error](errorType e1, errorType e3){return e1*proportionalInput1Error + e3*proportionalInput3Error;});
             newErrorComp.addError(functionError);
         }
-        else if ((n1.error == 0) and (input2Error + input3Error != 0.)
+        else if ((n1.error == 0) and (input2Error + input3Error != 0.))
         {
             preciseType proportionality = (totalError - functionError) / (input3Error + input2Error);
             preciseType proportionalInput3Error = proportionality * (input3Error / n3.error);
@@ -1221,19 +1221,19 @@ namespace Sstd
 {
     template<typename N, typename E, typename P, typename arithmeticTYPE(T)>
     inline auto remquo(const S<N,E,P>& n1, const T& n2, int* quot) -> SreturnType(n1.number,n2)
-    {
-        return remquo(SreturnType(n1.number,n2)(n1), SreturnType(n1.number,n2)(n2), quot);
-    }
-    template<typename N, typename E, typename P, typename arithmeticTYPE(T)>
-    inline auto remquo(const T& n1, const S<N,E,P>& n2, int* quot) -> SreturnType(n1, n2.number)
-    {
-        return remquo(SreturnType(n1,n2.number)(n1), SreturnType(n1,n2.number)(n2), quot);
-    }
-    template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2>
-    inline auto remquo(const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, int* quot) -> SreturnType(n1.number, n2.number)
-    {
-        return remquo(SreturnType(n1.number,n2.number)(n1), SreturnType(n1.number,n2.number)(n2), quot);
-    }
+{
+    return remquo(SreturnType(n1.number,n2)(n1), SreturnType(n1.number,n2)(n2), quot);
+}
+template<typename N, typename E, typename P, typename arithmeticTYPE(T)>
+inline auto remquo(const T& n1, const S<N,E,P>& n2, int* quot) -> SreturnType(n1, n2.number)
+{
+return remquo(SreturnType(n1,n2.number)(n1), SreturnType(n1,n2.number)(n2), quot);
+}
+template<typename N1, typename E1, typename P1, typename N2, typename E2, typename P2>
+inline auto remquo(const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, int* quot) -> SreturnType(n1.number, n2.number)
+{
+return remquo(SreturnType(n1.number,n2.number)(n1), SreturnType(n1.number,n2.number)(n2), quot);
+}
 }
 using Sstd::remquo;
 
@@ -1272,7 +1272,7 @@ templated inline const Snum Sstd::nextafter(const Snum& n1, const Snum& n2)
     preciseType preciseCorrectedResult = std::nextafter(n1.corrected_number(), n2.corrected_number());
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef SHAMAN_TAGGED_ERROR
+#ifdef SHAMAN_TAGGED_ERROR
     Serror newErrorComp;
     if((n1.error == 0.) && (n2.error == 0.))
     {
@@ -1301,16 +1301,16 @@ templated inline const Snum Sstd::nextafter(const Snum& n1, const Snum& n2)
         }
         else
         {
-            preciseType proportionality = totalError / inputError
+            preciseType proportionality = totalError / inputError;
             preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
             preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
             newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
         }
     }
     return Snum(result, totalError, newErrorComp);
-    #else
+#else
     return Snum(result, totalError);
-    #endif
+#endif
 };
 set_Sfunction2_casts(nextafter);
 
@@ -1352,7 +1352,7 @@ templated inline const Snum Sstd::nexttoward(const Snum& n1, const Snum& n2)
         }
         else
         {
-            preciseType proportionality = totalError / inputError
+            preciseType proportionality = totalError / inputError;
             preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
             preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
             newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
@@ -1377,7 +1377,7 @@ templated inline const Snum Sstd::fdim(const Snum& n1, const Snum& n2)
     preciseType preciseCorrectedResult = std::fdim(n1.corrected_number(), n2.corrected_number());
     preciseType totalError = preciseCorrectedResult - result;
 
-    #ifdef SHAMAN_TAGGED_ERROR
+#ifdef SHAMAN_TAGGED_ERROR
     Serror newErrorComp;
     preciseType preciseResult = std::fdim((preciseType)n1.number, (preciseType)n2.number);
     preciseType functionError = preciseResult - result;
@@ -1419,9 +1419,9 @@ templated inline const Snum Sstd::fdim(const Snum& n1, const Snum& n2)
         }
     }
     return Snum(result, totalError, newErrorComp);
-    #else
+#else
     return Snum(result, totalError);
-    #endif
+#endif
 };
 set_Sfunction2_casts(fdim);
 
@@ -1490,16 +1490,16 @@ templated const Snum Sstd::fma(const Snum& n1, const Snum& n2, const Snum& n3)
     //errorType newError = remainder + (n1.number*n2.error + n2.number*n1.error) + n3.error;
     errorType newError = std::fma(n2.number, n1.error, std::fma(n1.number, n2.error, remainder + n3.error));
 
-    #ifdef SHAMAN_TAGGED_ERROR
-        numberType number1 = n1.number;
+#ifdef SHAMAN_TAGGED_ERROR
+    numberType number1 = n1.number;
         numberType number2 = n2.number;
         Serror newErrorComp(n1.errorComposants, n2.errorComposants, [number1, number2](errorType e1, errorType e2){return number1*e2 + number2*e1;});
         newErrorComp.addErrors(n3.errorComposants);
         newErrorComp.addError(remainder);
         return Snum(result, newError, newErrorComp);
-    #else
-        return Snum(result, newError);
-    #endif
+#else
+    return Snum(result, newError);
+#endif
 };
 set_Sfunction3_casts(fma);
 
@@ -1604,5 +1604,3 @@ using Sstd::isunordered;
 
 #undef set_Sfunction2_casts
 #undef set_Sfunction3_casts
-
-
