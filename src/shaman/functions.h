@@ -238,11 +238,20 @@ templated const Snum Sstd::atan2(const Snum& n1, const Snum& n2)
             preciseType preciseCorrectedBut2Result = std::atan2(n1.corrected_number(), (preciseType)n2);
             preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
             preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
-            newErrorComp.addError(functionError);
+            preciseType inputError = input1Error + input2Error;
+            if (inputError == 0.)
+            {
+                // avoid division by zero
+                newErrorComp = Serror(functionError);
+            }
+            else
+            {
+                preciseType proportionality = (totalError - functionError) / inputError;
+                preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+                preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+                newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+                newErrorComp.addError(functionError);
+            }
         }
         return Snum(result, totalError, newErrorComp);
 #else
@@ -776,11 +785,20 @@ templated const Snum Sstd::pow(const Snum& n1, const Snum& n2)
             preciseType preciseCorrectedBut2Result = std::pow(n1.corrected_number(), (preciseType)n2);
             preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
             preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
-            newErrorComp.addError(functionError);
+            preciseType inputError = input1Error + input2Error;
+            if (inputError == 0.)
+            {
+                // avoid division by zero
+                newErrorComp = Serror(functionError);
+            }
+            else
+            {
+                preciseType proportionality = (totalError - functionError) / inputError;
+                preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+                preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+                newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+                newErrorComp.addError(functionError);
+            }
         }
         return Snum(result, totalError, newErrorComp);
 #else
@@ -876,11 +894,20 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2)
             preciseType preciseCorrectedBut2Result = std::hypot(n1.corrected_number(), (preciseType)n2);
             preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
             preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
-            newErrorComp.addError(functionError);
+            preciseType inputError = input1Error + input2Error;
+            if (inputError == 0.)
+            {
+                // avoid division by zero
+                newErrorComp = Serror(functionError);
+            }
+            else
+            {
+                preciseType proportionality = (totalError - functionError) / inputError;
+                preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+                preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+                newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+                newErrorComp.addError(functionError);
+            }
         }
         return Snum(result, totalError, newErrorComp);
 #else
@@ -902,60 +929,57 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
         preciseType preciseCorrectedBut1Result = std::hypot((preciseType)n1, n2.corrected_number(), n3.corrected_number());
         preciseType preciseCorrectedBut2Result = std::hypot(n1.corrected_number(), (preciseType)n2, n3.corrected_number());
         preciseType preciseCorrectedBut3Result = std::hypot(n1.corrected_number(), n2.corrected_number(), (preciseType)n3);
+        preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
+        preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
+        preciseType input3Error = preciseCorrectedResult - preciseCorrectedBut3Result;
         preciseType functionError = preciseResult - result;
-        if((n1.error == 0.) && (n2.error == 0.) && (n3.error == 0.))
+        if((n1.error == 0.) and (n2.error == 0.) and (n3.error == 0.))
         {
             newErrorComp = Serror(totalError);
         }
-        else if ((n2.error == 0.) && (n3.error == 0.))
+        else if ((n2.error == 0.) and (n3.error == 0.))
         {
             preciseType proportionalInput1Error = (totalError - functionError) / n1.error;
             newErrorComp = Serror(n1.errorComposants, [proportionalInput1Error](errorType e){return e*proportionalInput1Error;});
             newErrorComp.addError(functionError);
         }
-        else if ((n1.error == 0.) && (n3.error == 0.))
+        else if ((n1.error == 0.) and (n3.error == 0.))
         {
             preciseType proportionalInput2Error = (totalError - functionError) / n2.error;
             newErrorComp = Serror(n2.errorComposants, [proportionalInput2Error](errorType e){return e*proportionalInput2Error;});
             newErrorComp.addError(functionError);
         }
-        else if ((n1.error == 0.) && (n2.error == 0.))
+        else if ((n1.error == 0.) and (n2.error == 0.))
         {
             preciseType proportionalInput3Error = (totalError - functionError) / n3.error;
             newErrorComp = Serror(n3.errorComposants, [proportionalInput3Error](errorType e){return e*proportionalInput3Error;});
             newErrorComp.addError(functionError);
         }
-        else if (n3.error == 0)
+        else if ((n3.error == 0) and (input1Error + input2Error != 0.))
         {
-            preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
-            preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
             preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
             preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
             preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
             newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
             newErrorComp.addError(functionError);
         }
-        else if (n2.error == 0)
+        else if ((n2.error == 0) and (input1Error + input3Error != 0.))
         {
-            preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
-            preciseType input3Error = preciseCorrectedResult - preciseCorrectedBut3Result;
             preciseType proportionality = (totalError - functionError) / (input1Error + input3Error);
             preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
             preciseType proportionalInput3Error = proportionality * (input3Error / n3.error);
             newErrorComp = Serror(n1.errorComposants, n3.errorComposants, [proportionalInput1Error, proportionalInput3Error](errorType e1, errorType e3){return e1*proportionalInput1Error + e3*proportionalInput3Error;});
             newErrorComp.addError(functionError);
         }
-        else if (n1.error == 0)
+        else if ((n1.error == 0) and (input2Error + input3Error != 0.)
         {
-            preciseType input3Error = preciseCorrectedResult - preciseCorrectedBut3Result;
-            preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
             preciseType proportionality = (totalError - functionError) / (input3Error + input2Error);
             preciseType proportionalInput3Error = proportionality * (input3Error / n3.error);
             preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
             newErrorComp = Serror(n3.errorComposants, n2.errorComposants, [proportionalInput3Error, proportionalInput2Error](errorType e3, errorType e2){return e3*proportionalInput3Error + e2*proportionalInput2Error;});
             newErrorComp.addError(functionError);
         }
-        else
+        else if (input1Error + input2Error + input3Error != 0.)
         {
             preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
             preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
@@ -967,6 +991,10 @@ templated const Snum Sstd::hypot(const Snum& n1, const Snum& n2, const Snum& n3)
             newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
             newErrorComp.addErrorsTimeScalar(n3.errorComposants, proportionalInput3Error);
             newErrorComp.addError(functionError);
+        }
+        else
+        {
+        newErrorComp = Serror(functionError);
         }
         return Snum(result, totalError, newErrorComp);
 #else
@@ -1030,11 +1058,20 @@ templated const Snum Sstd::fmod(const Snum& n1, const Snum& n2)
             preciseType preciseCorrectedBut2Result = std::fmod(n1.corrected_number(), (preciseType)n2);
             preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
             preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
-            newErrorComp.addError(functionError);
+            preciseType inputError = input1Error + input2Error;
+            if (inputError == 0.)
+            {
+                // avoid division by zero
+                newErrorComp = Serror(functionError);
+            }
+            else
+            {
+                preciseType proportionality = (totalError - functionError) / inputError;
+                preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+                preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+                newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+                newErrorComp.addError(functionError);
+            }
         }
         return Snum(result, totalError, newErrorComp);
 #else
@@ -1104,11 +1141,20 @@ templated const Snum Sstd::remainder(const Snum& n1, const Snum& n2)
             preciseType preciseCorrectedBut2Result = std::remainder(n1.corrected_number(), (preciseType)n2);
             preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
             preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
-            newErrorComp.addError(functionError);
+            preciseType inputError = input1Error + input2Error;
+            if (inputError == 0.)
+            {
+                // avoid division by zero
+                newErrorComp = Serror(functionError);
+            }
+            else
+            {
+                preciseType proportionality = (totalError - functionError) / inputError;
+                preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+                preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+                newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+                newErrorComp.addError(functionError);
+            }
         }
         return Snum(result, totalError, newErrorComp);
 #else
@@ -1151,11 +1197,20 @@ templated const Snum Sstd::remquo(const Snum& n1, const Snum& n2, int* quot)
             preciseType preciseCorrectedBut2Result = std::remquo(n1.corrected_number(), (preciseType)n2, &dummyquot);
             preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
             preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-            preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
-            newErrorComp.addError(functionError);
+            preciseType inputError = input1Error + input2Error;
+            if (inputError == 0.)
+            {
+                // avoid division by zero
+                newErrorComp = Serror(functionError);
+            }
+            else
+            {
+                preciseType proportionality = (totalError - functionError) / inputError;
+                preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+                preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+                newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+                newErrorComp.addError(functionError);
+            }
         }
         return Snum(result, totalError, newErrorComp);
 #else
@@ -1239,10 +1294,18 @@ templated inline const Snum Sstd::nextafter(const Snum& n1, const Snum& n2)
         preciseType preciseCorrectedBut2Result = std::nextafter(n1.corrected_number(), (preciseType)n2);
         preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
         preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-        preciseType proportionality = totalError / (input1Error + input2Error);
-        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-        newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+        preciseType inputError = input1Error + input2Error;
+        if (inputError == 0.)
+        {
+            newErrorComp = Serror();
+        }
+        else
+        {
+            preciseType proportionality = totalError / inputError
+            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+        }
     }
     return Snum(result, totalError, newErrorComp);
     #else
@@ -1282,10 +1345,18 @@ templated inline const Snum Sstd::nexttoward(const Snum& n1, const Snum& n2)
         preciseType preciseCorrectedBut2Result = std::nexttoward(n1.corrected_number(), (preciseType)n2);
         preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
         preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-        preciseType proportionality = totalError / (input1Error + input2Error);
-        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-        newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+        preciseType inputError = input1Error + input2Error;
+        if (inputError == 0.)
+        {
+            newErrorComp = Serror();
+        }
+        else
+        {
+            preciseType proportionality = totalError / inputError
+            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+        }
     }
     return Snum(result, totalError, newErrorComp);
 #else
@@ -1332,11 +1403,20 @@ templated inline const Snum Sstd::fdim(const Snum& n1, const Snum& n2)
         preciseType preciseCorrectedBut2Result = std::fdim(n1.corrected_number(), (preciseType)n2);
         preciseType input1Error = preciseCorrectedResult - preciseCorrectedBut1Result;
         preciseType input2Error = preciseCorrectedResult - preciseCorrectedBut2Result;
-        preciseType proportionality = (totalError - functionError) / (input1Error + input2Error);
-        preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
-        preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
-        newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
-        newErrorComp.addError(functionError);
+        preciseType inputError = input1Error + input2Error;
+        if (inputError == 0.)
+        {
+            // avoid division by zero
+            newErrorComp = Serror(functionError);
+        }
+        else
+        {
+            preciseType proportionality = (totalError - functionError) / inputError;
+            preciseType proportionalInput1Error = proportionality * (input1Error / n1.error);
+            preciseType proportionalInput2Error = proportionality * (input2Error / n2.error);
+            newErrorComp = Serror(n1.errorComposants, n2.errorComposants, [proportionalInput1Error, proportionalInput2Error](errorType e1, errorType e2){return e1*proportionalInput1Error + e2*proportionalInput2Error;});
+            newErrorComp.addError(functionError);
+        }
     }
     return Snum(result, totalError, newErrorComp);
     #else
