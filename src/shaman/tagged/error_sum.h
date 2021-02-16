@@ -120,7 +120,7 @@ public:
         }
         else
         {
-            std::string errorMessage = "SHAMAN: You have been using more than " + std::to_string(maxTagNumber) + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.";
+            std::string errorMessage = "SHAMAN: You have been using more than " + std::to_string(SHAMAN_TAGNUMBER) + " tags. Please set SHAMAN_TAGNUMBER to a larger number or reduce the number of FUNCTION_BLOCK/LOCAL_BLOCK in the code.";
             throw std::runtime_error(errorMessage);
         }
     }
