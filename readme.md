@@ -71,6 +71,14 @@ Don't forget to enable Fused-Multiply-Add at compilation (`-mfma`), otherwise so
 Use the `SHAMAN_UNSTABLE_BRANCH` flag to enable the count and detection of unstable branches.
 The `Shaman::displayUnstableBranches` function can then be used to print the number of unstable tests performed by the application (and additional localisation informations if tagged error is activated).
 
+## Alternative implementation
+
+This is the official C++ reference implementation.
+
+You can find an [official Julia implementation here](https://gitlab.com/numerical_shaman/shaman_julia) (which does not include tagged error at the moment).
+
+There is also an [unofficial Haskell implementation](https://noinia.github.io/hgeometry/doc/hgeometry-combinatorial-0.11.0.0/Data-Double-Shaman.html) currently part of the [HGeometry library](https://github.com/noinia/hgeometry).
+
 ## How does Shaman works ?
 
 Shaman overloads operations to run a first order model of the propagation of numerical error in your code.
@@ -88,7 +96,7 @@ Hence, when Shaman indicates that a result has few/no significant digits, you sh
 
 ## References
 
-The inner workings of Shaman are detailed in [Nestor Demeure's PhD](https://tel.archives-ouvertes.fr/tel-03116750).
+The inner workings of Shaman are detailed in Nestor Demeure's PhD(available [here](https://tel.archives-ouvertes.fr/tel-03116750) and [here](https://www.researchgate.net/publication/348551075_Compromise_between_precision_and_performance_in_high_performance_computing)).
 You can reference it with:
 
 ```
