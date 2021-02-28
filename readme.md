@@ -77,7 +77,7 @@ This is the official C++ reference implementation.
 
 You can find an [official Julia implementation here](https://gitlab.com/numerical_shaman/shaman_julia) (which does not include tagged error at the moment).
 
-There is also an [unofficial Haskell implementation](https://noinia.github.io/hgeometry/doc/hgeometry-combinatorial-0.11.0.0/Data-Double-Shaman.html) currently part of the [HGeometry library](https://github.com/noinia/hgeometry).
+There is also an [unofficial Haskell implementation](https://hackage.haskell.org/package/hgeometry-combinatorial-0.12.0.0/docs/Data-Double-Shaman.html) currently part of the [HGeometry library](https://github.com/noinia/hgeometry).
 
 ## How does Shaman works ?
 
