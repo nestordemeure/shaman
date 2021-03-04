@@ -1,4 +1,4 @@
-add_library(shaman shaman/tagged/global_vars.cpp)
+add_library(shaman shaman/tagged/global_vars.cpp shaman/helpers/shaman_complex.h)
 
 target_include_directories(shaman PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

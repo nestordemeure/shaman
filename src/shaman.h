@@ -280,6 +280,7 @@ using Slong_double = S<long double, long double, long double>;
 #include <shaman/operators.h>
 #include <shaman/functions.h>
 #include <shaman/traits.h>
+#include <shaman/helpers/shaman_complex.h>
 #include <shaman/helpers/shaman_openmp.h>
 
 //-------------------------------------------------------------------------------------------------
