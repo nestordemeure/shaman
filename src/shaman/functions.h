@@ -760,7 +760,7 @@ templated const Snum Sstd::pow(const Snum& n1, const Snum& n2)
     preciseType totalError = preciseCorrectedResult - result;
 
 #ifdef SHAMAN_TAGGED_ERROR
-    Serror newErrorComp;
+        Serror newErrorComp;
         preciseType preciseResult = std::pow((preciseType)n1.number, (preciseType)n2.number);
         preciseType functionError = preciseResult - result;
         if((n1.error == 0.) && (n2.error == 0.))

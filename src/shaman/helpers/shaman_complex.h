@@ -3,7 +3,8 @@
 
 /*
  * A more numerically stable complex division algorithm.
- * It was picked because it does not rely on an FMA (which would be detrimental if we were to use pair arithmetic on top of it)
+ * Designed to mitigate overflows/underflows.
+ * It was picked because it does not rely on an FMA (which would be detrimental to performance if we were to use pair arithmetic on top of it)
  *
  * See also:
  * https://hal-ens-lyon.archives-ouvertes.fr/ensl-00734339v2/document
@@ -181,8 +182,6 @@ namespace std
         template<typename _Up>
         complex<Snum>& operator*=(const complex<_Up>& __z)
         {
-            // TODO add tagged error version
-
             // the double/float/long double implementation is higher precision than the naive formula used in std::complex<T>
             // hence the need for a specialized implementation
             std::complex<numberType> output(_M_real.number, _M_imag.number);
@@ -198,6 +197,11 @@ namespace std
             _M_real.number = output.real();
             _M_real.error = (__r - output.real()).corrected_number();
 
+            // TODO add tagged error version
+            #ifdef SHAMAN_TAGGED_ERROR
+
+            #endif
+
             return *this;
         }
 
@@ -205,31 +209,24 @@ namespace std
         template<typename _Up>
         complex<Snum>& operator/=(const complex<_Up>& __z)
         {
-            // TODO add tagged error version
-
             // the double/float/long double implementation is higher precision than the naive formula used in std::complex<T>
             // hence the need for a specialized implementation
             std::complex<numberType> output(_M_real.number, _M_imag.number);
             output /= std::complex<numberType>(__z.real().number, __z.imag().number);
 
             // use a pair arithmetic implementation of Smith's algorithm as our reference higher precision implementation
-            const complex<Snum> error = smithComplexDivision(*this, __z) - output;
+            const complex<Snum> preciseOutput = smithComplexDivision(*this, __z);
 
             // deduce the correct numerical error
             _M_imag.number = output.imag();
-            _M_imag.error = error.imag().corrected_number();
+            _M_imag.error = (preciseOutput.imag() - output.imag()).corrected_number();
             _M_real.number = output.real();
-            _M_real.error = error.real().corrected_number();
+            _M_real.error = (preciseOutput.real() - output.real()).corrected_number();
 
-            // use preciseType as our reference higher precision implementation
-            /*std::complex<preciseType> preciseOutput(_M_real.corrected_number(), _M_imag.corrected_number());
-            preciseOutput /= std::complex<preciseType>(__z.real().corrected_number(), __z.imag().corrected_number());
+            // TODO add tagged error version
+            #ifdef SHAMAN_TAGGED_ERROR
 
-            // deduce the correct numerical error
-            _M_imag.number = output.imag();
-            _M_imag.error = preciseOutput.imag() - output.imag();
-            _M_real.number = output.real();
-            _M_real.error = preciseOutput.real() - output.real();*/
+            #endif
 
             return *this;
         }
