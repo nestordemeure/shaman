@@ -35,6 +35,16 @@ Shaman insures that implicit cast are done as they would have been done by their
 However, similarly to `std::complex`, some mixed precision operation that are legal with the original types might be rejetted by their intrumented equivalent in the absence of an explicit cast (such as `Sfloat(1.5f) + double(1.5)`).
 To solve the problem, one just need to add an explicit cast.
 
+### Nan and infinity
+
+Shaman is able to propagate `nan` and `inf` correctly but they might play havoc with the numerical error computation.
+This is not a problem in general as the output is likely to be `nan` meaning that its numerical error is meaningless.
+
+However, some computation (such as a number divided by infinity) manage to recover gracefully without resulting in `nan` in the output.
+These computation might lead to `~nan~` being displayed, meaning that the number is finite but its numerical error is not-a-number.
+
+You can use  the `SHAMAN_FLUSH_NANINF` flag to eliminate this problem (note, however, that it might flush infinite numerical error to zero).
+
 ## Try it online
 
 Click below to try Shaman online:

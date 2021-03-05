@@ -192,10 +192,8 @@ namespace std
             const Snum __i = _M_real * __z.imag() + _M_imag * __z.real();
 
             // deduce the correct numerical error
-            _M_imag.number = output.imag();
-            _M_imag.error = (__i - output.imag()).corrected_number();
-            _M_real.number = output.real();
-            _M_real.error = (__r - output.real()).corrected_number();
+            _M_imag = Snum(output.imag(), (__i - output.imag()).corrected_number());
+            _M_real = Snum(output.real(), (__r - output.real()).corrected_number());
 
             // TODO add tagged error version
             #ifdef SHAMAN_TAGGED_ERROR
@@ -215,13 +213,12 @@ namespace std
             output /= std::complex<numberType>(__z.real().number, __z.imag().number);
 
             // use a pair arithmetic implementation of Smith's algorithm as our reference higher precision implementation
+            // TODO compare perf of between this and a comparison with preciseType (I expect preciseType to be at least much faster when using tagged error)
             const complex<Snum> preciseOutput = smithComplexDivision(*this, __z);
 
             // deduce the correct numerical error
-            _M_imag.number = output.imag();
-            _M_imag.error = (preciseOutput.imag() - output.imag()).corrected_number();
-            _M_real.number = output.real();
-            _M_real.error = (preciseOutput.real() - output.real()).corrected_number();
+            _M_imag = Snum(output.imag(), (preciseOutput.imag() - output.imag()).corrected_number());
+            _M_real = Snum(output.real(), (preciseOutput.real() - output.real()).corrected_number());
 
             // TODO add tagged error version
             #ifdef SHAMAN_TAGGED_ERROR

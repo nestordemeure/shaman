@@ -37,7 +37,16 @@ public:
     // base constructors
     inline S(): number(), error(), errorComposants() {};
     inline S(numberType numberArg): number(numberArg), error(), errorComposants() {}; // we accept implicit cast from T to S<T>
-    inline S(numberType numberArg, errorType errorArg, error_sum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg) {};
+    inline S(numberType numberArg, errorType errorArg, error_sum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg)
+    {
+        #ifdef SHAMAN_FLUSH_NANINF
+        if(not std::isfinite(errorArg))
+        {
+            error = errorType();
+            errorComposants = error_sum<errorType>();
+        }
+        #endif
+    };
     // from floating point
     template<typename T,
             typename = typename std::enable_if<std::is_floating_point<T>::value, T>::type,
@@ -78,7 +87,15 @@ public:
     // base constructors
     inline S(): number(), error() {};
     inline S(numberType numberArg): number(numberArg), error() {}; // we accept implicit cast from T to S<T>
-    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg) {};
+    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg)
+    {
+        #ifdef SHAMAN_FLUSH_NANINF
+        if(not std::isfinite(errorArg))
+        {
+            error = errorType();
+        }
+        #endif
+    };
     // from floating point
     template<typename T,
             typename = typename std::enable_if<std::is_floating_point<T>::value, T>::type,
