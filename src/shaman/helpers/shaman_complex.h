@@ -186,18 +186,48 @@ namespace std
             // hence the need for a specialized implementation
             std::complex<numberType> output(_M_real.number, _M_imag.number);
             output *= std::complex<numberType>(__z.real().number, __z.imag().number);
+            const numberType resultReal = output.real();
+            const numberType resultImag = output.imag();
 
-            // use pair arithmetic as our reference higher precision implementation
-            const Snum __r = _M_real * __z.real() - _M_imag * __z.imag();
-            const Snum __i = _M_real * __z.imag() + _M_imag * __z.real();
-
-            // deduce the correct numerical error
-            _M_imag = Snum(output.imag(), (__i - output.imag()).corrected_number());
-            _M_real = Snum(output.real(), (__r - output.real()).corrected_number());
-
-            // TODO add tagged error version
             #ifdef SHAMAN_TAGGED_ERROR
+            const std::complex<preciseType> preciseCorrectedResult(_M_real.corrected_number(), _M_imag.corrected_number());
+            preciseCorrectedResult *= std::complex<preciseType>(__z.real().corrected_number(), __z.imag().corrected_number());
+            const preciseType errorReal = preciseCorrectedResult.real() - resultReal;
+            const preciseType errorImag = preciseCorrectedResult.imag() - resultImag;
 
+            const std::complex<preciseType> preciseResult((preciseType)_M_real.number, (preciseType)_M_imag.number);
+            preciseResult *= std::complex<preciseType>((preciseType)__z.real().number, (preciseType)__z.imag().number);
+            const preciseType preciseResultReal = preciseResult.real();
+            const preciseType preciseResultImag = preciseResult.imag();
+
+            preciseType functionErrorReal = preciseResultReal - resultReal;
+            preciseType functionErrorImag = preciseResultImag - resultImag;
+
+            const numberType Mr = _M_real.number;
+            const numberType Mi = _M_imag.number;
+            const numberType zr = __z.real().number;
+            const numberType zi = __z.imag().number;
+
+            Serror newErrorCompReal(_M_real.errorComposants, __z.real().errorComposants, [Mr, zr](errorType eM, errorType ez){return Mr*ez + zr*eM;});
+            newErrorCompReal.addErrorsTimeScalar(_M_imag.errorComposants, -zi);
+            newErrorCompReal.addErrorsTimeScalar(__z.imag().errorComposants, -Mi);
+            newErrorCompReal.addError(functionErrorReal);
+            _M_real = Snum(output.real(), errorReal, newErrorCompReal);
+
+            Serror newErrorCompImag(_M_real.errorComposants, __z.imag().errorComposants, [Mr, zi](errorType eM, errorType ez){return Mr*ez + zi*eM;});
+            newErrorCompImag.addErrorsTimeScalar(_M_imag.errorComposants, zr);
+            newErrorCompImag.addErrorsTimeScalar(__z.real().errorComposants, Mi);
+            newErrorCompImag.addError(functionErrorReal);
+            _M_imag = Snum(output.imag(), errorImag, newErrorCompImag);
+            #else
+            // use pair arithmetic as our reference higher precision implementation
+            const Snum preciseCorrectedResultReal = _M_real * __z.real() - _M_imag * __z.imag();
+            const Snum preciseCorrectedResultImag = _M_real * __z.imag() + _M_imag * __z.real();
+            const preciseType errorReal = (preciseCorrectedResultReal - resultReal).corrected_number();
+            const preciseType errorImag = (preciseCorrectedResultImag - resultImag).corrected_number();
+
+            _M_imag = Snum(output.imag(), errorImag);
+            _M_real = Snum(output.real(), errorReal);
             #endif
 
             return *this;
@@ -211,18 +241,50 @@ namespace std
             // hence the need for a specialized implementation
             std::complex<numberType> output(_M_real.number, _M_imag.number);
             output /= std::complex<numberType>(__z.real().number, __z.imag().number);
-
-            // use a pair arithmetic implementation of Smith's algorithm as our reference higher precision implementation
-            // TODO compare perf of between this and a comparison with preciseType (I expect preciseType to be at least much faster when using tagged error)
-            const complex<Snum> preciseOutput = smithComplexDivision(*this, __z);
+            const numberType resultReal = output.real();
+            const numberType resultImag = output.imag();
 
             // deduce the correct numerical error
-            _M_imag = Snum(output.imag(), (preciseOutput.imag() - output.imag()).corrected_number());
-            _M_real = Snum(output.real(), (preciseOutput.real() - output.real()).corrected_number());
-
-            // TODO add tagged error version
             #ifdef SHAMAN_TAGGED_ERROR
+            const std::complex<preciseType> preciseCorrectedResult(_M_real.corrected_number(), _M_imag.corrected_number());
+            preciseCorrectedResult /= std::complex<preciseType>(__z.real().corrected_number(), __z.imag().corrected_number());
+            const preciseType errorReal = preciseCorrectedResult.real() - resultReal;
+            const preciseType errorImag = preciseCorrectedResult.imag() - resultImag;
 
+            const std::complex<preciseType> preciseResult((preciseType)_M_real.number, (preciseType)_M_imag.number);
+            preciseResult /= std::complex<preciseType>((preciseType)__z.real().number, (preciseType)__z.imag().number);
+            const preciseType preciseResultReal = preciseResult.real();
+            const preciseType preciseResultImag = preciseResult.imag();
+
+            preciseType functionErrorReal = preciseResultReal - resultReal;
+            preciseType functionErrorImag = preciseResultImag - resultImag;
+
+            const numberType Mr = _M_real.number;
+            const numberType Mi = _M_imag.number;
+            const numberType zr = __z.real().number;
+            const numberType zi = __z.imag().number;
+            const numberType denom = std::norm(std::complex<numberType>(__z.real().number, __z.imag().number));
+
+            Serror newErrorCompReal(_M_real.errorComposants, __z.real().errorComposants, [Mr, zr](errorType eM, errorType ez){return Mr*ez + zr*eM;});
+            newErrorCompReal.addErrorsTimeScalar(_M_imag.errorComposants, zi);
+            newErrorCompReal.addErrorsTimeScalar(__z.imag().errorComposants, Mi);
+            newErrorCompReal.divByScalar(denom);
+            newErrorCompReal.addError(functionErrorReal);
+            _M_real = Snum(output.real(), errorReal, newErrorCompReal);
+
+            Serror newErrorCompImag(_M_real.errorComposants, __z.imag().errorComposants, [Mr, zi](errorType eM, errorType ez){return -(Mr*ez + zi*eM);});
+            newErrorCompImag.addErrorsTimeScalar(_M_imag.errorComposants, zr);
+            newErrorCompImag.addErrorsTimeScalar(__z.real().errorComposants, Mi);
+            newErrorCompImag.divByScalar(denom);
+            newErrorCompImag.addError(functionErrorReal);
+            _M_imag = Snum(output.imag(), errorImag, newErrorCompImag);
+            #else
+            // use a pair arithmetic implementation of Smith's algorithm as our reference higher precision implementation
+            // TODO compare perf of between this and doing the computation with preciseType
+            const complex<Snum> preciseOutput = smithComplexDivision(*this, __z);
+
+            _M_imag = Snum(resultImag, (preciseOutput.imag() - resultImag).corrected_number());
+            _M_real = Snum(resultReal, (preciseOutput.real() - resultReal).corrected_number());
             #endif
 
             return *this;
@@ -232,6 +294,11 @@ namespace std
         {
             return *this;
         }
+
+        std::complex<preciseType> corrected_number() const
+        {
+            return std::complex<preciseType>(_M_real.corrected_number(), _M_imag.corrected_number());
+        };
 
     private:
         Snum _M_real;
