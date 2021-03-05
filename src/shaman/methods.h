@@ -171,9 +171,9 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     int nbDigitsMax = std::numeric_limits<numberType>::digits10 + 2; // since this is a maximum, we add two to avoid being too pessimistic (17 for double)
     numberType fdigits = std::floor(n.digits());
 
-    if (std::isnan(n.number)) // not a number
+    if (not std::isfinite(n.number)) // not a traditional number
     {
-        os << "nan";
+        os << n.number;
     }
     else if (std::isnan(n.error))
     {
