@@ -190,12 +190,12 @@ namespace std
             const numberType resultImag = output.imag();
 
             #ifdef SHAMAN_TAGGED_ERROR
-            const std::complex<preciseType> preciseCorrectedResult(_M_real.corrected_number(), _M_imag.corrected_number());
+            std::complex<preciseType> preciseCorrectedResult(_M_real.corrected_number(), _M_imag.corrected_number());
             preciseCorrectedResult *= std::complex<preciseType>(__z.real().corrected_number(), __z.imag().corrected_number());
             const preciseType errorReal = preciseCorrectedResult.real() - resultReal;
             const preciseType errorImag = preciseCorrectedResult.imag() - resultImag;
 
-            const std::complex<preciseType> preciseResult((preciseType)_M_real.number, (preciseType)_M_imag.number);
+            std::complex<preciseType> preciseResult((preciseType)_M_real.number, (preciseType)_M_imag.number);
             preciseResult *= std::complex<preciseType>((preciseType)__z.real().number, (preciseType)__z.imag().number);
             const preciseType preciseResultReal = preciseResult.real();
             const preciseType preciseResultImag = preciseResult.imag();
@@ -246,12 +246,12 @@ namespace std
 
             // deduce the correct numerical error
             #ifdef SHAMAN_TAGGED_ERROR
-            const std::complex<preciseType> preciseCorrectedResult(_M_real.corrected_number(), _M_imag.corrected_number());
+            std::complex<preciseType> preciseCorrectedResult(_M_real.corrected_number(), _M_imag.corrected_number());
             preciseCorrectedResult /= std::complex<preciseType>(__z.real().corrected_number(), __z.imag().corrected_number());
             const preciseType errorReal = preciseCorrectedResult.real() - resultReal;
             const preciseType errorImag = preciseCorrectedResult.imag() - resultImag;
 
-            const std::complex<preciseType> preciseResult((preciseType)_M_real.number, (preciseType)_M_imag.number);
+            std::complex<preciseType> preciseResult((preciseType)_M_real.number, (preciseType)_M_imag.number);
             preciseResult /= std::complex<preciseType>((preciseType)__z.real().number, (preciseType)__z.imag().number);
             const preciseType preciseResultReal = preciseResult.real();
             const preciseType preciseResultImag = preciseResult.imag();
