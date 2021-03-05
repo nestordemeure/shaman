@@ -8,6 +8,7 @@
 #include <limits>
 #include <atomic>
 #include <memory>
+#include <cmath>
 #include <type_traits>
 
 #ifdef SHAMAN_TAGGED_ERROR
