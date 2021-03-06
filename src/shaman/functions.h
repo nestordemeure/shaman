@@ -1492,11 +1492,11 @@ templated const Snum Sstd::fma(const Snum& n1, const Snum& n2, const Snum& n3)
 
 #ifdef SHAMAN_TAGGED_ERROR
     numberType number1 = n1.number;
-        numberType number2 = n2.number;
-        Serror newErrorComp(n1.errorComposants, n2.errorComposants, [number1, number2](errorType e1, errorType e2){return number1*e2 + number2*e1;});
-        newErrorComp.addErrors(n3.errorComposants);
-        newErrorComp.addError(remainder);
-        return Snum(result, newError, newErrorComp);
+    numberType number2 = n2.number;
+    Serror newErrorComp(n1.errorComposants, n2.errorComposants, [number1, number2](errorType e1, errorType e2){return number1*e2 + number2*e1;});
+    newErrorComp.addErrors(n3.errorComposants);
+    newErrorComp.addError(remainder);
+    return Snum(result, newError, newErrorComp);
 #else
     return Snum(result, newError);
 #endif
