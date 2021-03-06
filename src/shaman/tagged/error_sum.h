@@ -28,7 +28,7 @@ public:
     /*
      * empty constructor : currently no error
      */
-    explicit error_sum(): errors() {}
+    constexpr explicit error_sum(): errors() {}
 
     /*
      * copy constructor that allows construction from another error_sum with the same number of composant number
