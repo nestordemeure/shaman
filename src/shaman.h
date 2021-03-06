@@ -18,6 +18,13 @@
 #define LOCAL_BLOCK(text)
 #endif
 
+// constexpr that is only used if we are in C++14 or more
+#if __cplusplus >= 201402L
+#define CONSTEXPR14 constexpr
+#else
+#define CONSTEXPR14
+#endif
+
 //-------------------------------------------------------------------------------------------------
 // SHAMAN CLASS
 
@@ -52,7 +59,7 @@ public:
     template<typename T,
             typename = typename std::enable_if<std::is_floating_point<T>::value, T>::type,
             typename = typename std::enable_if<not std::is_same<T,numberType>::value, T>::type >
-    inline constexpr explicit S(T x): number(x), error(), errorComposants()
+    inline CONSTEXPR14 explicit S(T x): number(x), error(), errorComposants()
     {
         const errorType castError = errorType(x - number);
         error = castError;
@@ -60,7 +67,7 @@ public:
     };
     // from integer
     template<typename T, typename = typename std::enable_if<std::is_integral<T>::value, T>::type>
-    inline constexpr S(T x): number(x), error(), errorComposants()
+    inline CONSTEXPR14 S(T x): number(x), error(), errorComposants()
     {
         const errorType castError = errorType(preciseType(x) - number);
         error = castError;
@@ -69,7 +76,7 @@ public:
     // from other S type
     template<typename n, typename e, typename p,
              typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type >
-    inline constexpr S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants)
+    inline CONSTEXPR14 S(const S<n,e,p>& s): number(s.number), error(s.error), errorComposants(s.errorComposants)
     {
         const errorType castError = errorType(s.number - number);
         error += castError;
@@ -78,7 +85,7 @@ public:
     // from other volatile S type
     template<typename n, typename e, typename p,
              typename = typename std::enable_if<not std::is_same<n,numberType>::value, n>::type >
-    inline constexpr S(const volatile S<n,e,p>& s): number(s.number), error(s.error), errorComposants(const_cast<error_sum<e>&>(s.errorComposants))
+    inline CONSTEXPR14 S(const volatile S<n,e,p>& s): number(s.number), error(s.error), errorComposants(const_cast<error_sum<e>&>(s.errorComposants))
     {
         const errorType castError = errorType(s.number - number);
         error += castError;
@@ -88,7 +95,7 @@ public:
     // base constructors
     inline constexpr S(): number(), error() {};
     inline constexpr S(numberType numberArg): number(numberArg), error() {}; // we accept implicit cast from T to S<T>
-    inline S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg)
+    inline CONSTEXPR14 S(numberType numberArg, errorType errorArg): number(numberArg), error(errorArg)
     {
         #ifdef SHAMAN_FLUSH_NANINF
         if(not std::isfinite(errorArg))
