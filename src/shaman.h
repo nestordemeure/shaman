@@ -19,7 +19,7 @@
 #endif
 
 // constexpr that is only used if we are in C++14 or more
-#if __cplusplus >= 201402L
+#if __cpp_constexpr >= 201304
 #define CONSTEXPR14 constexpr
 #else
 #define CONSTEXPR14
@@ -45,7 +45,7 @@ public:
     // base constructors
     inline constexpr S(): number(), error(), errorComposants() {};
     inline constexpr S(numberType numberArg): number(numberArg), error(), errorComposants() {}; // we accept implicit cast from T to S<T>
-    inline S(numberType numberArg, errorType errorArg, error_sum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg)
+    inline CONSTEXPR14 S(numberType numberArg, errorType errorArg, error_sum<errorType> errorCompArg): number(numberArg), error(errorArg), errorComposants(errorCompArg)
     {
         #ifdef SHAMAN_FLUSH_NANINF
         if(not std::isfinite(errorArg))
