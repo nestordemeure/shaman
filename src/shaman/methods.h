@@ -244,24 +244,27 @@ templated std::string Snum::to_string() const
     return stream.str();
 }
 
-/*
- * function to convert a Snum into a string
- *
- * NOTE : code duplicated from .to_string()
- */
-templated inline std::string Sstd::to_string(const Snum& n)
+namespace Sstd
 {
-    std::ostringstream stream;
-    stream << n;
-    return stream.str();
-};
+    /*
+     * function to convert a Snum into a string
+     *
+     * NOTE : code duplicated from .to_string()
+     */
+    templated inline std::string to_string(const Snum& n)
+    {
+        std::ostringstream stream;
+        stream << n;
+        return stream.str();
+    };
 
-/*
- * convert a value into a C string (const char *)
- */
-template<typename T>
-inline const char* Sstd::to_Cstring(const T& n)
-{
-    return Sstd::to_string(n).c_str();
-};
+    /*
+     * convert a value into a C string (const char *)
+     */
+    template<typename T>
+    inline const char* to_Cstring(const T& n)
+    {
+        return Sstd::to_string(n).c_str();
+    };
+}
 
