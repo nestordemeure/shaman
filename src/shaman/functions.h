@@ -1271,7 +1271,7 @@ using Sstd::ceil;
 using Sstd::floor;
 using Sstd::trunc;
 using Sstd::round;
-using Sstd::rind;
+using Sstd::rint;
 using Sstd::nearbyint;
 using Sstd::fmod;
 using Sstd::lround;
