@@ -1556,6 +1556,19 @@ templated inline const bool isunordered(const Snum &n1, const Snum &n2)
 };
 
 //-----------------------------------------------------------------------------
+// STRING OPERATIONS
+
+/*
+ * function to convert a Snum into a string
+ *
+ * NOTE : code duplicated from .to_string()
+ */
+templated inline std::string to_string(const Snum& n)
+{
+    return n.to_string();
+};
+
+//-----------------------------------------------------------------------------
 }
 
 using Sstd::cos;
