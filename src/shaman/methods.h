@@ -171,7 +171,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     int nbDigitsMax = std::numeric_limits<numberType>::digits10 + 2; // since this is a maximum, we add two to avoid being too pessimistic (17 for double)
     numberType fdigits = std::floor(n.digits());
 
-    if (not std::isfinite(n.number)) // not a traditional number
+    if (!std::isfinite(n.number)) // not a traditional number
     {
         os << n.number;
     }
@@ -182,7 +182,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     else if (fdigits <= 0) // no significant digits
     {
         // the first zeros might be significant
-        int digits = std::floor(Snum::digits(0, n.error));
+        int digits = static_cast<int>(Snum::digits(0, n.error));
 
         if ((std::abs(n.number) >= 1) || (digits <= 0))
         {
@@ -198,7 +198,7 @@ templated inline std::ostream& operator<<(std::ostream& os, const Snum& n)
     }
     else // a perfectly fine number
     {
-        int digits = std::min((numberType) nbDigitsMax, fdigits);
+        int digits = static_cast<int>(std::min((numberType) nbDigitsMax, fdigits));
         os << std::scientific << std::setprecision(digits-1) << n.number;
     }
 
@@ -243,25 +243,3 @@ templated std::string Snum::to_string() const
     stream << this;
     return stream.str();
 }
-
-/*
- * function to convert a Snum into a string
- *
- * NOTE : code duplicated from .to_string()
- */
-templated inline std::string Sstd::to_string(const Snum& n)
-{
-    std::ostringstream stream;
-    stream << n;
-    return stream.str();
-};
-
-/*
- * convert a value into a C string (const char *)
- */
-template<typename T>
-inline const char* Sstd::to_Cstring(const T& n)
-{
-    return Sstd::to_string(n).c_str();
-};
-

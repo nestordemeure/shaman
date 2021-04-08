@@ -18,7 +18,7 @@ int nrand = 23;
 float random1()
 {
   nrand = (nrand*5363 + 143) % 1387;
-  return 2.0*nrand/1387.0 - 1.0;
+  return static_cast<float>(2.0*nrand/1387.0 - 1.0);
 }
 
 /*
