@@ -63,10 +63,8 @@ Additional BSD Notice
 */
 
 #include <vector>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
+#include <cmath>
+#include <chrono>
 #include <shaman.h>
 
 #ifndef SHAMAN_TAGGED_ERROR
@@ -2970,8 +2968,9 @@ int main(int argc, char *argv[])
         }
     }
 
-    timeval start, end;
-    gettimeofday(&start, NULL);
+    using namespace std::chrono;
+    steady_clock::time_point start = steady_clock::now();
+
 
 
     /* timestep to solution */
@@ -2985,9 +2984,9 @@ int main(int argc, char *argv[])
 #endif
     }
 
-    gettimeofday(&end, NULL);
-    double elapsed_time = double(end.tv_sec - start.tv_sec) + double(end.tv_usec - start.tv_usec) *1e-6;
-
+    steady_clock::time_point end = steady_clock::now();
+    duration<double> time_span = duration_cast<duration<double>>(end - start);
+    double elapsed_time = time_span.count();  // in seconds
 
     printf("\n\nElapsed time = %12.6e\n\n", elapsed_time);
 

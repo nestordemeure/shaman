@@ -277,7 +277,6 @@ namespace Sstd
     templated const bool isunordered(const Snum& n1, const Snum& n2);
     //methods
     templated std::string to_string(const Snum &n);
-    template<typename T> const char* to_Cstring(const T &n);
 }
 #endif
 

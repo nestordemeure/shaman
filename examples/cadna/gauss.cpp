@@ -28,8 +28,8 @@ void gauss()
 
   std::array<std::array<Sfloat, 5>, 4> a;
   std::array<Sfloat, 4> xsol;
-  int idim = a.size();
-  int idim1 = a[0].size();
+  int idim = static_cast<int>(a.size());
+  int idim1 = static_cast<int>(a[0].size());
 
   xsol[0] = 1.f;
   xsol[1] = 1.f;
