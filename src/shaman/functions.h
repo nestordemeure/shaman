@@ -102,9 +102,18 @@
     }
 #endif
 
-namespace Sstd {
 //-----------------------------------------------------------------------------
-// TRIGONOMETRIC FUNCTIONS
+// Sstd DEFINITION
+
+#ifdef NO_SHAMAN
+namespace Sstd = std;
+#else
+namespace Sstd
+{
+using namespace std;
+using namespace Shaman;
+
+// ---------- TRIGONOMETRIC FUNCTIONS ----------
 
 SHAMAN_FUNCTION(cos);
 SHAMAN_FUNCTION(sin);
@@ -248,8 +257,7 @@ templated const Snum atan2(const Snum& n1, const Snum& n2)
 };
 set_Sfunction2_casts(atan2);
 
-//-----------------------------------------------------------------------------
-// HYPERBOLIC FUNCTIONS
+// ---------- HYPERBOLIC FUNCTIONS ----------
 
 SHAMAN_FUNCTION(cosh);
 SHAMAN_FUNCTION(sinh);
@@ -330,8 +338,7 @@ templated const Snum atanh(const Snum& n)
     #endif
 };
 
-//-----------------------------------------------------------------------------
-// EXPONENTIAL AND LOGARITHMIC FUNCTIONS
+// ---------- EXPONENTIAL AND LOGARITHMIC FUNCTIONS ----------
 
 SHAMAN_FUNCTION(exp);
 SHAMAN_FUNCTION(exp2);
@@ -723,8 +730,7 @@ templated const Snum scalbln(const Snum &n, long int power)
     #endif
 };
 
-//-----------------------------------------------------------------------------
-// POWER FUNCTIONS
+// ---------- POWER FUNCTIONS ----------
 
 SHAMAN_FUNCTION(cbrt);
 
@@ -978,8 +984,7 @@ templated const Snum hypot(const Snum& n1, const Snum& n2, const Snum& n3)
 };
 set_Sfunction3_casts(hypot);
 
-//-----------------------------------------------------------------------------
-// ERROR AND GAMMA FUNCTIONS
+// ---------- ERROR AND GAMMA FUNCTIONS ----------
 
 SHAMAN_FUNCTION(erf);
 SHAMAN_FUNCTION(erff);
@@ -990,8 +995,7 @@ SHAMAN_FUNCTION(erfcl);
 SHAMAN_FUNCTION(tgamma);
 SHAMAN_FUNCTION(lgamma);
 
-//-----------------------------------------------------------------------------
-// ROUNDING AND REMAINDER FUNCTIONS
+// ---------- ROUNDING AND REMAINDER FUNCTIONS ----------
 
 SHAMAN_FUNCTION(ceil);
 SHAMAN_FUNCTION(floor);
@@ -1206,8 +1210,7 @@ inline auto remquo(const S<N1,E1,P1>& n1, const S<N2,E2,P2>& n2, int* quot) -> S
     return remquo(SreturnType(n1.number,n2.number)(n1), SreturnType(n1.number,n2.number)(n2), quot);
 };
 
-//-----------------------------------------------------------------------------
-// FLOATING POINT MANIPULATION FUNCTIONS
+// ---------- FLOATING POINT MANIPULATION FUNCTIONS ----------
 
 // copysign
 templated inline const Snum copysign(const Snum& n1, const Snum& n2)
@@ -1334,8 +1337,7 @@ templated inline const Snum nexttoward(const Snum& n1, const Snum& n2)
 };
 set_Sfunction2_casts(nexttoward);
 
-//-----------------------------------------------------------------------------
-// MINIMUM MAXIMUM DIFFERENCE FUNCTIONS
+// ---------- MINIMUM MAXIMUM DIFFERENCE FUNCTIONS ----------
 
 // fdim
 templated inline const Snum fdim(const Snum& n1, const Snum& n2)
@@ -1424,8 +1426,7 @@ templated inline const Snum fmax(const Snum& n1, const Snum& n2)
 };
 set_Sfunction2_casts(fmax);
 
-//-----------------------------------------------------------------------------
-// OTHER FUNCTIONS
+// ---------- OTHER FUNCTIONS ----------
 
 // abs
 templated inline const Snum abs(const Snum& n)
@@ -1445,7 +1446,7 @@ templated inline const Snum abs(const Snum& n)
 // fabs
 templated inline const Snum fabs(const Snum& n)
 {
-    return Sstd::abs(n);
+    return abs(n);
 };
 
 // fma
@@ -1470,8 +1471,7 @@ templated const Snum fma(const Snum& n1, const Snum& n2, const Snum& n3)
 };
 set_Sfunction3_casts(fma);
 
-//-----------------------------------------------------------------------------
-// CLASSIFICATION FUNCTIONS
+// ---------- CLASSIFICATION FUNCTIONS ----------
 
 // fpclassify
 templated inline const int fpclassify(const Snum &x)
@@ -1511,8 +1511,7 @@ templated inline bool signbit(const Snum &n)
     return std::signbit(n.number);
 };
 
-//-----------------------------------------------------------------------------
-// COMPARISON FUNCTIONS
+// ---------- COMPARISON FUNCTIONS ----------
 
 // isgreater
 templated inline const bool isgreater(const Snum &n1, const Snum &n2)
@@ -1555,21 +1554,16 @@ templated inline const bool isunordered(const Snum &n1, const Snum &n2)
     return std::isunordered(n1.number, n2.number);
 };
 
-//-----------------------------------------------------------------------------
-// STRING OPERATIONS
+// ---------- STRING OPERATIONS ----------
 
-/*
- * function to convert a Snum into a string
- *
- * NOTE : code duplicated from .to_string()
- */
+// converts a Snum into a string
 templated inline std::string to_string(const Snum& n)
 {
     return n.to_string();
 };
 
-//-----------------------------------------------------------------------------
 }
+#endif
 
 using Sstd::cos;
 using Sstd::sin;
