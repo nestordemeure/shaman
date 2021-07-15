@@ -28,6 +28,15 @@ std::cout << "result as displayed by shaman: " << sum << '\n' // notice that Sha
 
 Mathematical functions are defined in the `Sstd` namespace, additional traits and definitions can be included from the headers in the `shaman/helpers` folder to help when using MPI, Eigen or Trilinos.
 
+### Unstable tests
+
+A test is said *unstable* if numerical error could have impacted its output (which can change the branch being taken by a code and deeply impact its behaviour).
+
+To detect unstable tests, pass the `SHAMAN_UNSTABLE_BRANCH` flag at compile time.
+They will then be monitored and counted.
+
+You can get the exact location of the unstable tests by either setting a breakpoint on the `Shaman::unstability` function (which will be called whenever an unstable test is detected) or running the code with the `shaman_profiler.py` (you will find it in the `tools/shaman_profiler` folder) in order to get a summary of the number and position of all unstable branches (note that this script adds a significant computing time overhead).
+
 ### Mixed precision operations
 
 Shaman insures that implicit cast are done as they would have been done by their underlying types.
