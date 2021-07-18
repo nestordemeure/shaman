@@ -1,4 +1,3 @@
-
 # SHAMAN's NUMERICAL PROFILER
 #
 # use gdb's python API to get informations from the numerical debugging
@@ -106,7 +105,7 @@ def get_frame_seq():
 
 def file_in_shaman(path):
     """returns true if a file is in shaman"""
-    return path.endswith("shaman/src/Operators.h") or path.endswith("shaman/src/Functions.h")
+    return path.endswith("src/shaman/operators.h") or path.endswith("src/shaman/functions.h")
 
 #-----
 
@@ -167,7 +166,7 @@ class ShamanDebugBreakpoint(gdb.Breakpoint):
 gdb.execute("start")
 
 # Set our breakpoint, which might be in some shared library, hence the "start" previously
-ShamanDebugBreakpoint("NumericalDebugger::unstability")
+ShamanDebugBreakpoint("Shaman::unstability")
 
 # Runs the program
 gdb.execute("continue")
