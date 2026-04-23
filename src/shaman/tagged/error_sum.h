@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <array>
 #include <sstream>
 #include <iomanip>
 #include <iostream>
